@@ -1,0 +1,15 @@
+---
+title: "Homework Applet"
+author: "Jonathan J. Park"
+---
+
+
+---
+title: "Homework Graph Generator"
+format: html
+page-layout: full
+---
+
+<iframe src="https://jonathanparkphd.shinyapps.io/NetworkAnalysis-HWApplet/"
+        width="100%" height="800px" frameborder="0">
+</iframe>

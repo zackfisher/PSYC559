@@ -1,0 +1,20 @@
+---
+title: "Introduction to Network Analysis"
+author: "Jonathan J. Park"
+---
+
+This `.qmd` file contains all of the relevant information for our first week of the Network Analysis seminar.
+
+To start off the quarter, we will review the syllabus including things such as the topics we will cover, the final project for the course, and sign-ups for weekly presentations.
+
+The general layout of each weekly meeting is as follows:
+
+1.  A topical overview of the readings for the current week and a discussion of the methods
+    1.  These may include comments or questions resulting from the readings
+2.  A coding session where parts of the weekly readings are transformed into actionable code to illustrate their use and interpretability
+
+\begin{equation}
+
+y = mx + 18
+
+\end{equation}

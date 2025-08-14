@@ -1,0 +1,246 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PSC-290: Network Analysis",
+    "section": "",
+    "text": "Welcome to the Network Analysis seminar!\nThroughout this course, we will be covering fundamental topics in graph theory and network analysis and how these concepts may relate to modeling and understanding psychological phenomenon.\nIt will be your responsibility to stay up-to-date with topics and voice any concerns or confusion by e-mailing me.\nIn the tab to the left, you will find each topic arranged by weeks. Do note, weekly topics are subject to change."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "introduction.html",
+    "href": "introduction.html",
+    "title": "Introduction to Network Analysis",
+    "section": "",
+    "text": "This .qmd file contains all of the relevant information for our first week of the Network Analysis seminar.\nTo start off the quarter, we will review the syllabus including things such as the topics we will cover, the final project for the course, and sign-ups for weekly presentations.\nThe general layout of each weekly meeting is as follows:\n\nA topical overview of the readings for the current week and a discussion of the methods\n\nThese may include comments or questions resulting from the readings\n\nA coding session where parts of the weekly readings are transformed into actionable code to illustrate their use and interpretability\n\n\\[\\begin{equation}\n\ny = mx + 18\n\n\\end{equation}\\]",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "week1.html",
+    "href": "week1.html",
+    "title": "Network Construction",
+    "section": "",
+    "text": "This week, we focus on the construction of networks. This involves the tedious discussion of each constituent part of a graph. Broadly, we will cover:\n\n\nVertices [nodes]\nLinks [edges]\nNomenclature\n\n\\[\\begin{equation}\n\ny = mx + 18\n\n\\end{equation}\\]",
+    "crumbs": [
+      "Week 1",
+      "Week 1: Network Construction"
+    ]
+  },
+  {
+    "objectID": "week1_2.html",
+    "href": "week1_2.html",
+    "title": "Matrix Algebra",
+    "section": "",
+    "text": "So far, there has been a great deal of terminology and mathematics that–I hope–are not too difficult or overwhelming because… it gets worse! :)\nHere, we continue the inundation via mathematica and introduce some basic, foundational concepts of matrix algebra. Matrices are the language\nThese foundational concepts will be invaluable as we read through papers and discuss methods for implementing graph theoretical techniques to problems we may be interested in.\nNote: Many of these materials are drawn from Zachary Fisher’s tutorials on Matrix Algebra.",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_1.html",
+    "href": "week1_1.html",
+    "title": "Graph Theory",
+    "section": "",
+    "text": "Graph theory and network analysis are often used interchangeably. Past literature may draw the line between graphs and networks by whether or not they “touch” real data. Others (e.g., Barnes & Harary, 1983) might suggest that graph theory is where improvements are made to the field and network analysis are where those theories go to die.\nIn this seminar, we will abide by the former set of arguments. Graphs will apply to the theoretical models we are working with and networks will be the models when applied to data.",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#visualization-of-an-undirected-graph",
+    "href": "week1_1.html#visualization-of-an-undirected-graph",
+    "title": "Graph Theory",
+    "section": "Visualization of an Undirected Graph",
+    "text": "Visualization of an Undirected Graph\nHere, we will define a graph, \\(G\\), which–as discussed above–is defined by \\(V\\) and \\(E\\). We will define \\(G\\) by:\n\n\\(V = \\{A, B, C\\}\\)\n\\(E = \\{\\{A,B\\}, \\{B,C\\}, \\{A,C\\}\\}\\)\n\nThis tells us that we have a graph with 3-vertices and 3-links.\nThis is equivalent to the following graph:\n\n# install.packages(\"igraph\")\nlibrary(igraph)\nedges = c(\"A\", \"B\", \n          \"B\", \"C\", \n          \"A\", \"C\")\ng = make_graph(edges = edges, directed = FALSE)\nplot(g)\n\n\n\n\n\n\n\n\nAs we discussed earlier, the definition of \\(E\\) forces an interpretation of the graph that may or may not be amenable to the types of graphs that you work with in your own work.\n\nReflection 2.\nOther than the link limit, what other constraints are imposed upon \\(E\\) that may not align with graphs we might encounter in real life?\nFor those who have seen or worked with networks before, what might be missing in the graph that might expect?\n\n\nAnswer.\n\nMany of the graphs we typically work with may:\n\nHave well-defined bidirectional connections\nPossess self-loops\nHave weights\n\n\nThese discussions and thoughts might then push us to redefine \\(E\\) and identify alternative definitions which may better reflect our reality.",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#a-brief-history",
+    "href": "week1_1.html#a-brief-history",
+    "title": "Graph Theory",
+    "section": "A Brief History",
+    "text": "A Brief History\nThe history of graph theory is quite extensive. It’s difficult to pinpoint the exact origins of when people began connecting circles with lines and calling them things; however, the general consensus is that Euler’s solving of the “Bridges of Königsberg” problem in 1736 was the first formalism of graph theory.\nSince then, graph theory and–by extension–network analysis has seen a dramatic rise in their implementation and development across various fields including [but not limited to]:\n\nMathematics\nStatistical Physics\nBiology\nComputer Science\nSociology\nPsychology\n\nThis course is designed around the formalisms of graph theory and its extensions into network interventions, attacks, and control. Likewise, we will discuss alternative forms and representations of networks that–to my knowledge–have not been sufficiently discussed in the field of psychology.\nThis means that the more recent work on “network theories in Psychology” a la regularized pairwise Markov random fields will not be a primary focus of the course; however, they will be covered to give everyone familiarity with the contemporary directions of psychological research.\nMy hope is that exposure to the broader field of graph theory and/or network analysis will encourage a greater deal of thought and scrutiny over applications of these techniques to data which may or may not be amenable to graph theoretical problems.\nIn this seminar, we are learning analytic techniques that may or may not align with our theories of the real world. Do not fall into the trap of thinking graphs apply to all possible questions. Graphs–like CFAs, SEMs, SSMs, or any other acronym–imply something about our real world. If those assumptions are not tenable, then the model is inappropriate.\nTo quote from Barnes & Harary (1983):\n\n“The example given from psychology [of Factor Analysis] shows also how the growth of a social science can be distorted when its practioners become dominated not by empirical evidence but by a mathematical technique in which they assume a proprietary interest. Network analysts should be forewarned against this hazard.”",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#defining-a-graph",
+    "href": "week1_1.html#defining-a-graph",
+    "title": "Graph Theory",
+    "section": "Defining a Graph",
+    "text": "Defining a Graph\nWe begin our own journey in graph theory/network analysis by introducing the basic formalisms and mathematical notation of graphs.\nThis section may be among the most mathematically dense components of this entire seminar. If you have trouble following along, that is okay. Imagine today’s meeting as learning the language for graph theory.\nAs with any language, these things take time to settle and become familiar. My hope is that exposure to these specific terms early on will lead to a much easier time grasping difficult concepts later in the quarter.\nAsk questions. Ask for examples. Begin discussion. These will help you and others in the course.\nLet’s begin!\nThe most basic form of a graph–referred to as a simple undirected graph–is given by:\n\\[G = (V,E)\\]\nwhere:\n\n\\(G\\): the graph is given by\n\\(V\\), a set of vertices and\n\\(E \\subseteq \\{\\{x, y\\} \\mid x, y \\in V \\text{ and } x \\neq y\\}\\)\n\nThe notation of \\(E\\) may be a bit challenging for those without familiarity with mathematical notation. So, we verbalize the notation of \\(E\\) as:\n\n\\(E\\) is a subset of all unordered pairs, \\(\\{x, y\\}\\) such that \\(x\\) and \\(y\\) are elements from the set of vertices, \\(V\\), and are not the same vertex (i.e., \\(x \\neq y\\)).\n\nPut another way, \\(E\\) is the set of \\(\\{x,y\\}\\) pairs of vertices which are connected to one another. They are our links or edges. Importantly, the way we define \\(E\\) has a strong effect on the types of graphs we will be able to generate and study.\nFurther, we can identify some limits to \\(G\\) just by looking at the formalism of \\(E\\). Namely, in the number of total links that may exist in \\(G\\) given \\(V\\).\n\nReflection 1.\nWhat are the limits imposed on \\(E\\) given \\(V\\)?\nLet’s solve this by defining a graph comprised of 3 vertices and creating a table or a matrix.\n\n\nAnswer.\n\nThe definition of \\(E\\) has several constraints:\n\n\\(x \\neq y\\)\n\\(\\{x,y\\}\\) are unordered pairs; meaning \\(\\{x,y\\} = \\{y,x\\}\\)\n\nThis means that vertices in \\(G\\) may not link to themselves.\nIt also implies that 2 vertices may be connected to one other only once.\nFor our \\(3\\times 3\\) table only 3 links can be drawn out of the \\(3\\times 3 = 9\\) possible. We can simplify this to say that there are \\(n\\times n\\) cells.\n\nThe diagonal part is one set of \\(n\\)\nThe parts above and below the diagonal are \\(n\\times (n - 1)\\)\n\nIf we only want the lower cells, we can just divide by 2 and get: \\(\\frac{n\\times(n-1)}{2}\\).\nTo get our \\(n\\) for our graph, we need to know the total number of vertices which is given by \\(|V|\\) or the “cardinality” of \\(V\\). This is just a fancy way of expressing the size of the set.\nThus, we can derive the total number of possible links as:\n\\[|E|_{max} = \\frac{|V|(|V|-1)}{2}\\] where:\n\n\\(|\\cdot|\\) is the cadinality–or size–of \\(\\cdot\\)\n\nThis means that the maximum cardinality–or size–of \\(E\\) is constrained by the cardinality of \\(V\\)\n\nThis is good to know as it sets a foundation for questions down the road and adjustments we may want to make to the definition of \\(E\\) to make it align better with our own theories.\nLet’s move on to a simple visualization of a graph in the following section.",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#alternate-representations-of-graphs",
+    "href": "week1_1.html#alternate-representations-of-graphs",
+    "title": "Graph Theory",
+    "section": "Alternate Representations of Graphs",
+    "text": "Alternate Representations of Graphs",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#extending-upon-e",
+    "href": "week1_1.html#extending-upon-e",
+    "title": "Graph Theory",
+    "section": "Extending Upon \\(E\\)",
+    "text": "Extending Upon \\(E\\)\nAs discussed, the structure of the graph, \\(G\\), is affected quite strongly by the nature of \\(E\\). We may choose to adjust the definition of it to obtain networks that may better represent real-world systems.\nFor instance, we might adjust \\(E\\) to mean:\n\\[E \\subseteq \\{(\\{x,y\\},i) | x, y \\in V, i \\in \\mathbb{N}\\}\\] Here, \\(E\\) is the set of edges where each edge is a tuple comprised of the unordered vertex pair \\(\\{x,y\\}\\) and \\(i \\in \\mathbb{N}\\). The index, \\(i\\), takes on any form from all of the natural numbers and distinguishes multiple multiple links connectin the same pair of vertices.\nWe can note several things from this new expression for \\(E\\). First, we have relaxed the self-loop restriction (i.e., \\(x \\neq y\\)). This allows a vertex to connect to itself.\nSecond, we have added an identifier which represents the numbered link between a set of vertices.\nUltimately, this new definition of \\(E\\) changes our graph from an undirected simple graph to an undirected multigraph.\nGiven this new result, we may now observe the following connectivity pattern:\n\nset.seed(1234)\nedges = c(\"A\", \"B\", \n          \"B\", \"C\", \n          \"B\", \"C\",\n          \"B\", \"C\",\n          \"A\", \"C\",\n          \"A\", \"A\",\n          \"A\", \"A\")\ng = make_graph(edges = edges, directed = FALSE)\nE(g)$id = seq_along(E(g))\nloop_edges = which(which_loop(g))\nloop_angles = rep(0, ecount(g))\nloop_angles[loop_edges] = c(270, 180)\nplot(g, edge.loop.angle = loop_angles)\n\n\n\n\n\n\n\n\nHere, we would have the edge list, \\(E\\), denoted as:\n\n\\(\\{A, B, 1\\}\\)\n\\(\\{B, C, 1\\}\\)\n\\(\\{B, C, 2\\}\\)\n\\(\\{B, C, 3\\}\\)\n\\(\\{A, C, 1\\}\\)\n\\(\\{A, A, 1\\}\\)\n\\(\\{A, A, 2\\}\\)\n\nThis tells us that there are 2 \\(A-A\\) links and 3 \\(B-C\\) links.\n\nReflection 3.\nMany of us have been exposed to networks previously even if we are not well-versed in their strict mathematical expression. Imagine that \\(\\{A, B, C\\}\\) are some real, tangible variables that you may be familiar with.\nWhat could the links between \\(\\{A, B, C\\}\\) be representative of?\n\n\nExamples.\n\n\n\\(\\{A, B, C\\}\\) could be cities and their links, roads. Cities often have multiple ways to move from \\(A\\) to \\(B\\) thereby explaining the multiple links\nNeurons have multiple ways of exerting influence from certain hubs to others. In the presence of brain damage, some amount of alternative avenues may be utilized by the brain to accomplish tasks",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#the-digraph",
+    "href": "week1_1.html#the-digraph",
+    "title": "Graph Theory",
+    "section": "The Digraph",
+    "text": "The Digraph\nOften, we may envision the relations between variables we are interested in as being directional. For instance, we may know that there is a temporal precedence to the connectivity patterns among our vertices. Such as, \\(\\text{Caffeine Consumption } \\rightarrow \\text{ Wakefulness}\\). In those instances, we may relax an additional components of \\(E\\) to derive the “digraph” or–simply–a [di]rected [graph].\nTo accomplish this, we revisit the equation for \\(E\\) in an undirected simple graph:\n\\[E \\subseteq \\{\\{x, y\\} \\mid x, y \\in V \\text{ and } x \\neq y\\}\\]\nWe already removed the restriction for no self-loops by eliminating \\(x \\neq y\\) when moving to the multigraph. Likewise, instead of forcing an [un]ordered pair–denoted by \\(\\{\\cdot\\}\\), we can allow for an ordered pair via \\((\\cdot)\\):\n\\[E \\subseteq \\{(x, y) \\mid x, y \\in V\\}\\]\nNow, \\(x\\rightarrow y \\neq x \\leftarrow y\\). This doubles our set of possible links between vertices. If we also add back the self-loops, this means that the value of \\(|E|_{max}\\)–the theoretical cardinality of \\(E\\) is given by:\n\\[|E|_{max} = |V|^2\\]\nThere we go! We’ve created an undirected simple graph, a multigraph, and a digraph. These are far from being the only graphs that we’ll cover in the remainder of this seminar but it serves as a strong foundation for where we will go.\nIn the following pages, we will discuss:\n\nConstruction of Graphs by Adjacency Matrices\nReview Basic Operations in Matrix Algebra\nIntroduce a final graph type",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#the-bipartite-graph",
+    "href": "week1_1.html#the-bipartite-graph",
+    "title": "Graph Theory",
+    "section": "The Bipartite Graph",
+    "text": "The Bipartite Graph",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#square",
+    "href": "week1_2.html#square",
+    "title": "Matrix Algebra",
+    "section": "Square",
+    "text": "Square",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#symmetric",
+    "href": "week1_2.html#symmetric",
+    "title": "Matrix Algebra",
+    "section": "Symmetric",
+    "text": "Symmetric",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#diagonal",
+    "href": "week1_2.html#diagonal",
+    "title": "Matrix Algebra",
+    "section": "Diagonal",
+    "text": "Diagonal",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#identity",
+    "href": "week1_2.html#identity",
+    "title": "Matrix Algebra",
+    "section": "Identity",
+    "text": "Identity",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#matrix-transpose",
+    "href": "week1_2.html#matrix-transpose",
+    "title": "Matrix Algebra",
+    "section": "Matrix Transpose",
+    "text": "Matrix Transpose",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#matrix-trace",
+    "href": "week1_2.html#matrix-trace",
+    "title": "Matrix Algebra",
+    "section": "Matrix Trace",
+    "text": "Matrix Trace",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#matrix-addition",
+    "href": "week1_2.html#matrix-addition",
+    "title": "Matrix Algebra",
+    "section": "Matrix Addition",
+    "text": "Matrix Addition",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#matrix-subtraction",
+    "href": "week1_2.html#matrix-subtraction",
+    "title": "Matrix Algebra",
+    "section": "Matrix Subtraction",
+    "text": "Matrix Subtraction",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#matrix-multiplication",
+    "href": "week1_2.html#matrix-multiplication",
+    "title": "Matrix Algebra",
+    "section": "Matrix Multiplication",
+    "text": "Matrix Multiplication",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  },
+  {
+    "objectID": "week1_2.html#matrix-division",
+    "href": "week1_2.html#matrix-division",
+    "title": "Matrix Algebra",
+    "section": "Matrix Division",
+    "text": "Matrix Division",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Matrix Algebra"
+    ]
+  }
+]

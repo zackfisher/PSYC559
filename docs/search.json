@@ -1,0 +1,143 @@
+[
+  {
+    "objectID": "introduction.html",
+    "href": "introduction.html",
+    "title": "Introduction to Network Analysis",
+    "section": "",
+    "text": "Welcome to the first week of Network Analysis to both the PSC-190 and PSC-290 students.\nTo start off the quarter, we will review the syllabus which–much like this website–contains the list of topics we will try to cover throughout the quarter. Likewise, it contains a breakdown of your quarter grades, class policies, and information regarding your presentations and quarter projects.",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "introduction.html#the-syllabus",
+    "href": "introduction.html#the-syllabus",
+    "title": "Introduction to Network Analysis",
+    "section": "The Syllabus",
+    "text": "The Syllabus\nStudents may review the syllabus on Canvas. We will discuss the uniquenesses of both courses and the connections between the two in a later section.",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "introduction.html#final-project",
+    "href": "introduction.html#final-project",
+    "title": "Introduction to Network Analysis",
+    "section": "Final Project",
+    "text": "Final Project\nThroughout the quarter, students will be introduced to a myriad of analytic methods in graph theory and network analysis. Often, the ultimate goal of these course formats is to generate some research report that may–eventually–be ready for publication.\nIn my own experience, these very rarely pan out due to how quickly a quarter unfolds over time. Instead of a full scale research project, your goal for this quarter is to design a project proposal.\nThis includes but is not limited to:\n\nAn introduction section to the topic [if focusing on a substantive question] and the analytic technique\nA methods section introducing the analytic technique in detail. This should include:\n\nThe analytic form of the technique\nThe strengths and limitations of this method\n\nAn analytic plan describing:\n\nWhy this technique was chosen over alternative avenues\nThe expected results and how it will be applied\nA skeleton code for running the analysis\n[Optional] Either a simulated showcase or an application to real-data to demonstrate the potential results",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "introduction.html#class-presentation",
+    "href": "introduction.html#class-presentation",
+    "title": "Introduction to Network Analysis",
+    "section": "Class Presentation",
+    "text": "Class Presentation\nStudents will be in-charge for presenting on one of the topics during the quarter. If there are more students than there are topics, you are welcome to form teams to present.\nOnce topics are assigned, it will be your job to prepare the .qmd file for the week you have been assigned.\nIn your .qmd, you will provide an outline of the research articles that were assigned for the week as well as implementation of the technique to code. In the week prior to your presentation, you will be required to meet with me to discuss your plans for the presentation.\nIn our meeting, we will review your plans and discuss places where more detail could be added. Likewise, for your coding example, we will work together to generate a set of code that will clearly illustrate the method using examples relevant to your interests.\nFinally, student presenters will generate the weekly reflection questions and coding challenges for their week.",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "introduction.html#class-format",
+    "href": "introduction.html#class-format",
+    "title": "Introduction to Network Analysis",
+    "section": "Class Format",
+    "text": "Class Format\nThe general layout of each weekly meeting is as follows:\n\nA topical overview of the readings for the current week and discussion\n\nThese will be led by the student presenters that week with the goal of facilitating discussion\nDiscussions may include comments or questions resulting from the readings or other, ideas inspired by the readings\nStudents are encouraged to bring their own lived experiences, interests, and knowledge to these conversations. Participation is a major component of this course and we will be meeting for \\(\\sim 3\\) hours each week.\n\nA translation of the readings of the week into actionable code\n\nThese will be led by the student presenters of the week\nCode will be reviewed by me–the instructor–prior to presentation to make sure it is thorough and free of bugs\nStudents will be in charge of developing a problem set for the week consisting of strengths, limitations, and application of the methods",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
+    "objectID": "week1_1.html",
+    "href": "week1_1.html",
+    "title": "Graph Theory",
+    "section": "",
+    "text": "Graph theory and network analysis are often used interchangeably. Past literature may draw the line between graphs and networks by whether or not they “touch” real data. Others (e.g., Barnes & Harary, 1983) might suggest that graph theory is where improvements are made to the field and network analysis are where those theories go to die.\nIn this seminar, we will abide by the former set of arguments. Graphs will apply to the theoretical models we are working with and networks will be the models when applied to data.",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#a-brief-history",
+    "href": "week1_1.html#a-brief-history",
+    "title": "Graph Theory",
+    "section": "A Brief History",
+    "text": "A Brief History\nThe history of graph theory is quite extensive. It’s difficult to pinpoint the exact origins of when people began connecting circles with lines and calling them things; however, the general consensus is that Euler’s solving of the “Bridges of Königsberg” problem in 1736 was the first formalism of graph theory.\nSince then, graph theory and–by extension–network analysis has seen a dramatic rise in their implementation and development across various fields including [but not limited to]:\n\nMathematics\nStatistical Physics\nBiology\nComputer Science\nSociology\nPsychology\n\nThis course is designed around the formalisms of graph theory and its extensions into network interventions, attacks, and control. Likewise, we will discuss alternative forms and representations of networks that–to my knowledge–have not been sufficiently discussed in the field of psychology.\nThis means that the more recent work on “network theories in Psychology” a la regularized pairwise Markov random fields will not be a primary focus of the course; however, they will be covered to give everyone familiarity with the contemporary directions of psychological research.\nMy hope is that exposure to the broader field of graph theory and/or network analysis will encourage a greater deal of thought and scrutiny over applications of these techniques to data which may or may not be amenable to graph theoretical problems.\nIn this seminar, we are learning analytic techniques that may or may not align with our theories of the real world. Do not fall into the trap of thinking graphs apply to all possible questions. Graphs–like CFAs, SEMs, SSMs, or any other acronym–imply something about our real world. If those assumptions are not tenable, then the model is inappropriate.\nTo quote from Barnes & Harary (1983):\n\n“The example given from psychology [of Factor Analysis] shows also how the growth of a social science can be distorted when its practioners become dominated not by empirical evidence but by a mathematical technique in which they assume a proprietary interest. Network analysts should be forewarned against this hazard.”",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#some-illustrative-examples",
+    "href": "week1_1.html#some-illustrative-examples",
+    "title": "Graph Theory",
+    "section": "Some Illustrative Examples",
+    "text": "Some Illustrative Examples\nBefore we dive into defining a graph or network, we can talk about networks in the real-world. Surely, many of us have been exposed to networks whether we were aware of them at the time or not. For instance, this website is one of many websites that exist on the internet which is one of humanities greatest [or worst, your choice] creations. Likewise, the internet is fundamentally a network:\n\n\n\nThere, we can find vertices [websites] and links representing whether the website in question connects to another website. One might expect a website like Google to have a lot of “links” or connections while this website likely has very few–if any–connections.\nLaniakeia in Hawaiian means, “Immeasurable Heaven” and is the name for our local galactic supercluster; the neighborhood of our Milky Way and billions of other was created by Tully et al., 2014 to represent the “flow” of galaxies towards or away some basic of attraction. Galaxies that ultimately shared the same main attractor where ultimately lumped into the same galactic neighborhood as us.\n\n\n\nLikewise, very small things and systems can be treated as graphs. Work by Steinway et al., 2014 identified pathways which resulted in the activation of the Sonic Hedgehog (SHH) signaling pathway which is involved in tissue repair and directed cellular genesis. In their work, they constructed a Boolean network to model these interactions and found that SHH gets hijacked during the epithelial-to-mesenchymal transition (EMT) which contributes to cancer progression. Once hijacked, SHH drives the development of cancer by enabling cells to become more invasive and likely to spread.\n\n\n\nOver the past decade, the use of graphs and networks has exploded in the psychological sciences. Much of my own research involves the intersection of networks and dynamical models. In one of my papers, we investigated how the strength of relations between psychological symptoms varied depending on the sampling interval.\n\n\n\nAll that said, graphs are incredibly broad representations of complex, real-world systems. Despite the fact that they may not represent the true mathematical model which may have generated our data, they are still powerful tools for understanding, modeling, and “controlling” real-world systems.",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#defining-a-graph",
+    "href": "week1_1.html#defining-a-graph",
+    "title": "Graph Theory",
+    "section": "Defining a Graph",
+    "text": "Defining a Graph\nWe begin our own journey in graph theory/network analysis by introducing the basic formalisms and mathematical notation of graphs.\nThis section may be among the most mathematically dense components of this entire seminar. If you have trouble following along, that is okay. Imagine today’s meeting as learning the language for graph theory.\nAs with any language, these things take time to settle and become familiar. My hope is that exposure to these specific terms early on will lead to a much easier time grasping difficult concepts later in the quarter.\nAsk questions. Ask for examples. Begin discussion. These will help you and others in the course.\nLet’s begin!\nThe most basic form of a graph–referred to as a simple undirected graph–is given by:\n\\[G = (V,E)\\]\nwhere:\n\n\\(G\\): the graph is given by\n\\(V\\), a set of vertices and\n\\(E \\subseteq \\{\\{x, y\\} \\mid x, y \\in V \\text{ and } x \\neq y\\}\\)\n\nThe notation of \\(E\\) may be a bit challenging for those without familiarity with mathematical notation. First, we’ll break down the notation and then verbalize the notation of \\(E\\):\n\n\\(\\subseteq\\): subset\n\\(\\{\\cdot_{1}, \\cdot_{2}\\}\\): an unordered pair; a pair where the order of \\(\\cdot_{1}\\) and \\(\\cdot_{2}\\) does not matter\n\\(x, y \\in V\\): \\(x\\) and \\(y\\) “in the set of” \\(V\\)\n\\(x \\neq y\\): \\(x\\) cannot equal \\(y\\)\n\nSo, we verbalize the notation of \\(E\\) as:\n\n\\(E\\) is a subset of all unordered pairs, \\(\\{x, y\\}\\) such that \\(x\\) and \\(y\\) are elements from the set of vertices, \\(V\\), and are not the same vertex (i.e., \\(x \\neq y\\)).\n\nPut another way, \\(E\\) is the subset of \\(\\{x,y\\}\\) pairs of vertices which are connected to one another. They are our links or edges.\nIt’s important to note that the way we define \\(E\\) has a strong effect on the types of graphs we will be able to generate and study.\nFurther, we can identify some limits to \\(G\\) just by looking at the expression of \\(E\\). Namely, in the number of total links that may exist in \\(G\\) given \\(V\\).\n\nReflection 1.\nWhat are the limits imposed on \\(E\\) given \\(V\\)?\nLet’s solve this by defining a graph comprised of 3 vertices and creating a table or a matrix; a term we will define formally in the following section.\nAssume that forbidden links are set to \\(0.00\\) and allowable links are set to \\(1.00\\). Given that, which links would be set to \\(1.00\\)? Which would be \\(0.00\\)?\n\\[\n\\underset{p\\times p}{\\mathbf{A}} =\n\\begin{bmatrix}\na_{11} & a_{12} & a_{13} \\\\\na_{21} & a_{22} & a_{23} \\\\\na_{31} & a_{32} & a_{33}\n\\end{bmatrix}\n\\]\n\n\nAnswer.\n\nFor the matrix, the elements are configured as follows:\n\\[\n\\underset{p\\times p}{\\mathbf{A}} =\n\\begin{bmatrix}\n0 & a_{1} & a_{2} \\\\\na_{1} & 0 & a_{3} \\\\\na_{2} & a_{3} & 0\n\\end{bmatrix}\n\\] Note that the diagonal elements are 0 because \\(x \\neq y\\) and “off-diagonal” elements are equal to one another. This is the matrix implied by the rules of an undirected simple graph.\nThe definition of \\(E\\) has several constraints:\n\nFirst that: \\(x \\neq y\\)\nSecond that: \\(\\{x,y\\}\\) are unordered pairs; meaning \\(\\{x,y\\} = \\{y,x\\}\\)\n\nThis means that vertices in \\(G\\) may not link to themselves and that 2 vertices may be connected to one other only once.\nFor our \\(3\\times 3\\) table only 3 links can be drawn out of the \\(3\\times 3 = 9\\) possible. We can simplify this to say that there are \\(n\\times n\\) cells.\n\nThe diagonal part is one set of \\(n\\)\nThe parts above and below the diagonal are \\(n\\times (n - 1)\\)\n\nIf we only want the lower cells, we can just divide by 2 and get: \\(\\frac{n\\times(n-1)}{2}\\).\nTo get our \\(n\\) for our graph, we need to know the total number of vertices which is given by \\(|V|\\) or the “cardinality” of \\(V\\). This is just a fancy way of expressing the size of the set.\nThus, we can derive the total number of possible links as:\n\\[|E|_{max} = \\frac{|V|(|V|-1)}{2}\\] where:\n\n\\(|\\cdot|\\) is the cadinality–or size–of \\(\\cdot\\)\n\nThis means that the maximum cardinality–or size–of \\(E\\) is constrained by the cardinality of \\(V\\)\n\nThis is good to know as it sets a foundation for questions down the road and adjustments we may want to make to the definition of \\(E\\) to make it align better with our own theories.\nLet’s move on to a simple visualization of a graph in the following section.",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#visualization-of-an-undirected-graph",
+    "href": "week1_1.html#visualization-of-an-undirected-graph",
+    "title": "Graph Theory",
+    "section": "Visualization of an Undirected Graph",
+    "text": "Visualization of an Undirected Graph\nHere, we will define a graph, \\(G\\), which–as discussed above–is defined by \\(V\\) and \\(E\\). We will define \\(G\\) by:\n\n\\(V = \\{A, B, C\\}\\)\n\\(E = \\{\\{A,B\\}, \\{B,C\\}, \\{A,C\\}\\}\\)\n\nThis tells us that we have a graph with 3-vertices and 3-links.\nThis is equivalent to the following graph in \\(\\texttt{R}\\):\n\n# The \"#\" symbol is how you add comments into R code.\n  # Add this before any text to avoid running it and running into errors\n\n# First, we'll install the igraph package if we haven't done so already\n  # install.packages(\"igraph\")\n# After installing a package, we have to \"call it in\" via the library() or require() functions\nlibrary(igraph)\nedges = c(\"A\", \"B\", \n          \"B\", \"C\", \n          \"A\", \"C\")\ng = make_graph(edges = edges, directed = FALSE)\nplot(g)\n\n\n\n\n\n\n\n\nAs we discussed earlier, the definition of \\(E\\) forces an interpretation of the graph that may or may not be amenable to the types of graphs that you work with in your own work.\n\nReflection 2.\n\nFirst, what complex systems do you think are appropriately modeled by non-directed connections with no self-loops? Try to play devil’s advocate even if you disagree.\nOther than the link limit, what other constraints are imposed upon \\(E\\) that may not align with graphs we might encounter in real life?\n\nFor those who have seen or worked with networks before, what might be missing in the graph that might expect?\n\n\nAnswer.\n\n\nFriendship networks could be defined as bidirectional; though, when two vertices [people] disagree then we may need more complex definitions of \\(E\\)\nThe classic co-authorship networks\nElectrical grids and road networks\n\nBy contrast, many graphs we typically work with may:\n\nHave well-defined bidirectional connections\nPossess self-loops\nHave weighted values for links between vertices\n\n\nThese discussions and thoughts might then push us to redefine \\(E\\) and identify alternative definitions which may better reflect our reality.",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#extending-upon-e",
+    "href": "week1_1.html#extending-upon-e",
+    "title": "Graph Theory",
+    "section": "Extending Upon \\(E\\)",
+    "text": "Extending Upon \\(E\\)\nAs discussed, the structure of the graph, \\(G\\), is affected quite strongly by the nature of \\(E\\). We may choose to adjust the definition of it to obtain networks that may better represent real-world systems.\nFor instance, we might adjust \\(E\\) to mean:\n\\[E \\subseteq \\{(\\{x,y\\},i) | x, y \\in V, i \\in \\mathbb{N}\\}\\] Here, \\(E\\) is the set of edges where each edge is a tuple comprised of the unordered vertex pair \\(\\{x,y\\}\\) and \\(i \\in \\mathbb{N}\\). The index, \\(i\\), takes on any form from all of the natural numbers and distinguishes multiple multiple links connectin the same pair of vertices.\nWe can note several things from this new expression for \\(E\\). First, we have relaxed the self-loop restriction (i.e., \\(x \\neq y\\)). This allows a vertex to connect to itself.\nSecond, we have added an identifier which represents the numbered link between a set of vertices.\nUltimately, this new definition of \\(E\\) changes our graph from an undirected simple graph to an undirected multigraph.\nGiven this new result, we may now observe the following connectivity pattern:\n\nset.seed(1234)\nedges = c(\"A\", \"B\", \n          \"B\", \"C\", \n          \"B\", \"C\",\n          \"B\", \"C\",\n          \"A\", \"C\",\n          \"A\", \"A\",\n          \"A\", \"A\")\ng = make_graph(edges = edges, directed = FALSE)\nE(g)$id = seq_along(E(g))\nloop_edges = which(which_loop(g))\nloop_angles = rep(0, ecount(g))\nloop_angles[loop_edges] = c(270, 180)\nplot(g, edge.loop.angle = loop_angles, margin = 0.20)\n\n\n\n\n\n\n\n\nHere, we would have the edge list, \\(E\\), denoted as:\n\n\\(\\{A, B, 1\\}\\)\n\\(\\{B, C, 1\\}\\)\n\\(\\{B, C, 2\\}\\)\n\\(\\{B, C, 3\\}\\)\n\\(\\{A, C, 1\\}\\)\n\\(\\{A, A, 1\\}\\)\n\\(\\{A, A, 2\\}\\)\n\nThis tells us that there are 2 \\(A-A\\) links and 3 \\(B-C\\) links.\n\nReflection 3.\nMany of us have been exposed to networks previously even if we are not well-versed in their strict mathematical expression. Imagine that \\(\\{A, B, C\\}\\) are some real, tangible variables that you may be familiar with.\nWhat could the links between \\(\\{A, B, C\\}\\) be representative of?\n\n\nExamples.\n\n\n\\(\\{A, B, C\\}\\) could be cities and their links, roads. Cities often have multiple ways to move from \\(A\\) to \\(B\\) thereby explaining the multiple links\nNeurons have multiple ways of exerting influence from certain hubs to others. In the presence of brain damage, some amount of alternative avenues may be utilized by the brain to accomplish tasks",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "week1_1.html#the-digraph",
+    "href": "week1_1.html#the-digraph",
+    "title": "Graph Theory",
+    "section": "The Digraph",
+    "text": "The Digraph\nOften, we may envision the relations between variables we are interested in as being directional. For instance, we may know that there is a temporal precedence to the connectivity patterns among our vertices. Such as, \\(\\text{Caffeine Consumption } \\rightarrow \\text{ Wakefulness}\\). In those instances, we may relax an additional components of \\(E\\) to derive the “digraph” or–simply–a [di]rected [graph].\nTo accomplish this, we revisit the equation for \\(E\\) in an undirected simple graph:\n\\[E \\subseteq \\{\\{x, y\\} \\mid x, y \\in V \\text{ and } x \\neq y\\}\\]\nWe already removed the restriction for no self-loops by eliminating \\(x \\neq y\\) when moving to the multigraph. Likewise, instead of forcing an [un]ordered pair–denoted by \\(\\{\\cdot\\}\\), we can allow for an ordered pair via \\((\\cdot)\\):\n\\[E \\subseteq \\{(x, y) \\mid x, y \\in V\\}\\]\nNow, \\(x\\rightarrow y \\neq x \\leftarrow y\\). This doubles our set of possible links between vertices. If we also add back the self-loops, this means that the value of \\(|E|_{max}\\)–the theoretical cardinality of \\(E\\) is given by:\n\\[|E|_{max} = |V|^2\\]\nThere we go! We’ve created an undirected simple graph, a multigraph, and a digraph. These are far from being the only graphs that we’ll cover in the remainder of this seminar but it serves as a strong foundation for where we will go.\nIn the following pages, we will discuss:\n\nReview Basic Operations in Matrix Algebra\nConstruction of Graphs by Adjacency Matrices",
+    "crumbs": [
+      "Week 1: Fundamentals",
+      "Graph Theory"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PSC559: Applied Machine Learning in Psychology",
+    "section": "",
+    "text": "Welcome to the Machine Learning seminar!\nThroughout this course, we will be covering fundamental topics in graph theory and network analysis and how these concepts may relate to modeling and understanding psychological phenomenon.\nIt will be your responsibility to stay up-to-date with topics and voice any concerns or confusion by e-mailing me.\nPlease regularly check this page as well as the syllabus on Canvas for updates to the schedule or topics. If you require assistance or accommodations, please reach out to the Student Disability Center (SDC) to file for them and they will reach out to me. You are welcome to disclose to me as well in the interim; however, official documentation is still necessary.\nIn the tabs to the left, you will find each topic arranged by weeks.\nNotice, this page is dedicated to students enrolled in both the PSC-190 and PSC-290 forms of Network Analysis. This is intentional. Many of the topics we discuss will be in parallel. Only the content and style of the materials will change between sessions."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  }
+]
