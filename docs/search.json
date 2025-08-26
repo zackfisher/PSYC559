@@ -7,13 +7,6 @@
     "text": "About this site\n\n1 + 1\n\n[1] 2"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "PSC559: Applied Machine Learning in Psychology",
-    "section": "",
-    "text": "Welcome to the Machine Learning seminar!"
-  },
-  {
     "objectID": "week1_1.html",
     "href": "week1_1.html",
     "title": "Introduction to R",
@@ -56,5 +49,19 @@
       "Foundations of ML",
       "Introduction to R"
     ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PSC559: Applied Machine Learning in Psychology",
+    "section": "",
+    "text": "Welcome to the Machine Learning seminar!"
+  },
+  {
+    "objectID": "readme.html",
+    "href": "readme.html",
+    "title": "PSYC559: Applied Machine Learning in Psychology",
+    "section": "",
+    "text": "https://zackfisher.github.io/PSYC559/"
   }
 ]

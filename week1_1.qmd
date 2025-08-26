@@ -5,7 +5,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Setting Up Your Environment 
+## Setting Up Your Environment
 
 Before getting started we will need to install R and RStudio.
 
