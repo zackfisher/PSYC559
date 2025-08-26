@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Zachary F. Fisher">
 
-<title>PSC559: Applied Machine Learning in Psychology – PSYC559: Applied Machine Learning in Psychology</title>
+<title>PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -67,6 +68,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -80,9 +110,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      PSYC559: Applied Machine Learning in Psychology
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./introduction.html">Introduction</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -101,7 +129,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./introduction.html" class="sidebar-item-text sidebar-link">
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -145,21 +173,34 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-syllabus" id="toc-the-syllabus" class="nav-link active" data-scroll-target="#the-syllabus">The Syllabus</a></li>
+  <li><a href="#getting-statextttrted-with-textttr" id="toc-getting-statextttrted-with-textttr" class="nav-link" data-scroll-target="#getting-statextttrted-with-textttr">Getting sta<span class="math inline">\(\texttt{R}\)</span>ted with <span class="math inline">\(\texttt{R}\)</span></a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">PSC559: Applied Machine Learning in Psychology</h1>
+<h1 class="title">PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Zachary F. Fisher </p>
+          </div>
+  </div>
     
   
     
@@ -170,9 +211,20 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome to the Machine Learning seminar!</p>
+<p>Welcome to the first week of Applied Machine Learning in Psychology.</p>
+<section id="the-syllabus" class="level2">
+<h2 class="anchored" data-anchor-id="the-syllabus">The Syllabus</h2>
+<p><a href="https://canvas.unc.edu/">Students may review the syllabus on Canvas</a>.</p>
+</section>
+<section id="getting-statextttrted-with-textttr" class="level1">
+<h1>Getting sta<span class="math inline">\(\texttt{R}\)</span>ted with <span class="math inline">\(\texttt{R}\)</span></h1>
+<p>If you have not done so already, you will need to download <a href="https://ftp.osuosl.org/pub/cran/">R</a> and <a href="https://posit.co/download/rstudio-desktop/">RStudio</a>.</p>
+<p><span class="math inline">\(\texttt{R}\)</span> is a programming language that is popular among researchers in statistics, econometrics, and the social and behavioral sciences. It has a great deal of utility for modeling and visualizing data and will be our primary tool for testing concepts in this seminar.</p>
+<p><strong>If you have never used <span class="math inline">\(\texttt{R}\)</span> or have never coded in your entire life, that is fine</strong>!</p>
+<p>You will be walked through basic <span class="math inline">\(\texttt{R}\)</span> coding and functions when they are introduced. Even in instances where you are presenting and developing the coding sets for the coming week, you will be guided by myself with coding suggestions and support. Fear of coding is not a reason to be worried about your success in this course!</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

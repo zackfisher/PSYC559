@@ -1,0 +1,50 @@
+---
+title: "Reading in Data"
+author: "Zachary Fisher" 
+editor_options: 
+  chunk_output_type: console
+---
+
+## Loading Data
+
+One of the most important initial tasks you'll face in R is reading in data. Let's walk through some basics.
+
+By reading in data we are generally refering to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabularobject where columns representing variables and rows representing cases. This is not always the case but covers the most basic use case.
+
+![Example of tabular data](images/tabular.png)
+
+Many different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text),
+.sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.
+
+### Location of the Data File
+
+One of the trickiest parts of loading data from your hard drive into R is knowing how to locate it. Depending on whether you are using a Mac or Windows machine you can read in .csv files directly if you know the path. For example, I can load a .csv file into R and save it as a data frame labeled `df` as follows:
+
+```{r}
+df <- read.csv("/Users/zacharyfisher/Dropbox/Macbook/UNC/Teaching/Courses/PSYC559/PSYC559-Site/data/ifood_df.csv")
+```
+
+Once the .csv file is loaded I can look at it using the `View()` function
+
+```{r, eval=FALSE}
+View(df)
+```
+
+or simple examine the first few cases using `head()`
+
+```{r}
+head(df)
+```
+
+### Loading Data from the Working Directory
+
+Another way to load data is to set the working directory to the folder where the data is located. This can be helpful if you are having trouble finding the path to the data. From RStudio, use the menu to change your working directory under **Session \> Set Working Directory \> Choose Directory**. Then set the working directory to the folder where you have stored your data. Conveniently, you will also now see a path to the data in your R console you can use to Copy-Paste a path. Now you can simply use the filename of the .csv file to read in the data. See the example below.
+
+![Set the working directory in RStudio.](images/working_directory.png)
+
+```{r}
+setwd("/Users/zacharyfisher/Dropbox/Macbook/UNC/Teaching/Courses/PSYC559/PSYC559-Site/data")
+df <- read.csv("ifood_df.csv")
+```
+
+In addition to `setwd()` you can also find what your current working directory is using the `getwd()` command.

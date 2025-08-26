@@ -13,6 +13,10 @@ website:
       - section: "Foundations of ML"
         contents:
           - week1_1.qmd
+          - week1_1b.qmd
+          - week1_2.qmd
+          - week1_3.qmd
+          - week1_4.qmd
       # - section: "Week 2: Centrality"
       #   contents:
       #     - week2_1.qmd

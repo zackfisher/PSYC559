@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Zachary Fisher">
 
-<title>PSC559: Applied Machine Learning in Psychology – PSYC559: Applied Machine Learning in Psychology</title>
+<title>R Packages – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -80,9 +115,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      PSYC559: Applied Machine Learning in Psychology
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week1_1.html">Foundations of ML</a></li><li class="breadcrumb-item"><a href="./week1_1b.html">R Packages</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -122,7 +155,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week1_1b.html" class="sidebar-item-text sidebar-link">
+  <a href="./week1_1b.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">R Packages</span></a>
   </div>
 </li>
@@ -145,21 +178,35 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#installing-r-packages" id="toc-installing-r-packages" class="nav-link active" data-scroll-target="#installing-r-packages">Installing R Packages</a></li>
+  <li><a href="#using-r-packages" id="toc-using-r-packages" class="nav-link" data-scroll-target="#using-r-packages">Using R Packages</a></li>
+  <li><a href="#finding-useful-r-packages" id="toc-finding-useful-r-packages" class="nav-link" data-scroll-target="#finding-useful-r-packages">Finding Useful R Packages</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week1_1.html">Foundations of ML</a></li><li class="breadcrumb-item"><a href="./week1_1b.html">R Packages</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">PSC559: Applied Machine Learning in Psychology</h1>
+<h1 class="title">R Packages</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Zachary Fisher </p>
+          </div>
+  </div>
     
   
     
@@ -170,9 +217,40 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome to the Machine Learning seminar!</p>
+<section id="installing-r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="installing-r-packages">Installing R Packages</h2>
+<p>One of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the <code>ggplot2</code> package for plotting and visualizing data and the <code>psych</code> package for describing data numerically.</p>
+<p>To install R packages you can use the <code>install.packages()</code> function directly in the console as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>or you can do so from the Packages tab of the Files pane in RStudio using the following steps:</p>
+<ol type="1">
+<li><p>Click on the “Packages” tab.</p></li>
+<li><p>Click on “Install” next to Update.</p></li>
+<li><p>Type the name of the package under “Packages (separate multiple with space or comma):” In this case, type <code>ggplot2</code>.</p></li>
+<li><p>Click “Install.”</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/install_packages_easy_way.png" class="img-fluid figure-img"></p>
+<figcaption>Install packages using RStudio</figcaption>
+</figure>
+</div>
+</section>
+<section id="using-r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="using-r-packages">Using R Packages</h2>
+<p>Once a package is installed you can load it into your environment using the <code>library()</code> function. Once loaded you have access to all the R functions supplied by that package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="finding-useful-r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="finding-useful-r-packages">Finding Useful R Packages</h2>
+<p>There are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the <a href="https://cran.r-project.org/web/views/">CRAN Task Views</a>. For example, there is an interesting <a href="https://cran.r-project.org/web/views/MachineLearning.html">Task View for Machine Learning</a> that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the S<a href="https://cran.r-project.org/web/views/SportsAnalytics.html">ports Analytics Task View</a> there is a <a href="https://cran.r-project.org/web/packages/f1dataR/index.html"><code>f1dataR</code></a> package that provides historical data from the beginning of Formula 1.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

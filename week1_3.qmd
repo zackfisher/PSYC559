@@ -1,0 +1,55 @@
+---
+title: "Describing Data Numerically"
+author: "Zachary Fisher" 
+editor_options: 
+  chunk_output_type: console
+---
+
+## Numerical Summaries of Data Frames
+
+Once you have read in a data frame it can be useful to know how the variables are understood by R. For example, let's look at some [Kaggle Marketing Analytics Data](https://www.kaggle.com/datasets/jackdaoud/marketing-data){.uri}. You can download the raw data [here](https://github.com/nailson/ifood-data-business-analyst-test).
+
+![Data dictionary for marketing data](images/dictionary.png){fig-align="center"}
+
+### Read in Marketing Data
+
+Let's read in the data using the `read.csv()` function.
+
+```{r}
+setwd("/Users/zacharyfisher/Dropbox/Macbook/UNC/Teaching/Courses/PSYC559/PSYC559-Site/data")
+df <- read.csv("ifood_df.csv")
+```
+
+### Install and Load `psych` Package
+
+Once we know the data has been read into R we can look at how R understands the data file using the structure function `str()`
+
+```{r}
+str(df)
+```
+
+The `psych` package in R provides some useful function for describing data. Let's install `psyc`, load the package, and look at our data.
+
+```{r, eval=FALSE}
+install.packages("psych") # install the package
+```
+
+```{r}
+library("psych") # load the library
+```
+
+### Describe the Data
+
+Now let's use the `describe()` function from `psych` to look at our marketing data.
+
+```{r}
+describe(df) # describe our marketing data
+```
+
+### Describe the Data by Group
+
+We may also be interested in describing the data based on a specific grouping factor. For example, let's look at our summaries based on whether or not a customer has lodged a formal complaint.
+
+```{r}
+describeBy(df, group = "Complain") # describe our marketing data
+```

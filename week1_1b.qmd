@@ -1,0 +1,40 @@
+---
+title: "R Packages"
+author: "Zachary Fisher" 
+editor_options: 
+  chunk_output_type: console
+---
+
+## Installing R Packages
+
+One of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the `ggplot2` package for plotting and visualizing data and the `psych` package for describing data numerically.
+
+To install R packages you can use the `install.packages()` function directly in the console as follows:
+
+```{r, eval=FALSE}
+install.packages("ggplot2")
+```
+
+or you can do so from the Packages tab of the Files pane in RStudio using the following steps:
+
+1.  Click on the “Packages” tab.
+
+2.  Click on “Install” next to Update.
+
+3.  Type the name of the package under “Packages (separate multiple with space or comma):” In this case, type `ggplot2`.
+
+4.  Click “Install.”
+
+![Install packages using RStudio](images/install_packages_easy_way.png){fig-align="center"}
+
+## Using R Packages
+
+Once a package is installed you can load it into your environment using the `library()` function. Once loaded you have access to all the R functions supplied by that package.
+
+```{r}
+library("ggplot2")
+```
+
+## Finding Useful R Packages
+
+There are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the [CRAN Task Views](https://cran.r-project.org/web/views/). For example, there is an interesting [Task View for Machine Learning](https://cran.r-project.org/web/views/MachineLearning.html) that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the S[ports Analytics Task View](https://cran.r-project.org/web/views/SportsAnalytics.html) there is a [`f1dataR`](https://cran.r-project.org/web/packages/f1dataR/index.html) package that provides historical data from the beginning of Formula 1.
