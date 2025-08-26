@@ -7,10 +7,10 @@ website:
     style: "docked"
     search: false
     contents:
-      - text: "Introduction"
+      - text: "Fundamentals of R"
         href: introduction.qmd
         contents: 
-      - section: "Foundations of ML"
+      - section: "Introduction to R"
         contents:
           - week1_1.qmd
           - week1_1b.qmd

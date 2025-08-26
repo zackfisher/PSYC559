@@ -115,9 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      PSYC559: Applied Machine Learning in Psychology
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./week1_4.html">Describing Data Visually</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -137,13 +135,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./introduction.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Introduction</span></a>
+ <span class="menu-text">Fundamentals of R</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Foundations of ML</span></a>
+ <span class="menu-text">Introduction to R</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -173,6 +171,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Describing Data Numerically</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week1_4.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Describing Data Visually</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -189,6 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#install-and-load-ggplot2-package" id="toc-install-and-load-ggplot2-package" class="nav-link" data-scroll-target="#install-and-load-ggplot2-package">Install and Load <code>ggplot2</code> Package</a></li>
   <li><a href="#the-mpg-dataset" id="toc-the-mpg-dataset" class="nav-link" data-scroll-target="#the-mpg-dataset">The <code>mpg</code> Dataset</a></li>
+  <li><a href="#creating-a-basic-ggplot" id="toc-creating-a-basic-ggplot" class="nav-link" data-scroll-target="#creating-a-basic-ggplot">Creating a Basic ggplot</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -196,7 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./week1_4.html">Describing Data Visually</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Describing Data Visually</h1>
 </div>
@@ -237,7 +242,91 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="the-mpg-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="the-mpg-dataset">The <code>mpg</code> Dataset</h3>
-<p><code>ggplot2</code> contains a dataset titled <code>mpg</code> that contains observations collected by the US Environmental Protection Agency on 38 models of car.</p>
+<p><code>ggplot2</code> contains a dataset titled <code>mpg</code> that contains observations collected by the US Environmental Protection Agency on 38 models of car. Let’s look at the dataset using the <code>describe()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"psych"</span>) <span class="co"># load the library</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'psych'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:ggplot2':
+
+    %+%, alpha</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              vars   n    mean    sd median trimmed   mad    min  max range
+manufacturer*    1 234    7.76  5.13    6.0    7.68  5.93    1.0   15  14.0
+model*           2 234   19.09 11.15   18.5   18.98 14.08    1.0   38  37.0
+displ            3 234    3.47  1.29    3.3    3.39  1.33    1.6    7   5.4
+year             4 234 2003.50  4.51 2003.5 2003.50  6.67 1999.0 2008   9.0
+cyl              5 234    5.89  1.61    6.0    5.86  2.97    4.0    8   4.0
+trans*           6 234    5.65  2.88    4.0    5.53  1.48    1.0   10   9.0
+drv*             7 234    1.67  0.66    2.0    1.59  1.48    1.0    3   2.0
+cty              8 234   16.86  4.26   17.0   16.61  4.45    9.0   35  26.0
+hwy              9 234   23.44  5.95   24.0   23.23  7.41   12.0   44  32.0
+fl*             10 234    4.63  0.70    5.0    4.77  0.00    1.0    5   4.0
+class*          11 234    4.59  1.99    5.0    4.64  2.97    1.0    7   6.0
+               skew kurtosis   se
+manufacturer*  0.21    -1.63 0.34
+model*         0.11    -1.23 0.73
+displ          0.44    -0.91 0.08
+year           0.00    -2.01 0.29
+cyl            0.11    -1.46 0.11
+trans*         0.29    -1.65 0.19
+drv*           0.48    -0.76 0.04
+cty            0.79     1.43 0.28
+hwy            0.36     0.14 0.39
+fl*           -2.25     5.76 0.05
+class*        -0.14    -1.52 0.13</code></pre>
+</div>
+</div>
+</section>
+<section id="creating-a-basic-ggplot" class="level3">
+<h3 class="anchored" data-anchor-id="creating-a-basic-ggplot">Creating a Basic ggplot</h3>
+<p>Let’s take a look at two variables in the <code>mpg</code> dataset.</p>
+<ul>
+<li><p><code>displ</code>, a car’s engine size, in litres.</p></li>
+<li><p><code>hwy</code>, a car’s fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.</p></li>
+</ul>
+<p>To plot <code>mpg</code>, run this code to put <code>displ</code> on the x-axis and <code>hwy</code> on the y-axis:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week1_4_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also convey information about our data by mapping the aesthetics in our plots to the variables in our dataset. For example, we can map the colors of the data points to the <code>class</code> variable to reveal the class of each car.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy, <span class="at">color =</span> class))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week1_4_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Lastly, we can use facets to split a larger plot into subplots. This can be helpful when we want to break apart our data based on a categorical variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> class, <span class="at">nrow =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week1_4_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 </section>
