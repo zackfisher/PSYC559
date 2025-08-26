@@ -1,15 +1,15 @@
 ---
-title: "Introduction to Network Analysis"
-author: "Jonathan J. Park"
+title: "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY"
+author: "Zachary F. Fisher"
 ---
 
-Welcome to the first week of Network Analysis to both the PSC-190 and PSC-290 students.
+Welcome to the first week of Applied Machine Learning in Psychology.
 
-To start off the quarter, we will review the syllabus which--much like this website--contains the list of topics we will try to cover throughout the quarter. Likewise, it contains a breakdown of your quarter grades, class policies, and information regarding your presentations and quarter projects.
+To start off the quarter, we will review the syllabus which--much like this website--contains the list of topics we will try to cover throughout the quarter. Likewise, it contains a breakdown of your quarter grades, class policies, and information regarding your presentations and projects.
 
 ## The Syllabus
 
-[Students may review the syllabus on Canvas](https://canvas.ucdavis.edu/).
+[Students may review the syllabus on Canvas](https://canvas.unc.edu/).
 We will discuss the uniquenesses of both courses and the connections between the two in a later section.
 
 ## Final Project
