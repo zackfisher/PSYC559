@@ -3,13 +3,3 @@ title: "PSC559: Applied Machine Learning in Psychology"
 ---
 
 Welcome to the Machine Learning seminar!
-
-Throughout this course, we will be covering fundamental topics in graph theory and network analysis and how these concepts may relate to modeling and understanding psychological phenomenon.
-
-It will be your responsibility to stay up-to-date with topics and voice any concerns or confusion [by e-mailing me](mailto:imJPark@UCDavis.edu).
-
-Please regularly check this page as well as the syllabus [on Canvas](https://canvas.ucdavis.edu/) for updates to the schedule or topics. If you require assistance or accommodations, please reach out to the [Student Disability Center (SDC)](https://sdc.ucdavis.edu/) to file for them and they will reach out to me. You are welcome to disclose to me as well in the interim; however, official documentation is still necessary.
-
-In the tabs to the left, you will find each topic arranged by weeks.
-
-Notice, this page is dedicated to students enrolled in both the PSC-190 **and** PSC-290 forms of Network Analysis. This is intentional. Many of the topics we discuss will be in parallel. Only the content and style of the materials will change between sessions.

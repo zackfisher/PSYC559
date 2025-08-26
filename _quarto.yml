@@ -2,7 +2,7 @@ project:
   type: website
   output-dir: docs
 website:
-  title: "PSYC559: Applied Machine Learning"
+  title: "PSYC559: Applied Machine Learning in Psychology"
   sidebar:
     style: "docked"
     search: false
@@ -10,13 +10,13 @@ website:
       - text: "Introduction"
         href: introduction.qmd
         contents: 
-      - section: "Week 1: Fundamentals"
+      - section: "Foundations of ML"
         contents:
           - week1_1.qmd
-      - section: "Week 2: Centrality"
-        contents:
-          - week2_1.qmd
-          - week2_2.qmd
+      # - section: "Week 2: Centrality"
+      #   contents:
+      #     - week2_1.qmd
+      #     - week2_2.qmd
 format:
   html:
     theme: darkly
