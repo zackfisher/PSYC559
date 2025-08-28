@@ -1,0 +1,48 @@
+---
+title: "Terminology Notes"
+editor_options: 
+  chunk_output_type: console
+---
+
+::: {style="color: yellow"}
+# Some Important Definitions
+:::
+
+## Examples, Items, Instances or Cases
+
+-   **Definition:** Individual data points used for learning or evaluation.\
+-   **Example:** Each participant in a study, with their responses to a cognitive task or survey questionnaire.
+
+## Features
+
+-   **Definition:** Attributes or variables associated with each example, often represented as a vector.\
+-   **Example:** Participant age, gender, response times, scores on survey items, or physiological measures (e.g., heart rate, skin conductance).
+
+## Labels
+
+-   **Definition:** The outcome, value, or category assigned to each example.\
+-   **Example:**
+    -   Classification: Diagnosed vs. non-diagnosed for depression.\
+    -   Regression: Continuous depression score on a scale from 0–30.
+
+## Training Sample
+
+-   **Definition:** The subset of examples used to train the learning algorithm.\
+-   **Example:** 100 participants’ data with known depression scores used to train a predictive model.
+
+## Validation Sample
+
+-   **Definition:** Examples used to **tune algorithm parameters** (e.g., regularization strength, number of neurons in a network).\
+-   **Example:** 30 participants’ data used to select the optimal model settings or tuning parameters before final evaluation.
+
+## Test Sample
+
+-   **Definition:** Examples used to **evaluate model performance**, separate from training and validation. Examples used to evaluate the performance of a learning algorithm. The test sample is not made available in the learning stage.
+-   **Example:** 50 new participants whose depression scores the model predicts; predicted scores are compared to actual scores to assess accuracy.
+
+## Loss Function
+
+-   **Definition:** A function that measures the difference between predicted labels and true labels.\
+-   **Example:**
+-   **Regression:** Squared loss: L(y, y′) = (y′ − y)², e.g., predicted vs. actual depression score.\
+-   **Classification:** Zero-one loss: L(y, y′) = 1 if prediction ≠ true label, e.g., predicted diagnosis vs. actual diagnosis.

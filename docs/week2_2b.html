@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PSC559: Applied Machine Learning in Psychology – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Terminology Notes – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -80,9 +80,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      PSYC559: Applied Machine Learning in Psychology
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_2b.html">Terminology Notes</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -175,7 +173,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_2b.html" class="sidebar-item-text sidebar-link">
+  <a href="./week2_2b.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Terminology Notes</span></a>
   </div>
 </li>
@@ -186,15 +184,28 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#some-important-definitions" id="toc-some-important-definitions" class="nav-link active" data-scroll-target="#some-important-definitions">Some Important Definitions</a></li>
+  <li><a href="#examples-items-instances-or-cases" id="toc-examples-items-instances-or-cases" class="nav-link" data-scroll-target="#examples-items-instances-or-cases">Examples, Items, Instances or Cases</a></li>
+  <li><a href="#features" id="toc-features" class="nav-link" data-scroll-target="#features">Features</a></li>
+  <li><a href="#labels" id="toc-labels" class="nav-link" data-scroll-target="#labels">Labels</a></li>
+  <li><a href="#training-sample" id="toc-training-sample" class="nav-link" data-scroll-target="#training-sample">Training Sample</a></li>
+  <li><a href="#validation-sample" id="toc-validation-sample" class="nav-link" data-scroll-target="#validation-sample">Validation Sample</a></li>
+  <li><a href="#test-sample" id="toc-test-sample" class="nav-link" data-scroll-target="#test-sample">Test Sample</a></li>
+  <li><a href="#loss-function" id="toc-loss-function" class="nav-link" data-scroll-target="#loss-function">Loss Function</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_2b.html">Terminology Notes</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">PSC559: Applied Machine Learning in Psychology</h1>
+<h1 class="title">Terminology Notes</h1>
 </div>
 
 
@@ -211,11 +222,74 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome to the PSC559: Applied Machine Learning in Psychology!</p>
-<p>As the class progresses I will update this front matter with a general course overview and important announcements.</p>
-<p>If you find errors or typos in any of these materials please let me know.</p>
+<section id="some-important-definitions" class="level1" style="color: yellow">
+<h1>Some Important Definitions</h1>
+</section>
+<section id="examples-items-instances-or-cases" class="level2">
+<h2 class="anchored" data-anchor-id="examples-items-instances-or-cases">Examples, Items, Instances or Cases</h2>
+<ul>
+<li><strong>Definition:</strong> Individual data points used for learning or evaluation.<br>
+</li>
+<li><strong>Example:</strong> Each participant in a study, with their responses to a cognitive task or survey questionnaire.</li>
+</ul>
+</section>
+<section id="features" class="level2">
+<h2 class="anchored" data-anchor-id="features">Features</h2>
+<ul>
+<li><strong>Definition:</strong> Attributes or variables associated with each example, often represented as a vector.<br>
+</li>
+<li><strong>Example:</strong> Participant age, gender, response times, scores on survey items, or physiological measures (e.g., heart rate, skin conductance).</li>
+</ul>
+</section>
+<section id="labels" class="level2">
+<h2 class="anchored" data-anchor-id="labels">Labels</h2>
+<ul>
+<li><strong>Definition:</strong> The outcome, value, or category assigned to each example.<br>
+</li>
+<li><strong>Example:</strong>
+<ul>
+<li>Classification: Diagnosed vs.&nbsp;non-diagnosed for depression.<br>
+</li>
+<li>Regression: Continuous depression score on a scale from 0–30.</li>
+</ul></li>
+</ul>
+</section>
+<section id="training-sample" class="level2">
+<h2 class="anchored" data-anchor-id="training-sample">Training Sample</h2>
+<ul>
+<li><strong>Definition:</strong> The subset of examples used to train the learning algorithm.<br>
+</li>
+<li><strong>Example:</strong> 100 participants’ data with known depression scores used to train a predictive model.</li>
+</ul>
+</section>
+<section id="validation-sample" class="level2">
+<h2 class="anchored" data-anchor-id="validation-sample">Validation Sample</h2>
+<ul>
+<li><strong>Definition:</strong> Examples used to <strong>tune algorithm parameters</strong> (e.g., regularization strength, number of neurons in a network).<br>
+</li>
+<li><strong>Example:</strong> 30 participants’ data used to select the optimal model settings or tuning parameters before final evaluation.</li>
+</ul>
+</section>
+<section id="test-sample" class="level2">
+<h2 class="anchored" data-anchor-id="test-sample">Test Sample</h2>
+<ul>
+<li><strong>Definition:</strong> Examples used to <strong>evaluate model performance</strong>, separate from training and validation. Examples used to evaluate the performance of a learning algorithm. The test sample is not made available in the learning stage.</li>
+<li><strong>Example:</strong> 50 new participants whose depression scores the model predicts; predicted scores are compared to actual scores to assess accuracy.</li>
+</ul>
+</section>
+<section id="loss-function" class="level2">
+<h2 class="anchored" data-anchor-id="loss-function">Loss Function</h2>
+<ul>
+<li><strong>Definition:</strong> A function that measures the difference between predicted labels and true labels.<br>
+</li>
+<li><strong>Example:</strong></li>
+<li><strong>Regression:</strong> Squared loss: L(y, y′) = (y′ − y)², e.g., predicted vs.&nbsp;actual depression score.<br>
+</li>
+<li><strong>Classification:</strong> Zero-one loss: L(y, y′) = 1 if prediction ≠ true label, e.g., predicted diagnosis vs.&nbsp;actual diagnosis.</li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -3,13 +3,11 @@ title: "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY"
 author: "Zachary F. Fisher"
 ---
 
-Welcome to the first week of Applied Machine Learning in Psychology.
-
+Welcome to Applied Machine Learning in Psychology.
 
 ## The Syllabus
 
 [Students may review the syllabus on Canvas](https://canvas.unc.edu/).
-
 
 # Getting sta$\texttt{R}$ted with $\texttt{R}$
 
@@ -17,16 +15,6 @@ If you have not done so already, you will need to download [R](https://ftp.osuos
 
 $\texttt{R}$ is a programming language that is popular among researchers in statistics, econometrics, and the social and behavioral sciences. It has a great deal of utility for modeling and visualizing data and will be our primary tool for testing concepts in this seminar.
 
-**If you have never used $\texttt{R}$ or have never coded in your entire life, that is fine**!
+**If you have never used** $\texttt{R}$ or have never coded in your entire life, that is fine!
 
 You will be walked through basic $\texttt{R}$ coding and functions when they are introduced. Even in instances where you are presenting and developing the coding sets for the coming week, you will be guided by myself with coding suggestions and support. Fear of coding is not a reason to be worried about your success in this course!
-
-
-
-
-
-
-
-
-
-

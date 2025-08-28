@@ -2,4 +2,8 @@
 title: "PSC559: Applied Machine Learning in Psychology"
 ---
 
-Welcome to the Machine Learning seminar!
+Welcome to the PSC559: Applied Machine Learning in Psychology!
+
+As the class progresses I will update this front matter with a general course overview and important announcements.
+
+If you find errors or typos in any of these materials please let me know.

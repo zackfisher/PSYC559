@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PSC559: Applied Machine Learning in Psychology – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Problem Classes in ML – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -38,7 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b53751a350365c71b6c909e95f209ed1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c90fbf8e27b40bd2f4a08d7b17c287b2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b8ddda7af1c99188329f288f0306ccf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -80,9 +80,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      PSYC559: Applied Machine Learning in Psychology
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_2.html">Problem Classes in ML</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -163,7 +161,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_2.html" class="sidebar-item-text sidebar-link">
+  <a href="./week2_2.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Problem Classes in ML</span></a>
   </div>
 </li>
@@ -186,15 +184,27 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#major-classes-of-machine-learning-problems" id="toc-major-classes-of-machine-learning-problems" class="nav-link active" data-scroll-target="#major-classes-of-machine-learning-problems">Major Classes of Machine Learning Problems</a></li>
+  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification">Classification</a></li>
+  <li><a href="#regression" id="toc-regression" class="nav-link" data-scroll-target="#regression">Regression</a></li>
+  <li><a href="#ranking" id="toc-ranking" class="nav-link" data-scroll-target="#ranking">Ranking</a></li>
+  <li><a href="#clustering" id="toc-clustering" class="nav-link" data-scroll-target="#clustering">Clustering</a></li>
+  <li><a href="#dimensionality-reduction" id="toc-dimensionality-reduction" class="nav-link" data-scroll-target="#dimensionality-reduction">Dimensionality Reduction</a></li>
+  <li><a href="#binary-classification-and-you" id="toc-binary-classification-and-you" class="nav-link" data-scroll-target="#binary-classification-and-you">Binary Classification and You</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_2.html">Problem Classes in ML</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">PSC559: Applied Machine Learning in Psychology</h1>
+<h1 class="title">Problem Classes in ML</h1>
 </div>
 
 
@@ -211,9 +221,95 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome to the PSC559: Applied Machine Learning in Psychology!</p>
-<p>As the class progresses I will update this front matter with a general course overview and important announcements.</p>
-<p>If you find errors or typos in any of these materials please let me know.</p>
+<section id="major-classes-of-machine-learning-problems" class="level1" style="color: yellow">
+<h1>Major Classes of Machine Learning Problems</h1>
+</section>
+<p>Machine learning applications correspond to a wide variety of learning problems. Some major classes include:</p>
+<section id="classification" class="level2">
+<h2 class="anchored" data-anchor-id="classification">Classification</h2>
+<ul>
+<li>The <em>goal of classification</em> is often toassign a category or label to each observation.</li>
+<li>The music genre problem is a good example of a classification problem</li>
+<li><strong>Note:</strong> The number of categories can be small, large, or even unbounded (e.g., optical character recognition, text classification, speech recognition).</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/classification.jpg" class="img-fluid figure-img" width="700"></p>
+<figcaption>https://datahacker.rs/008-machine-learning-multiclass-classification-and-softmax-function/</figcaption>
+</figure>
+</div>
+<p><em>Can you think of any examples of algorithms you encounter in your everyday life that solve classification problems?</em></p>
+<hr>
+</section>
+<section id="regression" class="level2">
+<h2 class="anchored" data-anchor-id="regression">Regression</h2>
+<ul>
+<li><p>In regression problems we are typically concerned with predicting a real-valued number for each item.</p></li>
+<li><p>For example, we might be interested in predicting stock prices, or how .<br>
+stressed out someone is.</p></li>
+<li><p><strong>Notes:</strong> The penalty for prediction errors depends on the magnitude of the difference between true and predicted values, unlike classification where categories are discrete and there is often no notion of distance between various categories.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/regression.webp" class="img-fluid figure-img" width="700"></p>
+<figcaption>https://builtin.com/data-science/regression-machine-learning</figcaption>
+</figure>
+</div></li>
+</ul>
+<p><em>Can you think of any examples of algorithms you encounter in your everyday life that solve regression-type problems?</em></p>
+<hr>
+</section>
+<section id="ranking" class="level2">
+<h2 class="anchored" data-anchor-id="ranking">Ranking</h2>
+<ul>
+<li>With ranking problems we are often tasked with ordering items according to a specific criterion.</li>
+<li>A well-known example of a ranking algorithm is Google’s <a href="https://web.stanford.edu/class/cs54n/handouts/24-GooglePageRankAlgorithm.pdf">PageRank</a> algorithm.</li>
+<li><strong>Notes:</strong> Ranking problems focus on relative order rather than exact category or numeric value.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ranking.webp" class="img-fluid figure-img" width="700"></p>
+<figcaption>https://towardsdatascience.com/wp-content/uploads/2023/08/1ZFmd2Q-G95ArY93od20Adw.png</figcaption>
+</figure>
+</div>
+<p><em>Can you think of any examples of algorithms you encounter in your everyday life that solve ranking problems?</em></p>
+<hr>
+</section>
+<section id="clustering" class="level2">
+<h2 class="anchored" data-anchor-id="clustering">Clustering</h2>
+<ul>
+<li>In clustering problems we are typically looking topartition items into similar groups or regions.</li>
+<li>For example, in social network analysis we are interested in identifying communities within large groups of people</li>
+<li><strong>Notes:</strong> Clustering is often applied to very large datasets to reveal underlying structure.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clustering.png" class="img-fluid figure-img" width="700"></p>
+<figcaption>https://scikit-learn.org/stable/_images/sphx_glr_plot_cluster_comparison_001.png</figcaption>
+</figure>
+</div>
+<p><em>How do the classification and clustering problems discussed thus far differ?</em></p>
+<p><em>Can you think of any examples of algorithms you encounter in your everyday life that solve clustering problems?</em></p>
+<hr>
+</section>
+<section id="dimensionality-reduction" class="level2">
+<h2 class="anchored" data-anchor-id="dimensionality-reduction">Dimensionality Reduction</h2>
+<ul>
+<li>When looking to solve dimension reduction problems we are typically interested in transforming high-dimensional data into a lower-dimensional representation while preserving important properties.</li>
+<li>Common examples in psychology include identifying constructs in survey data or scales.</li>
+<li><strong>Notes:</strong> Dimension reduction is also useful for feature extraction, noise reduction, and speeding up downstream learning tasks.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/pca.png" class="img-fluid figure-img" width="700"></p>
+<figcaption>https://www.sthda.com/english/sthda-upload/figures/principal-component-methods/006-principal-component-analysis-pca-variable-cos2-corrplot-1.png</figcaption>
+</figure>
+</div>
+<p><em>Can you think of any examples of algorithms you encounter in your everyday life that solve dimension reduction problems?</em></p>
+</section>
+<section id="binary-classification-and-you" class="level1" style="color: yellow">
+<h1>Binary Classification and You</h1>
+</section>
+<p>We will now complete a short in-class exercise demonstrating how one might build a binary classification problem.</p>
 
 
 

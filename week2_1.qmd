@@ -1,0 +1,159 @@
+---
+title: "Important Distinctions"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
+---
+
+The vast amount of jargon one encounters when first diving into the machine learning literature is a common source of confusion for new learners. Many ML terms are borrowed from statistics, computer science, or everyday language, but they can carry subtly or even radically different meanings in ML contexts.
+
+With the following overview I will provide a high-level overview of some common terms used in machine learning, and try to highlight the differences between concepts that may seem similar, but often represent distinct ideas.
+
+Two important distinctions:
+
+1.  The difference between Artificial Intelligence and Machine Learning
+
+2.  The difference between an algorithm and a model
+
+::: {style="color: yellow"}
+# AI vs. Machine Learning
+:::
+
+Artificial Intelligence (AI) and Machine Learning (ML) are related but distinct concepts in computer science and data analysis.
+
+## Artificial Intelligence (AI)
+
+-   AI is the broad field of creating systems that can perform tasks that normally require human intelligence.
+-   Typically, the goal of AI is to create machines that can simulate intelligent behavior, whether or not they learn from data.
+-   Common Examples of AI include**:**
+    -   Large Language Models
+
+*Can you think of any examples of AI you encounter in your everyday life?*
+
+## Machine Learning (ML)
+
+-   ML is a branch of AI focused on systems that learn patterns from data and improve automatically from experience.
+-   When doing ML we are generally interested in creating models that generalize from data to make accurate predictions on unseen inputs.
+-   Common use cases for ML in everyday life include**:**
+    -   Clutter or spam email detection
+
+*Can you think of any examples of ML you encounter in your everyday life?*
+
+## Differences Between AI and ML
+
+| Aspect | Artificial Intelligence (AI) | Machine Learning (ML) |
+|-------------------|---------------------------|---------------------------|
+| Focus | Simulating intelligent behavior | Learning patterns from data |
+| Goal | Broader human-like intelligence | Specific predictive or decision-making tasks |
+| Examples | Chess engines, self-driving cars, expert systems | Regression, neural networks, clustering |
+
+: \
+![https://www.edureka.co/blog/ai-vs-machine-learning-vs-deep-learning/](images/AI-vs-ML-vs-Deep-Learning.png)
+
+Broadly speaking, ML is a branch of AI focused on training models to recognize patterns and make predictions using algorithms. AI encompasses a broader set of techniques, some of which do not involve learning from data at all.
+
+<div>
+
+# What is an Algorithm in ML? {style="color: yellow"}
+
+</div>
+
+ML approaches rely heavily on accurate and efficient prediction algorithms.
+
+So, what exactly are algorithms?
+
+An algorithm is a step-by-step, well-defined procedure for solving a problem or completing a task.
+
+In computing and machine learning, algorithms are generally a finite sequence of instructions that takes some input, follows a set of rules, and produces an output.
+
+## Characteristics of an Algorithm
+
+1.  Input – Data the algorithm operates on
+2.  Output – The result produced after execution
+3.  Finiteness – Must finish in a finite number of steps
+4.  Definiteness – Each step is clear and unambiguous
+5.  Effectiveness – Each operation can actually be carried out
+
+## Algorithms in Machine Learning
+
+-   In ML, an algorithm is the procedure used to train a model from data.
+
+-   Example: Linear regression algorithm finds the best-fit line by minimizing error.
+
+-   Example: Decision tree algorithm splits data into branches by checking features step by step.
+
+One can think of an algorithm as the recipe one follows when cooking a meal. The ingredients of the dish are analogous to the input data, and the finished dish is equivalent to the model.
+
+![https://xkcd.com/1667/](images/algorithms.png)
+
+So, how does an algorithm differ from a model? What is a model in the context of ML?
+
+::: {style="color: yellow"}
+# What is a Model in ML?
+:::
+
+A model in machine learning is the learned representation of patterns in data, produced by applying a learning algorithm to a dataset. It is what we use to make predictions, classify new examples, or infer relationships.
+
+![https://www.geeksforgeeks.org/machine-learning/types-of-machine-learning/](images/model_ml.png)
+
+## Definition
+
+A model is the outcome of training a machine learning algorithm on data.It encapsulates the patterns, relationships, or structure discovered in the training data.
+
+-   **Input:** Features from the training data\
+-   **Process:** Algorithm (e.g., linear regression, decision tree, neural network)\
+-   **Output:** Parameters, structure, or rules that allow prediction
+
+## Examples
+
+| Algorithm | Resulting Model | What It Represents |
+|-------------------|--------------------|---------------------------------|
+| Linear Regression | A line (y = mx + b) | Relationship between input and output variables |
+| Decision Tree | Tree of splits | How features split to predict classes or values |
+| Neural Network | Layers of neurons & weights | Complex non-linear mappings between inputs and outputs |
+| k-Means Clustering | Cluster centroids | Grouping of data points into clusters |
+
+------------------------------------------------------------------------
+
+## Things to Remember
+
+-   The algorithm is the *procedure for learning*\
+-   The model is the *trained artifact* used for prediction or inference\
+-   Different algorithms can produce different models from the same data\
+-   A model generalizes patterns from training data to unseen data
+-   Algorithm = recipe (instructions for learning)\
+-   Model = finished dish (learned representation ready to use)
+
+The model is the end product of learning — the part that actually “knows” something about the data and can be used to make predictions. In ML: Data + Algorithm → Model → Predictions.
+
+::: {style="color: yellow"}
+# Choosing the Right Algorithm
+:::
+
+Understanding what algorithm to choose for a specific problem or application is often difficult. In this class we will devote a lot of time on how to make these decisions, and communicate the results of an analysis. That said, we often have minimal knowledge of the problem or data at hand when we first approach an applied problem, and it is difficult to know which ML method will perform best. This idea is generally known as the no free lunch theorem
+
+-   An algorithm is just the *procedure* — its effectiveness depends entirely on the kind of data/problem it’s applied to
+
+-   In addition, no single model type will always generalize best
+
+-   The “right” choice depends on the problem domain and data distribution
+
+::: {style="color: yellow"}
+# Design Your Own Algorithm
+:::
+
+An algorithm is just a set of step-by-step instructions to solve a problem. Machine learning algorithms are no different—they’re just systematic ways of finding patterns in data. Let’s explore what that means.
+
+In groups of 3–4, imagine you are writing an algorithm for a simple real-world problem:
+
+> **“How could you design an algorithm that helps a computer decide, in real time, whether a song is best classified as hip-hop or indie rock?”**
+
+Each group should discuss (and prepare to share):
+
+1.  **What features would you use?**
+
+2.  **What rules or steps would you design?**
+
+3.  **How would the algorithm improve if you had many examples of songs?**

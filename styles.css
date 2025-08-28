@@ -12,3 +12,12 @@
   background-color: #333; /* a dark grey so the text stands out */
 }
 
+hr {
+    height: 5px;
+    color: white;
+    background-color: white;
+}
+
+.caption{
+   text-align: center;
+}

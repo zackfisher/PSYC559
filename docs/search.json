@@ -44,11 +44,194 @@
     ]
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "week2_2b.html#examples-items-instances-or-cases",
+    "href": "week2_2b.html#examples-items-instances-or-cases",
+    "title": "Terminology Notes",
+    "section": "Examples, Items, Instances or Cases",
+    "text": "Examples, Items, Instances or Cases\n\nDefinition: Individual data points used for learning or evaluation.\n\nExample: Each participant in a study, with their responses to a cognitive task or survey questionnaire.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Terminology Notes"
+    ]
+  },
+  {
+    "objectID": "week2_2b.html#features",
+    "href": "week2_2b.html#features",
+    "title": "Terminology Notes",
+    "section": "Features",
+    "text": "Features\n\nDefinition: Attributes or variables associated with each example, often represented as a vector.\n\nExample: Participant age, gender, response times, scores on survey items, or physiological measures (e.g., heart rate, skin conductance).",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Terminology Notes"
+    ]
+  },
+  {
+    "objectID": "week2_2b.html#labels",
+    "href": "week2_2b.html#labels",
+    "title": "Terminology Notes",
+    "section": "Labels",
+    "text": "Labels\n\nDefinition: The outcome, value, or category assigned to each example.\n\nExample:\n\nClassification: Diagnosed vs. non-diagnosed for depression.\n\nRegression: Continuous depression score on a scale from 0–30.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Terminology Notes"
+    ]
+  },
+  {
+    "objectID": "week2_2b.html#training-sample",
+    "href": "week2_2b.html#training-sample",
+    "title": "Terminology Notes",
+    "section": "Training Sample",
+    "text": "Training Sample\n\nDefinition: The subset of examples used to train the learning algorithm.\n\nExample: 100 participants’ data with known depression scores used to train a predictive model.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Terminology Notes"
+    ]
+  },
+  {
+    "objectID": "week2_2b.html#validation-sample",
+    "href": "week2_2b.html#validation-sample",
+    "title": "Terminology Notes",
+    "section": "Validation Sample",
+    "text": "Validation Sample\n\nDefinition: Examples used to tune algorithm parameters (e.g., regularization strength, number of neurons in a network).\n\nExample: 30 participants’ data used to select the optimal model settings or tuning parameters before final evaluation.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Terminology Notes"
+    ]
+  },
+  {
+    "objectID": "week2_2b.html#test-sample",
+    "href": "week2_2b.html#test-sample",
+    "title": "Terminology Notes",
+    "section": "Test Sample",
+    "text": "Test Sample\n\nDefinition: Examples used to evaluate model performance, separate from training and validation. Examples used to evaluate the performance of a learning algorithm. The test sample is not made available in the learning stage.\nExample: 50 new participants whose depression scores the model predicts; predicted scores are compared to actual scores to assess accuracy.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Terminology Notes"
+    ]
+  },
+  {
+    "objectID": "week2_2b.html#loss-function",
+    "href": "week2_2b.html#loss-function",
+    "title": "Terminology Notes",
+    "section": "Loss Function",
+    "text": "Loss Function\n\nDefinition: A function that measures the difference between predicted labels and true labels.\n\nExample:\nRegression: Squared loss: L(y, y′) = (y′ − y)², e.g., predicted vs. actual depression score.\n\nClassification: Zero-one loss: L(y, y′) = 1 if prediction ≠ true label, e.g., predicted diagnosis vs. actual diagnosis.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Terminology Notes"
+    ]
+  },
+  {
+    "objectID": "readme.html",
+    "href": "readme.html",
+    "title": "PSYC559: Applied Machine Learning in Psychology",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "https://zackfisher.github.io/PSYC559/"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PSC559: Applied Machine Learning in Psychology",
+    "section": "",
+    "text": "Welcome to the PSC559: Applied Machine Learning in Psychology!\nAs the class progresses I will update this front matter with a general course overview and important announcements.\nIf you find errors or typos in any of these materials please let me know."
+  },
+  {
+    "objectID": "week2_3.html",
+    "href": "week2_3.html",
+    "title": "Data Splitting",
+    "section": "",
+    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\n\n\n\nThe subset of examples used to train the learning algorithm. Here we typically estimate the model’s parameters in the training sample.\nFor example, if we have data from 150 participants, we might keep data from 100 participants (with known depression scores) to train a predictive model.\nNotes: Spending too much in training won’t allow us to get a good assessment of predictive performance. We may find a model that fits the training data very well, but is not generalizable (overfitting).\n\n\n\n\n\nSamples used to tune algorithm hyperparameters (e.g., regularization strength, number of neurons in a network).\nFor example, from our 100 individuals in the training sample, we may split the training data into 4 groups of 25 participants. Each of these will be a validation sample, and allow us to select the optimal model settings or tuning parameters before our final evaluation.\n\n\n\n\n\nThe test Sample used to evaluate model performance, separate from training and validation. The test sample is not made available in the learning stage. Sometimes too much spent in testing won’t allow us to get a good assessment of model parameters.\nFor example, for those 50 participants we never looked out may be our test data. The model can now be used to predict depression scores ; predicted scores for the individuals in the test sample. Here we can now compare actual scores to assess accuracy.\n\n\n\n\nhttps://www.statology.org/validation-set-vs-test-set/\nIn groups of 3–4, discuss:",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Data Splitting"
+    ]
+  },
+  {
+    "objectID": "week2_3.html#parameters-vs.-hyperparameters",
+    "href": "week2_3.html#parameters-vs.-hyperparameters",
+    "title": "Data Splitting",
+    "section": "Parameters vs. Hyperparameters",
+    "text": "Parameters vs. Hyperparameters\n\nParameters are values learned automatically (or estimated) from the training data. The model parameters are often the thing we are interested in estimating in a given algorithm.\nFor example. the slope of the line in a simple linear regression prediction problem relating amount of treatment (feature) to depression score (target).\nHyperparameters are set before training begins, and control how the learning process works. The selection of hyperparameters is often critical to model performance, as in procedures like k-folds cross-validation, playing a critical role in how the model generalizes.\nFor example, the the number of clusters used to partition the data",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Data Splitting"
+    ]
+  },
+  {
+    "objectID": "week2_3.html#role-of-parameters-in-data-splitting",
+    "href": "week2_3.html#role-of-parameters-in-data-splitting",
+    "title": "Data Splitting",
+    "section": "Role of Parameters in Data Splitting",
+    "text": "Role of Parameters in Data Splitting\nWhen we split data, each portion plays a distinct role:\n\nTraining set → Fit the model parameters.\n\nValidation set → Used to compare different hyperparameter choices.\n\nTest set → Used only once, at the very end, to estimate generalization performance.\n\nImportant note: Hyperparameters should be tuned using the validation set, not the test set. If we adjust hyperparameters based on the test set, we are indirectly training on it and lose the ability to measure real-world performance.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Data Splitting"
+    ]
+  },
+  {
+    "objectID": "week2_3.html#example-k-means-clustering",
+    "href": "week2_3.html#example-k-means-clustering",
+    "title": "Data Splitting",
+    "section": "Example: k-Means Clustering",
+    "text": "Example: k-Means Clustering\n\nParameters (learned from the data)\n\nCluster centroids: the coordinates of the cluster centers.\n\nThese are calculated by the algorithm during training and adjusted iteratively until convergence.\n\nYou do not set them manually — the algorithm figures them out.\n\n\n\nHyperparameters (set before training)\n\nNumber of clusters (k): chosen by the user before running the algorithm.\n\nInitialization method (e.g., random, k-means++).\n\nMaximum number of iterations allowed.\n\nThese control how the algorithm runs, but are not learned from the data itself.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Data Splitting"
+    ]
+  },
+  {
+    "objectID": "week2_3.html#prevents-overfitting-to-the-training-data",
+    "href": "week2_3.html#prevents-overfitting-to-the-training-data",
+    "title": "Data Splitting",
+    "section": "Prevents Overfitting to the Training Data",
+    "text": "Prevents Overfitting to the Training Data\n\nWhen a model is trained, it adapts to patterns in the training set.\n\nIf we only check performance on that same data, we might think the model is excellent — but it may just be memorizing instead of generalizing.\n\nA separate test set lets us see how the model behaves on new, unseen data.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Data Splitting"
+    ]
+  },
+  {
+    "objectID": "week2_3.html#simulates-real-world-performance",
+    "href": "week2_3.html#simulates-real-world-performance",
+    "title": "Data Splitting",
+    "section": "Simulates Real-World Performance",
+    "text": "Simulates Real-World Performance\n\nIn real life, the model will be applied to data it hasn’t seen before.\n\nBy holding out a test set, we simulate that scenario, giving us a better sense of expected performance in practice.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Data Splitting"
+    ]
+  },
+  {
+    "objectID": "week2_3.html#helps-with-model-selection-tuning",
+    "href": "week2_3.html#helps-with-model-selection-tuning",
+    "title": "Data Splitting",
+    "section": "Helps with Model Selection & Tuning",
+    "text": "Helps with Model Selection & Tuning\n\nA validation set (or cross-validation) is used to choose hyperparameters (like tree depth, learning rate, regularization strength).\n\nIf we tuned on the test set, we’d essentially be “leaking” information, and performance estimates would be biased upward.\n\nProper splitting ensures that the test set remains untouched until the very end.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Data Splitting"
+    ]
+  },
+  {
+    "objectID": "week2_3.html#detects-data-leakage",
+    "href": "week2_3.html#detects-data-leakage",
+    "title": "Data Splitting",
+    "section": "Detects Data Leakage",
+    "text": "Detects Data Leakage\n\nSometimes information from the future or from labels sneaks into the features.\n\nIf this happens, the model might look perfect on the training set but fail on a clean split.\n\nData splitting may not actually help data leakage though. When might it help and when might it not?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Data Splitting"
+    ]
+  },
+  {
+    "objectID": "week2_3.html#provides-a-fair-benchmark",
+    "href": "week2_3.html#provides-a-fair-benchmark",
+    "title": "Data Splitting",
+    "section": "Provides a Fair Benchmark",
+    "text": "Provides a Fair Benchmark\n\nIn research and industry, different models need to be compared on a common, untouched test set.\n\nWithout splitting, comparisons aren’t meaningful, since each model might overfit differently.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Data Splitting"
+    ]
   },
   {
     "objectID": "week1_4.html",
@@ -119,47 +302,205 @@
   {
     "objectID": "week1_1.html",
     "href": "week1_1.html",
-    "title": "Introduction to R",
+    "title": "Basic R Programming",
     "section": "",
     "text": "Before getting started we will need to install R and RStudio.\n\n\nWe can download R from CRAN, the comprehensive R archive network. CRAN is a server used to distribute R and R packages. If you don’t have R installed already you can do so here.\n\n\n\nWith R installed, let’s go ahead and install RStudio. RStudio is a convenient IDE (integrated development environment) for R programming. Download and install the RStudio Desktop client.\n\n\n\nFrom the RStudio Education page:\n\nFor beginner-friendly installation instructions, we recommend the free online ModernDive chapter Getting Started with R and RStudio. You may also enjoy the Basic Basics lesson unit from R-Ladies Sydney, which provides an opinionated tour of RStudio for new users and a step-by-step guide to installing and using R packages.\n\n\n\n\nFor those of you who may be unfamiliar with using an IDE, RStudio is simply a convenient way for us to interact with R. You can think of R as the engine, powering the car, and RStudio as the controls and dashboard for driving. For 559, we won’t interact directly with R very often, instead we will work with R directly from RStudio.\n\n\n\nImage from https://moderndive.com/1-getting-started.html\n\n\n\n\n\nAfter opening RStudio you will see something similar to the image below, where the application is divided into different panes. Each pane serves a different purpose:\n\nQ1: contains scripts you are working from and sometimes data views\nQ2: the console where you run the code\nQ3: the environment page, code history, and build tools\nQ4: files, plots, packages, help documentation\n\n\n\n\nImage from https://rladiessydney.org/courses/01-basicbasics-1\n\n\n\n\n\nLet’s begin by using the Console to interact with R.\n\n\nWe can use R as a basic calculator.\n\n1 / 200 * 30\n#&gt; [1] 0.15\n(59 + 73 + 2) / 3\n#&gt; [1] 44.66667\nsin(pi / 2)\n#&gt; [1] 1\n\n\n\n\nWe can create new object using the assignment operator &lt;- as follows:\n\nx &lt;- 3 * 4\nsecret_password &lt;- \"password1234\"\n\nIn R, object names are case sensitive, must start with a letter and can contain numbers, letters, underscores and periods.\nYou can look at objects by typing their name into the console:\n\nx\n\n[1] 12\n\n\n\nsecret_password\n\n[1] \"password1234\"\n\n\nIf you type an object that hasn’t been defined yet you will get an error. For example,\n\nSecret_Password\n\nError: object 'Secret_Password' not found\n\n\n\n\n\nR has many built-in functions and you can also create your own. Functions can be used to perform tasks in R. They take arguments as inputs, and return outputs. Often you will supply arguments to a function, and it is also possible to use a function’s default values.\nFor example, there is a function in R called seq(from, to) that creates a sequence of numbers starting at from and ending at to. For example, if we want a sequences of numbers from = 10 all the way to = 20:\n\n# you can add comments to your code using the # key\n# anything after the # will not be run as code\n# note the code below is equivalent to seq(10, 20)\n\nseq(from = 10, to = 20) \n\n [1] 10 11 12 13 14 15 16 17 18 19 20\n\n\nIf you want to better understand what a specific function in R does you can always look to the documentation by typing a question mark before the function name in the R console, for example ?seq or ?rep.\n\n?seq\n\n\n\n\nIt is good practice to add comments to your code. These comments can help others understand what you are doing, and more importantly, they will help you remember what you did. How to effectively use comments is part of a larger discussion on how to write effective and understandable code, and if you’re interested take a look at different style guides for R.\n\n# you can add comments to your code using the # key \n# anything after the # will not be run as code \n#\n# note: the code below is equivalent to seq(10, 20)\n\nseq(from = 10, to = 20)\n\n [1] 10 11 12 13 14 15 16 17 18 19 20\n\n\n\n\n\nFour of the most common data types used in R are discussed below:\n\nNumeric: The most common data type in R is numeric. A variable or a series will be stored as numeric data if the values are numbers or if the values contains decimals. For example, the following two series are stored as numeric by default:\n\n# numeric series without decimals\nnum_data &lt;- c(3, 7, 2)\nnum_data\n\n[1] 3 7 2\n\nclass(num_data)\n\n[1] \"numeric\"\n\n# numeric series with decimals\nnum_data_dec &lt;- c(3.4, 7.1, 2.9)\nnum_data_dec\n\n[1] 3.4 7.1 2.9\n\nclass(num_data_dec)\n\n[1] \"numeric\"\n\n\nCharacter: The data type character is used when storing text, known as strings in R. The simplest ways to store data under the character format is by using \"\" around the piece of text:\n\nchar &lt;- \"some text\"\nchar\n\n[1] \"some text\"\n\nclass(char)\n\n[1] \"character\"\n\n\nFactor: Factor variables are a special case of character variables in the sense that it also contains text. However, factor variables are used when there are a limited number of unique character strings. It often represents a categorical variable.\n\ntext &lt;- c(\"test1\", \"test2\", \"test1\", \"test1\") # create a character vector\nclass(text) # to know the class\n\n[1] \"character\"\n\ntext_factor &lt;- as.factor(text) # transform to factor\nclass(text_factor) # recheck the class\n\n[1] \"factor\"\n\n\nLogical: A logical variable is a variable with only two values; TRUE or FALSE\n\nvalue1 &lt;- 7\nvalue2 &lt;- 9\n\n# is value1 greater than value2?\ngreater &lt;- value1 &gt; value2\ngreater\n\n[1] FALSE\n\nclass(greater)\n\n[1] \"logical\"\n\n\n\nThese are four common R data types you’ll see in this class. There are others not listed here. For more detailed descriptions of data types in R there are a number of helpful resources available online, including this discussion of data structures.\n\n\n\nConditional statements are another useful R tool. These operators work similar in other programming languages but may look unfamiliar if you don’t have experience with R.\n\n\n\nx &lt;- 10\n\nif (x &gt; 6) {\n  print(\"x is greater than 6\")\n}\n\n[1] \"x is greater than 6\"\n\n\n\n\n\n\nx &lt;- 3\n\nif (x &gt; 6) {\n  print(\"x is greater than 6\")\n} else {\n  print(\"x is less than or equal to 6\")\n}\n\n[1] \"x is less than or equal to 6\"\n\n\nNested If Statements\n\nx &lt;- 8\ny &lt;- 3\n\nif (x &gt; 6) {\n  if (y &lt; 6) {\n    print(\"x is greater than 6 and y is less than 6\")\n  }\n}\n\n[1] \"x is greater than 6 and y is less than 6\"",
     "crumbs": [
       "Introduction to R",
-      "Introduction to R"
+      "Basic R Programming"
     ]
   },
   {
     "objectID": "week1_1.html#setting-up-your-environment",
     "href": "week1_1.html#setting-up-your-environment",
-    "title": "Introduction to R",
+    "title": "Basic R Programming",
     "section": "",
     "text": "Before getting started we will need to install R and RStudio.\n\n\nWe can download R from CRAN, the comprehensive R archive network. CRAN is a server used to distribute R and R packages. If you don’t have R installed already you can do so here.\n\n\n\nWith R installed, let’s go ahead and install RStudio. RStudio is a convenient IDE (integrated development environment) for R programming. Download and install the RStudio Desktop client.\n\n\n\nFrom the RStudio Education page:\n\nFor beginner-friendly installation instructions, we recommend the free online ModernDive chapter Getting Started with R and RStudio. You may also enjoy the Basic Basics lesson unit from R-Ladies Sydney, which provides an opinionated tour of RStudio for new users and a step-by-step guide to installing and using R packages.\n\n\n\n\nFor those of you who may be unfamiliar with using an IDE, RStudio is simply a convenient way for us to interact with R. You can think of R as the engine, powering the car, and RStudio as the controls and dashboard for driving. For 559, we won’t interact directly with R very often, instead we will work with R directly from RStudio.\n\n\n\nImage from https://moderndive.com/1-getting-started.html\n\n\n\n\n\nAfter opening RStudio you will see something similar to the image below, where the application is divided into different panes. Each pane serves a different purpose:\n\nQ1: contains scripts you are working from and sometimes data views\nQ2: the console where you run the code\nQ3: the environment page, code history, and build tools\nQ4: files, plots, packages, help documentation\n\n\n\n\nImage from https://rladiessydney.org/courses/01-basicbasics-1\n\n\n\n\n\nLet’s begin by using the Console to interact with R.\n\n\nWe can use R as a basic calculator.\n\n1 / 200 * 30\n#&gt; [1] 0.15\n(59 + 73 + 2) / 3\n#&gt; [1] 44.66667\nsin(pi / 2)\n#&gt; [1] 1\n\n\n\n\nWe can create new object using the assignment operator &lt;- as follows:\n\nx &lt;- 3 * 4\nsecret_password &lt;- \"password1234\"\n\nIn R, object names are case sensitive, must start with a letter and can contain numbers, letters, underscores and periods.\nYou can look at objects by typing their name into the console:\n\nx\n\n[1] 12\n\n\n\nsecret_password\n\n[1] \"password1234\"\n\n\nIf you type an object that hasn’t been defined yet you will get an error. For example,\n\nSecret_Password\n\nError: object 'Secret_Password' not found\n\n\n\n\n\nR has many built-in functions and you can also create your own. Functions can be used to perform tasks in R. They take arguments as inputs, and return outputs. Often you will supply arguments to a function, and it is also possible to use a function’s default values.\nFor example, there is a function in R called seq(from, to) that creates a sequence of numbers starting at from and ending at to. For example, if we want a sequences of numbers from = 10 all the way to = 20:\n\n# you can add comments to your code using the # key\n# anything after the # will not be run as code\n# note the code below is equivalent to seq(10, 20)\n\nseq(from = 10, to = 20) \n\n [1] 10 11 12 13 14 15 16 17 18 19 20\n\n\nIf you want to better understand what a specific function in R does you can always look to the documentation by typing a question mark before the function name in the R console, for example ?seq or ?rep.\n\n?seq\n\n\n\n\nIt is good practice to add comments to your code. These comments can help others understand what you are doing, and more importantly, they will help you remember what you did. How to effectively use comments is part of a larger discussion on how to write effective and understandable code, and if you’re interested take a look at different style guides for R.\n\n# you can add comments to your code using the # key \n# anything after the # will not be run as code \n#\n# note: the code below is equivalent to seq(10, 20)\n\nseq(from = 10, to = 20)\n\n [1] 10 11 12 13 14 15 16 17 18 19 20\n\n\n\n\n\nFour of the most common data types used in R are discussed below:\n\nNumeric: The most common data type in R is numeric. A variable or a series will be stored as numeric data if the values are numbers or if the values contains decimals. For example, the following two series are stored as numeric by default:\n\n# numeric series without decimals\nnum_data &lt;- c(3, 7, 2)\nnum_data\n\n[1] 3 7 2\n\nclass(num_data)\n\n[1] \"numeric\"\n\n# numeric series with decimals\nnum_data_dec &lt;- c(3.4, 7.1, 2.9)\nnum_data_dec\n\n[1] 3.4 7.1 2.9\n\nclass(num_data_dec)\n\n[1] \"numeric\"\n\n\nCharacter: The data type character is used when storing text, known as strings in R. The simplest ways to store data under the character format is by using \"\" around the piece of text:\n\nchar &lt;- \"some text\"\nchar\n\n[1] \"some text\"\n\nclass(char)\n\n[1] \"character\"\n\n\nFactor: Factor variables are a special case of character variables in the sense that it also contains text. However, factor variables are used when there are a limited number of unique character strings. It often represents a categorical variable.\n\ntext &lt;- c(\"test1\", \"test2\", \"test1\", \"test1\") # create a character vector\nclass(text) # to know the class\n\n[1] \"character\"\n\ntext_factor &lt;- as.factor(text) # transform to factor\nclass(text_factor) # recheck the class\n\n[1] \"factor\"\n\n\nLogical: A logical variable is a variable with only two values; TRUE or FALSE\n\nvalue1 &lt;- 7\nvalue2 &lt;- 9\n\n# is value1 greater than value2?\ngreater &lt;- value1 &gt; value2\ngreater\n\n[1] FALSE\n\nclass(greater)\n\n[1] \"logical\"\n\n\n\nThese are four common R data types you’ll see in this class. There are others not listed here. For more detailed descriptions of data types in R there are a number of helpful resources available online, including this discussion of data structures.\n\n\n\nConditional statements are another useful R tool. These operators work similar in other programming languages but may look unfamiliar if you don’t have experience with R.\n\n\n\nx &lt;- 10\n\nif (x &gt; 6) {\n  print(\"x is greater than 6\")\n}\n\n[1] \"x is greater than 6\"\n\n\n\n\n\n\nx &lt;- 3\n\nif (x &gt; 6) {\n  print(\"x is greater than 6\")\n} else {\n  print(\"x is less than or equal to 6\")\n}\n\n[1] \"x is less than or equal to 6\"\n\n\nNested If Statements\n\nx &lt;- 8\ny &lt;- 3\n\nif (x &gt; 6) {\n  if (y &lt; 6) {\n    print(\"x is greater than 6 and y is less than 6\")\n  }\n}\n\n[1] \"x is greater than 6 and y is less than 6\"",
     "crumbs": [
       "Introduction to R",
-      "Introduction to R"
+      "Basic R Programming"
     ]
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "PSC559: Applied Machine Learning in Psychology",
+    "objectID": "week2_2.html",
+    "href": "week2_2.html",
+    "title": "Problem Classes in ML",
     "section": "",
-    "text": "Welcome to the Machine Learning seminar!"
+    "text": "Machine learning applications correspond to a wide variety of learning problems. Some major classes include:\nWe will now complete a short in-class exercise demonstrating how one might build a binary classification problem.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
   },
   {
-    "objectID": "readme.html",
-    "href": "readme.html",
-    "title": "PSYC559: Applied Machine Learning in Psychology",
+    "objectID": "week2_2.html#classification",
+    "href": "week2_2.html#classification",
+    "title": "Problem Classes in ML",
+    "section": "Classification",
+    "text": "Classification\n\nThe goal of classification is often toassign a category or label to each observation.\nThe music genre problem is a good example of a classification problem\nNote: The number of categories can be small, large, or even unbounded (e.g., optical character recognition, text classification, speech recognition).\n\n\n\n\nhttps://datahacker.rs/008-machine-learning-multiclass-classification-and-softmax-function/\n\n\nCan you think of any examples of algorithms you encounter in your everyday life that solve classification problems?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_2.html#regression",
+    "href": "week2_2.html#regression",
+    "title": "Problem Classes in ML",
+    "section": "Regression",
+    "text": "Regression\n\nIn regression problems we are typically concerned with predicting a real-valued number for each item.\nFor example, we might be interested in predicting stock prices, or how .\nstressed out someone is.\nNotes: The penalty for prediction errors depends on the magnitude of the difference between true and predicted values, unlike classification where categories are discrete and there is often no notion of distance between various categories.\n\n\n\nhttps://builtin.com/data-science/regression-machine-learning\n\n\n\nCan you think of any examples of algorithms you encounter in your everyday life that solve regression-type problems?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_2.html#ranking",
+    "href": "week2_2.html#ranking",
+    "title": "Problem Classes in ML",
+    "section": "Ranking",
+    "text": "Ranking\n\nWith ranking problems we are often tasked with ordering items according to a specific criterion.\nA well-known example of a ranking algorithm is Google’s PageRank algorithm.\nNotes: Ranking problems focus on relative order rather than exact category or numeric value.\n\n\n\n\nhttps://towardsdatascience.com/wp-content/uploads/2023/08/1ZFmd2Q-G95ArY93od20Adw.png\n\n\nCan you think of any examples of algorithms you encounter in your everyday life that solve ranking problems?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_2.html#clustering",
+    "href": "week2_2.html#clustering",
+    "title": "Problem Classes in ML",
+    "section": "Clustering",
+    "text": "Clustering\n\nIn clustering problems we are typically looking topartition items into similar groups or regions.\nFor example, in social network analysis we are interested in identifying communities within large groups of people\nNotes: Clustering is often applied to very large datasets to reveal underlying structure.\n\n\n\n\nhttps://scikit-learn.org/stable/_images/sphx_glr_plot_cluster_comparison_001.png\n\n\nHow do the classification and clustering problems discussed thus far differ?\nCan you think of any examples of algorithms you encounter in your everyday life that solve clustering problems?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_2.html#dimensionality-reduction",
+    "href": "week2_2.html#dimensionality-reduction",
+    "title": "Problem Classes in ML",
+    "section": "Dimensionality Reduction",
+    "text": "Dimensionality Reduction\n\nWhen looking to solve dimension reduction problems we are typically interested in transforming high-dimensional data into a lower-dimensional representation while preserving important properties.\nCommon examples in psychology include identifying constructs in survey data or scales.\nNotes: Dimension reduction is also useful for feature extraction, noise reduction, and speeding up downstream learning tasks.\n\n\n\n\nhttps://www.sthda.com/english/sthda-upload/figures/principal-component-methods/006-principal-component-analysis-pca-variable-cos2-corrplot-1.png\n\n\nCan you think of any examples of algorithms you encounter in your everyday life that solve dimension reduction problems?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_1.html",
+    "href": "week2_1.html",
+    "title": "Important Distinctions",
     "section": "",
-    "text": "https://zackfisher.github.io/PSYC559/"
+    "text": "The vast amount of jargon one encounters when first diving into the machine learning literature is a common source of confusion for new learners. Many ML terms are borrowed from statistics, computer science, or everyday language, but they can carry subtly or even radically different meanings in ML contexts.\nWith the following overview I will provide a high-level overview of some common terms used in machine learning, and try to highlight the differences between concepts that may seem similar, but often represent distinct ideas.\nTwo important distinctions:\nArtificial Intelligence (AI) and Machine Learning (ML) are related but distinct concepts in computer science and data analysis.\nML approaches rely heavily on accurate and efficient prediction algorithms.\nSo, what exactly are algorithms?\nAn algorithm is a step-by-step, well-defined procedure for solving a problem or completing a task.\nIn computing and machine learning, algorithms are generally a finite sequence of instructions that takes some input, follows a set of rules, and produces an output.\nA model in machine learning is the learned representation of patterns in data, produced by applying a learning algorithm to a dataset. It is what we use to make predictions, classify new examples, or infer relationships.\nUnderstanding what algorithm to choose for a specific problem or application is often difficult. In this class we will devote a lot of time on how to make these decisions, and communicate the results of an analysis. That said, we often have minimal knowledge of the problem or data at hand when we first approach an applied problem, and it is difficult to know which ML method will perform best. This idea is generally known as the no free lunch theorem\nAn algorithm is just a set of step-by-step instructions to solve a problem. Machine learning algorithms are no different—they’re just systematic ways of finding patterns in data. Let’s explore what that means.\nIn groups of 3–4, imagine you are writing an algorithm for a simple real-world problem:\nEach group should discuss (and prepare to share):",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#artificial-intelligence-ai",
+    "href": "week2_1.html#artificial-intelligence-ai",
+    "title": "Important Distinctions",
+    "section": "Artificial Intelligence (AI)",
+    "text": "Artificial Intelligence (AI)\n\nAI is the broad field of creating systems that can perform tasks that normally require human intelligence.\nTypically, the goal of AI is to create machines that can simulate intelligent behavior, whether or not they learn from data.\nCommon Examples of AI include:\n\nLarge Language Models\n\n\nCan you think of any examples of AI you encounter in your everyday life?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#machine-learning-ml",
+    "href": "week2_1.html#machine-learning-ml",
+    "title": "Important Distinctions",
+    "section": "Machine Learning (ML)",
+    "text": "Machine Learning (ML)\n\nML is a branch of AI focused on systems that learn patterns from data and improve automatically from experience.\nWhen doing ML we are generally interested in creating models that generalize from data to make accurate predictions on unseen inputs.\nCommon use cases for ML in everyday life include:\n\nClutter or spam email detection\n\n\nCan you think of any examples of ML you encounter in your everyday life?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#differences-between-ai-and-ml",
+    "href": "week2_1.html#differences-between-ai-and-ml",
+    "title": "Important Distinctions",
+    "section": "Differences Between AI and ML",
+    "text": "Differences Between AI and ML\n\n\n\n\n\n\n\n\n\n\nAspect\nArtificial Intelligence (AI)\nMachine Learning (ML)\n\n\n\n\nFocus\nSimulating intelligent behavior\nLearning patterns from data\n\n\nGoal\nBroader human-like intelligence\nSpecific predictive or decision-making tasks\n\n\nExamples\nChess engines, self-driving cars, expert systems\nRegression, neural networks, clustering\n\n\n\nBroadly speaking, ML is a branch of AI focused on training models to recognize patterns and make predictions using algorithms. AI encompasses a broader set of techniques, some of which do not involve learning from data at all.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#characteristics-of-an-algorithm",
+    "href": "week2_1.html#characteristics-of-an-algorithm",
+    "title": "Important Distinctions",
+    "section": "Characteristics of an Algorithm",
+    "text": "Characteristics of an Algorithm\n\nInput – Data the algorithm operates on\nOutput – The result produced after execution\nFiniteness – Must finish in a finite number of steps\nDefiniteness – Each step is clear and unambiguous\nEffectiveness – Each operation can actually be carried out",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#algorithms-in-machine-learning",
+    "href": "week2_1.html#algorithms-in-machine-learning",
+    "title": "Important Distinctions",
+    "section": "Algorithms in Machine Learning",
+    "text": "Algorithms in Machine Learning\n\nIn ML, an algorithm is the procedure used to train a model from data.\nExample: Linear regression algorithm finds the best-fit line by minimizing error.\nExample: Decision tree algorithm splits data into branches by checking features step by step.\n\nOne can think of an algorithm as the recipe one follows when cooking a meal. The ingredients of the dish are analogous to the input data, and the finished dish is equivalent to the model.\n\n\n\nhttps://xkcd.com/1667/\n\n\nSo, how does an algorithm differ from a model? What is a model in the context of ML?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#definition",
+    "href": "week2_1.html#definition",
+    "title": "Important Distinctions",
+    "section": "Definition",
+    "text": "Definition\nA model is the outcome of training a machine learning algorithm on data.It encapsulates the patterns, relationships, or structure discovered in the training data.\n\nInput: Features from the training data\n\nProcess: Algorithm (e.g., linear regression, decision tree, neural network)\n\nOutput: Parameters, structure, or rules that allow prediction",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#examples",
+    "href": "week2_1.html#examples",
+    "title": "Important Distinctions",
+    "section": "Examples",
+    "text": "Examples\n\n\n\n\n\n\n\n\nAlgorithm\nResulting Model\nWhat It Represents\n\n\n\n\nLinear Regression\nA line (y = mx + b)\nRelationship between input and output variables\n\n\nDecision Tree\nTree of splits\nHow features split to predict classes or values\n\n\nNeural Network\nLayers of neurons & weights\nComplex non-linear mappings between inputs and outputs\n\n\nk-Means Clustering\nCluster centroids\nGrouping of data points into clusters",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#things-to-remember",
+    "href": "week2_1.html#things-to-remember",
+    "title": "Important Distinctions",
+    "section": "Things to Remember",
+    "text": "Things to Remember\n\nThe algorithm is the procedure for learning\n\nThe model is the trained artifact used for prediction or inference\n\nDifferent algorithms can produce different models from the same data\n\nA model generalizes patterns from training data to unseen data\nAlgorithm = recipe (instructions for learning)\n\nModel = finished dish (learned representation ready to use)\n\nThe model is the end product of learning — the part that actually “knows” something about the data and can be used to make predictions. In ML: Data + Algorithm → Model → Predictions.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Distinctions"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
   },
   {
     "objectID": "introduction.html",
     "href": "introduction.html",
     "title": "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY",
     "section": "",
-    "text": "Welcome to the first week of Applied Machine Learning in Psychology.",
+    "text": "Welcome to Applied Machine Learning in Psychology.",
     "crumbs": [
-      "Fundamentals of R"
+      "Table of Contents"
     ]
   },
   {
@@ -169,7 +510,7 @@
     "section": "The Syllabus",
     "text": "The Syllabus\nStudents may review the syllabus on Canvas.",
     "crumbs": [
-      "Fundamentals of R"
+      "Table of Contents"
     ]
   }
 ]

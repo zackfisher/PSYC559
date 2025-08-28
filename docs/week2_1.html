@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PSC559: Applied Machine Learning in Psychology – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Important Distinctions – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -38,7 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b53751a350365c71b6c909e95f209ed1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c90fbf8e27b40bd2f4a08d7b17c287b2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b8ddda7af1c99188329f288f0306ccf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -80,9 +80,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      PSYC559: Applied Machine Learning in Psychology
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_1.html">Important Distinctions</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -157,7 +155,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_1.html" class="sidebar-item-text sidebar-link">
+  <a href="./week2_1.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Important Distinctions</span></a>
   </div>
 </li>
@@ -186,15 +184,33 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#ai-vs.-machine-learning" id="toc-ai-vs.-machine-learning" class="nav-link active" data-scroll-target="#ai-vs.-machine-learning">AI vs.&nbsp;Machine Learning</a></li>
+  <li><a href="#artificial-intelligence-ai" id="toc-artificial-intelligence-ai" class="nav-link" data-scroll-target="#artificial-intelligence-ai">Artificial Intelligence (AI)</a></li>
+  <li><a href="#machine-learning-ml" id="toc-machine-learning-ml" class="nav-link" data-scroll-target="#machine-learning-ml">Machine Learning (ML)</a></li>
+  <li><a href="#differences-between-ai-and-ml" id="toc-differences-between-ai-and-ml" class="nav-link" data-scroll-target="#differences-between-ai-and-ml">Differences Between AI and ML</a></li>
+  <li><a href="#what-is-an-algorithm-in-ml" id="toc-what-is-an-algorithm-in-ml" class="nav-link" data-scroll-target="#what-is-an-algorithm-in-ml">What is an Algorithm in ML?</a></li>
+  <li><a href="#characteristics-of-an-algorithm" id="toc-characteristics-of-an-algorithm" class="nav-link" data-scroll-target="#characteristics-of-an-algorithm">Characteristics of an Algorithm</a></li>
+  <li><a href="#algorithms-in-machine-learning" id="toc-algorithms-in-machine-learning" class="nav-link" data-scroll-target="#algorithms-in-machine-learning">Algorithms in Machine Learning</a></li>
+  <li><a href="#what-is-a-model-in-ml" id="toc-what-is-a-model-in-ml" class="nav-link" data-scroll-target="#what-is-a-model-in-ml">What is a Model in ML?</a></li>
+  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition">Definition</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+  <li><a href="#things-to-remember" id="toc-things-to-remember" class="nav-link" data-scroll-target="#things-to-remember">Things to Remember</a></li>
+  <li><a href="#choosing-the-right-algorithm" id="toc-choosing-the-right-algorithm" class="nav-link" data-scroll-target="#choosing-the-right-algorithm">Choosing the Right Algorithm</a></li>
+  <li><a href="#design-your-own-algorithm" id="toc-design-your-own-algorithm" class="nav-link" data-scroll-target="#design-your-own-algorithm">Design Your Own Algorithm</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_1.html">Important Distinctions</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">PSC559: Applied Machine Learning in Psychology</h1>
+<h1 class="title">Important Distinctions</h1>
 </div>
 
 
@@ -211,9 +227,211 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome to the PSC559: Applied Machine Learning in Psychology!</p>
-<p>As the class progresses I will update this front matter with a general course overview and important announcements.</p>
-<p>If you find errors or typos in any of these materials please let me know.</p>
+<p>The vast amount of jargon one encounters when first diving into the machine learning literature is a common source of confusion for new learners. Many ML terms are borrowed from statistics, computer science, or everyday language, but they can carry subtly or even radically different meanings in ML contexts.</p>
+<p>With the following overview I will provide a high-level overview of some common terms used in machine learning, and try to highlight the differences between concepts that may seem similar, but often represent distinct ideas.</p>
+<p>Two important distinctions:</p>
+<ol type="1">
+<li><p>The difference between Artificial Intelligence and Machine Learning</p></li>
+<li><p>The difference between an algorithm and a model</p></li>
+</ol>
+<section id="ai-vs.-machine-learning" class="level1" style="color: yellow">
+<h1>AI vs.&nbsp;Machine Learning</h1>
+</section>
+<p>Artificial Intelligence (AI) and Machine Learning (ML) are related but distinct concepts in computer science and data analysis.</p>
+<section id="artificial-intelligence-ai" class="level2">
+<h2 class="anchored" data-anchor-id="artificial-intelligence-ai">Artificial Intelligence (AI)</h2>
+<ul>
+<li>AI is the broad field of creating systems that can perform tasks that normally require human intelligence.</li>
+<li>Typically, the goal of AI is to create machines that can simulate intelligent behavior, whether or not they learn from data.</li>
+<li>Common Examples of AI include<strong>:</strong>
+<ul>
+<li>Large Language Models</li>
+</ul></li>
+</ul>
+<p><em>Can you think of any examples of AI you encounter in your everyday life?</em></p>
+</section>
+<section id="machine-learning-ml" class="level2">
+<h2 class="anchored" data-anchor-id="machine-learning-ml">Machine Learning (ML)</h2>
+<ul>
+<li>ML is a branch of AI focused on systems that learn patterns from data and improve automatically from experience.</li>
+<li>When doing ML we are generally interested in creating models that generalize from data to make accurate predictions on unseen inputs.</li>
+<li>Common use cases for ML in everyday life include<strong>:</strong>
+<ul>
+<li>Clutter or spam email detection</li>
+</ul></li>
+</ul>
+<p><em>Can you think of any examples of ML you encounter in your everyday life?</em></p>
+</section>
+<section id="differences-between-ai-and-ml" class="level2">
+<h2 class="anchored" data-anchor-id="differences-between-ai-and-ml">Differences Between AI and ML</h2>
+<table class="caption-top table">
+<caption><br>
+<img src="images/AI-vs-ML-vs-Deep-Learning.png" class="img-fluid" alt="https://www.edureka.co/blog/ai-vs-machine-learning-vs-deep-learning/"></caption>
+<colgroup>
+<col style="width: 26%">
+<col style="width: 36%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aspect</th>
+<th>Artificial Intelligence (AI)</th>
+<th>Machine Learning (ML)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Focus</td>
+<td>Simulating intelligent behavior</td>
+<td>Learning patterns from data</td>
+</tr>
+<tr class="even">
+<td>Goal</td>
+<td>Broader human-like intelligence</td>
+<td>Specific predictive or decision-making tasks</td>
+</tr>
+<tr class="odd">
+<td>Examples</td>
+<td>Chess engines, self-driving cars, expert systems</td>
+<td>Regression, neural networks, clustering</td>
+</tr>
+</tbody>
+</table>
+<p>Broadly speaking, ML is a branch of AI focused on training models to recognize patterns and make predictions using algorithms. AI encompasses a broader set of techniques, some of which do not involve learning from data at all.</p>
+</section>
+<section id="what-is-an-algorithm-in-ml" class="level1" style="color: yellow">
+<h1 style="color: yellow">What is an Algorithm in ML?</h1>
+</section>
+<p>ML approaches rely heavily on accurate and efficient prediction algorithms.</p>
+<p>So, what exactly are algorithms?</p>
+<p>An algorithm is a step-by-step, well-defined procedure for solving a problem or completing a task.</p>
+<p>In computing and machine learning, algorithms are generally a finite sequence of instructions that takes some input, follows a set of rules, and produces an output.</p>
+<section id="characteristics-of-an-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="characteristics-of-an-algorithm">Characteristics of an Algorithm</h2>
+<ol type="1">
+<li>Input – Data the algorithm operates on</li>
+<li>Output – The result produced after execution</li>
+<li>Finiteness – Must finish in a finite number of steps</li>
+<li>Definiteness – Each step is clear and unambiguous</li>
+<li>Effectiveness – Each operation can actually be carried out</li>
+</ol>
+</section>
+<section id="algorithms-in-machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="algorithms-in-machine-learning">Algorithms in Machine Learning</h2>
+<ul>
+<li><p>In ML, an algorithm is the procedure used to train a model from data.</p></li>
+<li><p>Example: Linear regression algorithm finds the best-fit line by minimizing error.</p></li>
+<li><p>Example: Decision tree algorithm splits data into branches by checking features step by step.</p></li>
+</ul>
+<p>One can think of an algorithm as the recipe one follows when cooking a meal. The ingredients of the dish are analogous to the input data, and the finished dish is equivalent to the model.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/algorithms.png" class="img-fluid figure-img"></p>
+<figcaption>https://xkcd.com/1667/</figcaption>
+</figure>
+</div>
+<p>So, how does an algorithm differ from a model? What is a model in the context of ML?</p>
+</section>
+<section id="what-is-a-model-in-ml" class="level1" style="color: yellow">
+<h1>What is a Model in ML?</h1>
+</section>
+<p>A model in machine learning is the learned representation of patterns in data, produced by applying a learning algorithm to a dataset. It is what we use to make predictions, classify new examples, or infer relationships.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/model_ml.png" class="img-fluid figure-img"></p>
+<figcaption>https://www.geeksforgeeks.org/machine-learning/types-of-machine-learning/</figcaption>
+</figure>
+</div>
+<section id="definition" class="level2">
+<h2 class="anchored" data-anchor-id="definition">Definition</h2>
+<p>A model is the outcome of training a machine learning algorithm on data.It encapsulates the patterns, relationships, or structure discovered in the training data.</p>
+<ul>
+<li><strong>Input:</strong> Features from the training data<br>
+</li>
+<li><strong>Process:</strong> Algorithm (e.g., linear regression, decision tree, neural network)<br>
+</li>
+<li><strong>Output:</strong> Parameters, structure, or rules that allow prediction</li>
+</ul>
+</section>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 27%">
+<col style="width: 45%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Algorithm</th>
+<th>Resulting Model</th>
+<th>What It Represents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Linear Regression</td>
+<td>A line (y = mx + b)</td>
+<td>Relationship between input and output variables</td>
+</tr>
+<tr class="even">
+<td>Decision Tree</td>
+<td>Tree of splits</td>
+<td>How features split to predict classes or values</td>
+</tr>
+<tr class="odd">
+<td>Neural Network</td>
+<td>Layers of neurons &amp; weights</td>
+<td>Complex non-linear mappings between inputs and outputs</td>
+</tr>
+<tr class="even">
+<td>k-Means Clustering</td>
+<td>Cluster centroids</td>
+<td>Grouping of data points into clusters</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="things-to-remember" class="level2">
+<h2 class="anchored" data-anchor-id="things-to-remember">Things to Remember</h2>
+<ul>
+<li>The algorithm is the <em>procedure for learning</em><br>
+</li>
+<li>The model is the <em>trained artifact</em> used for prediction or inference<br>
+</li>
+<li>Different algorithms can produce different models from the same data<br>
+</li>
+<li>A model generalizes patterns from training data to unseen data</li>
+<li>Algorithm = recipe (instructions for learning)<br>
+</li>
+<li>Model = finished dish (learned representation ready to use)</li>
+</ul>
+<p>The model is the end product of learning — the part that actually “knows” something about the data and can be used to make predictions. In ML: Data + Algorithm → Model → Predictions.</p>
+</section>
+<section id="choosing-the-right-algorithm" class="level1" style="color: yellow">
+<h1>Choosing the Right Algorithm</h1>
+</section>
+<p>Understanding what algorithm to choose for a specific problem or application is often difficult. In this class we will devote a lot of time on how to make these decisions, and communicate the results of an analysis. That said, we often have minimal knowledge of the problem or data at hand when we first approach an applied problem, and it is difficult to know which ML method will perform best. This idea is generally known as the no free lunch theorem</p>
+<ul>
+<li><p>An algorithm is just the <em>procedure</em> — its effectiveness depends entirely on the kind of data/problem it’s applied to</p></li>
+<li><p>In addition, no single model type will always generalize best</p></li>
+<li><p>The “right” choice depends on the problem domain and data distribution</p></li>
+</ul>
+<section id="design-your-own-algorithm" class="level1" style="color: yellow">
+<h1>Design Your Own Algorithm</h1>
+</section>
+<p>An algorithm is just a set of step-by-step instructions to solve a problem. Machine learning algorithms are no different—they’re just systematic ways of finding patterns in data. Let’s explore what that means.</p>
+<p>In groups of 3–4, imagine you are writing an algorithm for a simple real-world problem:</p>
+<blockquote class="blockquote">
+<p><strong>“How could you design an algorithm that helps a computer decide, in real time, whether a song is best classified as hip-hop or indie rock?”</strong></p>
+</blockquote>
+<p>Each group should discuss (and prepare to share):</p>
+<ol type="1">
+<li><p><strong>What features would you use?</strong></p></li>
+<li><p><strong>What rules or steps would you design?</strong></p></li>
+<li><p><strong>How would the algorithm improve if you had many examples of songs?</strong></p></li>
+</ol>
 
 
 

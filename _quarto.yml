@@ -7,7 +7,7 @@ website:
     style: "docked"
     search: false
     contents:
-      - text: "Fundamentals of R"
+      - text: "Table of Contents"
         href: introduction.qmd
         contents: 
       - section: "Introduction to R"
@@ -17,10 +17,12 @@ website:
           - week1_2.qmd
           - week1_3.qmd
           - week1_4.qmd
-      # - section: "Week 2: Centrality"
-      #   contents:
-      #     - week2_1.qmd
-      #     - week2_2.qmd
+      - section: "Introduction to Machine Learning"
+        contents:
+          - week2_1.qmd
+          - week2_2.qmd
+          - week2_3.qmd
+          - week2_2b.qmd
 format:
   html:
     theme: darkly

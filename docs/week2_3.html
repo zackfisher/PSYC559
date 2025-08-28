@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PSC559: Applied Machine Learning in Psychology – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Data Splitting – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -38,7 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b53751a350365c71b6c909e95f209ed1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c90fbf8e27b40bd2f4a08d7b17c287b2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b8ddda7af1c99188329f288f0306ccf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -80,9 +80,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
-      PSYC559: Applied Machine Learning in Psychology
-      </li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_3.html">Data Splitting</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -169,7 +167,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_3.html" class="sidebar-item-text sidebar-link">
+  <a href="./week2_3.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Data Splitting</span></a>
   </div>
 </li>
@@ -186,15 +184,43 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#data-splitting-in-machine-learning" id="toc-data-splitting-in-machine-learning" class="nav-link active" data-scroll-target="#data-splitting-in-machine-learning">Data Splitting in Machine Learning</a>
+  <ul class="collapse">
+  <li><a href="#training-sample" id="toc-training-sample" class="nav-link" data-scroll-target="#training-sample">Training Sample</a></li>
+  <li><a href="#validation-sample" id="toc-validation-sample" class="nav-link" data-scroll-target="#validation-sample">Validation Sample</a></li>
+  <li><a href="#test-sample" id="toc-test-sample" class="nav-link" data-scroll-target="#test-sample">Test Sample</a></li>
+  </ul></li>
+  <li><a href="#hyperparameters-in-the-context-of-data-splitting" id="toc-hyperparameters-in-the-context-of-data-splitting" class="nav-link" data-scroll-target="#hyperparameters-in-the-context-of-data-splitting">(Hyper)parameters in the Context of Data Splitting</a>
+  <ul class="collapse">
+  <li><a href="#parameters-vs.-hyperparameters" id="toc-parameters-vs.-hyperparameters" class="nav-link" data-scroll-target="#parameters-vs.-hyperparameters">Parameters vs.&nbsp;Hyperparameters</a></li>
+  <li><a href="#role-of-parameters-in-data-splitting" id="toc-role-of-parameters-in-data-splitting" class="nav-link" data-scroll-target="#role-of-parameters-in-data-splitting">Role of Parameters in Data Splitting</a></li>
+  <li><a href="#example-k-means-clustering" id="toc-example-k-means-clustering" class="nav-link" data-scroll-target="#example-k-means-clustering">Example: <em>k</em>-Means Clustering</a>
+  <ul class="collapse">
+  <li><a href="#parameters-learned-from-the-data" id="toc-parameters-learned-from-the-data" class="nav-link" data-scroll-target="#parameters-learned-from-the-data">Parameters (learned from the data)</a></li>
+  <li><a href="#hyperparameters-set-before-training" id="toc-hyperparameters-set-before-training" class="nav-link" data-scroll-target="#hyperparameters-set-before-training">Hyperparameters (set before training)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#benefits-of-data-splitting-in-ml" id="toc-benefits-of-data-splitting-in-ml" class="nav-link" data-scroll-target="#benefits-of-data-splitting-in-ml">Benefits of Data Splitting in ML</a></li>
+  <li><a href="#prevents-overfitting-to-the-training-data" id="toc-prevents-overfitting-to-the-training-data" class="nav-link" data-scroll-target="#prevents-overfitting-to-the-training-data">Prevents Overfitting to the Training Data</a></li>
+  <li><a href="#simulates-real-world-performance" id="toc-simulates-real-world-performance" class="nav-link" data-scroll-target="#simulates-real-world-performance">Simulates Real-World Performance</a></li>
+  <li><a href="#helps-with-model-selection-tuning" id="toc-helps-with-model-selection-tuning" class="nav-link" data-scroll-target="#helps-with-model-selection-tuning">Helps with Model Selection &amp; Tuning</a></li>
+  <li><a href="#detects-data-leakage" id="toc-detects-data-leakage" class="nav-link" data-scroll-target="#detects-data-leakage">Detects Data Leakage</a></li>
+  <li><a href="#provides-a-fair-benchmark" id="toc-provides-a-fair-benchmark" class="nav-link" data-scroll-target="#provides-a-fair-benchmark">Provides a Fair Benchmark</a></li>
+  <li><a href="#data-splitting-in-real-life" id="toc-data-splitting-in-real-life" class="nav-link" data-scroll-target="#data-splitting-in-real-life">Data Splitting in Real Life</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_3.html">Data Splitting</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">PSC559: Applied Machine Learning in Psychology</h1>
+<h1 class="title">Data Splitting</h1>
 </div>
 
 
@@ -211,9 +237,153 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome to the PSC559: Applied Machine Learning in Psychology!</p>
-<p>As the class progresses I will update this front matter with a general course overview and important announcements.</p>
-<p>If you find errors or typos in any of these materials please let me know.</p>
+<section id="data-splitting-in-machine-learning" class="level1">
+<h1>Data Splitting in Machine Learning</h1>
+<p>Data splitting (e.g., dividing data into <strong>training, validation, and test samples</strong>) is crucial because it protects us from fooling ourselves about how well a model actually performs.</p>
+<section id="training-sample" class="level3">
+<h3 class="anchored" data-anchor-id="training-sample">Training Sample</h3>
+<ul>
+<li><p>The subset of examples used to train the learning algorithm. Here we typically estimate the model’s <strong>parameters</strong> in the training sample.</p></li>
+<li><p>For example, if we have data from 150 participants, we might keep data from 100 participants (with known depression scores) to train a predictive model.</p></li>
+<li><p><strong>Notes</strong>: Spending too much in training won’t allow us to get a good assessment of predictive performance. We may find a model that fits the training data very well, but is not generalizable (<em>overfitting</em>).</p></li>
+</ul>
+</section>
+<section id="validation-sample" class="level3">
+<h3 class="anchored" data-anchor-id="validation-sample">Validation Sample</h3>
+<ul>
+<li><p>Samples used to tune algorithm <strong>hyperparameters</strong> (e.g., regularization strength, number of neurons in a network).</p></li>
+<li><p>For example, from our 100 individuals in the training sample, we may split the training data into 4 groups of 25 participants. Each of these will be a validation sample, and allow us to select the optimal model settings or tuning parameters before our final evaluation.</p></li>
+</ul>
+</section>
+<section id="test-sample" class="level3">
+<h3 class="anchored" data-anchor-id="test-sample">Test Sample</h3>
+<ul>
+<li><p>The test Sample used to evaluate model performance, separate from training and validation. The test sample is not made available in the learning stage. Sometimes too much spent in testing won’t allow us to get a good assessment of model parameters.</p></li>
+<li><p>For example, for those 50 participants we never looked out may be our test data. The model can now be used to predict depression scores ; predicted scores for the individuals in the test sample. Here we can now compare actual scores to assess accuracy.</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/data_split.png" class="img-fluid figure-img"></p>
+<figcaption>https://www.statology.org/validation-set-vs-test-set/</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="hyperparameters-in-the-context-of-data-splitting" class="level1">
+<h1>(Hyper)parameters in the Context of Data Splitting</h1>
+<p>In our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.</p>
+<section id="parameters-vs.-hyperparameters" class="level2">
+<h2 class="anchored" data-anchor-id="parameters-vs.-hyperparameters">Parameters vs.&nbsp;Hyperparameters</h2>
+<ul>
+<li><p><strong>Parameters</strong> are values learned automatically (or estimated) from the training data. The model parameters are often the thing we are interested in estimating in a given algorithm.</p></li>
+<li><p>For example. the slope of the line in a simple linear regression prediction problem relating amount of treatment (feature) to depression score (target).</p></li>
+<li><p><strong>Hyperparameters</strong> are set before training begins, and control how the learning process works. The selection of hyperparameters is often critical to model performance, as in procedures like k-folds cross-validation, playing a critical role in how the model generalizes.</p></li>
+<li><p>For example, the the number of clusters used to partition the data</p></li>
+</ul>
+</section>
+<section id="role-of-parameters-in-data-splitting" class="level2">
+<h2 class="anchored" data-anchor-id="role-of-parameters-in-data-splitting">Role of Parameters in Data Splitting</h2>
+<p>When we split data, each portion plays a distinct role:</p>
+<ul>
+<li><p><strong>Training set</strong> → Fit the model parameters.<br>
+</p></li>
+<li><p><strong>Validation set</strong> → Used to compare different hyperparameter choices.<br>
+</p></li>
+<li><p><strong>Test set</strong> → Used only once, at the very end, to estimate generalization performance.</p>
+<p><br>
+<strong>Important note</strong>: Hyperparameters should be tuned using the validation set, not the test set. If we adjust hyperparameters based on the test set, we are indirectly training on it and lose the ability to measure real-world performance.</p></li>
+</ul>
+<hr>
+</section>
+<section id="example-k-means-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="example-k-means-clustering">Example: <em>k</em>-Means Clustering</h2>
+<section id="parameters-learned-from-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="parameters-learned-from-the-data">Parameters (learned from the data)</h3>
+<ul>
+<li><strong>Cluster centroids</strong>: the coordinates of the cluster centers.<br>
+</li>
+<li>These are <em>calculated by the algorithm</em> during training and adjusted iteratively until convergence.<br>
+</li>
+<li>You do not set them manually — the algorithm figures them out.</li>
+</ul>
+</section>
+<section id="hyperparameters-set-before-training" class="level3">
+<h3 class="anchored" data-anchor-id="hyperparameters-set-before-training">Hyperparameters (set before training)</h3>
+<ul>
+<li><strong>Number of clusters (<em>k</em>)</strong>: chosen by the user before running the algorithm.<br>
+</li>
+<li><strong>Initialization method</strong> (e.g., random, k-means++).<br>
+</li>
+<li><strong>Maximum number of iterations</strong> allowed.<br>
+</li>
+<li>These control <em>how</em> the algorithm runs, but are not learned from the data itself.</li>
+</ul>
+<hr>
+</section>
+</section>
+</section>
+<section id="benefits-of-data-splitting-in-ml" class="level1" style="color: yellow">
+<h1>Benefits of Data Splitting in ML</h1>
+</section>
+<hr>
+<section id="prevents-overfitting-to-the-training-data" class="level2">
+<h2 class="anchored" data-anchor-id="prevents-overfitting-to-the-training-data">Prevents Overfitting to the Training Data</h2>
+<ul>
+<li>When a model is trained, it adapts to patterns in the training set.<br>
+</li>
+<li>If we only check performance on that same data, we might think the model is excellent — but it may just be memorizing instead of generalizing.<br>
+</li>
+<li>A separate test set lets us see how the model behaves on <em>new, unseen</em> data.</li>
+</ul>
+<hr>
+</section>
+<section id="simulates-real-world-performance" class="level2">
+<h2 class="anchored" data-anchor-id="simulates-real-world-performance">Simulates Real-World Performance</h2>
+<ul>
+<li>In real life, the model will be applied to data it hasn’t seen before.<br>
+</li>
+<li>By holding out a test set, we simulate that scenario, giving us a better sense of expected performance in practice.</li>
+</ul>
+<hr>
+</section>
+<section id="helps-with-model-selection-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="helps-with-model-selection-tuning">Helps with Model Selection &amp; Tuning</h2>
+<ul>
+<li>A validation set (or cross-validation) is used to choose hyperparameters (like tree depth, learning rate, regularization strength).<br>
+</li>
+<li>If we tuned on the test set, we’d essentially be “leaking” information, and performance estimates would be biased upward.<br>
+</li>
+<li>Proper splitting ensures that the test set remains untouched until the very end.</li>
+</ul>
+<hr>
+</section>
+<section id="detects-data-leakage" class="level2">
+<h2 class="anchored" data-anchor-id="detects-data-leakage">Detects Data Leakage</h2>
+<ul>
+<li>Sometimes information from the future or from labels sneaks into the features.<br>
+</li>
+<li>If this happens, the model might look perfect on the training set but fail on a clean split.<br>
+</li>
+<li>Data splitting may not actually help data leakage though. When might it help and when might it not?</li>
+</ul>
+<hr>
+</section>
+<section id="provides-a-fair-benchmark" class="level2">
+<h2 class="anchored" data-anchor-id="provides-a-fair-benchmark">Provides a Fair Benchmark</h2>
+<ul>
+<li>In research and industry, different models need to be compared on a <em>common, untouched test set</em>.<br>
+</li>
+<li>Without splitting, comparisons aren’t meaningful, since each model might overfit differently.</li>
+</ul>
+<hr>
+</section>
+<section id="data-splitting-in-real-life" class="level1" style="color: yellow">
+<h1>Data Splitting in Real Life</h1>
+</section>
+<p>In groups of 3–4, discuss:</p>
+<blockquote class="blockquote">
+<p><strong><em>Imagine a real-world scenario that involves learning and evaluation. This can be interpreted loosely, if necessary. Describe the different aspects of the learning and assessment process and how they might corresponds to training, validation, and test sets in the context of machine learning? Why?”</em></strong></p>
+</blockquote>
 
 
 
