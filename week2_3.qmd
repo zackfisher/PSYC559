@@ -130,3 +130,71 @@ When we split data, each portion plays a distinct role:
 In groups of 3–4, discuss:
 
 > ***Imagine a real-world scenario that involves learning and evaluation. This can be interpreted loosely, if necessary. Describe the different aspects of the learning and assessment process and how they might corresponds to training, validation, and test sets in the context of machine learning? Why?”***
+
+::: {style="color: yellow"}
+# K-Folds Cross-Validation
+:::
+
+So, what does all this data splitting mean for us in practice? Let's take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation
+
+### Motivation for Cross-Validation
+
+When talking about data-splitting we discussed training, validation and test sets. For a moment, let's take a closer look at the training and validation sets to get a clear idea of what is happening.
+
+Let's split our available data into two parts:
+
+-   **Training Set**: which the model learns from\
+-   **Validation Set**: used to check how well the model performs on data it hasn’t seen before
+
+This method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.
+
+This idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.
+
+### K-Folds
+
+One idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.
+
+![https://bradleyboehmke.github.io/HOML/process.html#splitting](images/cv.png){width="800"}
+
+### K-Folds Cross-Validation in Steps
+
+Sometimes it is helpful to write out the steps of a procedure like this explicitly.
+
+#### Step 1: Split the data into *k* folds
+
+-   Shuffle the dataset randomly.\
+-   Divide it into *k* roughly equal-sized parts, called folds.\
+-   For example, if k =10, we have 10-fold cross-validation, and split the data into 10 parts.
+
+#### Step 2: Train and validate across folds
+
+For each fold *i* from 1 to *k*:\
+1. Use fold *i* as the validation set.\
+2. Use the remaining *k – 1* folds as the training set.\
+3. Train the model on the training set.\
+4. Evaluate its performance on the validation set.
+
+At the end, we will have *k* performance scores (one per fold).
+
+#### Step 3: Average the performance
+
+-   Compute the average performance across all *k* folds.\
+-   This gives a more reliable estimate of how well the model generalizes than using a single holdout split.
+
+#### Step 4: Hyperparameter tuning
+
+To tune hyperparameters using cross-validation:\
+1. Define a grid of candidate hyperparameter values.\
+2. For each candidate:\
+- Repeat steps 2-3.\
+3. Select the hyperparameter value with the best average performance.
+
+#### Step 5: Retrain on the full training set
+
+-   Once the best hyperparameter is chosen, retrain the model on the entire training dataset (not just folds).\
+-   This ensures the model learns from all available data.
+
+#### Step 6: Evaluate on the holdout test set (if available)
+
+-   If you set aside a test set at the very beginning, now is the time to use it.\
+-   This gives an unbiased estimate of how the tuned model will perform on brand-new data.

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Terminology Notes – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Bias and Variance – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -38,7 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b53751a350365c71b6c909e95f209ed1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c90fbf8e27b40bd2f4a08d7b17c287b2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b8ddda7af1c99188329f288f0306ccf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -80,7 +80,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_2b.html">Terminology Notes</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_4.html">Bias and Variance</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -173,13 +173,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_4.html" class="sidebar-item-text sidebar-link">
+  <a href="./week2_4.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Bias and Variance</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_2b.html" class="sidebar-item-text sidebar-link active">
+  <a href="./week2_2b.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Terminology Notes</span></a>
   </div>
 </li>
@@ -195,23 +195,24 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#some-important-definitions" id="toc-some-important-definitions" class="nav-link active" data-scroll-target="#some-important-definitions">Some Important Definitions</a></li>
-  <li><a href="#examples-items-instances-or-cases" id="toc-examples-items-instances-or-cases" class="nav-link" data-scroll-target="#examples-items-instances-or-cases">Examples, Items, Instances or Cases</a></li>
-  <li><a href="#features" id="toc-features" class="nav-link" data-scroll-target="#features">Features</a></li>
-  <li><a href="#labels" id="toc-labels" class="nav-link" data-scroll-target="#labels">Labels</a></li>
-  <li><a href="#training-sample" id="toc-training-sample" class="nav-link" data-scroll-target="#training-sample">Training Sample</a></li>
-  <li><a href="#validation-sample" id="toc-validation-sample" class="nav-link" data-scroll-target="#validation-sample">Validation Sample</a></li>
-  <li><a href="#test-sample" id="toc-test-sample" class="nav-link" data-scroll-target="#test-sample">Test Sample</a></li>
-  <li><a href="#loss-function" id="toc-loss-function" class="nav-link" data-scroll-target="#loss-function">Loss Function</a></li>
+  <li><a href="#bias-in-machine-learning" id="toc-bias-in-machine-learning" class="nav-link active" data-scroll-target="#bias-in-machine-learning">Bias in Machine Learning</a></li>
+  <li><a href="#common-source-of-bias-in-machine-learning" id="toc-common-source-of-bias-in-machine-learning" class="nav-link" data-scroll-target="#common-source-of-bias-in-machine-learning">Common Source of Bias in Machine Learning</a></li>
+  <li><a href="#some-consequences-of-bias-in-machine-learning" id="toc-some-consequences-of-bias-in-machine-learning" class="nav-link" data-scroll-target="#some-consequences-of-bias-in-machine-learning">Some Consequences of Bias in Machine Learning</a></li>
+  <li><a href="#variance-in-machine-learning" id="toc-variance-in-machine-learning" class="nav-link" data-scroll-target="#variance-in-machine-learning">Variance in Machine Learning</a></li>
+  <li><a href="#common-causes-of-high-variance" id="toc-common-causes-of-high-variance" class="nav-link" data-scroll-target="#common-causes-of-high-variance">Common Causes of High Variance</a></li>
+  <li><a href="#the-bias-variance-tradeoff" id="toc-the-bias-variance-tradeoff" class="nav-link" data-scroll-target="#the-bias-variance-tradeoff">The Bias Variance Tradeoff</a></li>
+  <li><a href="#why-a-bias-variance-tradeoff" id="toc-why-a-bias-variance-tradeoff" class="nav-link" data-scroll-target="#why-a-bias-variance-tradeoff">Why a Bias-Variance Tradeoff?</a></li>
+  <li><a href="#why-the-tradeoff-occurs" id="toc-why-the-tradeoff-occurs" class="nav-link" data-scroll-target="#why-the-tradeoff-occurs">Why the Tradeoff Occurs</a></li>
+  <li><a href="#high-bias-and-high-variance" id="toc-high-bias-and-high-variance" class="nav-link" data-scroll-target="#high-bias-and-high-variance">High Bias and High Variance?</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_2b.html">Terminology Notes</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_4.html">Bias and Variance</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Terminology Notes</h1>
+<h1 class="title">Bias and Variance</h1>
 </div>
 
 
@@ -228,71 +229,115 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="some-important-definitions" class="level1" style="color: yellow">
-<h1>Some Important Definitions</h1>
+<p>Prediction errors can be broken down into two main parts: bias and variance.</p>
+<p>These represent different sources of mistakes a model can make.</p>
+<p>Usually, there’s a tradeoff between keeping bias low and keeping variance low. It can be exceptionally hard to minimize both at the same time.</p>
+<p>By understanding where bias and variance come from, we can make better choices when building models and end up with more accurate predictions.</p>
+<p>Let’s approach each concept in turn.</p>
+<section id="bias-in-machine-learning" class="level1" style="color: yellow">
+<h1>Bias in Machine Learning</h1>
 </section>
-<section id="examples-items-instances-or-cases" class="level2">
-<h2 class="anchored" data-anchor-id="examples-items-instances-or-cases">Examples, Items, Instances or Cases</h2>
+<p><strong>Bias</strong> is the difference between the average prediction from our model and the true value which we are trying to predict.</p>
+<p>In machine learning, bias often refers to the systematic error in a model.</p>
+<p>Bias in ML can lead to incorrect or unfair outcomes, possibly from flawed or incomplete training data, or perhaps from poor assumptions made by the algorithm.</p>
+<p>A biased model fails to accurately reflect the true relationship in the data, leading to poor generalization and skewed predictions.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/bias_graphical_representation.jpg" class="img-fluid figure-img" width="800"></p>
+<figcaption>https://www.tutorialspoint.com/machine_learning/machine_learning_bias_and_variance.htm</figcaption>
+</figure>
+</div>
+<section id="common-source-of-bias-in-machine-learning" class="level3">
+<h3 class="anchored" data-anchor-id="common-source-of-bias-in-machine-learning">Common Source of Bias in Machine Learning</h3>
 <ul>
-<li><strong>Definition:</strong> Individual data points used for learning or evaluation.<br>
-</li>
-<li><strong>Example:</strong> Each participant in a study, with their responses to a cognitive task or survey questionnaire.</li>
-</ul>
-</section>
-<section id="features" class="level2">
-<h2 class="anchored" data-anchor-id="features">Features</h2>
+<li><p><strong>Data-related bias</strong>: This occurs when the training data itself is not representative of the real-world scenario or contains skewed or prejudiced information. Data-related bias often result from incomplete datasets.</p>
 <ul>
-<li><strong>Definition:</strong> Attributes or variables associated with each example, often represented as a vector.<br>
-</li>
-<li><strong>Example:</strong> Participant age, gender, response times, scores on survey items, or physiological measures (e.g., heart rate, skin conductance).</li>
-</ul>
-</section>
-<section id="labels" class="level2">
-<h2 class="anchored" data-anchor-id="labels">Labels</h2>
+<li>Example: facial recognition systems trained on light-skinned faces</li>
+</ul></li>
+<li><p><strong>Algorithmic bias</strong>: This type of bias arises from the model’s architecture or the assumptions embedded within the algorithms. Algorithmic bias can often reflect societal inequities.</p>
 <ul>
-<li><strong>Definition:</strong> The outcome, value, or category assigned to each example.<br>
-</li>
-<li><strong>Example:</strong>
-<ul>
-<li>Classification: Diagnosed vs.&nbsp;non-diagnosed for depression.<br>
-</li>
-<li>Regression: Continuous depression score on a scale from 0–30.</li>
+<li>Example: loan approval</li>
 </ul></li>
 </ul>
 </section>
-<section id="training-sample" class="level2">
-<h2 class="anchored" data-anchor-id="training-sample">Training Sample</h2>
+<section id="some-consequences-of-bias-in-machine-learning" class="level3">
+<h3 class="anchored" data-anchor-id="some-consequences-of-bias-in-machine-learning">Some Consequences of Bias in Machine Learning</h3>
 <ul>
-<li><strong>Definition:</strong> The subset of examples used to train the learning algorithm.<br>
-</li>
-<li><strong>Example:</strong> 100 participants’ data with known depression scores used to train a predictive model.</li>
+<li><p><strong>Inaccurate Predictions</strong>: Biased models do not properly capture the true data generating pattern.</p></li>
+<li><p><strong>Unfair or Discriminatory Outcomes</strong>: Unfair treatment of individuals based on demographic characteristics.</p></li>
+<li><p><strong>Reinforcement of Stereotypes</strong>: Biased AI systems can perpetuate and even amplify existing societal stereotypes.</p></li>
 </ul>
 </section>
-<section id="validation-sample" class="level2">
-<h2 class="anchored" data-anchor-id="validation-sample">Validation Sample</h2>
+<section id="variance-in-machine-learning" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="variance-in-machine-learning">Variance in Machine Learning</h2>
+</section>
+<p>In statistics, variance is a measure of dispersion, meaning it is a measure of how far a set of numbers is spread out from their average value.</p>
+<p>In machine learning, variance typically refers to the sensitivity of a model’s predictions to small changes in the training data.</p>
+<p>So, error due to <em>variance</em> is defined as the variability of a model prediction for a given data point.</p>
+<section id="common-causes-of-high-variance" class="level3">
+<h3 class="anchored" data-anchor-id="common-causes-of-high-variance">Common Causes of High Variance</h3>
 <ul>
-<li><strong>Definition:</strong> Examples used to <strong>tune algorithm parameters</strong> (e.g., regularization strength, number of neurons in a network).<br>
-</li>
-<li><strong>Example:</strong> 30 participants’ data used to select the optimal model settings or tuning parameters before final evaluation.</li>
+<li><p><strong>Model complexity</strong>: Overly complex models, with many features or high-degree terms, are more prone to high variance compared to simpler models.</p></li>
+<li><p><strong>Insufficient data</strong>: With smaller datasets, observation specifiv fluctuations matter more, so predictions on new data become less stable with higher variance.</p></li>
 </ul>
 </section>
-<section id="test-sample" class="level2">
-<h2 class="anchored" data-anchor-id="test-sample">Test Sample</h2>
+<section id="the-bias-variance-tradeoff" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="the-bias-variance-tradeoff">The Bias Variance Tradeoff</h2>
+</section>
+<p>Bias and variance are often introduced together in the context of the bias-variance tradeoff that occurs when models overfit, or underfit the data.</p>
+<p>When a model <em>overfits the data</em>, it means the model has learned too much from the training data, including random noise or minor fluctuations, rather than just the true underlying patterns.</p>
+<p>When a model <em>underfits the data</em>, it means the model is too simple to capture the underlying patterns in the data.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/mlconcepts_image5.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>https://docs.aws.amazon.com/machine-learning/latest/dg/model-fit-underfitting-vs-overfitting.html</figcaption>
+</figure>
+</div>
+<section id="why-a-bias-variance-tradeoff" class="level3">
+<h3 class="anchored" data-anchor-id="why-a-bias-variance-tradeoff">Why a Bias-Variance Tradeoff?</h3>
+<p>The bias-variance tradeoff can be understood as the tension between model simplicity and model flexibility: improving one can often worsen the other.</p>
 <ul>
-<li><strong>Definition:</strong> Examples used to <strong>evaluate model performance</strong>, separate from training and validation. Examples used to evaluate the performance of a learning algorithm. The test sample is not made available in the learning stage.</li>
-<li><strong>Example:</strong> 50 new participants whose depression scores the model predicts; predicted scores are compared to actual scores to assess accuracy.</li>
+<li><strong>Underfitting and High Bias:</strong>
+<ul>
+<li>Model is too simple to capture the true patterns in the data.</li>
+<li>Both training and test errors are high.</li>
+<li>Variance is low because predictions do not change much when trained on different datasets.</li>
+</ul></li>
+<li><strong>High Variance (Overfitting):</strong>
+<ul>
+<li>Model is too flexible and fits the training data—including noise—very closely.</li>
+<li>Training error is low, but test error is high.</li>
+</ul></li>
 </ul>
 </section>
-<section id="loss-function" class="level2">
-<h2 class="anchored" data-anchor-id="loss-function">Loss Function</h2>
+<section id="why-the-tradeoff-occurs" class="level3">
+<h3 class="anchored" data-anchor-id="why-the-tradeoff-occurs">Why the Tradeoff Occurs</h3>
 <ul>
-<li><strong>Definition:</strong> A function that measures the difference between predicted labels and true labels.<br>
+<li>Making the model more complex reduces bias but increases variance, since the model becomes sensitive to small fluctuations in the training data.<br>
 </li>
-<li><strong>Example:</strong></li>
-<li><strong>Regression:</strong> Squared loss: L(y, y′) = (y′ − y)², e.g., predicted vs.&nbsp;actual depression score.<br>
-</li>
-<li><strong>Classification:</strong> Zero-one loss: L(y, y′) = 1 if prediction ≠ true label, e.g., predicted diagnosis vs.&nbsp;actual diagnosis.</li>
+<li>Making the model simpler reduces variance but increases bias, because it cannot capture all the patterns.</li>
 </ul>
+<p>There is a sweet spot in between that balances bias and variance, resulting in the lowest total prediction error.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/underfit_right_overfit.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>https://www.endtoend.ai/blog/bias-variance-tradeoff-in-reinforcement-learning/</figcaption>
+</figure>
+</div>
+</section>
+<section id="high-bias-and-high-variance" class="level3">
+<h3 class="anchored" data-anchor-id="high-bias-and-high-variance">High Bias and High Variance?</h3>
+<p>This can happen if the model is poorly specified and trained on very noisy or limited data:</p>
+<ul>
+<li><p>It cannot represent the underlying patterns properly (high bias)</p></li>
+<li><p>Predictions fluctuate a lot due to the noise (high variance).</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/bullseye.png" class="img-fluid figure-img"></p>
+<figcaption>https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote12.html</figcaption>
+</figure>
+</div>
 
 
 </section>

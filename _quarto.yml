@@ -22,6 +22,7 @@ website:
           - week2_1.qmd
           - week2_2.qmd
           - week2_3.qmd
+          - week2_4.qmd
           - week2_2b.qmd
 format:
   html:

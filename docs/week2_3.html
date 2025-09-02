@@ -173,6 +173,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./week2_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bias and Variance</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./week2_2b.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Terminology Notes</span></a>
   </div>
@@ -212,6 +218,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#detects-data-leakage" id="toc-detects-data-leakage" class="nav-link" data-scroll-target="#detects-data-leakage">Detects Data Leakage</a></li>
   <li><a href="#provides-a-fair-benchmark" id="toc-provides-a-fair-benchmark" class="nav-link" data-scroll-target="#provides-a-fair-benchmark">Provides a Fair Benchmark</a></li>
   <li><a href="#data-splitting-in-real-life" id="toc-data-splitting-in-real-life" class="nav-link" data-scroll-target="#data-splitting-in-real-life">Data Splitting in Real Life</a></li>
+  <li><a href="#k-folds-cross-validation" id="toc-k-folds-cross-validation" class="nav-link" data-scroll-target="#k-folds-cross-validation">K-Folds Cross-Validation</a></li>
+  <li><a href="#motivation-for-cross-validation" id="toc-motivation-for-cross-validation" class="nav-link" data-scroll-target="#motivation-for-cross-validation">Motivation for Cross-Validation</a></li>
+  <li><a href="#k-folds" id="toc-k-folds" class="nav-link" data-scroll-target="#k-folds">K-Folds</a></li>
+  <li><a href="#k-folds-cross-validation-in-steps" id="toc-k-folds-cross-validation-in-steps" class="nav-link" data-scroll-target="#k-folds-cross-validation-in-steps">K-Folds Cross-Validation in Steps</a></li>
   </ul>
 </nav>
     </div>
@@ -384,8 +394,89 @@ ul.task-list li input[type="checkbox"] {
 <blockquote class="blockquote">
 <p><strong><em>Imagine a real-world scenario that involves learning and evaluation. This can be interpreted loosely, if necessary. Describe the different aspects of the learning and assessment process and how they might corresponds to training, validation, and test sets in the context of machine learning? Why?”</em></strong></p>
 </blockquote>
+<section id="k-folds-cross-validation" class="level1" style="color: yellow">
+<h1>K-Folds Cross-Validation</h1>
+</section>
+<p>So, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation</p>
+<section id="motivation-for-cross-validation" class="level3">
+<h3 class="anchored" data-anchor-id="motivation-for-cross-validation">Motivation for Cross-Validation</h3>
+<p>When talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.</p>
+<p>Let’s split our available data into two parts:</p>
+<ul>
+<li><strong>Training Set</strong>: which the model learns from<br>
+</li>
+<li><strong>Validation Set</strong>: used to check how well the model performs on data it hasn’t seen before</li>
+</ul>
+<p>This method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.</p>
+<p>This idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.</p>
+</section>
+<section id="k-folds" class="level3">
+<h3 class="anchored" data-anchor-id="k-folds">K-Folds</h3>
+<p>One idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/cv.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>https://bradleyboehmke.github.io/HOML/process.html#splitting</figcaption>
+</figure>
+</div>
+</section>
+<section id="k-folds-cross-validation-in-steps" class="level3">
+<h3 class="anchored" data-anchor-id="k-folds-cross-validation-in-steps">K-Folds Cross-Validation in Steps</h3>
+<p>Sometimes it is helpful to write out the steps of a procedure like this explicitly.</p>
+<section id="step-1-split-the-data-into-k-folds" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-split-the-data-into-k-folds">Step 1: Split the data into <em>k</em> folds</h4>
+<ul>
+<li>Shuffle the dataset randomly.<br>
+</li>
+<li>Divide it into <em>k</em> roughly equal-sized parts, called folds.<br>
+</li>
+<li>For example, if k =10, we have 10-fold cross-validation, and split the data into 10 parts.</li>
+</ul>
+</section>
+<section id="step-2-train-and-validate-across-folds" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-train-and-validate-across-folds">Step 2: Train and validate across folds</h4>
+<p>For each fold <em>i</em> from 1 to <em>k</em>:<br>
+1. Use fold <em>i</em> as the validation set.<br>
+2. Use the remaining <em>k – 1</em> folds as the training set.<br>
+3. Train the model on the training set.<br>
+4. Evaluate its performance on the validation set.</p>
+<p>At the end, we will have <em>k</em> performance scores (one per fold).</p>
+</section>
+<section id="step-3-average-the-performance" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-average-the-performance">Step 3: Average the performance</h4>
+<ul>
+<li>Compute the average performance across all <em>k</em> folds.<br>
+</li>
+<li>This gives a more reliable estimate of how well the model generalizes than using a single holdout split.</li>
+</ul>
+</section>
+<section id="step-4-hyperparameter-tuning" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-hyperparameter-tuning">Step 4: Hyperparameter tuning</h4>
+<p>To tune hyperparameters using cross-validation:<br>
+1. Define a grid of candidate hyperparameter values.<br>
+2. For each candidate:<br>
+- Repeat steps 2-3.<br>
+3. Select the hyperparameter value with the best average performance.</p>
+</section>
+<section id="step-5-retrain-on-the-full-training-set" class="level4">
+<h4 class="anchored" data-anchor-id="step-5-retrain-on-the-full-training-set">Step 5: Retrain on the full training set</h4>
+<ul>
+<li>Once the best hyperparameter is chosen, retrain the model on the entire training dataset (not just folds).<br>
+</li>
+<li>This ensures the model learns from all available data.</li>
+</ul>
+</section>
+<section id="step-6-evaluate-on-the-holdout-test-set-if-available" class="level4">
+<h4 class="anchored" data-anchor-id="step-6-evaluate-on-the-holdout-test-set-if-available">Step 6: Evaluate on the holdout test set (if available)</h4>
+<ul>
+<li>If you set aside a test set at the very beginning, now is the time to use it.<br>
+</li>
+<li>This gives an unbiased estimate of how the tuned model will perform on brand-new data.</li>
+</ul>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
