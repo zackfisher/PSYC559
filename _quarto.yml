@@ -24,6 +24,9 @@ website:
           - week2_3.qmd
           - week2_4.qmd
           - week2_2b.qmd
+     # - section: "Assignments"
+     #   contents:
+     #     - assignment1_1.qmd
 format:
   html:
     theme: darkly

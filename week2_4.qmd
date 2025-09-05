@@ -27,8 +27,7 @@ In machine learning, bias often refers to the systematic error in a model.
 
 Bias in ML can lead to incorrect or unfair outcomes, possibly from flawed or incomplete training data, or perhaps from poor assumptions made by the algorithm.
 
-A biased model fails to accurately reflect the true relationship in the
-data, leading to poor generalization and skewed predictions.
+A biased model fails to accurately reflect the true relationship in the data, leading to poor generalization and skewed predictions.
 
 ![https://www.tutorialspoint.com/machine_learning/machine_learning_bias_and_variance.htm](images/bias_graphical_representation.jpg){width="800"}
 

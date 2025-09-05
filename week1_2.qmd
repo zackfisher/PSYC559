@@ -1,11 +1,15 @@
 ---
 title: "Reading in Data"
-author: "Zachary Fisher" 
+format: 
+  html: 
+    fontsize: 25px
 editor_options: 
   chunk_output_type: console
 ---
 
+::: {style="color: yellow"}
 ## Loading Data
+:::
 
 One of the most important initial tasks you'll face in R is reading in data. Let's walk through some basics.
 
@@ -13,8 +17,7 @@ By reading in data we are generally refering to the process of importing data fr
 
 ![Example of tabular data](images/tabular.png)
 
-Many different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text),
-.sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.
+Many different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.
 
 ### Location of the Data File
 

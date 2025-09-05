@@ -1,11 +1,15 @@
 ---
 title: "R Packages"
-author: "Zachary Fisher" 
+format: 
+  html: 
+    fontsize: 25px
 editor_options: 
   chunk_output_type: console
 ---
 
+::: {style="color: yellow"}
 ## Installing R Packages
+:::
 
 One of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the `ggplot2` package for plotting and visualizing data and the `psych` package for describing data numerically.
 
@@ -27,7 +31,9 @@ or you can do so from the Packages tab of the Files pane in RStudio using the fo
 
 ![Install packages using RStudio](images/install_packages_easy_way.png){fig-align="center"}
 
+::: {style="color: yellow"}
 ## Using R Packages
+:::
 
 Once a package is installed you can load it into your environment using the `library()` function. Once loaded you have access to all the R functions supplied by that package.
 
@@ -35,6 +41,8 @@ Once a package is installed you can load it into your environment using the `lib
 library("ggplot2")
 ```
 
+::: {style="color: yellow"}
 ## Finding Useful R Packages
+:::
 
 There are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the [CRAN Task Views](https://cran.r-project.org/web/views/). For example, there is an interesting [Task View for Machine Learning](https://cran.r-project.org/web/views/MachineLearning.html) that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the S[ports Analytics Task View](https://cran.r-project.org/web/views/SportsAnalytics.html) there is a [`f1dataR`](https://cran.r-project.org/web/packages/f1dataR/index.html) package that provides historical data from the beginning of Formula 1.

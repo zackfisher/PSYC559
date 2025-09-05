@@ -1,11 +1,15 @@
 ---
 title: "Describing Data Visually"
-author: "Zachary Fisher" 
+format: 
+  html: 
+    fontsize: 25px
 editor_options: 
   chunk_output_type: console
 ---
 
+::: {style="color: yellow"}
 ## Data Visualization
+:::
 
 This section will briefly introduce you to visualizing data using the `ggplot2` package. R has a number of systems for making graphs but ggplot2 is by far the most developed option. ggplot2 implements the **grammar of graphics**, and if you'd like to learn more about the motivation for this work take a look at [The Layered Grammar of Graphics](http://vita.had.co.nz/papers/layered-grammar.pdf).
 

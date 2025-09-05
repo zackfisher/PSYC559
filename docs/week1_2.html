@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Zachary Fisher">
 
 <title>Reading in Data – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
@@ -73,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b53751a350365c71b6c909e95f209ed1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c90fbf8e27b40bd2f4a08d7b17c287b2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b8ddda7af1c99188329f288f0306ccf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -191,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./week2_1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Important Distinctions</span></a>
+ <span class="menu-text">Important Terms and Distinctions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -230,11 +229,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#loading-data" id="toc-loading-data" class="nav-link active" data-scroll-target="#loading-data">Loading Data</a>
-  <ul class="collapse">
+  <li><a href="#loading-data" id="toc-loading-data" class="nav-link active" data-scroll-target="#loading-data">Loading Data</a></li>
   <li><a href="#location-of-the-data-file" id="toc-location-of-the-data-file" class="nav-link" data-scroll-target="#location-of-the-data-file">Location of the Data File</a></li>
   <li><a href="#loading-data-from-the-working-directory" id="toc-loading-data-from-the-working-directory" class="nav-link" data-scroll-target="#loading-data-from-the-working-directory">Loading Data from the Working Directory</a></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
@@ -250,12 +247,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Zachary Fisher </p>
-          </div>
-  </div>
     
   
     
@@ -266,8 +257,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="loading-data" class="level2">
+<section id="loading-data" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="loading-data">Loading Data</h2>
+</section>
 <p>One of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.</p>
 <p>By reading in data we are generally refering to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabularobject where columns representing variables and rows representing cases. This is not always the case but covers the most basic use case.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -366,7 +358,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In addition to <code>setwd()</code> you can also find what your current working directory is using the <code>getwd()</code> command.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

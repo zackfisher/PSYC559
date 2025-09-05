@@ -1,11 +1,15 @@
 ---
 title: "Basic R Programming"
-author: "Zachary Fisher" 
+format: 
+  html: 
+    fontsize: 25px
 editor_options: 
   chunk_output_type: console
 ---
 
+::: {style="color: yellow"}
 ## Setting Up Your Environment
+:::
 
 Before getting started we will need to install R and RStudio.
 

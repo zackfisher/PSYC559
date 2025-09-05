@@ -80,4 +80,4 @@ Machine learning applications correspond to a wide variety of learning problems.
 # Binary Classification and You
 :::
 
-We will now complete a short in-class exercise demonstrating how one might build a binary classification problem.
+We will now complete a short in-class exercise demonstrating how one might build a binary classifier to solve a classic classification problem.

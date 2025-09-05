@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Zachary Fisher">
 
 <title>R Packages – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
@@ -73,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b53751a350365c71b6c909e95f209ed1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-c90fbf8e27b40bd2f4a08d7b17c287b2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-7b8ddda7af1c99188329f288f0306ccf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -191,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./week2_1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Important Distinctions</span></a>
+ <span class="menu-text">Important Terms and Distinctions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -248,12 +247,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Zachary Fisher </p>
-          </div>
-  </div>
     
   
     
@@ -264,8 +257,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="installing-r-packages" class="level2">
+<section id="installing-r-packages" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="installing-r-packages">Installing R Packages</h2>
+</section>
 <p>One of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the <code>ggplot2</code> package for plotting and visualizing data and the <code>psych</code> package for describing data numerically.</p>
 <p>To install R packages you can use the <code>install.packages()</code> function directly in the console as follows:</p>
 <div class="cell">
@@ -284,20 +278,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <figcaption>Install packages using RStudio</figcaption>
 </figure>
 </div>
-</section>
-<section id="using-r-packages" class="level2">
+<section id="using-r-packages" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="using-r-packages">Using R Packages</h2>
+</section>
 <p>Once a package is installed you can load it into your environment using the <code>library()</code> function. Once loaded you have access to all the R functions supplied by that package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="finding-useful-r-packages" class="level2">
+<section id="finding-useful-r-packages" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="finding-useful-r-packages">Finding Useful R Packages</h2>
+</section>
 <p>There are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the <a href="https://cran.r-project.org/web/views/">CRAN Task Views</a>. For example, there is an interesting <a href="https://cran.r-project.org/web/views/MachineLearning.html">Task View for Machine Learning</a> that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the S<a href="https://cran.r-project.org/web/views/SportsAnalytics.html">ports Analytics Task View</a> there is a <a href="https://cran.r-project.org/web/packages/f1dataR/index.html"><code>f1dataR</code></a> package that provides historical data from the beginning of Formula 1.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

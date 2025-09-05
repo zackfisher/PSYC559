@@ -1,5 +1,10 @@
 ---
 title: "PSC559: Applied Machine Learning in Psychology"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
 ---
 
 Welcome to the PSC559: Applied Machine Learning in Psychology!

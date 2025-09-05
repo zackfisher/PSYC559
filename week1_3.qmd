@@ -1,11 +1,15 @@
 ---
 title: "Describing Data Numerically"
-author: "Zachary Fisher" 
+format: 
+  html: 
+    fontsize: 25px
 editor_options: 
   chunk_output_type: console
 ---
 
+::: {style="color: yellow"}
 ## Numerical Summaries of Data Frames
+:::
 
 Once you have read in a data frame it can be useful to know how the variables are understood by R. For example, let's look at some [Kaggle Marketing Analytics Data](https://www.kaggle.com/datasets/jackdaoud/marketing-data){.uri}. You can download the raw data [here](https://github.com/nailson/ifood-data-business-analyst-test).
 

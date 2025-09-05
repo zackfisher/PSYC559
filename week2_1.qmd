@@ -1,5 +1,5 @@
 ---
-title: "Important Distinctions"
+title: "Important Terms and Distinctions"
 format: 
   html: 
     fontsize: 25px
@@ -7,15 +7,15 @@ editor_options:
   chunk_output_type: console
 ---
 
-The vast amount of jargon one encounters when first diving into the machine learning literature is a common source of confusion for new learners. Many ML terms are borrowed from statistics, computer science, or everyday language, but they can carry subtly or even radically different meanings in ML contexts.
+The amount of jargon one finds when first diving into the machine learning literature is a common source of confusion for new learners. Many ML terms are borrowed from statistics, computer science, or everyday language, but they can carry subtly or even radically different meanings in ML contexts.
 
-With the following overview I will provide a high-level overview of some common terms used in machine learning, and try to highlight the differences between concepts that may seem similar, but often represent distinct ideas.
+In the following overview I will provide a high-level summary of some common terms used in machine learning, and try to highlight the differences between concepts that may seem similar, but often represent distinct ideas.
 
-Two important distinctions:
+**Two important distinction I will try to highlight are the differences between:**
 
-1.  The difference between Artificial Intelligence and Machine Learning
+1.  Artificial Intelligence (AI) and Machine Learning (ML)
 
-2.  The difference between an algorithm and a model
+2.  Algorithms and Models
 
 ::: {style="color: yellow"}
 # AI vs. Machine Learning
@@ -26,18 +26,18 @@ Artificial Intelligence (AI) and Machine Learning (ML) are related but distinct 
 ## Artificial Intelligence (AI)
 
 -   AI is the broad field of creating systems that can perform tasks that normally require human intelligence.
--   Typically, the goal of AI is to create machines that can simulate intelligent behavior, whether or not they learn from data.
+-   Typically, the goal of AI is to create programs that can simulate intelligent behavior, whether or not they learn from data.
 -   Common Examples of AI include**:**
-    -   Large Language Models
+    -   Digital assistants, LLMs
 
 *Can you think of any examples of AI you encounter in your everyday life?*
 
 ## Machine Learning (ML)
 
 -   ML is a branch of AI focused on systems that learn patterns from data and improve automatically from experience.
--   When doing ML we are generally interested in creating models that generalize from data to make accurate predictions on unseen inputs.
+-   When doing ML we are generally interested in creating models that generalize well enough to make accurate predictions on unseen inputs.
 -   Common use cases for ML in everyday life include**:**
-    -   Clutter or spam email detection
+    -   Recommendation systems, image recognition
 
 *Can you think of any examples of ML you encounter in your everyday life?*
 
@@ -94,7 +94,9 @@ So, how does an algorithm differ from a model? What is a model in the context of
 # What is a Model in ML?
 :::
 
-A model in machine learning is the learned representation of patterns in data, produced by applying a learning algorithm to a dataset. It is what we use to make predictions, classify new examples, or infer relationships.
+A model in machine learning is the learned representation of patterns in data, produced by applying a learning algorithm to a dataset.
+
+A model in ML is the vehicle to make predictions, classify new examples, or infer relationships.
 
 ![https://www.geeksforgeeks.org/machine-learning/types-of-machine-learning/](images/model_ml.png)
 
@@ -119,11 +121,11 @@ A model is the outcome of training a machine learning algorithm on data.It encap
 
 ## Things to Remember
 
--   The algorithm is the *procedure for learning*\
--   The model is the *trained artifact* used for prediction or inference\
--   Different algorithms can produce different models from the same data\
+-   The algorithm is the procedure for learning\
+-   The model is the trained artifact used for prediction or inference
+-   Different algorithms can produce different models from the same data
 -   A model generalizes patterns from training data to unseen data
--   Algorithm = recipe (instructions for learning)\
+-   Algorithm = recipe (instructions for learning)
 -   Model = finished dish (learned representation ready to use)
 
 The model is the end product of learning — the part that actually “knows” something about the data and can be used to make predictions. In ML: Data + Algorithm → Model → Predictions.
