@@ -7,7 +7,9 @@ editor_options:
   chunk_output_type: console
 ---
 
+::: {style="color: yellow"}
 # Data Splitting in Machine Learning
+:::
 
 Data splitting (e.g., dividing data into **training, validation, and test samples**) is crucial because it protects us from fooling ourselves about how well a model actually performs.
 
@@ -33,7 +35,9 @@ Data splitting (e.g., dividing data into **training, validation, and test sample
 
 ![https://www.statology.org/validation-set-vs-test-set/](images/data_split.png)
 
+::: {style="color: yellow"}
 # (Hyper)parameters in the Context of Data Splitting
+:::
 
 In our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it's worth explaining the difference.
 

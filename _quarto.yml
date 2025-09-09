@@ -23,7 +23,8 @@ website:
           - week2_2.qmd
           - week2_3.qmd
           - week2_4.qmd
-          - week2_2b.qmd
+          - week2_5.qmd
+          #- week2_2b.qmd
      # - section: "Assignments"
      #   contents:
      #     - assignment1_1.qmd

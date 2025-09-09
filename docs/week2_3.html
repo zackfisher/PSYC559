@@ -179,8 +179,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_2b.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Terminology Notes</span></a>
+  <a href="./week2_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Feature Engineering</span></a>
   </div>
 </li>
       </ul>
@@ -195,21 +195,17 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#data-splitting-in-machine-learning" id="toc-data-splitting-in-machine-learning" class="nav-link active" data-scroll-target="#data-splitting-in-machine-learning">Data Splitting in Machine Learning</a>
-  <ul class="collapse">
+  <li><a href="#data-splitting-in-machine-learning" id="toc-data-splitting-in-machine-learning" class="nav-link active" data-scroll-target="#data-splitting-in-machine-learning">Data Splitting in Machine Learning</a></li>
   <li><a href="#training-sample" id="toc-training-sample" class="nav-link" data-scroll-target="#training-sample">Training Sample</a></li>
   <li><a href="#validation-sample" id="toc-validation-sample" class="nav-link" data-scroll-target="#validation-sample">Validation Sample</a></li>
   <li><a href="#test-sample" id="toc-test-sample" class="nav-link" data-scroll-target="#test-sample">Test Sample</a></li>
-  </ul></li>
-  <li><a href="#hyperparameters-in-the-context-of-data-splitting" id="toc-hyperparameters-in-the-context-of-data-splitting" class="nav-link" data-scroll-target="#hyperparameters-in-the-context-of-data-splitting">(Hyper)parameters in the Context of Data Splitting</a>
-  <ul class="collapse">
+  <li><a href="#hyperparameters-in-the-context-of-data-splitting" id="toc-hyperparameters-in-the-context-of-data-splitting" class="nav-link" data-scroll-target="#hyperparameters-in-the-context-of-data-splitting">(Hyper)parameters in the Context of Data Splitting</a></li>
   <li><a href="#parameters-vs.-hyperparameters" id="toc-parameters-vs.-hyperparameters" class="nav-link" data-scroll-target="#parameters-vs.-hyperparameters">Parameters vs.&nbsp;Hyperparameters</a></li>
   <li><a href="#role-of-parameters-in-data-splitting" id="toc-role-of-parameters-in-data-splitting" class="nav-link" data-scroll-target="#role-of-parameters-in-data-splitting">Role of Parameters in Data Splitting</a></li>
   <li><a href="#example-k-means-clustering" id="toc-example-k-means-clustering" class="nav-link" data-scroll-target="#example-k-means-clustering">Example: <em>k</em>-Means Clustering</a>
   <ul class="collapse">
   <li><a href="#parameters-learned-from-the-data" id="toc-parameters-learned-from-the-data" class="nav-link" data-scroll-target="#parameters-learned-from-the-data">Parameters (learned from the data)</a></li>
   <li><a href="#hyperparameters-set-before-training" id="toc-hyperparameters-set-before-training" class="nav-link" data-scroll-target="#hyperparameters-set-before-training">Hyperparameters (set before training)</a></li>
-  </ul></li>
   </ul></li>
   <li><a href="#benefits-of-data-splitting-in-ml" id="toc-benefits-of-data-splitting-in-ml" class="nav-link" data-scroll-target="#benefits-of-data-splitting-in-ml">Benefits of Data Splitting in ML</a></li>
   <li><a href="#prevents-overfitting-to-the-training-data" id="toc-prevents-overfitting-to-the-training-data" class="nav-link" data-scroll-target="#prevents-overfitting-to-the-training-data">Prevents Overfitting to the Training Data</a></li>
@@ -247,8 +243,9 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="data-splitting-in-machine-learning" class="level1">
+<section id="data-splitting-in-machine-learning" class="level1" style="color: yellow">
 <h1>Data Splitting in Machine Learning</h1>
+</section>
 <p>Data splitting (e.g., dividing data into <strong>training, validation, and test samples</strong>) is crucial because it protects us from fooling ourselves about how well a model actually performs.</p>
 <section id="training-sample" class="level3">
 <h3 class="anchored" data-anchor-id="training-sample">Training Sample</h3>
@@ -278,9 +275,9 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 </section>
-</section>
-<section id="hyperparameters-in-the-context-of-data-splitting" class="level1">
+<section id="hyperparameters-in-the-context-of-data-splitting" class="level1" style="color: yellow">
 <h1>(Hyper)parameters in the Context of Data Splitting</h1>
+</section>
 <p>In our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.</p>
 <section id="parameters-vs.-hyperparameters" class="level2">
 <h2 class="anchored" data-anchor-id="parameters-vs.-hyperparameters">Parameters vs.&nbsp;Hyperparameters</h2>
@@ -329,7 +326,6 @@ ul.task-list li input[type="checkbox"] {
 <li>These control <em>how</em> the algorithm runs, but are not learned from the data itself.</li>
 </ul>
 <hr>
-</section>
 </section>
 </section>
 <section id="benefits-of-data-splitting-in-ml" class="level1" style="color: yellow">
