@@ -22,7 +22,9 @@ Domains considered to be part of a feature engineering pipeline can include:
 
 -   Screening or Feature Selection
 
--   Dimesion Reduction
+-   Dimension Reduction
+
+To introducing feature engineering we will explore some example data from the GSS.
 
 ::: {style="color: yellow"}
 ## Example Data
@@ -75,15 +77,21 @@ Dealing with missing data in a consistent manner is one of the most important as
 ### Missing Data Mechnisms
 :::
 
-Much attention is paid to the mechisms producing missing data in the statistics and applied sciences literature. Knowing how the missing data came about is critical for knowing how to handle it in a subsequent analysis.
+Much attention is paid to the mechisms producing missing data in the statistics and applied sciences literature.
 
-Although attention to missing data mechanisms has historically not been a primary focus in the ML literature, this has been changing. A common framework for understanding missing data mechanisms was described by Rubin [-@rubin1976]. Here we will briefly describe these mechanisms in the context of our current data example.
+Knowing how the missing data came about is critical for knowing how to handle it in a subsequent analysis.
+
+Although attention to missing data mechanisms has historically not been a primary focus in the ML literature, this has been changing.
+
+A common framework for understanding missing data mechanisms was described by Rubin [-@rubin1976]. Here we will briefly describe these mechanisms in the context of our current data example.
 
 ::: {style="color: lightyellow"}
 #### Missing Completely at Random (MCAR)
 :::
 
-In MCAR, the probability of a value being missing is unrelated to the value itself or any other observed or unobserved variable. This is a purely random and unsystematic process. Imagine a cat opening up your dataset in Excel and walking across the keyboard, randomly deleting different cells.
+**In MCAR, the probability of a value being missing is unrelated to the value itself or any other observed or unobserved variable.** This is a purely random and unsystematic process. 
+
+Imagine a cat opening up your dataset in Excel and walking across the keyboard, randomly deleting different cells.
 
 **Definition:** Missingness in self-reported happiness, for example, is unrelated to the respondent's true happiness level or any other variables.
 
@@ -95,9 +103,9 @@ In MCAR, the probability of a value being missing is unrelated to the value itse
 #### Missing at Random (MAR)
 :::
 
-In MAR, the probability of a value being missing is systematically related to other observed variables in the dataset, but not to the unobserved value itself.
+**In MAR, the probability of a value being missing is systematically related to other observed variables in the dataset, but not to the unobserved value itself.**
 
-**Definition:** Missingness in the one of our predictors variables (income) is unrelated to the respondent's true happiness level or any other variables.
+**Definition:** Missingness in happiness depends on *other observed variables* but not directly on happiness itself.
 
 **Example:** Suppose in the GSS, individuals with higher incomes were less likely to answer the happiness question. Missingness on happiness is explained by *income*, which is observed. Conditional on income (having income in our model as a predictor), the probability of missingness does not depend how happy one is.
 
@@ -111,7 +119,7 @@ In MAR, the probability of a value being missing is systematically related to ot
 
 **Example:** Respondents who are very unhappy may avoid answering the happiness question because it feels too personal, while those who are extremely happy may skip it because they consider it obvious. Missingness is directly tied to the unreported happiness level.
 
-**Implication:** Standard imputation methods will be biased. Handling MNAR requires explicitly modeling the missingness mechanism (e.g., selection models, pattern-mixture models, sensitivity analysis, or generative deep models)
+**Implication:** Standard imputation methods will be biased. Handling MNAR requires explicitly modeling the missingness mechanism (e.g., selection models, pattern-mixture models)
 
 ::: {style="color: orange"}
 ### 
@@ -169,7 +177,9 @@ Many missing data visualizations are described in the [`naniar` vignette on miss
 ### Missing Data Activity
 :::
 
-Below is a small dataset looking at predictors of happiness. Some values are missing. Your job is to speculate on why each value might be missing and which type of missing data mechanism it represents: MCAR, MAR, or MNAR.
+Below is a small dataset looking at predictors of happiness. Some values are missing.
+
+In small groups please speculate on why each value might be missing and which type of missing data mechanism it represents: MCAR, MAR, or MNAR.
 
 ```{r}
 # Columns: id, happiness (target), age (feature), income (feature), education (feature)

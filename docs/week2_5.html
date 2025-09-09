@@ -290,8 +290,9 @@ div.csl-indent {
 <li><p>Feature Creation</p></li>
 <li><p>Feature Transformations</p></li>
 <li><p>Screening or Feature Selection</p></li>
-<li><p>Dimesion Reduction</p></li>
+<li><p>Dimension Reduction</p></li>
 </ul>
+<p>To introducing feature engineering we will explore some example data from the GSS.</p>
 <section id="example-data" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="example-data">Example Data</h2>
 </section>
@@ -345,20 +346,23 @@ For help on a specific GSS variable, type ?varname at the console.</code></pre>
 <section id="missing-data-mechnisms" class="level3" style="color: orange">
 <h3 class="anchored" data-anchor-id="missing-data-mechnisms">Missing Data Mechnisms</h3>
 </section>
-<p>Much attention is paid to the mechisms producing missing data in the statistics and applied sciences literature. Knowing how the missing data came about is critical for knowing how to handle it in a subsequent analysis.</p>
-<p>Although attention to missing data mechanisms has historically not been a primary focus in the ML literature, this has been changing. A common framework for understanding missing data mechanisms was described by Rubin <span class="citation" data-cites="rubin1976">(<a href="#ref-rubin1976" role="doc-biblioref">1976</a>)</span>. Here we will briefly describe these mechanisms in the context of our current data example.</p>
+<p>Much attention is paid to the mechisms producing missing data in the statistics and applied sciences literature.</p>
+<p>Knowing how the missing data came about is critical for knowing how to handle it in a subsequent analysis.</p>
+<p>Although attention to missing data mechanisms has historically not been a primary focus in the ML literature, this has been changing.</p>
+<p>A common framework for understanding missing data mechanisms was described by Rubin <span class="citation" data-cites="rubin1976">(<a href="#ref-rubin1976" role="doc-biblioref">1976</a>)</span>. Here we will briefly describe these mechanisms in the context of our current data example.</p>
 <section id="missing-completely-at-random-mcar" class="level4" style="color: lightyellow">
 <h4 class="anchored" data-anchor-id="missing-completely-at-random-mcar">Missing Completely at Random (MCAR)</h4>
 </section>
-<p>In MCAR, the probability of a value being missing is unrelated to the value itself or any other observed or unobserved variable. This is a purely random and unsystematic process.&nbsp;Imagine a cat opening up your dataset in Excel and walking across the keyboard, randomly deleting different cells.</p>
+<p><strong>In MCAR, the probability of a value being missing is unrelated to the value itself or any other observed or unobserved variable.</strong> This is a purely random and unsystematic process.&nbsp;</p>
+<p>Imagine a cat opening up your dataset in Excel and walking across the keyboard, randomly deleting different cells.</p>
 <p><strong>Definition:</strong> Missingness in self-reported happiness, for example, is unrelated to the respondent’s true happiness level or any other variables.</p>
 <p><strong>Example:</strong> Let’s say there is a glitch in the online GSS survey and for some respondent’s questions are randomly skipped. This means the probability of missingness is purely random, and it does not depend on other variables (e.g.&nbsp;income, age, or happiness levels).</p>
 <p><strong>Implication:</strong> Dropping these cases (listwise deletion) or using simple imputation will not bias the results, although efficiency is reduced.</p>
 <section id="missing-at-random-mar" class="level4" style="color: lightyellow">
 <h4 class="anchored" data-anchor-id="missing-at-random-mar">Missing at Random (MAR)</h4>
 </section>
-<p>In MAR, the probability of a value being missing is systematically related to other observed variables in the dataset, but not to the unobserved value itself.</p>
-<p><strong>Definition:</strong> Missingness in the one of our predictors variables (income) is unrelated to the respondent’s true happiness level or any other variables.</p>
+<p><strong>In MAR, the probability of a value being missing is systematically related to other observed variables in the dataset, but not to the unobserved value itself.</strong></p>
+<p><strong>Definition:</strong> Missingness in happiness depends on <em>other observed variables</em> but not directly on happiness itself.</p>
 <p><strong>Example:</strong> Suppose in the GSS, individuals with higher incomes were less likely to answer the happiness question. Missingness on happiness is explained by <em>income</em>, which is observed. Conditional on income (having income in our model as a predictor), the probability of missingness does not depend how happy one is.</p>
 <p><strong>Implication:</strong> Methods like multiple imputation (MICE), missForest, or regression-based imputation can use income (and other observed covariates like marital status, education) to predict and impute missing happiness values without bias.</p>
 <section id="missing-not-at-random-mnar" class="level4" style="color: lightyellow">
@@ -366,7 +370,7 @@ For help on a specific GSS variable, type ?varname at the console.</code></pre>
 </section>
 <p><strong>Definition:</strong> Missingness in happiness depends on the unobserved happiness score itself.</p>
 <p><strong>Example:</strong> Respondents who are very unhappy may avoid answering the happiness question because it feels too personal, while those who are extremely happy may skip it because they consider it obvious. Missingness is directly tied to the unreported happiness level.</p>
-<p><strong>Implication:</strong> Standard imputation methods will be biased. Handling MNAR requires explicitly modeling the missingness mechanism (e.g., selection models, pattern-mixture models, sensitivity analysis, or generative deep models)</p>
+<p><strong>Implication:</strong> Standard imputation methods will be biased. Handling MNAR requires explicitly modeling the missingness mechanism (e.g., selection models, pattern-mixture models)</p>
 <section id="section" class="level3" style="color: orange">
 <h3 class="anchored" data-anchor-id="section"></h3>
 <p>Handling Missing Data in R</p>
@@ -431,7 +435,8 @@ For help on a specific GSS variable, type ?varname at the console.</code></pre>
 <section id="missing-data-activity" class="level3" style="color: orange">
 <h3 class="anchored" data-anchor-id="missing-data-activity">Missing Data Activity</h3>
 </section>
-<p>Below is a small dataset looking at predictors of happiness. Some values are missing. Your job is to speculate on why each value might be missing and which type of missing data mechanism it represents: MCAR, MAR, or MNAR.</p>
+<p>Below is a small dataset looking at predictors of happiness. Some values are missing.</p>
+<p>In small groups please speculate on why each value might be missing and which type of missing data mechanism it represents: MCAR, MAR, or MNAR.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Columns: id, happiness (target), age (feature), income (feature), education (feature)</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># NA indicates missing values</span></span>
