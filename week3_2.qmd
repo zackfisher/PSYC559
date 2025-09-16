@@ -1,0 +1,338 @@
+---
+title: "Multiple Linear Regression"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
+data <- readRDS("data/data.RDS")
+library(dplyr)
+library(tidymodels)
+```
+
+::: {style="color: yellow"}
+## Overview of Multiple Linear Regression
+:::
+
+Multiple linear regression is a statistical method used to model the relationship between two variables. As such, multiple regression extends the simple linear regression framework to include more than one predictor variable:\
+- **more than one feature** (also called the predictors or independent variables),\
+- **one target** (also called the outcome or dependent variable).
+
+
+Multiple linear regression allows us to model the relationship between a single outcome variable $Y_i$ and multiple predictors $X_{1i}, X_{2i}, \dots, X_{pi}$ for each observation $i = 1, \dots, n$.
+
+
+::: {style="color: yellow"}
+## Example Data
+:::
+
+Again let's use the Ames dataset to illustrate multiple linear regression. We will look to predict the sale price of a home (Sale_Price) using two predictors: above ground living area (Gr_Liv_Area) and the year the house was built (Year_Built).
+
+```{r}
+# Install and load package
+# install.packages("AmesHousing")
+library(AmesHousing)
+
+# Load data
+ames <- make_ames()
+```
+
+
+::: {style="color: yellow"}
+## The Model
+:::
+
+The general form of the multiple linear regression model is:
+
+$$
+Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + \dots + \beta_p X_{pi} + \varepsilon_i
+$$
+
+where:  
+- $Y_i$: the dependent (outcome) variable for observation $i$.  
+- $X_{ji}$: the value of predictor $j$ for observation $i$.  
+- $\beta_0$: the intercept (expected value of $Y_i$ when all $X_{ji} = 0$).  
+- $\beta_j$: the regression coefficient for predictor $X_{ji}$, representing the expected change in $Y_i$ for a one-unit increase in $X_{ji}$, holding all other predictors constant.  
+- $\varepsilon_i$: the error term for observation $i$, capturing variation in $Y_i$ not explained by the predictors.  
+
+
+::: {style="color: yellow"}
+## Assumptions
+:::
+
+Multiple regression relies on several key assumptions:  
+
+1. **Linearity**: The relationship between each $X_{ji}$ and $Y_i$ is linear.  
+2. **Independence**: The errors $\varepsilon_i$ are independent across observations.  
+3. **Homoscedasticity**: The variance of $\varepsilon_i$ is constant across all values of the predictors.  
+4. **Normality**: The errors $\varepsilon_i$ are normally distributed (especially important for inference).  
+5. **No perfect multicollinearity**: Predictors are not exact linear combinations of one another.  
+
+
+
+::: {style="color: yellow"}
+## Estimating the Model
+:::
+
+The coefficients $\beta_0, \beta_1, \dots, \beta_p$ are estimated using ordinary least squares (OLS).  
+OLS chooses coefficient values that minimize the residual sum of square:  
+
+$$
+\text{RSS} = \sum_{i=1}^n (y_i - \hat{y}_i)^2
+$$
+
+where:  
+- $y_i$ is the observed outcome for observation $i$,  
+- $\hat{y}_i$ is the predicted value of $Y_i$ from the model.  
+
+
+::: {style="color: yellow"}
+## Interpreting Coefficients
+:::
+
+- Each $\beta_j$ reflects the **unique contribution** of predictor $X_{ji}$ to explaining $Y_i$, after adjusting for all other predictors.  
+- For example, $\beta_2$ represents the expected change in $Y_i$ when $X_{2i}$ increases by one unit, holding $X_{1i}, X_{3i}, \dots, X_{pi}$ constant.  
+
+
+::: {style="color: yellow"}
+## Implementation in R
+:::
+
+In R, we fit a multiple regression model with the `lm()` function:
+
+```{r}
+fit_mlr <- lm(
+  Sale_Price ~ Gr_Liv_Area + Year_Built, 
+  data = ames
+)
+summary(fit_mlr)
+```
+
+We interpret the intercept, $\beta_0=-2,106,000$, as the estimated mean sale price when both Gr_Liv_Area and Year_Built are 0. While this interpretation may not be meaningful in a real-world context (since a house with 0 living area and built in year 0 is not realistic), it serves as a baseline for our model. 
+
+We interpret the slope coefficient for Gr_Liv_Area, $\beta_1=96$, as the estimated change in mean sale price for each additional square foot of living area, holding Year_Built constant. Specifically, for each one-square-foot increase in Gr_Liv_Area, the mean sale price is estimated to increase by $96$ dollars, holding Year_Built constant.
+
+We interpret the slope coefficient for Year_Built, $\beta_2=1,087$, as the estimated change in mean sale price for each additional year the house was built, holding Gr_Liv_Area constant. Specifically, for each one-year increase in Year_Built, the mean sale price is estimated to increase by roughly a thousand dollars, holding Gr_Liv_Area constant.
+
+
+::: {style="color: orange"}
+### Interactions in Multiple Linear Regression
+::: 
+
+In multiple linear regression, an interaction occurs when the effect of one predictor on the response variable depends on the level of another predictor.  
+
+In other words, the impact of one variable is modified or moderated by another variable.
+
+For two predictors, $X_1$ and $X_2$, an interaction term can be included as:
+
+$$
+Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + \beta_3 (X_{1i} \cdot X_{2i}) + \varepsilon_i
+$$
+
+where:  
+- $\beta_3$ captures the **interaction effect** between $X_1$ and $X_2$.  
+- The term $(X_{1i} \cdot X_{2i})$ is the product of the two predictors.  
+- If $\beta_3 \neq 0$, the effect of $X_1$ on $Y$ changes depending on $X_2$, and vice versa.  
+
+
+Interactions allow the model to represent non-additive relationships between predictors and the response. Without interactions, the model assumes each predictor contributes independently, which may oversimplify reality.  
+
+```{r}
+fit_interaction <- lm(
+  Sale_Price ~ Gr_Liv_Area + Year_Built + Gr_Liv_Area:Year_Built, 
+  data = ames
+)
+summary(fit_interaction)
+```
+
+We could interpret the interaction coefficient, $\beta_3=0.057$, as follows: For each additional square foot of living area, the effect of Year_Built on Sale_Price increases by about six cents, holding Gr_Liv_Area constant. Conversely, for each additional year the house was built, the effect of Gr_Liv_Area on Sale_Price increases by about six cents, holding Year_Built constant.
+
+
+
+::: {style="color: orange"}
+### Assessing Model Accuracy
+::: 
+
+To assess how accurate our models are we will go back to our cross-validation framework. First, let's split our data into test and train sets.
+
+```{r}
+set.seed(123)
+split <- initial_split(
+  ames, 
+  prop = 0.7, 
+  strata = "Sale_Price"
+)
+ames_train  <- training(split)
+ames_test   <- testing(split)
+```
+
+Now, let's consider three different models we may want to compare:
+1. **Model 1**: A simple linear regression using only Gr_Liv_Area as a predictor.\
+2. **Model 2**: A multiple linear regression using Gr_Liv_Area and Year_Built as predictors.\
+3. **Model 3**: A full model using all available predictors.
+
+::: {style="color: lightyellow"}
+#### Model 1
+::: 
+
+```{r, warning=FALSE, message=FALSE}
+library(caret)
+# Train model using 10-fold cross-validation
+set.seed(123)  # for reproducibility
+(cv_model1 <- train(
+  form = Sale_Price ~ Gr_Liv_Area, 
+  data = ames_train, 
+  method = "lm",
+  trControl = trainControl(method = "cv", number = 10)
+))
+```
+
+The resulting cross-validated RMSE is \$56,644.76 (this is the average RMSE across the 10 CV folds). How should we interpret this? When applied to unseen data, the predictions this model makes are, on average, about \$56,644.76 off from the actual sale price.
+
+::: {style="color: lightyellow"}
+#### Model 2
+::: 
+
+```{r, warning=FALSE, message=FALSE}
+# model 2 CV
+set.seed(123)
+(cv_model2 <- train(
+  Sale_Price ~ Gr_Liv_Area + Year_Built, 
+  data = ames_train, 
+  method = "lm",
+  trControl = trainControl(method = "cv", number = 10)
+))
+```
+
+The resulting cross-validated RMSE is now a bit lower at \$46,865.68 (this is the average RMSE across the 10 CV folds). How should we interpret this? When applied to unseen data, the predictions this model makes are, on average, about \$46,865.68 off from the actual sale price.
+
+
+::: {style="color: lightyellow"}
+#### Model 3
+::: 
+
+```{r, warning=FALSE, message=FALSE}
+# model 3 CV
+set.seed(123)
+(cv_model3 <- train(
+  Sale_Price ~ Gr_Liv_Area + Year_Built + Gr_Liv_Area*Year_Built, 
+  data = ames_train, 
+  method = "lm",
+  trControl = trainControl(method = "cv", number = 10)
+))
+```
+
+
+Again we see a (very) small improvement when adding all the available features. The resulting cross-validated RMSE is now lower at \$46,523.38 (this is the average RMSE across the 10 CV folds). How should we interpret this? When applied to unseen data, the predictions this model makes are, on average, about \$46,523.38 off from the actual sale price.
+
+```{r}
+# Extract out of sample performance measures
+summary(resamples(list(
+  model1 = cv_model1, 
+  model2 = cv_model2, 
+  model3 = cv_model3
+)))
+```
+
+::: {style="color: orange"}
+### Model Concerns
+::: 
+
+As discussed earlier, linear regression remains one of the most widely used modeling techniques, primarily because the regression coefficients are straightforward to interpret. Each coefficient quantifies the expected change in the response variable for a one-unit change in a predictor, holding all other predictors constant. 
+
+However, linear regression relies on several strong assumptions, and these assumptions are often violated as we increase the number of predictors in the model. Violations can lead to biased estimates, misleading interpretations of coefficients, and inaccurate predictions.
+
+::: {style="color: orange"}
+#### Linearity
+::: 
+
+Linear regression assumes a linear relationship between each predictor and the response variable. This means that the change in the response associated with a one-unit change in a predictor is constant across all levels of that predictor.  
+
+In practice, many relationships are non-linear. Fortunately, we can often address this issue by applying transformations to the response and/or predictors to make the relationship approximately linear. 
+
+For example, the relationship between home sale price and the year the home was built is shown:  
+
+
+```{r}
+p1 <- ggplot(ames_train, aes(Year_Built, Sale_Price)) + 
+  geom_point(size = 1, alpha = .4) +
+  geom_smooth(se = FALSE) +
+  scale_y_continuous("Sale price", labels = scales::dollar) +
+  xlab("Year built") +
+  ggtitle(paste("Non-transformed variables with a\n",
+                "non-linear relationship."))
+
+p2 <- ggplot(ames_train, aes(Year_Built, Sale_Price)) + 
+  geom_point(size = 1, alpha = .4) + 
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_y_log10("Sale price", labels = scales::dollar, 
+                breaks = seq(0, 400000, by = 100000)) +
+  xlab("Year built") +
+  ggtitle(paste("Transforming variables can provide a\n",
+                "near-linear relationship."))
+
+gridExtra::grid.arrange(p1, p2, nrow = 1)
+```
+
+- The **left plot** shows the raw data, revealing a non-linear pattern where the change in sale price is not constant across years.  
+- By applying a **log transformation** to the sale price, we can achieve a relationship that is closer to linear, making it more suitable for linear regression.  
+
+::: {style="color: orange"}
+#### Heteroskedasticity
+::: 
+Heteroskedasticity occurs when the variance of the errors is not constant across all levels of the predictors. This violates the homoscedasticity assumption of linear regression.
+
+Looking at the plot of residuals versus fitted values for Model 1, we can see a funnel shape, indicating that the variance of the residuals increases with the fitted values. This suggests heteroskedasticity, which can lead to inefficient estimates and invalid inference.
+
+```{r}
+df1 <- broom::augment(cv_model1$finalModel, data = ames_train)
+
+ggplot(df1, aes(.fitted, .std.resid)) + 
+  geom_point(size = 1, alpha = .4) +
+  xlab("Predicted values") +
+  ylab("Residuals") +
+  ggtitle("Model 1", subtitle = "Sale_Price ~ Gr_Liv_Area")
+```
+
+To address heteroskedasticity, we can consider transforming the response variable (e.g., using a log transformation) or using robust standard errors that adjust for non-constant variance.
+
+::: {style="color: orange"}
+#### Autocorrelation
+::: 
+
+We might also be concerned with checking the residuals for autocorrelation, especially if our data has a time component. Autocorrelation occurs when the residuals are correlated with each other, violating the independence assumption. This can lead to underestimated standard errors and overly optimistic p-values. Since our current data does not have a time component, we will not explore this further here.
+
+::: {style="color: orange"}
+#### Feature Importance
+::: 
+
+The `vip()` function from the **`vip`** package in R (Variable Importance Plots) is commonly used to visualize the relative importance of predictors in a model.
+
+```{r,warning=FALSE, message=FALSE}
+# Load package
+library(vip)
+```
+
+The `vip()` function takes any fitted model object, such as `lm()` for linear regression, `glm()`, random forests, or xgboost.
+
+
+For linear regression models, vip() typically uses the absolute value of the t-statistics of the coefficients as a measure of importance. Predictors with larger absolute t-values are considered more influential on the response.
+
+
+```{r, warning=FALSE, message=FALSE}
+# model 4 CV
+set.seed(1234)
+(cv_model4 <- train(
+  Sale_Price ~ Neighborhood + Gr_Liv_Area + Year_Built + Overall_Qual + Total_Bsmt_SF + Garage_Area + Full_Bath + TotRms_AbvGrd + Fireplaces + Garage_Cars + Wood_Deck_SF + Open_Porch_SF + Year_Remod_Add ,
+  data = ames_train, 
+  method = "lm",
+  trControl = trainControl(method = "cv", number = 10)
+))
+
+vip(cv_model4, num_features = 10, method = "model")
+```
+

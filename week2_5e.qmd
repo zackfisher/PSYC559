@@ -1,0 +1,50 @@
+---
+title: "Numeric Feature Engineering"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide'}
+library(dplyr)
+library(tidymodels)
+data <- readRDS("data/data.RDS")
+```
+
+::: {style="color: yellow"}
+## Numeric Feature Engineering
+:::
+
+Feature engineering on continuous or numeric features involves transforming the raw data to make it more useful for modeling. Common motivations include capturing nonlinear relationships (e.g., log or polynomial transforms), improving distributional properties (reducing skew or outlier impact), and putting features on comparable scales through standardization.
+
+In some cases, continuous variables are binned into categories or combined into interactions to highlight patterns. Overall, these transformations help models detect structure in the data more effectively and improve both performance and interpretability.
+
+::: {style="color: orange"}
+### Skewness
+:::
+
+Parametric models with distributional assumptions (e.g., GLMs, and some regularized models) can benefit from minimizing the skewness of numeric features. One popular transformation is the [Yeo-Johnson transformation](https://en.wikipedia.org/wiki/Power_transform#Yeo%E2%80%93Johnson_transformation).
+
+The Yeo-Johnsontransformation is a statistical technique used to stabilize variance and make data more normally distributed, similar to the Box-Cox transformation but more flexible. Unlike Box-Cox, it can handle both positive and negative values, making it useful for real-world data that span zero.
+
+```{r}
+recipe(happy ~ ., data = data) %>%
+  step_YeoJohnson(all_numeric()) 
+```
+
+::: {style="color: orange"}
+### Standardization
+:::
+
+We will often want to standardize variables prior to our model fitting to put them on a common scale, typically with mean of zero and a standard deviation of one.
+
+This prevents features with larger numeric ranges (e.g., income in dollars vs. age in years) from dominating distance-based methods (like k-NN, SVMs, or clustering). It can also help with optimization problems, may improve convergence and can help ensure that regularization penalties (like in ridge or lasso regression) are applied fairly across predictors.
+
+```{r,eval=FALSE}
+data %>%
+  step_center(all_numeric(), -all_outcomes()) %>%
+  step_scale(all_numeric(), -all_outcomes())
+```

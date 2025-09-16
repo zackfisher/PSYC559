@@ -1,6 +1,25 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - 1_1.qmd
+    - 1_1b.qmd
+    - 1_2.qmd
+    - week1_3.qmd
+    - week1_4.qmd
+    - week2_1.qmd
+    - week2_2.qmd
+    - week2_3.qmd
+    - week2_4.qmd
+    - week2_5a.qmd
+    - week2_5b.qmd
+    - week2_5c.qmd
+    - week2_5d.qmd
+    - week2_5e.qmd
+    - week2_5f.qmd
+    - week2_5g.qmd
+    - week3_1.qmd
+    - week3_2.qmd
 website:
   title: "PSYC559: Applied Machine Learning in Psychology"
   sidebar:
@@ -12,9 +31,9 @@ website:
         contents: 
       - section: "Introduction to R"
         contents:
-          - week1_1.qmd
-          - week1_1b.qmd
-          - week1_2.qmd
+          - 1_1.qmd
+          - 1_1b.qmd
+          - 1_2.qmd
           - week1_3.qmd
           - week1_4.qmd
       - section: "Introduction to Machine Learning"
@@ -23,11 +42,19 @@ website:
           - week2_2.qmd
           - week2_3.qmd
           - week2_4.qmd
-          - week2_5.qmd
-          #- week2_2b.qmd
-     # - section: "Assignments"
-     #   contents:
-     #     - assignment1_1.qmd
+      - section: "Feature Engineering"
+        contents:    
+          - week2_5a.qmd
+          - week2_5b.qmd
+          - week2_5c.qmd
+          - week2_5d.qmd
+          - week2_5e.qmd
+          - week2_5f.qmd
+          - week2_5g.qmd
+      - section: "Linear Regression"
+        contents:    
+          - week3_1.qmd
+          - week3_2.qmd
 format:
   html:
     theme: darkly

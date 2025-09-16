@@ -1,0 +1,86 @@
+---
+title: "Example Data"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+::: {style="color: yellow"}
+## Example Data
+:::
+
+To demonstrate feature engineering we will use some example data from the [The General Social Survey (GSS)](https://gss.norc.org/).
+
+GSS is a long-running, nationally representative survey of adults in the United States that has been conducted almost every two years since 1972 by the [National Opinion Research Center (NORC)](https://www.norc.org/) at the University of Chicago. The GSS data is often used to measure American's attitudes, behaviors, and beliefs on a wide range of topics—such as politics, religion, crime, race relations, family, work, and technology.
+
+There are two ways to access the GSS data. One is using the [GSS Data Explorer](#0). Another option is using the `gssr` [@gssr] R package. Here we will use the `gssr` [@gssr] package to download some example data.
+
+We will start by choosing `happy` as our target variable. This comes from Question 157 of the 2024 GSS where respondents were asked:
+
+> Taken all together, how would you say things are these days - would you say that you are very happy, pretty happy, or not too happy?
+
+Responses were coded such that 1 indicates "very happy", 2 indicates "pretty happy", and 3 indicates "not too happy", while NA indicates "don’t know."
+
+We can also identify ad bunch of features we think predict self-reported happiness and save our final dataset.
+
+```{r}
+library(gssr)
+
+gss24 <- gss_get_yr(2024)
+
+target <- "happy"
+
+features <- c(
+  "age",     # age of participant
+  "sex",     # sex of participant
+  "race",    # race of participant
+  "educ",    # highest education completed by participant
+  "income",  # income of participant
+  "childs",  # number of children participant has
+  "wrkstat", # work force status
+  "marital", # marital status
+  "born",    # whether or not participant was born in USA
+  "partyid", # political party of participant
+  "adults",  # num of fam members 18 or older
+  "earnrs"   # number of earners in family  
+)
+
+data <- gss24[,c(target, features)]
+
+table(data$happy, useNA = "always")
+```
+
+Next, let's clean up `data` a bit, discarding some of the labels and missing value information we don’t need. The data in `gss24` retains the labeling structure provided by the GSS. Variables are stored numerically with labels attached to them. Often, when using the data in R, it will be convenient to convert the categorical variables we are interested in to character or factor type instead.
+
+Here we can use code from the [gssr package introduction](https://kjhealy.github.io/gssr/articles/overview.html) to simplify this recoding. The only thing we need to do is define the categorical variables in our data.
+
+```{r}
+library(dplyr)
+
+cat_vars <- c("sex","race", "educ", "wrkstat", "marital", "born", "partyid")
+cont_vars <- c("happy", "age", "income", "childs", "adults", "earnrs")
+
+capwords <- function(x, strict = FALSE) {
+    cap <- function(x) paste(toupper(substring(x, 1, 1)),
+                  {x <- substring(x, 2); if(strict) tolower(x) else x},
+                             sep = "", collapse = " " )
+    sapply(strsplit(x, split = " "), cap, USE.NAMES = !is.null(names(x)))
+}
+
+data <- data |>
+  mutate(
+    # Convert all missing to NA
+    across(everything(), haven::zap_missing), 
+    across(all_of(cont_vars), as.numeric),
+    # Make all categorical variables factors and relabel nicely
+    across(all_of(cat_vars), forcats::as_factor),
+    across(all_of(cat_vars), \(x) forcats::fct_relabel(x, capwords, strict = TRUE))
+  )
+```
+
+```{r,echo=F,results='hide'}
+saveRDS(data,"data/data.RDS")
+```

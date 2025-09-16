@@ -1,0 +1,218 @@
+---
+title: "Simple Linear Regression"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
+data <- readRDS("data/data.RDS")
+library(dplyr)
+library(tidymodels)
+```
+
+::: {style="color: yellow"}
+## Overview of Simple Linear Regression
+:::
+
+Simple linear regression is a statistical method used to model the relationship between two variables:\
+- **one feature** (also called the predictor or independent variable),\
+- **one target** (also called the outcome or dependent variable).
+
+The general form of a simple linear regression model is:
+
+$$
+Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i, \quad \quad \text{for}\:i=1,2,\dots,n 
+$$
+
+where:\
+- $Y_i$ : the ith observation on the target variable we want to predict.\
+- $X$ : the ith observation of the feature (or predictor) variable.\
+- $\beta_0$: the intercept, which represents the expected value of $Y$ when $X=0$.\
+- $\beta_1$: the slope, which tells us how much $Y$ changes for a one-unit increase in $X$\
+- $\varepsilon_i$: the ith observation of the error term, which captures random variation not explained by $X$.
+
+In practice, we estimate the parameters $\beta_0$ and $\beta_1$ using data by minimizing the residual sum of squares (RSS). It can be helpful to visualize what is meant by residual sum of squares and the fitted or optimal regression line.
+
+![https://wallstreetmojo-files.s3.ap-south-1.amazonaws.com/2022/05/Residual-sum-of-squares.jpg](images/rss.jpg){width="1000"}
+
+Once we have estimated the coefficients by finding the coefficients that minimize the RSS, the fitted equation can then be written as:
+
+$$
+\hat{Y}_i = b_0 + b_1 X_i
+$$
+
+where $\hat{Y}_i$ is the predicted value of $Y$ for the ith case (or person), and $b_0, b_1$ are the estimated coefficients from the sample data.
+
+This simple framework allows us to understand how two variables are related and to make predictions about $Y$ given new values of $X$.
+
+::: {style="color: yellow"}
+## Example Data: Ames Housing
+:::
+
+The **Ames Housing dataset** is a widely used dataset in regression and machine learning tutorials. It contains detailed information about residential homes in Ames, Iowa, and is often used to predict **sale prices** of homes based on various characteristics. For the regression chapters we will use the Ames Housing dataset to illustrate concepts in linear regression.
+
+-   Originally collected by Dean De Cock for data science education purposes.\
+-   Available in R via the `AmesHousing` or `modeldata` packages.\
+-   Contains 2930 observations (homes) and 82 variables describing different aspects of the homes.
+
+The dataset includes a mix of **numerical, categorical, and ordinal variables** covering:
+
+1.  **Property Characteristics**
+    -   Lot area (`Lot_Area`), lot shape (``` Lot``_``Shape ```), overall quality (``` Overall``_``Qual ```), overall condition (``` Overall``_``Cond ```)
+2.  **Building Attributes**
+    -   Year built (``` Year``_``Built ```), year remodeled (``` Year``_``Remod``_``Add ```), total square footage (``` Gr``_``Liv``_``Area ```), basement area (``` Total``_``Bsmt``_``SF ```)
+3.  **Garage Features**
+    -   Garage type (``` Garage``_``Type ```), number of cars (``` Garage``_``Cars ```), garage area (``` Garage``_``Area ```)
+4.  **Exterior and Structural Details**
+    -   Exterior material (``` Exter``_``Qual ```), roof style (``` Roof``_``Style ```), foundation type (`Foundation`)
+5.  **Neighborhood Information**
+    -   Neighborhood (`Neighborhood`) describing location and local characteristics
+6.  **Sale Information**
+    -   Sale price (``` Sale``_``Price ```) — the target variable
+    -   Sale condition (``` Sale``_``Condition ```)
+
+```{r}
+# Install and load package
+# install.packages("AmesHousing")
+library(AmesHousing)
+
+# Load data
+ames <- make_ames()
+
+# View first few rows
+head(ames)
+
+# Summary of key variables
+summary(ames$Sale_Price)
+summary(ames$Gr_Liv_Area)
+table(ames$Neighborhood)
+```
+
+::: {style="color: yellow"}
+## Simple Linear Regression in R
+:::
+
+We can fit a simple linear regression model using the `lm()` function in R. Note we are not using cross-validation here, simply fitting the training data to illustrate the concept of simple linear regression.
+
+For example, if we want to predict happiness (`Sale_Price`) based on house square footage (`Gr_Liv_Area`), we can use the following code:
+
+```{r, eval=T}
+fit_slr <- lm(
+  Sale_Price ~ Gr_Liv_Area, 
+  data = ames
+)
+summary(fit_slr)
+```
+
+We can interpret the results from summary in the following way:
+
+The estimated coefficients from our model are $\beta_0=13,289$ and $\beta_1=111.7$.
+
+We interpret the intercept, $\beta_0=13,289$, as the estimated mean sale price when the square footage is 0. While this interpretation may not be meaningful in a real-world context (since a house with 0 square footage does not exist), it serves as a baseline for our model.
+
+We interpret the slope coefficient, $\beta_1=111.7$, as the estimated change in mean sale price for each additional square foot of living area. Specifically, for each one-unit increase in square footage, the mean sale price is estimated to increase by \$111.7, holding all else constant. This indicates a positive relationship between square footage and sale price in our sample.
+
+::: {style="color: orange"}
+### Inference in Simple Linear Regression
+:::
+
+In addition to estimating the coefficients, we can also perform hypothesis tests and construct confidence intervals to assess the statistical significance and precision of our estimates.
+
+#### Accuracy of the Least Squares Estimates
+
+How accurate are the least squares estimates of $\beta_0$ and $\beta_1$?
+
+Point estimates by themselves are not very informative. It is often desirable to associate an estimate with some measure of its variability.
+
+#### Standard Errors
+
+The variability of an estimate is typically measured by its **standard error (SE)**, which is the square root of its variance.
+
+If we assume the errors in the linear regression model are i.i.d. $\sim (0, \sigma^2)$, then simple expressions for the SEs of the estimated coefficients exist. These are displayed in the **`Std. Error`** column of the output from `summary()`.
+
+#### t-Tests for Coefficients
+
+From these SEs, we can derive t-tests to determine whether individual coefficients are significantly different from zero.
+
+The t-statistic is defined as:
+
+$$
+t = \frac{\hat{\beta}_j}{SE(\hat{\beta}_j)}
+$$
+
+In R’s `summary()` output, this corresponds to the **`t value`** column.\
+- The reported t-statistic measures how many standard errors the coefficient is away from zero.\
+- Large absolute values (greater than about 2) suggest statistical significance at the $\alpha = 0.05$ level.\
+- The corresponding p-values are given in the **`Pr(>|t|)`** column.
+
+#### Confidence Intervals for Coefficients
+
+Under the same assumptions, we can also construct confidence intervals for each coefficient. The traditional $100(1-\alpha)\%$ confidence interval for $\beta_j$ is:
+
+$$
+\hat{\beta}_j \pm t_{1-\alpha/2, \, n-p} \cdot SE(\hat{\beta}_j)
+$$
+
+In R, one-at-a-time confidence intervals for regression coefficients can be obtained with the `confint()` function.
+
+\
+For example, a 95% confidence interval for the coefficients in a simple linear regression model can be computed as:
+
+```{r}
+confint(fit_slr, level = 0.95)
+```
+
+In general, a 95% confidence interval for a parameter (say, a slope $\beta_1$) means:
+
+> If we were to repeat the study many times (same design, new random samples each time), and for each sample we computed a 95% CI, then 95% of those intervals would contain the true parameter value.
+
+::: {style="color: orange"}
+### The Error Term
+:::
+
+In the simple linear regression model
+
+$$
+Y_i = \beta_0 + \beta_1 X + \varepsilon_i
+$$
+
+the error term $\varepsilon$ is at the heart of the model.
+
+-   The error term $\varepsilon$ represents the part of $Y$ that the model cannot explain with $X$.\
+-   It captures **random noise**, measurement error, and the influence of variables not included in the model.\
+-   Without $\varepsilon$, the regression line would perfectly fit every data point, which almost never happens in real data.
+
+::: {style="color: orange"}
+### Assumptions About the Error Term
+:::
+
+Classical linear regression (the Gauss–Markov framework) makes several key assumptions about $\varepsilon$:
+
+-   $E[\varepsilon] = 0$: on average, the errors cancel out (no systematic bias).\
+-   $\text{Var}(\varepsilon) = \sigma^2$: the variance of errors is constant across all values of $X$ (**homoscedasticity**).\
+-   Errors are independent of each other.\
+-   Errors are uncorrelated with the predictor $X$.
+
+::: {style="color: orange"}
+### The Variance of the Error Term ($\sigma^2$)
+:::
+
+-   $\sigma^2$ measures how much the actual values of $Y$ scatter around the regression line.\
+-   A smaller $\sigma^2$ means data points are tightly clustered around the line → better model fit.\
+-   A larger $\sigma^2$ means more unexplained variability → less precise predictions.
+
+In practice, $\sigma^2$ is unknown, so we estimate it with the **residual variance**:
+
+$$
+s^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - 2}
+$$
+
+where:\
+- $y_i$: the observed outcome,\
+- $\hat{y}_i$: the predicted outcome,\
+- $n$: the sample size,\
+- denominator $n-2$ accounts for the two estimated parameters ($\beta_0, \beta_1$).

@@ -1,0 +1,53 @@
+---
+title: "Overview"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+Feature engineering in machine learning typically describes the process of creating, transforming, or selecting variables (features) from raw data to improve a model’s performance.
+
+For example, one aspect of feature engineering is feature creation. This often means transforming raw data into meaningful inputs that better capture the underlying patterns the model needs to learn. For example, suppose we are trying to predict medicine adherence (whether or not someone takes their medicine). Our raw data may contain timestamps of when someone actually takes their medicine. We might use this timestamp to create new features for our model. For example, we might add features representing *day of the week*, *holiday* or *weekend* to provide additional context to the model.
+
+**A number of domains fall under feature engineering:**
+
+-   Missing data handling
+
+-   Feature creation
+
+-   Feature transformations
+
+-   Screening or feature selection
+
+-   Dimension reduction
+
+::: {style="color: yellow"}
+## Feature Engineering and Data Leakage
+:::
+
+Data leakage occurs when information from outside the training data set is used to create the model.
+
+Data leakage often occurs during feature engineering.
+
+To minimize data leaking, we will often want to do our feature engineering during the resampling, or data splitting, procedure we are using. To visualize this take a look at the graphic below from @handson where the pre-processing, or data engineering tasks, occur during each iteration. Keep this in mind as we introduce each feature engineering task.
+
+![https://bradleyboehmke.github.io/HOML/images/minimize-leakage.png](images/minimize-leakage.png){width="800"}
+
+::: {style="color: yellow"}
+### Outline of Remaining Sections
+:::
+
+1.  Example Data
+
+2.  Addressing Missing Data
+
+3.  Feature Filtering
+
+4.  Numeric Feature Engineering
+
+5.  Categorical Feature Engineering
+
+6.  Workflow

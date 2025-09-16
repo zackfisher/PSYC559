@@ -1,0 +1,58 @@
+---
+title: "Feature Filtering"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide'}
+data <- readRDS("data/data.RDS")
+```
+
+Feature filtering is a feature selection technique in machine learning where features are evaluated prior to the model fitting based on statistical or heuristic criteria. Features are then kept or discarded based on those criteria.
+
+It is called filtering because it is a preprocessing step, part of a feature engineering pipeline, done before we actually train the model.
+
+Typically, the goals of feature filtering are:
+
+1.  **Reduce dimensionality:** Fewer features means simpler models, faster training, and less risk of overfitting.
+
+2.  **Remove irrelevant or redundant features:** Avoids feeding the model noisy or useless inputs.
+
+3.  **Improve interpretability:** Models are easier to understand when they focus only on meaningful features.
+
+4.  **Boost performance:** Better generalization on new data when unnecessary features are excluded.
+
+In practice, one of the filtering tasks we will typically conduct involves weeding out low variance features.
+
+::: {style="color:orange"}
+## Removing Low-Variance Features {style="color:orange"}
+:::
+
+Zero and near-zero variance variables are low-hanging fruit to eliminate.
+
+-   **Zero Variance Features**: variable only contains a single unique value
+
+-   **Near-Zero Variance Features**: variable contains only a few unique values
+
+Zero and near-zero variance variables typically offer little to no information for model building. Furthermore, resampling (data-splitting) further complicates this picture because a given fold or sample may only contain a single value if the variable itself only contains a few unique values.
+
+@handson suggest the following rule-of-thumb for removing low-variance features:
+
+**Remove a variable if:**
+
+-   The fraction of unique values over the sample size is low (e.g. 10%).
+
+-   The ratio of the frequency of the most prevalent value to the frequency of the second most prevalent value is large (e.g. ≥20).
+
+We can use the `caret` [@caret] package in R to look at these different metrics for our example data.
+
+```{r}
+library(dplyr)
+library(caret)
+caret::nearZeroVar(data, saveMetrics = TRUE) %>% 
+  tibble::rownames_to_column() 
+```

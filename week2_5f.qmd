@@ -1,0 +1,66 @@
+---
+title: "Categorical Feature Engineering"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide'}
+data <- readRDS("data/data.RDS")
+library(dplyr)
+library(tidymodels)
+```
+
+Many models require that the predictors take numeric form. There are exceptionssuch as tree-based models, however, even tree-based methods can benefit from preprocessing categorical features. The following sections will discuss a few of the more common approaches to engineer categorical features.
+
+::: {style="color: orange"}
+### Lumping
+:::
+
+Sometimes features will contain levels that have very few observations. For example, take a look at the work status variable `wrkstat`. There are 8 unique levels and some have relatively few observations. For example, `With A Job, But Not At Work Because Of Temporary Illness, Vacation, Strike`.
+
+```{r}
+count(data, wrkstat) %>% arrange(n)
+```
+
+Sometimes we can benefit from collapsing, or “lumping” these into a lesser number of categories. In the above examples, we may want to collapse all levels that are observed in less than 5% of the training sample into an `Other` category. We can use `step_other()` to do so.
+
+```{r}
+lumping <- recipe(happy ~ ., data = data) %>%
+  step_other(wrkstat, threshold = 0.05, 
+             other = "Other")
+
+# Apply this blue print --> you will learn about this at 
+# the end of the chapter
+apply_2_training <- prep(lumping, training = data) %>%
+  bake(data)
+
+# New distribution of Neighborhood
+count(apply_2_training, wrkstat) %>% arrange(n)
+```
+
+::: {style="color: orange"}
+### One-Hot and Dummy Encoding
+:::
+
+As mentioned previously many models require that all features be numeric. Consequently, we need to intelligently transform any categorical variables into numeric representations so that these algorithms will work.
+
+There are many ways to recode categorical variables as numeric (e.g., one-hot, ordinal, binary, sum, and Helmert).
+
+One-hot encoding is a common method for converting categorical variables into a numerical format that machine learning algorithms can work with. Instead of assigning arbitrary numbers to categories (which could incorrectly imply an order), one-hot encoding creates a new binary (0/1) column for each category level. For a given observation, the column corresponding to its category is set to 1, and all others are set to 0.
+
+![https://towardsdatascience.com/encoding-categorical-variables-one-hot-vs-dummy-encoding-6d5b9c46e2db/](images/one_hot.webp){width="800"}
+
+However, this creates perfect collinearity which causes problems with some predictive modeling algorithms (e.g., ordinary linear regression and neural networks). Alternatively, we can create a full-rank encoding by dropping one of the levels (level `blue` has been dropped). This is referred to as dummy coding.
+
+![https://towardsdatascience.com/encoding-categorical-variables-one-hot-vs-dummy-encoding-6d5b9c46e2db/](images/dummy.webp){width="800"}
+
+Below is an example of one-hot encoding the predictors in our model.
+
+```{r}
+recipe(happy ~ ., data = data) %>%
+  step_dummy(all_factor_predictors(), one_hot = TRUE)
+```
