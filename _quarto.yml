@@ -20,6 +20,8 @@ project:
     - week2_5g.qmd
     - week3_1.qmd
     - week3_2.qmd
+    - week3_3.qmd
+    - week3_4.qmd
 website:
   title: "PSYC559: Applied Machine Learning in Psychology"
   sidebar:
@@ -51,10 +53,12 @@ website:
           - week2_5e.qmd
           - week2_5f.qmd
           - week2_5g.qmd
-      - section: "Linear Regression"
+      - section: "Regression"
         contents:    
           - week3_1.qmd
           - week3_2.qmd
+          - week3_3.qmd
+          - week3_4.qmd
 format:
   html:
     theme: darkly

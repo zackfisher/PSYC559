@@ -1,0 +1,358 @@
+---
+title: "Simple Lgostic Regression"
+format: 
+  html: 
+    fontsize: 25px
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
+data <- readRDS("data/data.RDS")
+library(dplyr)
+library(tidymodels)
+```
+
+
+::: {style="color: yellow"}
+## Overview of Simple Logistic Regression
+:::
+
+Simple logistic regression is used when the target (outcome) variable is binary (e.g., success/failure, yes/no, 0/1) and we have a single feature (predictor). Instead of modeling the outcome directly, logistic regression models the probability of the event occurring.
+
+-   $Y \in {0,1}$ is the binary target variable
+
+-   $X$ is the feature (predictor variable)
+
+-   $p(x) = P(Y=1 \mid X=x)$ is the probability of success given $X$
+
+
+::: {style="color: orange"}
+### Overview of Simple Logistic Regression
+:::
+
+Suppose we want to model a binary outcome $Y \in {0,1}$ (e.g., pass/fail, success/failure). At first, we might think of using linear regression:
+
+$$
+\hat{Y} = \beta_0 + \beta_1 X
+$$
+
+and interpret $\hat{Y}$ as the probability that $Y=1$.  
+
+
+::: {style="color: lightyellow"}
+### Problems with Using Linear Regression for Binary Outcomes
+:::
+
+**Predicted probabilities outside [0,1]:**  
+
+Linear regression does not constrain predictions. For some values of $X$, $\hat{Y}$ might be negative or greater than 1, which is impossible for probabilities.
+
+Let's fit a regression to binary data to make this concrete.
+
+```{r}
+# Load libraries
+library(ggplot2)
+library(gridExtra)
+
+set.seed(123)
+
+# Simulate some data
+n <- 100
+x <- runif(n, -3, 3)             # predictor
+p <- 1 / (1 + exp(-(-0.5 + 1*x))) # true logistic relationship
+y <- rbinom(n, 1, p)             # binary outcome
+
+data <- data.frame(x, y)
+
+# Fit linear regression (treat y as numeric 0/1)
+lm_fit <- lm(y ~ x, data = data)
+
+# Create grid of x values for prediction
+x_grid <- data.frame(x = seq(-3, 3, length.out = 200))
+
+# Predictions
+x_grid$lm_pred <- predict(lm_fit, newdata = x_grid)       # linear regression predictions
+
+# Plot: Linear regression
+p1 <- ggplot(data, aes(x, y)) +
+  geom_point(alpha = 0.6) +
+  geom_line(data = x_grid, aes(x, lm_pred), color = "red", size = 1) +
+  labs(title = "Linear Regression (flawed probabilities)",
+       y = "Predicted / Observed",
+       x = "X") +
+  theme_minimal() +
+  ylim(-0.2, 1.2)   # show that predictions can fall outside [0,1]
+
+p1
+```
+
+
+
+**Non-constant variance (heteroskedasticity):**  
+
+In binary data, the variance of $Y$ is
+
+$$
+   \mathrm{Var}(Y) = p(1-p)
+$$
+which depends on $p$. Importantly, the spread of residuals will be smallest near 
+$p=0$ or $p=1$ and largest near $p=0.5$. That’s exactly heteroskedasticity. Linear regression assumes constant variance (homoskedasticity), so its assumptions are violated. 
+
+Let's show this visually.
+
+```{r}
+# Extract fitted values and residuals
+fitted_vals <- lm_fit$fitted.values
+residuals <- lm_fit$residuals
+  
+  # Plot residuals vs fitted values
+  plot(fitted_vals, residuals,
+       xlab = "Fitted values",
+       ylab = "Residuals",
+       main = "Residuals vs Fitted (Linear Regression on Binary Outcome)",
+       pch = 19, col = "darkblue")
+  abline(h = 0, col = "red", lwd = 2)
+  
+legend("topright", legend = c("Residuals"),
+         col = c("darkblue", "darkgreen"), pch = c(19, NA), lty = c(NA, 2))
+
+```
+
+**Nonlinear relationship between predictors and probability:**  
+
+In reality, probabilities often follow an S-shaped curve — they change slowly when predictors are very small or very large, and change more quickly in the middle. Linear regression cannot capture this shape.
+
+*Can you think of a real-world example where this might happen?*
+
+## Logistic Regression Solution
+
+Logistic regression fixes these problems by modeling the log-odds of success as a linear function:
+
+$$
+\text{logit}(p(x)) = \ln \left(\frac{p(x)}{1-p(x)}\right) = \beta_0 + \beta_1 X
+$$
+
+This ensures:
+
+- Predicted probabilities are always between 0 and 1:
+$$
+  p(x) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x)}}
+$$
+- The variance is modeled correctly.  
+- The S-shaped curve naturally captures how probabilities change with $X$.  
+
+
+
+::: {style="color: yellow"}
+## Example Data: Dropout Data
+:::
+
+::: {style="color: orange"}
+### Overview
+:::
+
+The *Predict Students’ Dropout and Academic Success* dataset was contributed to the UCI Machine Learning Repository in December 2021.\
+It was collected from multiple databases at a higher education institution in Portugal and focuses on undergraduate students across diverse study programs (e.g., agronomy, education, nursing, journalism, management, social service, and technologies).
+
+The dataset is designed for classification tasks:\
+- **Target**: Predict whether a student will eventually graduate, remain enrolled without graduating, or drop out.\
+- **Motivation**: Enable early identification of students at risk of failure or dropout, supporting targeted interventions.\
+- **Challenge**: The outcome classes are imbalanced, which makes predictive modeling more complex.
+
+Dataset link: [UCI Repository](https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success)
+
+
+::: {style="color: orange"}
+### Dataset Characteristics
+:::
+
+The key characteristics of the dataset are:
+
+| Aspect | Description |
+|---------------------|---------------------------------------------------|
+| **Number of instances** | 4,424 students |
+| **Number of features** | 36 features (demographic, socio-economic, and educational background) |
+| **Feature types** | Mix of real-valued (continuous), categorical, and integer features |
+| **Target variable** | Student outcome: *dropout*, *enrolled (non-graduate)*, or *graduate* |
+| **Missing values** | None – anomalies, outliers, and missing entries have been cleaned |
+| **Timing of features** | All variables are available at the time of admission/enrollment |
+| **Train/test split** | The authors used 80% training, 20% testing in their evaluations |
+| **License** | Creative Commons Attribution 4.0 (CC BY 4.0) |
+
+
+::: {style="color: orange"}
+### Feature Categorgies
+:::
+
+All features describe student status at admission. They include:
+
+-   **Demographic information**:
+    -   Age, gender, marital status, nationality
+-   **Socio-economic background**:
+    -   Parents’ education levels, parents’ occupations, whether the student receives financial support
+-   **Educational background**:
+    -   Previous qualification type and grade\
+    -   Application mode (how the student applied)\
+    -   Application order (rank of the program in the application list)
+-   **Enrollment details**:
+    -   Degree program enrolled in\
+    -   Attendance mode (day/evening)
+
+
+::: {style="color: orange"}
+### Target Variable
+:::
+
+The target variable represents the final student status:
+
+- Dropout: Student left without completing the program\
+
+::: {style="color: orange"}
+### Read in Data
+:::
+
+```{r}
+dropout <- read.csv("data/dropout.csv", sep = ";")
+
+dropout$Dropout <- ifelse(dropout$Target == "Dropout", 1, 0)
+
+```
+
+::: {style="color: yellow"}
+## Simple Logistic Regression in R
+:::
+
+First, let's fit an intercept-only model to the data.
+
+::: {style="color: orange"}
+### Intercept-Only Model in R
+:::
+
+In our example the variable `Dropout` indicates whether a subject dropped out. Let's start with the simplest model for predicting `Dropout`, the intercept-only model. 
+
+More specifically, we have $ logit(\pi_i) = b_0(1_i)$where $\pi_i = P(grad_i = 1)$. 
+
+We can use the `glm()` function to fit the model to the data
+
+```{r}
+fit_intercept <- glm(
+  Dropout ~ 1, 
+  family = "binomial", 
+  data = dropout
+)
+
+summary(fit_intercept)
+```
+
+Without wanting to get to detailed we don't need to specify the `logit` link here because it is the canonical link function for the binomial distribution. This essentially means there is a direct correspondence between the predicted mean and the distribution's canonical location parameter. 
+
+::: {style="color: lightyellow"}
+#### Interpretation of the Intercept-Only Model
+:::
+
+In the intercept-only model, the intercept, $b_0$, reflects 
+
+1. The expected log-odds ($-0.7482$) of an individual dropping out. 
+
+2. The odds of dropping out $\mathrm{exp}(b_0)=0.47$.
+
+```{r}
+exp(-0.7482)
+```
+
+3. The expected probability ($0.32$) of the a subject dropping out.
+
+$$ P(Dropout_i = 1) = \pi_i = \frac{e^{b_0}}{1+e^{b_0}} $$
+or, equivalently, in R
+
+```{r}
+exp(-0.7482)/(1 + exp(-0.7482))
+```
+
+We can also confirm that the backward transformed parameter from this intercept-only logistic regression matches the expectation we get from the descriptives of the raw data.
+
+```{r}
+mean(dropout$Dropout)
+```
+
+*Note*: If $\beta_j > 0$ then $\mathrm{exp}(b_j) > 1$, indicating a positive relationship between $X_{j}$ and the probability of the event occurring. If $\beta_j < 0$, the opposite relationship holds.
+
+
+
+::: {style="color: orange"} 
+### Single-Predictor Model in R 
+:::
+
+OK, let's include a predictor in our logistic regression model. Let's start with `Age.at.enrollment` such that 
+
+$$ logit(\pi_i) = b_0 + b_1Age^{*}_{1i} + \epsilon_i $$ 
+where $\pi_i = P(Dropout_i = 1)$. Here, $Age^{*}$ is the mean-centered amount of money one spends on themselves in a month (in units of $100$ dollars).
+
+Let's fit the model in R.
+
+```{r}
+dropout$Age_star <- scale(dropout$Age.at.enrollment, center = TRUE, scale = FALSE)
+
+fit_pred <- glm(
+  Dropout ~ 1 + Age_star, 
+  family = "binomial", 
+  data = dropout, 
+)
+summary(fit_pred)
+```
+
+
+::: {style="color: lightyellow"} 
+#### Interpreting the Single-Predictor Model
+:::
+
+
+Again, There are essentially three ways to interpret coefficients from a logistic regression model:
+
+1. The log-odds (or logit)
+2. The Odds
+3. Probabilities
+
+
+**Log-Odds**
+
+The parameter estimate $b_0$ reflects the expected log-odds ($-0.776123$) of dropping out for an individual who is approximately 23 years old (the average age at admission). 
+
+The estimate for $b_1$ indicates the expected difference of the log-odds of dropping out for a 1-year difference in age. Therefore, we expect a $0.07$ difference in the log-odds of dropping out for a $1$ year difference in age.
+
+**Odds** 
+
+Parameter estimates from a logistic regression are often reported in terms of *odds* rather than *log-odds*. To obtain parameters in odds units, we simply exponentiate the coefficients. Note that this is just one of the steps of the inverse link function (which would take us all the way to probability units). 
+
+```{r}
+exp(cbind(OR = coef(fit_pred), confint(fit_pred)))
+```
+
+In other words, the odds of dropping out for an average-aged student $exp(-0.776123) = 0.46$.
+
+In regard to the slope coefficient, for 1-year difference in age, we expect to see about $7\%$ increase in the odds of dropping out.  This increase does not depend on the age of the individual. Note this is significant and we would likely report this interpretation. Essentially, if the odds ratio is equal to one, the predictor did not have an impact on the outcome.
+
+
+#### Probability
+
+Finally, we can also interpret the coefficients in terms of probabilities.
+
+Remember, probabilities range from $[0,1]$, whereas log-odds (the output from the raw logistic regression equation) can range from $(-\infty,\infty)$, and odds and odds ratios can range from $(0,\infty)$. Due to the bounded range of probabilities, probabilities are non-linear, but log-odds can be linear. 
+
+For example, as age goes up by constant increments, the probability of dropping out will increase by varying amounts, but the log-odds will increase by a constant amount, and the odds will increase by a constant multiplicative factor. 
+
+For this reason it is not so simple to interpret probabilities in logistic regression from the coefficient directly. Often it is much simpler to plot the probabilities across a range of the predictor variables.
+```{r}
+ggplot(data=dropout,
+       aes(x=Age_star,y=Dropout)) +
+ geom_point(alpha = .08, size = 10) +
+ xlab("Age") +
+ ylab("Dropout") +
+ theme_bw() +
+ stat_smooth(method = 'glm', method.args = list(family = "binomial"), se = TRUE)
+```
+
+Notice how the density of the observations is visualized by manipulating the transparency (alpha) level of the data points. The predicted curve based on our model has of course a non-linear shape (however, if we were to plot the relationship between the variables with using the logit link, it would be a straight line). 
+

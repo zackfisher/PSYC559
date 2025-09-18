@@ -61,20 +61,6 @@ where:
 
 
 ::: {style="color: yellow"}
-## Assumptions
-:::
-
-Multiple regression relies on several key assumptions:  
-
-1. **Linearity**: The relationship between each $X_{ji}$ and $Y_i$ is linear.  
-2. **Independence**: The errors $\varepsilon_i$ are independent across observations.  
-3. **Homoscedasticity**: The variance of $\varepsilon_i$ is constant across all values of the predictors.  
-4. **Normality**: The errors $\varepsilon_i$ are normally distributed (especially important for inference).  
-5. **No perfect multicollinearity**: Predictors are not exact linear combinations of one another.  
-
-
-
-::: {style="color: yellow"}
 ## Estimating the Model
 :::
 
