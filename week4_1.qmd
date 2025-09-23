@@ -1,0 +1,664 @@
+---
+title: "Regularized Regression"
+format: 
+  html: 
+    fontsize: 25px
+    code-folders: true
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
+data <- readRDS("data/data.RDS")
+library(dplyr)
+library(tidymodels)
+```
+
+::: {style="color: yellow"}
+## Overview of Regulaßrized Regression
+:::
+
+In this chapter we will introduce regularized regression methods, which are powerful tools for feature selection and prediction in high-dimensional settings.
+
+We will cover the following topics:
+
+::: {style="color: yellow"}
+## Background on Feature Selection
+:::
+
+::: {style="color: orange"}
+### Big Data in the Social Sciences Revisited
+:::
+
+In social science contexts, big data often means one or more of the following:
+
+-   Many features (predictors): hundreds, thousands, or more variables derived from text, administrative records, high-dimensional surveys, or sensor logs.
+-   Heterogeneous feature types: categorical, numeric, sparse counts, text-derived indicators, etc.
+-   High computational scale: datasets that strain traditional manual model-building practices.
+-   Complex correlations: many predictors are correlated or redundant.
+
+Crucially for modeling, the problem is not just size — it's that the number of candidate predictors (`p`) can be large relative to, or even exceed, the number of observations (`n`).
+
+::: {style="color: orange"}
+### Feature selection in General
+:::
+
+Feature selection is the process of choosing a subset of predictor variables for use in a model. Goals typically include:
+
+-   Prediction accuracy
+-   Interpretability
+-   Stability & reproducibility
+-   Computational efficiency
+
+Two broad strategies exist:
+
+-   Filter methods: screen features independently of a predictive model.
+-   Wrapper/embedded methods: selection is tied to the model.
+
+::: {style="color: lightyellow"}
+#### Historical Approaches to Feature Selection
+:::
+
+1.  Manual selection / domain knowledge
+
+-   **Pros**: interpretable, theory-driven.
+-   **Cons**: may miss predictive signals, hard with large p.
+
+2.  Univariate screening
+
+-   **Pros**: fast, simple.
+-   **Cons**: ignores potential confounding.
+
+::: callout-note
+## Confounding
+
+**Note**: A major downside of univariate screening is its inability to account for confounding variables, leading to biased results and misinterpretations. For example, suppose you’re studying whether education level predicts mental health outcomes. At first glance, you might find that higher education is associated with lower depression. But this relationship is confounded by income: People with more education may earn more money, and income itself reduces stress and depression.
+:::
+
+3.  Subset selection (stepwise, best subsets)
+
+-   **Pros**: directly searches for best small model.
+-   **Cons**: unstable, computationally infeasible with large p.
+
+4.  Dimensionality reduction (PCA, factor analysis)
+
+-   **Pros**: reduces dimensionality.
+-   **Cons**: does not keep original variables, less interpretable.
+
+5.  Bayesian approaches
+
+-   **Pros**: principled uncertainty quantification.
+-   **Cons**: computationally intensive.
+
+::: {style="color: yellow"}
+## Regularized Regression
+:::
+
+Regularized regression methods integrate feature selection into the model fitting process by adding a penalty term to the loss function. This encourages simpler models that generalize better.
+
+::: {style="color: orange"}
+### Intuition Behind Regularization
+:::
+
+Regularization is a modern solution that keeps the model simpler and more stable by shrinking regression coefficients toward zero.
+
+Think of it like adding a gentle rule to your model:
+
+> Prefer smaller coefficients unless the data really justify making them big.
+
+This way, unimportant predictors get down-weighted or even dropped, leaving a model that generalizes better.
+
+::: {style="color: lightyellow"}
+#### Example: Predicting Psychological Well-Being
+:::
+
+Imagine a researcher studying well-being. They collect data on 1,000 participants and measure 100 different predictors:
+
+-   **Demographics**: age, gender, income, education, marital status, etc.
+-   **Psychological scales**: stress, anxiety, optimism, self-esteem, social connectedness, etc.
+-   **Behavioral data**: sleep hours, exercise, diet, screen time, etc.
+-   **Social context**: neighborhood safety, community trust, political attitudes, etc.
+
+The goal is to predict a well-being score using these 100 predictors.
+
+**Estimating The Model with Classic Multiple Regression**
+
+If you estimate a regression with all 100 predictors using OLS:
+
+The model fits well in terms of variance explained, but:
+
+-   **Overfitting**: The model captures random noise in this dataset. Predictions on new data will be poor.
+-   **Multicollinearity**: Many psychological scales correlate highly (e.g., stress and anxiety). This makes coefficient estimates unstable — small changes in the sample can flip signs or magnitudes.
+-   **Interpretation chaos**: With overfitting and so many predictors, many coefficients may look important by chance.
+
+**Estimating The Model with Regularized Regression**
+
+If you estimate the same model using Lasso or Ridge (regularized) regression:
+
+-   **Simplicity**: The model shrinks many coefficients toward zero. Some may be exactly zero (Lasso), effectively removing them from the model.
+-   **Stability**: Coefficient estimates are more stable and less sensitive to small changes in the data.
+-   **Better prediction**: The model generalizes better to new data, improving out-of-sample prediction accuracy.
+
+**Example of Output from Both Approaches**
+
+```{r, warning=FALSE, message=FALSE}
+#| code-fold: true
+
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+# --- Setup ---
+set.seed(123)
+n <- 200   # participants
+p <- 100   # predictors
+
+# Generate realistic variable names
+demographics <- c("age", "gender", "income", "education", "marital_status")
+psych_scales <- paste0("stress_item", 1:20)
+behavior <- paste0("sleep_hours", 1:10)
+social <- paste0("social_item", 1:15)
+# Fill out the rest with generic names to reach 100
+other <- paste0("var", 1:(p - length(demographics) - length(psych_scales) - length(behavior) - length(social)))
+
+predictor_names <- c(demographics, psych_scales, behavior, social, other)
+
+
+# Simulate predictors
+X <- matrix(rnorm(n * p), n, p)
+colnames(X) <- predictor_names
+
+# True coefficients: let's say age, income, stress_item1, stress_item2, sleep_hours1 are true predictors
+true_beta <- rep(0, p)
+true_indices <- match(c("age", "income", "stress_item1", "stress_item2", "sleep_hours1"), predictor_names)
+true_beta[true_indices] <- c(0.8, 1.2, 1.0, 0.9, 0.7)
+
+# Simulate outcome: well-being
+y <- X %*% true_beta + rnorm(n, sd=1.5)
+
+# --- OLS ---
+ols_fit <- lm(y ~ X)
+ols_coefs <- coef(ols_fit)[-1]  # drop intercept
+
+# --- Lasso ---
+library(glmnet)
+cv_fit <- cv.glmnet(X, y, alpha=1)  # lasso
+best_lambda <- cv_fit$lambda.min
+lasso_fit <- glmnet(X, y, alpha=1, lambda=best_lambda)
+lasso_coefs <- as.vector(coef(lasso_fit)[-1])  # drop intercept
+
+# --- Table of first 30 predictors ---
+table_df <- data.frame(
+  Predictor = predictor_names[1:30],
+  OLS = round(ols_coefs[1:30], 2),
+  Lasso = round(lasso_coefs[1:30], 2)
+)
+
+table_df |>
+    mutate(
+      Lasso = cell_spec(
+        Lasso, 
+        "html",
+        background = ifelse(Lasso == 0, "red", "black"))
+      ) |>
+      kable(
+        "html", 
+        escape = FALSE,
+        row.names = FALSE, 
+        caption = "Comparison of OLS and Lasso Coefficients for First 30 Predictors") |>
+      kable_styling(full_width = FALSE)
+```
+
+**Observations**
+
+-   True predictors (age, income, stress_item1, stress_item2, sleep_hours1 if in first 30) are estimated accurately by both OLS and Lasso.
+-   Noise predictors are shrunk to zero by Lasso.
+
+Hopefully, this table illustrates how regularization performs variable selection, giving a cleaner, interpretable model for predicting well-being.
+
+::: callout-note
+## Bet On Sparsity
+
+The [**bet on sparsity principle**](https://tibshirani.su.domains/ftp/tibs-copss.pdf) popularized by **Bradley Efron and colleagues** is the idea that if the truth is **sparse** (there are a handful of meaningful predictors), regularization methods perform well, accurately identifying the important predictors and producing stable, interpretable estimates. However, if the truth is **dense**—meaning many or all predictors have nonzero effects—no method can reliably recover the full set of true coefficients, because the signal is spread too thin across many variables. For a counterpoint (or additional contextualization) see Andrew Gelman's [post](https://statmodeling.stat.columbia.edu/2013/12/16/whither-the-bet-on-sparsity-principle-in-a-nonsparse-world/) and the related comments.
+:::
+
+::: {style="color: orange"}
+### The Lasso Penalty
+:::
+
+**So how does this regularization (or shrinkage) actually work?**
+
+The Lasso (Least Absolute Shrinkage and Selection Operator) adds an L1 penalty to the loss function, which encourages sparsity in the coefficients.
+
+For example, remember our ordinary least squares (OLS) regression problem, we estimate coefficients $\beta = (\beta_1, \beta_2, \dots, \beta_p)$ by minimizing the residual sum of squares:
+
+\begin{equation}
+\widehat{\beta}^{OLS} = \arg\min_{\beta} \sum_{i=1}^n \left( y_i - \hat{y_i} \right)^2.
+\end{equation}
+
+OLS works well when the number of predictors $p$ is small and predictors are not highly correlated. However, when $p$ is large or predictors are correlated, OLS estimates can become unstable, coefficients can have high variance, and the model can overfit the data.
+
+Lasso regression addresses these problems by adding a penalty on the sum of the absolute values of the coefficients:
+
+\begin{equation}
+\widehat{\beta}^{Lasso} = \arg\min_{\beta}  
+\sum_{i=1}^n \left( y_i - \hat{y_i} \right)^2
++ \lambda \sum_{j=1}^p |\beta_j|
+,
+\end{equation}
+
+where $\lambda \ge 0$ is a **hyperparameter** that controls the strength of the penalty.
+
+Notice the penalty term $\lambda \sum_{j=1}^p |\beta_j|$ is taking the sum of the absolute values of the coefficients. This L1 penalty has the effect of shrinking some coefficients exactly to zero when $\lambda$ is sufficiently large, effectively performing variable selection.
+
+::: callout-note
+## Hyperparameters
+
+Remember, **hyperparameters** are the parameters we use during cross-validation to select the optimal model. Unlike parameters we estimate in our model (e.g., $\beta_1$), hyperparameters are set before training, and control the learning process itself (e.g., $\lambda$ in Lasso). For example, we might supply a grid of possible $\lambda$ values and use cross-validation to find the one that minimizes prediction error on held-out data.
+:::
+
+Intuitively, Lasso performs two things:
+
+- **Shrinkage**: Coefficients are pulled toward zero, reducing variance and improving prediction. 
+- **Variable selection**: Some coefficients are shrunk exactly to zero, effectively removing irrelevant predictors from the model.
+
+::: {style="color: orange"}
+### Lasso Hyperparameter Tuning
+:::
+
+The key hyperparameter in Lasso regression is $\lambda$, which controls the amount of regularization. 
+
+
+- A larger $\lambda$ means more shrinkage, leading to simpler models with fewer predictors. 
+- A smaller $\lambda$ means less shrinkage, allowing more predictors to remain in the model.
+- When $\lambda = 0$, Lasso reduces to OLS. 
+
+Choosing the right $\lambda$ is crucial for balancing bias and variance.
+
+For example, suppose we are trying to predict well-being using several psychological and demographic predictors. We can fit a Lasso regression model across a range of $\lambda$ values and visualize how the coefficients change.
+
+```{r,warning=FALSE,message=FALSE}
+#| code-fold: true
+
+# --- Load libraries ---
+if(!require(glmnet)) install.packages("glmnet")
+library(glmnet)
+
+# --- Simulate a small psychology dataset ---
+set.seed(123)
+n <- 200
+
+# Predictors
+stress <- rnorm(n, mean=5, sd=2)
+sleep <- rnorm(n, mean=7, sd=1.5)
+social_support <- rnorm(n, mean=50, sd=10)
+exercise <- rnorm(n, mean=3, sd=1)
+income <- rnorm(n, mean=50000, sd=15000)
+
+X <- cbind(stress, sleep, social_support, exercise, income)
+
+# True coefficients for simulation
+beta_true <- c(-0.8, 0.5, 0.7, 0, 0)  # only stress, sleep, social_support matter
+y <- X %*% beta_true + rnorm(n, sd=1.5)
+
+colnames(X) <- c("Stress", "Sleep", "SocialSupport", "Exercise", "Income")
+
+# --- Fit Lasso regression ---
+lasso_fit <- glmnet(X, y, alpha=1)
+
+# --- Plot coefficient paths ---
+plotmo::plot_glmnet(lasso_fit, xvar="lambda", main="Lasso Coefficient Paths", label =3)
+abline(h=0, col="gray", lty=2)
+
+# --- Optional: cross-validated lambda ---
+cv_fit <- cv.glmnet(X, y, alpha=1)
+best_lambda <- cv_fit$lambda.min
+abline(v=log(best_lambda), col="red", lty=2)
+```
+
+We typically use cross-validation to select the optimal $\lambda$. The process involves:
+1. Splitting the data into training and validation sets.
+2. Fitting Lasso models with different $\lambda$ values on the training set.
+3. Evaluating prediction error on the validation set.
+4. Selecting the $\lambda$ that minimizes validation error.
+
+::: {style="color: orange"}
+### The Ridge Penalty
+:::
+
+Ridge regression is another form of regularization that, like the Lasso, aims to prevent overfitting in high-dimensional regression problems and improve predictive performance. 
+
+Ridge regression modifies this by adding an \textbf{L2 penalty}, which penalizes the sum of squared coefficients:
+
+\begin{equation}
+\widehat{\beta}^{Ridge} = \arg\min_{\beta} 
+\sum_{i=1}^n \left( y_i - \hat{y_i}\right)^2
++ \lambda \sum_{j=1}^p \beta_j^2,
+\end{equation}
+
+where $\lambda \ge 0$ controls the strength of the penalty. Notice, instead of the absolute values of the coefficients (as in Lasso), Ridge uses the squares of the coefficients. This means Ridge regression does not set coefficients exactly to zero. Instead, it shrinks all coefficients toward zero, but none are eliminated entirely. 
+
+This means Ridge regression may be better suited for situations where many predictors have small but nonzero effects (a "dense" model).
+
+
+::: {style="color: orange"}
+### The Elastic Net Penalty
+:::
+
+Another penalty, related to the Lasso and Ridge, is the Elastic Net, which combines both L1 and L2 penalties. The Elastic Net is particularly useful when there are multiple correlated predictors.
+
+\begin{equation}
+\widehat{\beta}^{EN} = \arg\min_{\beta} 
+\sum_{i=1}^n \left( y_i - \hat{y_i} \right)^2 
++ \lambda \left[ \alpha \sum_{j=1}^p |\beta_j| + \frac{1-\alpha}{2} \sum_{j=1}^p \beta_j^2 \right],
+\end{equation}
+
+where we now have two hyperparameters: $\alpha$ and $\lambda$:
+
+- $\lambda \ge 0$ controls the overall strength of the penalty.
+- $\alpha \in [0,1]$ controls the mix between Lasso and Ridge.
+
+Thinking about the $\alpha$ hyperparameter it becomes clear that:
+
+- $\alpha = 1$: Elastic Net reduces to **Lasso**.
+- $\alpha = 0$: Elastic Net reduces to **Ridge**.
+- $0 < \alpha < 1$: combination of both penalties.
+
+::: {style="color: orange"}
+### Implementing Regularized Regression in R
+:::
+
+Remember the Ames Housing dataset used in our previous chapters? The Ames Housing dataset is a widely used dataset in regression and machine learning tutorials. It contains detailed information about residential homes in Ames, Iowa, and is often used to predict sale prices of homes based on various characteristics. For the regression chapters we will use the Ames Housing dataset to illustrate regularized regression.
+
+
+```{r, warning=FALSE, message=FALSE}
+library(tidymodels)
+set.seed(123)
+
+# Load the Ames Housing dataset
+data("ames", package = "modeldata")
+
+# Split the data into training and testing sets
+split <- initial_split(
+  ames, 
+  prop = 0.7, 
+  strata = "Sale_Price"
+)
+ames_train  <- training(split)
+ames_test   <- testing(split)
+
+
+# Create training  feature matrices
+# we use model.matrix(...)[, -1] to discard the intercept
+X <- model.matrix(Sale_Price ~ ., ames_train)[, -1]
+
+# transform y with log transformation
+Y <- log(ames_train$Sale_Price)
+```
+
+
+::: {style="color: orange"}
+#### Data Standardization
+:::
+
+It is important to standardize your features before applying regularized regression techniques like Lasso or Ridge. This is because these methods are sensitive to the scale of the predictors. Standardization ensures that all features contribute equally to the penalty term. If we didn't standardize, then predictors with naturally larger values (e.g., total square footage) would be penalized more than predictors with naturally smaller values (e.g., total number of rooms). 
+
+The `glmnet` package, which we will use for fitting Lasso and Ridge models, automatically standardizes the predictors by default. However, if you are using other packages or methods, you may need to standardize your data manually.
+
+
+::: {style="color: orange"}
+#### Comparing Lasso and Ridge Regression
+:::
+
+Let's fit both Lasso and Ridge regression models to the Ames Housing data and compare their results. We will use cross-validation to select the optimal $\lambda$ for each model.
+
+Note that setting `alpha = 1` specifies Lasso regression, while `alpha = 0` specifies Ridge regression.
+
+The figure below shows the 10-fold cross-validated mean squared error (MSE) across all $\lambda$ values. The numbers displayed along the top of the plot indicate the number of features included in the model.
+
+In both Ridge and Lasso models, we observe a modest improvement in MSE as the penalty $\text{log}(\lambda)$ increases, indicating that an unregularized OLS model may overfit the training data. 
+
+However, when the penalty ($\lambda$) becomes too large, the MSE begins to get larger.  
+
+```{r, warning=FALSE, message=FALSE}
+library(glmnet)
+
+# Apply CV lasso regression to Ames data
+lasso <- cv.glmnet(
+  x = X,
+  y = Y,
+  alpha = 1 # Lasso penalty
+)
+
+# Apply CV ridge regression to Ames data
+ridge <- cv.glmnet(
+  x = X,
+  y = Y,
+  alpha = 0 # Ridge penalty
+)
+
+# plot results
+par(mfrow = c(1, 2))
+plot(lasso, main = "Lasso penalty\n\n")
+plot(ridge, main = "Ridge penalty\n\n")
+```
+
+We can also look at a plot of the coefficients as a function of $\text{log}(\lambda)$ for both Lasso and Ridge regression.
+
+
+```{r, warning=FALSE, message=FALSE}
+
+# Lasso model
+lasso_min <- glmnet(
+  x = X,
+  y = Y,
+  alpha = 1
+)
+
+# Ridge model
+ridge_min <- glmnet(
+  x = X,
+  y = Y,
+  alpha = 0
+)
+
+par(mfrow = c(1, 2))
+
+# plot lasso model
+plot(lasso_min, xvar = "lambda", main = "Lasso penalty\n\n")
+abline(v = -1*log(lasso$lambda.min), col = "red", lty = "dashed")
+
+
+# plot ridge model
+plot(ridge_min, xvar = "lambda", main = "Ridge penalty\n\n")
+abline(v = log(ridge$lambda.min), col = "red", lty = "dashed")
+```
+
+
+::: {style="color: yellow"}
+## Comparing Regularization Methods
+:::
+
+So far we’ve implemented a pure Ridge and pure Lasso model. 
+
+However, we can implement an elastic net the same way as the ridge and lasso models, by adjusting the alpha parameter. Any alpha value between 0–1 will perform an elastic net. 
+
+When alpha = 0.5 we perform an equal combination of penalties whereas alpha <0.5 will have a heavier ridge penalty applied and alpha >0.5 will have a heavier lasso penalty.
+
+
+```{r, warning=FALSE, message=FALSE}
+library(caret)
+
+# for reproducibility
+set.seed(123)
+
+# grid search across 
+cv_glmnet <- train(
+  x = X,
+  y = Y,
+  method = "glmnet",
+  preProc = c("zv", "center", "scale"),
+  trControl = trainControl(method = "cv", number = 10),
+  tuneLength = 10
+)
+
+# model with lowest RMSE
+cv_glmnet$bestTune
+##   alpha     lambda
+## 7   0.1 0.02007035
+
+# results for model with lowest RMSE
+cv_glmnet$results %>%
+  filter(alpha == cv_glmnet$bestTune$alpha, lambda == cv_glmnet$bestTune$lambda)
+
+
+# plot cross-validated RMSE
+ggplot(cv_glmnet)
+
+```
+
+
+Now, let's consider three different models we may want to compare:
+
+1.  **Model 1**: Lasso regression\
+2.  **Model 2**: Ridge regression\
+3.  **Model 3**: Elastic net
+
+We can also compare the best fitting multiple regression model from the previous chapter.
+
+::: {style="color: lightyellow"}
+#### Model 1: Lasso
+:::
+
+```{r, warning=FALSE, message=FALSE}
+
+# model 1 Lasso
+lasso_grid <- expand.grid(
+  alpha = 1,
+  lambda = 10^seq(-3, 1, length.out = 100)
+)
+
+library(caret)
+# Train model using 10-fold cross-validation
+set.seed(123)  # for reproducibility
+cv_lasso <- train(
+  x = X,
+  y = Y,
+  method = "glmnet",
+  preProc = c("zv", "center", "scale"),
+  trControl = trainControl(method = "cv", number = 10),
+  tuneGrid = lasso_grid
+)
+```
+
+::: {style="color: lightyellow"}
+#### Model 2: Ridge
+:::
+
+```{r, warning=FALSE, message=FALSE,cache=TRUE}
+
+# model 1 Ridge
+ridge_grid <- expand.grid(
+  alpha = 0,
+  lambda = 10^seq(-3, 1, length.out = 100)
+)
+
+library(caret)
+# Train model using 10-fold cross-validation
+set.seed(123)  # for reproducibility
+cv_ridge <- train(
+  x = X,
+  y = Y,
+  method = "glmnet",
+  preProc = c("zv", "center", "scale"),
+  trControl = trainControl(method = "cv", number = 10),
+  tuneGrid = ridge_grid
+)
+```
+
+::: {style="color: lightyellow"}
+#### Model 3: Elastic Net
+:::
+
+```{r, warning=FALSE, message=FALSE,cache=TRUE}
+
+# model 3 Elastic Net
+en_grid <- expand.grid(
+  alpha = seq(0, 1, length.out = 100),
+  lambda = 10^seq(-3, 1, length.out = 100)
+)
+
+library(caret)
+# Train model using 10-fold cross-validation
+set.seed(123)  # for reproducibility
+cv_en <- train(
+  x = X,
+  y = Y,
+  method = "glmnet",
+  preProc = c("zv", "center", "scale"),
+  trControl = trainControl(method = "cv", number = 10),
+  tuneGrid = en_grid
+)
+```
+
+::: {style="color: lightyellow"}
+#### Model 4: Multiple Regression
+:::
+
+```{r, warning=FALSE, message=FALSE, cache=TRUE}
+
+# model 4 Multiple Regression
+
+library(caret)
+# Train model using 10-fold cross-validation
+set.seed(123)  # for reproducibility
+cv_lm <- train(
+  x = X[,c("Gr_Liv_Area", "Year_Built")],
+  y = Y,
+  method = "lm",
+  preProc = c("zv", "center", "scale"),
+  trControl = trainControl(method = "cv", number = 10)
+)
+```
+
+```{r}
+# Extract out of sample performance measures
+summary(resamples(list(
+  model1 = cv_lasso, 
+  model2 = cv_ridge, 
+  model3 = cv_en,
+  model4 = cv_lm
+)))
+```
+
+
+::: {style="color: lightyellow"}
+### Comparing Model Performance
+:::
+
+Remember in our original model we log-transformed the outcome variable `Sale_Price`. Therefore, when calculating RMSE, we need to exponentiate the predictions and the actual values to bring them back to the original scale. This way we can compare the models in terms of the actual sale prices.
+
+```{r, warning=FALSE, message=FALSE}
+pred_lasso <- predict(cv_lasso, X)
+pred_ridge <- predict(cv_ridge, X)
+pred_en    <- predict(cv_en, X)
+pred_lm    <- predict(cv_lm, X)
+
+cat("RMSE for Lasso:", RMSE(exp(pred_lasso), exp(Y)))
+cat("RMSE for Ridge:", RMSE(exp(pred_ridge), exp(Y)))
+cat("RMSE for Elastic Net:", RMSE(exp(pred_en), exp(Y)))
+cat("RMSE for Multiple Regression:", RMSE(exp(pred_lm), exp(Y)))
+```
+
+The resulting cross-validated RMSE for Elastic Net appears the smallest. How should we interpret this? When applied to unseen data, the predictions this model makes are, on average, about $25,400 off from the actual sale price. This is an improvement over the other models, which have higher RMSE values, indicating that the Elastic Net model provides more accurate predictions, on average.
+
+::: {style="color: lightyellow"}
+### Importance of Features
+:::
+
+
+```{r, warning=FALSE, message=FALSE}
+library(vip)
+vip(cv_en, num_features = 20, geom = "point")
+```

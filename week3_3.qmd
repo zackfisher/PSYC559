@@ -1,5 +1,5 @@
 ---
-title: "Simple Lgostic Regression"
+title: "Simple Logistic Regression"
 format: 
   html: 
     fontsize: 25px

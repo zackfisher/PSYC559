@@ -15,7 +15,7 @@ library(tidymodels)
 ```
 
 ::: {style="color: yellow"}
-## Overview of Multiple Linear Regression
+## Overview of Multiple Logistic Regression
 :::
 
 Multiple logistic regression extends the simple logistic regression framework to include more than one predictor variable:\
