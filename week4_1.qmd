@@ -16,7 +16,7 @@ library(tidymodels)
 ```
 
 ::: {style="color: yellow"}
-## Overview of Regulaßrized Regression
+## Overview of Regularized Regression
 :::
 
 In this chapter we will introduce regularized regression methods, which are powerful tools for feature selection and prediction in high-dimensional settings.

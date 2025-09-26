@@ -66,7 +66,9 @@ format:
     theme: darkly
     css: styles.css
     toc: true
-
+execute:
+  warning: false
+  message: false
 editor: visual
 
 
