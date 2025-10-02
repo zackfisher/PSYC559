@@ -107,7 +107,7 @@ Let's return to our example predicting whether a student likes to use big words 
 
 Let's see how our original decision tree worked.
 
-```{r,show=F,results='hide',message=FALSE,warning=FALSE,cache=TRUE}
+```{r,echo=F,show=F,results='hide',message=FALSE,warning=FALSE,cache=TRUE}
 library(caret)
 library(rpart)
 library(recipes)
