@@ -145,7 +145,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week3_1.html">Regression</a></li><li class="breadcrumb-item"><a href="./week5_1.html">Decision Trees</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week5_1.html">Tree Methods</a></li><li class="breadcrumb-item"><a href="./week5_1.html">Decision Trees</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -300,7 +300,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Regression</span></a>
+ <span class="menu-text">Regression Methods</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -336,10 +336,27 @@ window.Quarto = {
  <span class="menu-text">Regularized Regression</span></a>
   </div>
 </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Tree Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./week5_1.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Decision Trees</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week5_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bagging</span></a>
   </div>
 </li>
       </ul>
@@ -373,7 +390,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week3_1.html">Regression</a></li><li class="breadcrumb-item"><a href="./week5_1.html">Decision Trees</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week5_1.html">Tree Methods</a></li><li class="breadcrumb-item"><a href="./week5_1.html">Decision Trees</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Decision Trees</h1>
 </div>
@@ -461,7 +478,7 @@ window.Quarto = {
 <p>Since the node has 3 “pass” and 3 “fail,” it’s very impure.</p>
 <p>A common measure of impurity is the Gini impurity, which quantifies how often a randomly chosen element would be incorrectly labeled if it was randomly labeled according to the distribution of labels in the subset.</p>
 <p><span class="math display">\[
-Gini = 1 - p(Pass)^2 - p(Fail)^2
+Gini = 1 - p(Pass)^2 + p(Fail)^2
 \]</span><br>
 or more generally,</p>
 <p><span class="math display">\[  
@@ -522,7 +539,14 @@ Like the Gini coefficient, these measures help the algorithm decide the best spl
 </ul>
 <p><span class="math display">\[
 G\_{\text{split}} = \sum_{j=1}^{m} \frac{N_j}{N} , G_j,
-\]</span> where, - $ G_{}$ is the impurity after the split. - <span class="math inline">\(m\)</span> is the number of child nodes. - <span class="math inline">\(N_j\)</span> is the number of samples in child node <span class="math inline">\(j\)</span>. - <span class="math inline">\(N\)</span> is the total number of samples in the parent node. - <span class="math inline">\(G_j\)</span> is the impurity of child node <span class="math inline">\(j\)</span>.</p>
+\]</span> where,</p>
+<ul>
+<li><span class="math inline">\(G_{\text{split}}\)</span> is the impurity after the split.</li>
+<li><span class="math inline">\(m\)</span> is the number of child nodes.</li>
+<li><span class="math inline">\(N_j\)</span> is the number of samples in child node <span class="math inline">\(j\)</span>.</li>
+<li><span class="math inline">\(N\)</span> is the total number of samples in the parent node.</li>
+<li><span class="math inline">\(G_j\)</span> is the impurity of child node <span class="math inline">\(j\)</span>.</li>
+</ul>
 <p>Our goal is to minimize this quantity <span class="math inline">\(G_{\text{split}}\)</span>. The split that results in the lowest weighted impurity is chosen.</p>
 <section id="step-3-information-gain-or-impurity-reduction" class="level3" style="color: orange">
 <h3 class="anchored" data-anchor-id="step-3-information-gain-or-impurity-reduction">Step 3: Information Gain or Impurity Reduction</h3>
@@ -530,7 +554,7 @@ G\_{\text{split}} = \sum_{j=1}^{m} \frac{N_j}{N} , G_j,
 <p>For every feature we can then measure the “goodness” of a split as the reduction in impurity</p>
 <p><span class="math display">\[
 \Delta G = G_{\text{parent}} - G_{\text{split}},
-\]</span> where, - $ G&nbsp;is the reduction in impurity (information gain). - <span class="math inline">\(G_{\text{parent}}\)</span> is the impurity of the parent node. - <span class="math inline">\(G_{\text{split}}\)</span> is the weighted impurity after the split.</p>
+\]</span> where, - <span class="math inline">\(\Delta G\)</span> is the reduction in impurity (information gain). - <span class="math inline">\(G_{\text{parent}}\)</span> is the impurity of the parent node. - <span class="math inline">\(G_{\text{split}}\)</span> is the weighted impurity after the split.</p>
 <section id="step-4-choosing-the-best-feature" class="level3" style="color: orange">
 <h3 class="anchored" data-anchor-id="step-4-choosing-the-best-feature">Step 4: Choosing the Best Feature</h3>
 </section>
@@ -590,9 +614,45 @@ G\_{\text{split}} = \sum_{j=1}^{m} \frac{N_j}{N} , G_j,
 <p>Mathematically, the cost-complexity criterion is:</p>
 <p><span class="math display">\[
 R_{alpha(T)} \;=\; R(T) + \alpha |T|,
-\]</span> where, - <span class="math inline">\(R(T)\)</span>: is the predictor error<br>
-- <span class="math inline">\(T\)</span>: number of terminal nodes.<br>
-- <span class="math inline">\(\alpha\)</span>: penalty hyperparameter (analogous to <code>cp</code>)</p>
+\]</span> where,</p>
+<ul>
+<li><span class="math inline">\(R(T)\)</span>: is the predictor error<br>
+</li>
+<li><span class="math inline">\(T\)</span>: number of terminal nodes.<br>
+</li>
+<li><span class="math inline">\(\alpha\)</span>: penalty hyperparameter (analogous to <code>cp</code>)</li>
+</ul>
+<p>n <code>rpart</code>, decision trees are fit and pruned via <em>cost–complexity</em> (weakest-link) pruning. The optimization target is</p>
+<p><span class="math display">\[
+C_{\alpha}(T) = R(T) + \alpha\,|T|,
+\]</span></p>
+<p>where,</p>
+<ul>
+<li><span class="math inline">\(R(T)\)</span> is the resubstitution error (total impurity) summed over the terminal nodes of tree <span class="math inline">\(T\)</span>,</li>
+<li><span class="math inline">\(|T|\)</span> is the number of terminal nodes (leaves), and</li>
+<li><span class="math inline">\(\alpha \ge 0\)</span> is the per-leaf penalty.</li>
+</ul>
+<p><strong>What is</strong> <span class="math inline">\(R(T)\)</span>?</p>
+<p>The impurity <span class="math inline">\(R(T)\)</span> depends on the learning task; it is always computed as a sum over the leaves <span class="math inline">\(t\)</span> of <span class="math inline">\(T\)</span>.</p>
+<p><strong>Regression trees (<code>method="anova"</code>)</strong></p>
+<p><span class="math display">\[
+R(T)
+=
+\sum_{t \in \mathrm{leaves}(T)}
+\;\sum_{i \in t}
+\bigl(y_i - \bar{y}_t\bigr)^2,
+\qquad
+\bar{y}_t = \frac{1}{N_t}\sum_{i \in t} y_i.
+\]</span></p>
+<p><strong>Regression trees (<code>method="class"</code>)</strong></p>
+<p><span class="math display">\[
+R(T)
+=
+\sum_{t \in \mathrm{leaves}(T)}
+N_t \Bigl( 1 - \max_{k} p_{tk} \Bigr),
+\qquad
+p_{tk} = \frac{1}{N_t}\sum_{i \in t} \mathbf{1}\{y_i = k\}.
+\]</span></p>
 <section id="limitations-of-standard-decision-trees" class="level3" style="color: orange">
 <h3 class="anchored" data-anchor-id="limitations-of-standard-decision-trees">Limitations of Standard Decision Trees</h3>
 </section>
@@ -661,20 +721,40 @@ R_{alpha(T)} \;=\; R(T) + \alpha |T|,
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneLength =</span> <span class="dv">10</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>After training we can visualize the cross-validation results to see how the model’s performance varies with different values of the complexity parameter (<code>cp</code>). Here we see that the model achieves the best accuracy with a <code>cp</code> value of approximately 0.05.</p>
+<p>We can summarize the model to see the results of the cross-validation and the best <code>cp</code> value found.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cv_model_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="week5_1_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>cv_model_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CART 
+
+699 samples
+ 49 predictor
+  2 classes: '0', '1' 
+
+Recipe steps: impute_bag, dummy 
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 629, 629, 629, 629, 629, 629, ... 
+Resampling results across tuning parameters:
+
+  cp           Accuracy   Kappa    
+  0.000000000  0.6666874  0.3251901
+  0.001618123  0.6666874  0.3251901
+  0.004854369  0.7024224  0.3952978
+  0.008090615  0.7195445  0.4312424
+  0.009708738  0.7152588  0.4236310
+  0.011326861  0.7166874  0.4261848
+  0.012297735  0.7166874  0.4261848
+  0.022653722  0.7253416  0.4517328
+  0.025889968  0.7196273  0.4447376
+  0.378640777  0.6093789  0.1565585
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was cp = 0.02265372.</code></pre>
 </div>
 </div>
-</div>
-<p>We can also visualize the final decision tree using the <code>fancyRpartPlot</code> function from the <code>rattle</code> package. This function provides a clear and informative visualization of the decision tree structure, including the splits, nodes, and predicted classes.</p>
+<p>We can also visualize the cross-validation results to see how the model’s performance varies with different values of the complexity parameter (<code>cp</code>). Here we can again see that the model achieves the best accuracy with a <code>cp</code> value of approximately 0.02.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(cv_model_1<span class="sc">$</span>finalModel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cv_model_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -683,16 +763,54 @@ R_{alpha(T)} \;=\; R(T) + \alpha |T|,
 </div>
 </div>
 </div>
-<p>Now, let’s evaluate the model’s performance using cross-validation results and a confusion matrix.</p>
+<p>To look at the final model tree structure in text form we can use the following command.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions on the test set      </span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pred_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model_1, data_train)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create confusion matrix</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">relevel</span>(pred_class, <span class="at">ref =</span> <span class="st">"1"</span>), </span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">reference =</span> <span class="fu">relevel</span>(data_train[,target], <span class="at">ref =</span> <span class="st">"1"</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cv_model_1<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>n= 699 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+ 1) root 699 309 0 (0.5579399 0.4420601)  
+   2) OPN1&lt; 3.5 268  35 0 (0.8694030 0.1305970) *
+   3) OPN1&gt;=3.5 431 157 1 (0.3642691 0.6357309)  
+     6) OPN1&lt; 4.5 245 116 1 (0.4734694 0.5265306)  
+      12) EXT9_X1&lt; 0.5 156  70 0 (0.5512821 0.4487179) *
+      13) EXT9_X1&gt;=0.5 89  30 1 (0.3370787 0.6629213) *
+     7) OPN1&gt;=4.5 186  41 1 (0.2204301 0.7795699) *</code></pre>
+</div>
+</div>
+<p>We can also visualize the final decision tree using the <code>fancyRpartPlot</code> function from the <code>rattle</code> package. This function provides a clear and informative visualization of the decision tree structure, including the splits, nodes, and predicted classes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(cv_model_1<span class="sc">$</span>finalModel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week5_1_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Each rounded square in the plot above represents a decision node, showing the feature used for the split, the threshold value, and the distribution of classes in that node. The leaves (terminal nodes) show the predicted class and the probability of each class.</p>
+<p>The top number in each node is the predicted class, while the bottom number is the probability of that class. For example, in the root node, the model predicts class “0” with a probability of 0.56. This is simply the proportion of people who don’t like using fancy words in the training data.</p>
+<p>The first split of the data occurs on the feature <code>OPN1</code> (I have a rich vocabulary).</p>
+<p>If a respondent (strongly) disagrees with this statement (<code>OPN1 &lt; 3.5</code>), they are directed to the left branch of the tree, forming a leaf. This leaf contains about <code>38%</code> of the respondents and in this leaf <code>0.87</code> of respondents do not agree with the statement “I use difficult words” (<code>OPN8 = 0</code>).</p>
+<p>If a respondent (strongly) agrees with this statement (<code>OPN1 &gt; 3.5</code>), they are directed to the right branch of the tree. In this node <code>0.64</code> of respondents agree with the statement “I use difficult words” (<code>OPN8 = 0</code>).</p>
+<p>The right branch of the tree is then further split on the feature <code>OPN1</code>, separating respondents who very strongly agree with the statement “I have a rich vocabulary” (<code>OPN1 &gt; 4.5</code>) in the right branch, from those who are more neutral or slightly agree (<code>3.5 &lt; OPN1 &lt; 4.5</code>) in the left branch.</p>
+<p>The right branch of the tree ends in a terminal node (leaf) where <code>0.78</code> of respondents strongly agree with the statement “I use difficult words” (<code>OPN8 = 1</code>).</p>
+<p>The left branch of the tree is further split on the feature <code>EXT9</code> (“I don’t mind being the center of attention”).</p>
+<p>Those who agree at all with the statement (<code>EXT9 &lt; 0.5</code>) are directed to the left branch, where <code>22%</code> of the sample reside and the predicted response is <code>0</code> for “I use difficult words” with a probability of <code>0.55</code>.</p>
+<p>Those who endorse (<code>EXT9 &lt; 0.5</code>) at all are directed to the right branch, where <code>13%</code> of the sample remain and the predicted response is <code>1</code> for “I use difficult words” with a probability of <code>0.66</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions on the test set      </span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pred_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model_1, data_train)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create confusion matrix</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">relevel</span>(pred_class, <span class="at">ref =</span> <span class="st">"1"</span>), </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">reference =</span> <span class="fu">relevel</span>(data_train[,target], <span class="at">ref =</span> <span class="st">"1"</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 
@@ -729,7 +847,7 @@ Prediction   1   0
 <p>Let’s read in the Titanic training data from the <code>titanic</code> package and take a look at the data.</p>
 <p>This package comes with data that is pre-split into training and test sets.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>titanic_train <span class="ot">&lt;-</span> titanic<span class="sc">::</span>titanic_train</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>titanic_train <span class="ot">&lt;-</span> titanic<span class="sc">::</span>titanic_train</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here, the features included in <code>titanic_train</code>:</p>
 <ul>
@@ -745,7 +863,7 @@ Prediction   1   0
 </ul>
 <p>We can get basic desciptives using the <code>psych</code> package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(titanic_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(titanic_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            vars   n   mean     sd median trimmed    mad  min    max  range
 PassengerId    1 891 446.00 257.35 446.00  446.00 330.62 1.00 891.00 890.00
@@ -777,56 +895,56 @@ Embarked*   -1.27    -0.16 0.03</code></pre>
 </div>
 <p>Now, let’s fit our regression tree model to the Titanic data. We will predict the <code>Survived</code> variable using all other features in the dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>PassengerId <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Name <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Ticket <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Cabin <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Survived <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(titanic_train<span class="sc">$</span>Survived)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Sex <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(titanic_train<span class="sc">$</span>Sex)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>blueprint_titanic <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Survived <span class="sc">~</span>., <span class="at">data =</span> titanic_train) <span class="sc">%&gt;%</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_bag</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_factor_predictors</span>(), <span class="at">one_hot =</span> <span class="cn">FALSE</span>) </span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>cv_model_titanic <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  blueprint_titanic,</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> titanic_train,</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>),</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneLength =</span> <span class="dv">20</span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>PassengerId <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Name <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Ticket <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Cabin <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Survived <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(titanic_train<span class="sc">$</span>Survived)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>titanic_train<span class="sc">$</span>Sex <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(titanic_train<span class="sc">$</span>Sex)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>blueprint_titanic <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Survived <span class="sc">~</span>., <span class="at">data =</span> titanic_train) <span class="sc">%&gt;%</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_bag</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_factor_predictors</span>(), <span class="at">one_hot =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>cv_model_titanic <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  blueprint_titanic,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> titanic_train,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>),</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneLength =</span> <span class="dv">20</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cv_model_titanic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cv_model_titanic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="week5_1_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="week5_1_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>We can also visualize the final decision tree using the <code>fancyRpartPlot</code> function from the <code>rattle</code> package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(cv_model_titanic<span class="sc">$</span>finalModel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fancyRpartPlot</span>(cv_model_titanic<span class="sc">$</span>finalModel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="week5_1_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="week5_1_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Now, let’s evaluate the model’s performance using cross-validation results and a confusion matrix.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions on the test set      </span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>pred_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model_titanic, titanic_train)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create confusion matrix</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">relevel</span>(pred_class, <span class="at">ref =</span> <span class="st">"1"</span>), </span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">reference =</span> <span class="fu">relevel</span>(titanic_train[,<span class="st">"Survived"</span>], <span class="at">ref =</span> <span class="st">"1"</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions on the test set      </span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>pred_class <span class="ot">&lt;-</span> <span class="fu">predict</span>(cv_model_titanic, titanic_train)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create confusion matrix</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">relevel</span>(pred_class, <span class="at">ref =</span> <span class="st">"1"</span>), </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">reference =</span> <span class="fu">relevel</span>(titanic_train[,<span class="st">"Survived"</span>], <span class="at">ref =</span> <span class="st">"1"</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Confusion Matrix and Statistics
 

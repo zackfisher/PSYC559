@@ -47,7 +47,7 @@ The name comes from the fact that the model looks like a flowchart: you start at
 ### Overview: How do Decision Trees Work?
 :::
 
-The tree is built by repeatedly asking: 
+The tree is built by repeatedly asking:
 
 > Which feature and split best separates the data?
 
@@ -91,7 +91,7 @@ Since the node has 3 “pass” and 3 “fail,” it’s very impure.
 A common measure of impurity is the Gini impurity, which quantifies how often a randomly chosen element would be incorrectly labeled if it was randomly labeled according to the distribution of labels in the subset.
 
 $$
-Gini = 1 - p(Pass)^2 - p(Fail)^2
+Gini = 1 - p(Pass)^2 + p(Fail)^2
 $$\
 or more generally,
 
@@ -181,13 +181,13 @@ For each candidate feature and possible split point:
 
 $$
 G\_{\text{split}} = \sum_{j=1}^{m} \frac{N_j}{N} , G_j,
-$$
-where,
-- $ G\_{\text{split}}$ is the impurity after the split. 
-- $m$ is the number of child nodes. 
-- $N_j$ is the number of samples in child node $j$. 
-- $N$ is the total number of samples in the parent node. 
-- $G_j$ is the impurity of child node $j$.
+$$ where,
+
+-   $G_{\text{split}}$ is the impurity after the split.
+-   $m$ is the number of child nodes.
+-   $N_j$ is the number of samples in child node $j$.
+-   $N$ is the total number of samples in the parent node.
+-   $G_j$ is the impurity of child node $j$.
 
 Our goal is to minimize this quantity $G_{\text{split}}$. The split that results in the lowest weighted impurity is chosen.
 
@@ -199,11 +199,7 @@ For every feature we can then measure the “goodness” of a split as the reduc
 
 $$
 \Delta G = G_{\text{parent}} - G_{\text{split}},
-$$ 
-where, 
-- $ \Delta G\ is the reduction in impurity (information gain). 
-- $G_{\text{parent}}$ is the impurity of the parent node. 
-- $G_{\text{split}}$ is the weighted impurity after the split.
+$$ where, - $\Delta G$ is the reduction in impurity (information gain). - $G_{\text{parent}}$ is the impurity of the parent node. - $G_{\text{split}}$ is the weighted impurity after the split.
 
 ::: {style="color: orange"}
 ### Step 4: Choosing the Best Feature
@@ -257,14 +253,13 @@ Another approach to controlling tree complexity is pruning, which involves remov
 
 Pruning can be done in two main ways:
 
-
 **Post-Pruning**
 
 This involves growing the full tree and then removing branches that do not improve performance on a validation set. This can be done by evaluating the tree's performance after removing certain branches and keeping the changes that lead to better generalization.
 
 **Pre-Pruning**
 
-We could also add a penalty for tree complexity to the loss function used to evaluate splits. This encourages the model to prefer simpler trees that still perform well. Smaller penalties will lead to larger trees, while larger penalties will lead to smaller trees. 
+We could also add a penalty for tree complexity to the loss function used to evaluate splits. This encourages the model to prefer simpler trees that still perform well. Smaller penalties will lead to larger trees, while larger penalties will lead to smaller trees.
 
 As with regularization, we would evaluate multiple models across a spectrum of hyperparamaters (penalty parameters) and then use cross-validation to identify the optimal value that generalizes best to unseen data.
 
@@ -272,21 +267,59 @@ In the `rpart` package, which we will use later, the complexity parameter `cp` c
 
 **How `cp` Works**
 
-- Each split in a tree must reduce the lack of fit by at least `cp × error`.  
-- If the reduction is smaller, the split is pruned away.  
-- Large `cp` → smaller tree (simpler, more bias, less variance).  
-- Small `cp` → larger tree (complex, less bias, more variance).
+-   Each split in a tree must reduce the lack of fit by at least `cp × error`.\
+-   If the reduction is smaller, the split is pruned away.\
+-   Large `cp` → smaller tree (simpler, more bias, less variance).\
+-   Small `cp` → larger tree (complex, less bias, more variance).
 
 Mathematically, the cost-complexity criterion is:
 
 $$
 R_{alpha(T)} \;=\; R(T) + \alpha |T|,
-$$
-where,
-- $R(T)$: is the predictor error  
-- $T$: number of terminal nodes.  
-- $\alpha$: penalty hyperparameter (analogous to `cp`)
+$$ where,
 
+-   $R(T)$: is the predictor error\
+-   $T$: number of terminal nodes.\
+-   $\alpha$: penalty hyperparameter (analogous to `cp`)
+
+n `rpart`, decision trees are fit and pruned via *cost--complexity* (weakest-link) pruning. The optimization target is
+
+$$
+C_{\alpha}(T) = R(T) + \alpha\,|T|,
+$$
+
+where,
+
+-   $R(T)$ is the resubstitution error (total impurity) summed over the terminal nodes of tree $T$,
+-   $|T|$ is the number of terminal nodes (leaves), and
+-   $\alpha \ge 0$ is the per-leaf penalty.
+
+**What is** $R(T)$?
+
+The impurity $R(T)$ depends on the learning task; it is always computed as a sum over the leaves $t$ of $T$.
+
+**Regression trees (`method="anova"`)**
+
+$$
+R(T)
+=
+\sum_{t \in \mathrm{leaves}(T)}
+\;\sum_{i \in t}
+\bigl(y_i - \bar{y}_t\bigr)^2,
+\qquad
+\bar{y}_t = \frac{1}{N_t}\sum_{i \in t} y_i.
+$$
+
+**Regression trees (`method="class"`)**
+
+$$
+R(T)
+=
+\sum_{t \in \mathrm{leaves}(T)}
+N_t \Bigl( 1 - \max_{k} p_{tk} \Bigr),
+\qquad
+p_{tk} = \frac{1}{N_t}\sum_{i \in t} \mathbf{1}\{y_i = k\}.
+$$
 
 ::: {style="color: orange"}
 ### Limitations of Standard Decision Trees
@@ -314,7 +347,7 @@ In their standard form, decision trees have several limitations:
 ## Implementation in R
 :::
 
-In R we can use the `rpart` package to create decision trees. The `rpart` package implements the widely popular CART (Classification and Regression Trees) algorithm for building decision trees. 
+In R we can use the `rpart` package to create decision trees. The `rpart` package implements the widely popular CART (Classification and Regression Trees) algorithm for building decision trees.
 
 ::: {style="color: orange"}
 ### Decision Trees: Personality Example
@@ -373,10 +406,22 @@ cv_model_1 <- train(
 )
 ```
 
-After training we can visualize the cross-validation results to see how the model's performance varies with different values of the complexity parameter (`cp`). Here we see that the model achieves the best accuracy with a `cp` value of approximately 0.05.
+We can summarize the model to see the results of the cross-validation and the best `cp` value found.
+
+```{r,warning=FALSE,message=FALSE}
+cv_model_1
+```
+
+We can also visualize the cross-validation results to see how the model's performance varies with different values of the complexity parameter (`cp`). Here we can again see that the model achieves the best accuracy with a `cp` value of approximately 0.02.
 
 ```{r,warning=FALSE,message=FALSE}
 ggplot(cv_model_1)
+```
+
+To look at the final model tree structure in text form we can use the following command.
+
+```{r,warning=FALSE,message=FALSE}
+cv_model_1$finalModel
 ```
 
 We can also visualize the final decision tree using the `fancyRpartPlot` function from the `rattle` package. This function provides a clear and informative visualization of the decision tree structure, including the splits, nodes, and predicted classes.
@@ -385,7 +430,25 @@ We can also visualize the final decision tree using the `fancyRpartPlot` functio
 fancyRpartPlot(cv_model_1$finalModel)
 ```
 
-Now, let's evaluate the model's performance using cross-validation results and a confusion matrix.
+Each rounded square in the plot above represents a decision node, showing the feature used for the split, the threshold value, and the distribution of classes in that node. The leaves (terminal nodes) show the predicted class and the probability of each class.
+
+The top number in each node is the predicted class, while the bottom number is the probability of that class. For example, in the root node, the model predicts class "0" with a probability of 0.56. This is simply the proportion of people who don't like using fancy words in the training data.
+
+The first split of the data occurs on the feature `OPN1` (I have a rich vocabulary).
+
+If a respondent (strongly) disagrees with this statement (`OPN1 < 3.5`), they are directed to the left branch of the tree, forming a leaf. This leaf contains about `38%` of the respondents and in this leaf `0.87` of respondents do not agree with the statement "I use difficult words" (`OPN8 = 0`).
+
+If a respondent (strongly) agrees with this statement (`OPN1 > 3.5`), they are directed to the right branch of the tree. In this node `0.64` of respondents agree with the statement "I use difficult words" (`OPN8 = 0`).
+
+The right branch of the tree is then further split on the feature `OPN1`, separating respondents who very strongly agree with the statement "I have a rich vocabulary" (`OPN1 > 4.5`) in the right branch, from those who are more neutral or slightly agree (`3.5 < OPN1 < 4.5`) in the left branch.
+
+The right branch of the tree ends in a terminal node (leaf) where `0.78` of respondents strongly agree with the statement "I use difficult words" (`OPN8 = 1`).
+
+The left branch of the tree is further split on the feature `EXT9` ("I don't mind being the center of attention").
+
+Those who agree at all with the statement (`EXT9 < 0.5`) are directed to the left branch, where `22%` of the sample reside and the predicted response is `0` for "I use difficult words" with a probability of `0.55`.
+
+Those who endorse (`EXT9 < 0.5`) at all are directed to the right branch, where `13%` of the sample remain and the predicted response is `1` for "I use difficult words" with a probability of `0.66`.
 
 ```{r, warning = FALSE, message=FALSE}
 # Make predictions on the test set      
@@ -399,11 +462,9 @@ confusionMatrix(
 
 ```
 
-
 ::: {style="color: orange"}
 ### Decision Trees: Titanic Example
 :::
-
 
 Let's read in the Titanic training data from the `titanic` package and take a look at the data.
 
@@ -415,14 +476,14 @@ titanic_train <- titanic::titanic_train
 
 Here, the features included in `titanic_train`:
 
--   `Survived`: Whether the passenger survived (1) or not (0).  
+-   `Survived`: Whether the passenger survived (1) or not (0).\
 -   `Pclass`: Passenger class (1st, 2nd, 3rd).
--   `Sex`:  Sex of passenger.
+-   `Sex`: Sex of passenger.
 -   `Age`: Age of the passenger.
 -   `SibSp`: Number of siblings/spouses aboard.
 -   `Parch`: Number of parents/children aboard.
 -   `Fare`: Ticket fare.
--   `Embarked`: Port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton). 
+-   `Embarked`: Port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton).
 
 We can get basic desciptives using the `psych` package.
 
@@ -454,12 +515,11 @@ cv_model_titanic <- train(
 
 ```
 
-
 ```{r,warning=FALSE,message=FALSE}
 ggplot(cv_model_titanic)
 ```
 
-We can also visualize the final decision tree using the `fancyRpartPlot` function from the `rattle` package. 
+We can also visualize the final decision tree using the `fancyRpartPlot` function from the `rattle` package.
 
 ```{r,warning=FALSE,message=FALSE}
 fancyRpartPlot(cv_model_titanic$finalModel)
@@ -478,4 +538,3 @@ confusionMatrix(
 )
 
 ```
-
