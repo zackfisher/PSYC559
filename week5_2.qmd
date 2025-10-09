@@ -13,6 +13,11 @@ bibliography: references.bib
 data <- readRDS("data/data.RDS")
 library(dplyr)
 library(tidymodels)
+library(caret)
+library(rpart)
+library(recipes)
+library(rsample)
+library(ipred)
 ```
 
 ::: {style="color: yellow"}
@@ -37,55 +42,53 @@ Each bootstrap sample is of the same size as the original dataset but may contai
 
 ![https://bradleyboehmke.github.io/HOML/images/bootstrap-scheme.png](images/bootstrap.png){width="800"}
 
+Since samples are drawn with replacement, each bootstrap sample is likely to contain duplicate values.
 
-Since samples are drawn with replacement, each bootstrap sample is likely to contain duplicate values. 
+In fact, on average, $63.21\%$ of the original sample ends up in any particular bootstrap sample.
 
-In fact, on average, $63.21\%$ of the original sample ends up in any particular bootstrap sample. 
-
-The original observations not contained in a particular bootstrap sample are considered **out-of-bag (OOB)**. 
+The original observations not contained in a particular bootstrap sample are considered **out-of-bag (OOB)**.
 
 When bootstrapping, a model can be built on the selected samples and validated on the OOB samples; this is often done, for example, in random forests (see Chapter 11).
-
 
 ::: {style="color: orange"}
 ### Boostrapping Example
 :::
 
-Consider a dataset with 12 observations. 
+Consider a dataset with 12 observations.
 
 The original dataset might look like this:
 
-| ID | StudyHours | Attendance | Passed |
-|----|------------|------------|--------|
-| 1  | 2.0        | Low        | No     |
-| 2  | 3.5        | Low        | No     |
-| 3  | 4.0        | Low        | No     |
-| 4  | 4.5        | Med        | No     |
-| 5  | 5.0        | Med        | No     |
-| 6  | 5.5        | Med        | Yes    |
-| 7  | 6.0        | Med        | Yes    |
-| 8  | 6.5        | High       | Yes    |
-| 9  | 7.0        | High       | Yes    |
-| 10 | 7.5        | High       | Yes    |
-| 11 | 8.0        | High       | Yes    |
-| 12 | 8.5        | High       | Yes    |
+| ID  | StudyHours | Attendance | Passed |
+|-----|------------|------------|--------|
+| 1   | 2.0        | Low        | No     |
+| 2   | 3.5        | Low        | No     |
+| 3   | 4.0        | Low        | No     |
+| 4   | 4.5        | Med        | No     |
+| 5   | 5.0        | Med        | No     |
+| 6   | 5.5        | Med        | Yes    |
+| 7   | 6.0        | Med        | Yes    |
+| 8   | 6.5        | High       | Yes    |
+| 9   | 7.0        | High       | Yes    |
+| 10  | 7.5        | High       | Yes    |
+| 11  | 8.0        | High       | Yes    |
+| 12  | 8.5        | High       | Yes    |
 
 A bootstrap sample might look like this:
 
-| ID | StudyHours | Attendance | Passed |
-|----|------------|------------|--------|
-| 3  | 4.0        | Low        | No     |
-| 5  | 5.0        | Med        | No     |
-| 7  | 6.0        | Med        | Yes    |
-| 2  | 3.5        | Low        | No     |
-| 9  | 7.0        | High       | Yes    |
-| 12 | 8.5        | High       | Yes    |
-| 1  | 2.0        | Low        | No     |
-| 6  | 5.5        | Med        | Yes    |
-| 4  | 4.5        | Med        | No     |
-| 8  | 6.5        | High       | Yes    |
-| 10 | 7.5        | High       | Yes    |
-| 3  | 4.0        | Low        | No     |
+| ID  | StudyHours | Attendance | Passed |
+|-----|------------|------------|--------|
+| 3   | 4.0        | Low        | No     |
+| 5   | 5.0        | Med        | No     |
+| 7   | 6.0        | Med        | Yes    |
+| 2   | 3.5        | Low        | No     |
+| 9   | 7.0        | High       | Yes    |
+| 12  | 8.5        | High       | Yes    |
+| 1   | 2.0        | Low        | No     |
+| 6   | 5.5        | Med        | Yes    |
+| 4   | 4.5        | Med        | No     |
+| 8   | 6.5        | High       | Yes    |
+| 10  | 7.5        | High       | Yes    |
+| 3   | 4.0        | Low        | No     |
 
 In this example, the bootstrap sample includes some observations multiple times (e.g., ID 3 appears twice), while others (e.g., ID 11) are not included at all. The observations not included in the bootstrap sample (IDs 11) are considered out-of-bag (OOB) samples.
 
@@ -95,15 +98,13 @@ In this example, the bootstrap sample includes some observations multiple times 
 
 Bootstrapping helps to create diverse training datasets for building multiple decision trees. Each tree is trained on a different bootstrap sample, which introduces variability among the trees.
 
-When predictions are made, the results from all the trees are aggregated (e.g., by majority voting for classification or averaging for regression). This aggregation helps to smooth out the predictions and reduce the overall variance of the model. 
-
-
+When predictions are made, the results from all the trees are aggregated (e.g., by majority voting for classification or averaging for regression). This aggregation helps to smooth out the predictions and reduce the overall variance of the model.
 
 ::: {style="color: yellow"}
 ## Bagging in R
 :::
 
-Let's return to our example predicting whether a student likes to use big words based on their personality features. 
+Let's return to our example predicting whether a student likes to use big words based on their personality features.
 
 Let's see how our original decision tree worked.
 
@@ -140,6 +141,10 @@ cv_model_1 <- train(
   trControl = trainControl(method = "cv", number = 10),
   tuneLength = 10
 )
+
+
+vip::vip(cv_model_1)
+
 ```
 
 ```{r}
@@ -147,7 +152,7 @@ cv_model_1 <- train(
 pred_class <- predict(cv_model_1, data_test)
 
 # create confusion matrix
-confusionMatrix(
+caret::confusionMatrix(
   data = relevel(pred_class, ref = "1"), 
   reference = relevel(data_test[,"OPN8"], ref = "1")
 )
@@ -176,7 +181,7 @@ Let's look at the model summary and the prediction error. Compared to our non-ba
 pred_class <- predict(cv_bag1, data_test)
 
 # create confusion matrix
-confusionMatrix(
+caret::confusionMatrix(
   data = relevel(pred_class, ref = "1"), 
   reference = relevel(data_test[,"OPN8"], ref = "1")
 )
@@ -233,4 +238,3 @@ list(
   grid = cbind(grid, votes_yes = round(votes_yes, 3), bagged_class = bagged_class)
 )
 ```
-

@@ -493,6 +493,8 @@ describe(titanic_train)
 
 Now, let's fit our regression tree model to the Titanic data. We will predict the `Survived` variable using all other features in the dataset.
 
+
+
 ```{r,warning=FALSE,message=FALSE,cache=TRUE}
 titanic_train$PassengerId <- NULL
 titanic_train$Name <- NULL
