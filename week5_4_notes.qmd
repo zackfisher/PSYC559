@@ -1,0 +1,527 @@
+---
+title: "Gradient Boosting"
+format: 
+  html: 
+    fontsize: 25px
+    code-folders: true
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
+data <- readRDS("data/data.RDS")
+library(dplyr)
+library(tidymodels)
+library(caret)
+library(rpart)
+library(recipes)
+library(rsample)
+library(ipred)
+```
+
+::: {style="color: yellow"}
+## Overview of Gradient Boosting and Random Forests
+:::
+
+Before introducing gradient boosting, let's revisit bagging and random forests.
+
+This is important as all three methods share a common goal: improving the performance of decision trees by reducing variance (and bias) through ensemble learning.
+
+Remember, this is all because a single decision tree can be quite unstable (e.g. have high variance) and prone to overfitting our sample data. These ensemble methods reduce that variance (and sometimes bias) by combining multiple trees.
+
+::: {style="color: orange"}
+### Bagging Revisited
+:::
+
+The key idea in bagging (bootstrap aggregation) is to build many trees independently on bootstrapped samples of the training data and aggregate their predictions.
+
+Each tree is trained in parallel as separate models and we don't share information between them.
+
+Because each tree sees a slightly different sample, their errors “average out,” reducing the variance.
+
+::: {style="color: lightyellow"}
+#### Bagging Algorithm
+:::
+
+1.  Draw many bootstrap samples from the training data.
+2.  Train a decision tree on each sample (often grown fully, with no pruning).
+3.  For regression, average predictions across trees.
+4.  For classification, take the majority vote.
+
+::: {style="color: orange"}
+### Random Forests Revisited
+:::
+
+Remember, one complaint we had about bagging is that often trees will end up looking similar (correlated), reducing the benefit of averaging.
+
+The key idea of random forests is to add an additional layer of randomness by selecting a random subset of features at each split in the tree.
+
+This further decorrelates the trees, leading to a more diverse ensemble and better performance.
+
+::: {style="color: lightyellow"}
+#### Random Forest Algorithm
+:::
+
+1.  Draw many bootstrap samples from the training data.
+2.  Train a decision tree on each sample (often grown fully, with no pruning).
+    -   At each split, consider only a random subset of predictors (the `mtry` parameter in R).
+3.  For regression, average predictions across trees.
+4.  For classification, take the majority vote.
+
+::: {style="color: orange"}
+### Introducing Boosting
+:::
+
+In our previous improvements to classic decision trees we focused on reducing variance by looking across many independent trees.
+
+Boosting takes a different approach by focusing on reducing both bias and variance through a sequential learning process.
+
+Instead of building trees independently, boosting builds them sequentially, where each new tree focuses on the errors (residuals or misclassifications) of the previous ones.
+
+-   Each tree is typically **small (shallow)** — often just a “stump” (one or two splits).\
+-   The model is built step-by-step, where each new tree “corrects” the mistakes of the ensemble so far.
+
+**Algorithm sketch (simplified gradient boosting):**
+
+1\. Start with an initial prediction (e.g., the mean of *y*).
+
+2\. Compute the residuals (the errors) of that model.
+
+3\. Fit a small tree to those residuals.
+
+4\. Add this tree to the model with a small learning rate (shrinkage).
+
+5\. Repeat for many iterations.
+
+**Result:**\
+- Gradually reduces both bias and variance.\
+- Often achieves better predictive performance than bagging/random forests, but is more sensitive to noise and tuning (learning rate, tree depth, number of trees).
+
+Intuitive Analogy
+
+| Method | Analogy |
+|------------------------------------|------------------------------------|
+| **Bagging** | Many students independently take a test; average their answers. |
+| **Random Forest** | Many students take the test, but each uses a different subset of notes — encouraging diverse answers. |
+| **Boosting** | One student takes the test multiple times, learning from each mistake and improving step by step. |
+
+```{r}
+library(caret)
+library(rpart)
+library(recipes)
+library(rsample)
+library(ranger)
+library(vip)
+library(gbm)
+
+data <- read.csv("data/data-final-shuffled.csv")
+dichotomous_vars <- colnames(data)[sapply(data, max) == 1]
+character_vars   <- colnames(data)[sapply(data, class) == "character"]
+cat_vars         <- c(character_vars,dichotomous_vars)
+data[cat_vars ]  <- lapply(data[cat_vars ], as.factor)
+
+data$OPN8 <- as.numeric(data$OPN8) - 1  # convert to 0/1
+
+target <- "OPN8"
+data <- data[!is.na(data[,target]),]
+
+set.seed(123)
+split <- initial_split(data, prop = 0.7, strata = target)
+data_train  <- training(split)
+data_test   <- testing(split)
+
+formula_string <- as.formula(paste(target, "~ ."))
+
+blueprint <- recipe(formula_string, data = data_train) %>%
+  step_impute_bag(all_predictors()) %>%
+  step_dummy(all_factor_predictors(), one_hot = FALSE) 
+
+
+set.seed(123)  # for reproducibility
+gbm1 <- gbm(
+  formula = OPN8 ~ .,
+  data = data_train,
+  distribution = "bernoulli",  # SSE loss function
+  n.trees = 5000,
+  shrinkage = 0.1,
+  interaction.depth = 3,
+  n.minobsinnode = 10,
+  cv.folds = 10
+)
+
+# find index for number trees with minimum CV error
+best <- which.min(gbm1$cv.error)
+
+gbm.perf(gbm1, method = "cv")
+
+hyper_grid <- expand.grid(
+  learning_rate = c(0.3, 0.1, 0.05, 0.01, 0.005),
+  RMSE = NA,
+  trees = NA,
+  time = NA
+)
+
+# execute grid search
+for(i in seq_len(nrow(hyper_grid))) {
+
+  # fit gbm
+  set.seed(123)  # for reproducibility
+  train_time <- system.time({
+    m <- gbm(
+      formula = OPN8 ~ .,
+      data = data_train,
+      distribution = "bernoulli",
+      n.trees = 5000, 
+      shrinkage = hyper_grid$learning_rate[i], 
+      interaction.depth = 3, 
+      n.minobsinnode = 10,
+      cv.folds = 10 
+   )
+  })
+  
+  # add SSE, trees, and training time to results
+  hyper_grid$RMSE[i]  <- min(m$cv.error)
+  hyper_grid$trees[i] <- which.min(m$cv.error)
+  hyper_grid$Time[i]  <- train_time[["elapsed"]]
+
+}
+
+
+arrange(hyper_grid, RMSE)
+
+# search grid
+hyper_grid <- expand.grid(
+  n.trees = 6000,
+  shrinkage = 0.01,
+  interaction.depth = c(3, 5, 7),
+  n.minobsinnode = c(5, 10, 15)
+)
+
+# create model fit function
+model_fit <- function(n.trees, shrinkage, interaction.depth, n.minobsinnode) {
+  set.seed(123)
+  m <- gbm(
+    formula = OPN8 ~ .,
+    data = data_train,
+    distribution = "bernoulli",
+    n.trees = n.trees,
+    shrinkage = shrinkage,
+    interaction.depth = interaction.depth,
+    n.minobsinnode = n.minobsinnode,
+    cv.folds = 10
+  )
+  # compute RMSE
+  sqrt(min(m$cv.error))
+}
+
+# perform search grid with functional programming
+hyper_grid$rmse <- purrr::pmap_dbl(
+  hyper_grid,
+  ~ model_fit(
+    n.trees = ..1,
+    shrinkage = ..2,
+    interaction.depth = ..3,
+    n.minobsinnode = ..4
+    )
+)
+
+# results
+arrange(hyper_grid, rmse)
+
+
+set.seed(123)
+m_final <- gbm(
+    formula = OPN8 ~ .,
+    data = data_train,
+    distribution = "bernoulli",
+    n.trees = 6000,
+    shrinkage = 0.01,
+    interaction.depth = 3,
+    n.minobsinnode = 10,
+    cv.folds = 10
+  )
+
+pred_class <- ifelse(predict(m_final, data_test,type = "response") <0.5,0,1)
+
+# create confusion matrix
+confusionMatrix(
+  data = as.factor(pred_class), 
+  reference = as.factor(data_test[,"OPN8"])
+)
+```
+
+::: {style="color: orange"}
+### Gradient Boosting in R
+:::
+
+To use gradient boosting in R, we can use the `xgboost` package.
+
+Let's take a look at the tunable hyperprameters for the `xgbTree` model:
+
+```{r,message=FALSE,warning=FALSE,cache=TRUE}
+caret::getModelInfo()$xgbTree$parameters
+```
+
+::: {style="color: lightyellow"}
+#### Number of Boosting Iterations
+:::
+
+To get reasonable running time while testing hyperparameter combinations with `caret` we probably don’t want to go over $1,000$. Then, we want to find a good enough learning rate for this number of trees, as for lower learning rates 1000 iterations might not be enough.
+
+::: {style="color: lightyellow"}
+#### Max Tree Depth
+:::
+
+::: {style="color: lightyellow"}
+#### Shrinkage
+:::
+
+::: {style="color: lightyellow"}
+#### Minimum Loss Reduction
+:::
+
+::: {style="color: lightyellow"}
+#### Subsample Ratio of Columns
+:::
+
+::: {style="color: lightyellow"}
+#### Minimum Sum of Instance Weight
+:::
+
+::: {style="color: lightyellow"}
+#### Subsample Percentage
+:::
+
+A Kappa of 0.5 is not bad for this dataset, but we can probably do better with more tuning.
+
+```{r,message=FALSE,warning=FALSE,cache=TRUE}
+library(caret)
+library(rpart)
+library(recipes)
+library(rsample)
+library(ranger)
+library(vip)
+
+data <- read.csv("data/data-final-shuffled.csv")
+dichotomous_vars <- colnames(data)[sapply(data, max) == 1]
+character_vars   <- colnames(data)[sapply(data, class) == "character"]
+cat_vars         <- c(character_vars,dichotomous_vars)
+data[cat_vars ]  <- lapply(data[cat_vars ], as.factor)
+
+target <- "OPN8"
+data <- data[!is.na(data[,target]),]
+
+set.seed(123)
+split <- initial_split(data, prop = 0.7, strata = target)
+data_train  <- training(split)
+data_test   <- testing(split)
+
+formula_string <- as.formula(paste(target, "~ ."))
+
+blueprint <- recipe(formula_string, data = data_train) %>%
+  step_impute_bag(all_predictors()) %>%
+  step_dummy(all_factor_predictors(), one_hot = FALSE) 
+
+
+# note to start nrounds from 200, as smaller learning rates result in errors so
+# big with lower starting points that they'll mess the scales
+tune_grid <- expand.grid(
+  nrounds = seq(from = 200, to = 1000, by = 50),
+  eta = c(0.025, 0.05, 0.1, 0.3),
+  max_depth = c(2, 3, 4, 5, 6),
+  gamma = 0,
+  colsample_bytree = 1,
+  min_child_weight = 1,
+  subsample = 1
+)
+
+tune_control <- caret::trainControl(
+  method = "cv", # cross-validation
+  number = 10, # with n folds 
+  #index = createFolds(tr_treated$Id_clean), # fix the folds
+  verboseIter = FALSE, # no training log
+  allowParallel = TRUE # FALSE for reproducible results 
+)
+
+xgb_tune <- caret::train(
+  blueprint,
+  data = data_train,
+  metric = "Kappa",
+  trControl = tune_control,
+  tuneGrid = tune_grid,
+  method = "xgbTree",
+  verbose = TRUE
+)
+
+
+
+# helper function for the plots
+tuneplot <- function(x) {
+  ggplot(x) +
+    coord_cartesian(ylim = c(max(x$results$Kappa), min(x$results$Kappa))) +
+    labs(y = "Kappa") +
+    scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+
+    
+    
+    theme_bw()
+}
+
+tuneplot(xgb_tune)
+
+xgb_tune$bestTune
+
+tune_grid2 <- expand.grid(
+  nrounds = seq(from = 50, to = 1000, by = 50),
+  eta = xgb_tune$bestTune$eta,
+  max_depth = ifelse(xgb_tune$bestTune$max_depth == 2,
+    c(xgb_tune$bestTune$max_depth:4),
+    xgb_tune$bestTune$max_depth - 1:xgb_tune$bestTune$max_depth + 1),
+  gamma = 0,
+  colsample_bytree = 1,
+  min_child_weight = c(1, 2, 3),
+  subsample = 1
+)
+
+xgb_tune2 <- caret::train(
+  blueprint,
+  data = data_train,
+  metric = "Kappa",
+  trControl = tune_control,
+  tuneGrid = tune_grid2,
+  method = "xgbTree",
+  verbose = TRUE
+)
+
+
+tuneplot(xgb_tune2)
+
+xgb_tune2$bestTune
+
+
+tune_grid3 <- expand.grid(
+  nrounds = seq(from = 50, to = 1000, by = 50),
+  eta = xgb_tune$bestTune$eta,
+  max_depth = xgb_tune2$bestTune$max_depth,
+  gamma = 0,
+  colsample_bytree = c(0.4, 0.6, 0.8, 1.0),
+  min_child_weight = xgb_tune2$bestTune$min_child_weight,
+  subsample = c(0.5, 0.75, 1.0)
+)
+
+xgb_tune3 <- caret::train(
+  blueprint,
+  data = data_train,
+  metric = "Kappa",
+  trControl = tune_control,
+  tuneGrid = tune_grid3,
+  method = "xgbTree",
+  verbose = TRUE
+)
+
+
+tuneplot(xgb_tune3)
+
+
+
+tune_grid4 <- expand.grid(
+  nrounds = seq(from = 50, to = 1000, by = 50),
+  eta = xgb_tune$bestTune$eta,
+  max_depth = xgb_tune2$bestTune$max_depth,
+  gamma = c(0, 0.05, 0.1, 0.5, 0.7, 0.9, 1.0),
+  colsample_bytree = xgb_tune3$bestTune$colsample_bytree,
+  min_child_weight = xgb_tune2$bestTune$min_child_weight,
+  subsample = xgb_tune3$bestTune$subsample
+)
+
+xgb_tune4 <- caret::train(
+  blueprint,
+  data = data_train,
+  metric = "Kappa",
+  trControl = tune_control,
+  tuneGrid = tune_grid4,
+  method = "xgbTree",
+  verbose = TRUE
+)
+
+
+tuneplot(xgb_tune4)
+
+xgb_tune4$bestTune
+
+
+tune_grid5 <- expand.grid(
+  nrounds = seq(from = 100, to = 10000, by = 100),
+  eta = c(0.01, 0.015, 0.025, 0.05, 0.1),
+  max_depth = xgb_tune2$bestTune$max_depth,
+  gamma = xgb_tune4$bestTune$gamma,
+  colsample_bytree = xgb_tune3$bestTune$colsample_bytree,
+  min_child_weight = xgb_tune2$bestTune$min_child_weight,
+  subsample = xgb_tune3$bestTune$subsample
+)
+
+xgb_tune5 <- caret::train(
+  blueprint,
+  data = data_train,
+  metric = "Kappa",
+  trControl = tune_control,
+  tuneGrid = tune_grid5,
+  method = "xgbTree",
+  verbose = TRUE
+)
+
+
+tuneplot(xgb_tune5)
+
+xgb_tune5$bestTune
+
+
+(final_grid <- expand.grid(
+  nrounds = xgb_tune5$bestTune$nrounds,
+  eta = xgb_tune5$bestTune$eta,
+  max_depth = xgb_tune5$bestTune$max_depth,
+  gamma = xgb_tune5$bestTune$gamma,
+  colsample_bytree = xgb_tune5$bestTune$colsample_bytree,
+  min_child_weight = xgb_tune5$bestTune$min_child_weight,
+  subsample = xgb_tune5$bestTune$subsample
+))
+
+xgb_tune_final <- caret::train(
+  blueprint,
+  data = data_train,
+  metric = "Kappa",
+  trControl = tune_control,
+  tuneGrid = final_grid,
+  method = "xgbTree",
+  verbose = TRUE
+)
+
+
+pred_class_xgb <- predict(xgb_tune_final, data_test)
+
+# create confusion matrix
+m_xgb <- confusionMatrix(
+  data = relevel(pred_class_xgb, ref = "1"), 
+  reference = relevel(data_test[,"OPN8"], ref = "1")
+)
+
+m_xgb$overall[1:4]
+
+xgb_tune3$bestTune
+
+    xgbGrid <- expand.grid(nrounds = c(50, 100, 150),
+                           max_depth = c(2, 4, 6),
+                           eta = c(0.01, 0.1),
+                           gamma = c(0, 0.1),
+                           colsample_bytree = c(0.7, 1),
+                           min_child_weight = c(1, 5),
+                           subsample = c(0.7, 1))
+
+    xgb_model <- train(outcome ~ .,
+                       data = your_data,
+                       method = "xgbTree",
+                       trControl = fitControl,
+                       tuneGrid = xgbGrid,
+                       metric = "ROC") # or other relevant metric
+```

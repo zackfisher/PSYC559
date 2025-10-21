@@ -1,0 +1,103 @@
+---
+title: "Gradient Boosting"
+format: 
+  html: 
+    fontsize: 25px
+    code-folders: true
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
+data <- readRDS("data/data.RDS")
+library(dplyr)
+library(tidymodels)
+library(caret)
+library(rpart)
+library(recipes)
+library(rsample)
+library(ipred)
+```
+
+::: {style="color: yellow"}
+## Overview of Gradient Boosting and Random Forests
+:::
+
+Before introducing gradient boosting, let's revisit bagging and random forests.
+
+This is important as all three methods share a common goal: improving the performance of decision trees by reducing variance (and bias) through ensemble learning.
+
+Remember, this is all because a single decision tree can be quite unstable (e.g. have high variance) and prone to overfitting our sample data. These ensemble methods reduce that variance (and sometimes bias) by combining multiple trees.
+
+::: {style="color: orange"}
+### Bagging Revisited
+:::
+
+The key idea in bagging (bootstrap aggregation) is to build many trees independently on bootstrapped samples of the training data and aggregate their predictions.
+
+Each tree is trained in parallel as separate models and we don't share information between them.
+
+Because each tree sees a slightly different sample, their errors “average out,” reducing the variance.
+
+::: {style="color: lightyellow"}
+#### Bagging Algorithm
+:::
+
+1.  Draw many bootstrap samples from the training data.
+2.  Train a decision tree on each sample (often grown fully, with no pruning).
+3.  For regression, average predictions across trees.
+4.  For classification, take the majority vote.
+
+::: {style="color: orange"}
+### Random Forests Revisited
+:::
+
+Remember, one complaint we had about bagging is that often trees will end up looking similar (correlated), reducing the benefit of averaging.
+
+The key idea of random forests is to add an additional layer of randomness by selecting a random subset of features at each split in the tree.
+
+This further decorrelates the trees, leading to a more diverse ensemble and better performance.
+
+::: {style="color: lightyellow"}
+#### Random Forest Algorithm
+:::
+
+1.  Draw many bootstrap samples from the training data.
+2.  Train a decision tree on each sample (often grown fully, with no pruning).
+    -   At each split, consider only a random subset of predictors (the `mtry` parameter in R).
+3.  For regression, average predictions across trees.
+4.  For classification, take the majority vote.
+
+::: {style="color: orange"}
+### Introducing Boosting
+:::
+
+In our previous improvements to classic decision trees we focused on reducing variance by looking across many independent trees.
+
+Boosting takes a different approach by focusing on reducing both bias and variance through a sequential learning process.
+
+Instead of building trees independently, boosting builds them sequentially, where each new tree focuses on the errors (residuals or misclassifications) of the previous ones.
+
+-   Each tree is typically **small (shallow)** — often just a “stump” (one or two splits).\
+-   The model is built step-by-step, where each new tree “corrects” the mistakes of the ensemble so far.
+
+**Algorithm sketch (simplified gradient boosting):** 
+
+1. Start with an initial prediction (e.g., the mean of *y*). 
+2. Compute the residuals (the errors) of that model. 
+3. Fit a small tree to those residuals. 
+4. Add this tree to the model with a small learning rate (shrinkage). 
+5. Repeat for many iterations.
+
+**Result:**\
+- Gradually reduces both bias and variance.\
+- Often achieves better predictive performance than bagging/random forests, but is more sensitive to noise and tuning (learning rate, tree depth, number of trees).
+
+
+| Method | Analogy |
+|------------------------------------|------------------------------------|
+| **Bagging** | Many students independently take a test; average their answers. |
+| **Random Forest** | Many students take the test, but each uses a different subset of notes — encouraging diverse answers. |
+| **Boosting** | One student takes the test multiple times, learning from each mistake and improving step by step. |
+

@@ -26,6 +26,7 @@ project:
     - week5_1.qmd
     - week5_2.qmd
     - week5_3.qmd
+    - week5_4.qmd
 website:
   title: "PSYC559: Applied Machine Learning in Psychology"
   sidebar:
@@ -69,6 +70,7 @@ website:
           - week5_1.qmd
           - week5_2.qmd
           - week5_3.qmd
+          - week5_4.qmd
 format:
   html:
     theme: darkly
