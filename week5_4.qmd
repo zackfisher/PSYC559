@@ -82,22 +82,20 @@ Instead of building trees independently, boosting builds them sequentially, wher
 -   Each tree is typically **small (shallow)** — often just a “stump” (one or two splits).\
 -   The model is built step-by-step, where each new tree “corrects” the mistakes of the ensemble so far.
 
-**Algorithm sketch (simplified gradient boosting):** 
+**Algorithm sketch (simplified gradient boosting):**
 
-1. Start with an initial prediction (e.g., the mean of *y*). 
-2. Compute the residuals (the errors) of that model. 
-3. Fit a small tree to those residuals. 
-4. Add this tree to the model with a small learning rate (shrinkage). 
-5. Repeat for many iterations.
+1.  Start with an initial prediction (e.g., the mean of *y*).
+2.  Compute the residuals (the errors) of that model.
+3.  Fit a small tree to those residuals.
+4.  Add this tree to the model with a small learning rate (shrinkage).
+5.  Repeat for many iterations.
 
 **Result:**\
 - Gradually reduces both bias and variance.\
 - Often achieves better predictive performance than bagging/random forests, but is more sensitive to noise and tuning (learning rate, tree depth, number of trees).
 
-
 | Method | Analogy |
-|------------------------------------|------------------------------------|
+|----|----|
 | **Bagging** | Many students independently take a test; average their answers. |
 | **Random Forest** | Many students take the test, but each uses a different subset of notes — encouraging diverse answers. |
 | **Boosting** | One student takes the test multiple times, learning from each mistake and improving step by step. |
-

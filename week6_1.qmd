@@ -1,0 +1,433 @@
+---
+title: "Principal Components Analysis"
+format: 
+  html: 
+    fontsize: 25px
+    code-folders: true
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
+data <- readRDS("data/data.RDS")
+library(dplyr)
+library(tidymodels)
+library(caret)
+library(rpart)
+library(recipes)
+library(rsample)
+library(ipred)
+library(dplyr)
+```
+
+::: {style="color: yellow"}
+## A Brief History of Principal Components in Psychology
+:::
+
+::: {style="color: orange"}
+### Early 1900s: Measuring General Intelligence
+:::
+
+Psychology was one of the first fields to seriously ask: can we summarize many test scores with just a few underlying dimensions?
+
+-   In 1904, Charles Spearman noticed that scores on different cognitive tasks (vocabulary, math, memory, etc.) tended to be positively correlated. He argued this was because they all reflected a single underlying factor he called **g**, or general intelligence.
+
+-   Mathematically, what Spearman was doing was very close to extracting a dominant dimension from a correlation matrix — which is basically what the **first principal component** does, even though he didn’t use that term.
+
+So from the very beginning, psychologists were already thinking in “one main dimension explains a lot of the variance.”
+
+::: {style="color: orange"}
+### 1920s–1930s: Multiple Factors, Not Just One
+:::
+
+Louis Thurstone (founder of the L. L. Thurstone Lab on the second floor of Davie) pushed back on the “one big g” idea. He argued that mental abilities might not boil down to just one thing, but instead several broad, relatively independent abilities (verbal, spatial, numeric, etc.).
+
+![L. L. Thurstone Lab in Davie Hall](images/thurstone_lab.jpg){fig-align="center"}
+
+To support that view, he developed methods for taking a big correlation matrix of tests and reducing it to a smaller set of components or factors. The math here starts looking like what we now call **factor analysis** and **principal components**: represent a bunch of observed variables using a few weighted combinations.
+
+By the 1930s, psychology was already normalizing the idea that:
+
+-   You can replace a large set of test scores with a few summary scores.
+-   Those summary scores might map onto interpretable traits or abilities.
+
+::: {style="color: orange"}
+### 1930s: “Principal Components” Formalized
+:::
+
+In 1933, Harold Hotelling introduced Principal Components Analysis in the modern linear algebra sense: find new uncorrelated variables (components) that are weighted combinations of the original variables and that explain as much variance as possible, in order.
+
+::: {style="color: orange"}
+### Mid 20th century: Personality, Traits, and Tests
+:::
+
+By the 1950s–1960s, psychologists were applying PCA-/factor-like methods to personality items, attitude scales, symptom checklists, etc. The logic was: if we give a long questionnaire, do the items naturally cluster? Do we get a small number of broad traits?
+
+This work helped build models like the **Big Five** personality traits, which emerged from running dimensionality-reduction (often PCA or exploratory factor analysis) on large adjective rating datasets.
+
+At this point PCA is doing two jobs in psychology:
+
+1.  **Data reduction** – shrink a 100-item questionnaire down to a handful of composite scores.
+2.  **Structure discovery** – argue that those composites correspond to meaningful traits.
+
+::: {style="color: orange"}
+### Late 20th century: PCA and Machine Learning
+:::
+
+As psychology got more quantitative (especially cognitive psychology, neuropsychology, and later neuroimaging), PCA became routine:
+
+-   In cognitive tasks: summarize lots of correlated performance measures into a few component scores.
+-   In clinical/psychopathology research: reduce symptom profiles to core dimensions (e.g., “internalizing,” “externalizing”).
+-   In modern machine learning: use principal components to de-noise and de-correlate predictors before clustering, regression, or classification.
+
+::: {style="color: yellow"}
+## Difference between PCA and Factor Analysis
+:::
+
+![PVA vs FA](images/pca_fa.jpg){fig-align="center"}
+
+::: {style="color: orange"}
+### PCA (Principal Components Analysis):
+:::
+
+-   A data reduction technique. It builds new variables (components) that are weighted combinations of the original variables, chosen to capture as much **total variance** in the dataset as possible.
+-   Uses *all* the variance in each variable — common variance (shared with other variables) + unique variance (specific to that variable) + error.
+-   Are just mathematical directions in the data that maximize variance. They are not assumed to be “real” psychological traits. Interpretation is optional / post hoc.
+
+::: {style="color: orange"}
+### Factor Analysis
+:::
+
+-   A latent variable model. It assumes there are unobserved psychological constructs (“factors”) that **cause** the correlations among the observed variables, and tries to recover those constructs.
+-   Tries to model only the **common variance** that is shared across variables.
+-   Are explicitly interpreted as latent constructs (e.g., “Negative Affect,” “Working Memory,” etc.). The whole point is psychological meaning.
+
+::: {style="color: yellow"}
+## Introduction to PCA
+:::
+
+::: {style="color: orange"}
+### What is PCA and why do we use it?
+:::
+
+Principal Components Analysis (PCA) is a technique for **dimension reduction**.
+
+-   Many psychology datasets have lots of variables that are correlated.
+
+    -   Example: multiple items measuring stress, mood, rumination, sleep quality, etc.
+
+-   Models like regression or clustering can struggle when predictors are:
+
+    -   Highly correlated ("multicollinearity")
+    -   Too high-dimensional (too many variables relative to sample size)
+
+::: {style="color: orange"}
+### Goal of PCA
+:::
+
+Create a smaller number of *new* variables (called *principal components*) that summarize most of the variation in the original variables.
+
+So instead of working with (say) 20 questionnaire items, we might work with the first 2–3 components.
+
+**Key idea:** PCA is *unsupervised*.\
+It does **not** use an outcome / dependent variable.\
+It only looks at the relationships among the predictors themselves.
+
+::: {style="color: orange"}
+### How PCA Actualy Works
+:::
+
+1.  Start with your variables (e.g., a set of standardized questionnaire items).
+2.  PCA finds a new axis (a weighted combination of the original items) that captures as much variance as possible.
+    -   This new axis is called **PC1** (Principal Component 1).
+3.  Then it finds a second axis (**PC2**) that:
+    -   Explains as much of the *remaining* variance as possible,
+    -   Is uncorrelated with PC1.
+4.  Then PC3, PC4, and so on.
+
+Each principal component is:
+
+-   A **linear combination** of the original variables\
+    (e.g., PC1 = 0.40·stress + 0.41·rumination + 0.05·sleep + ...),
+-   Chosen to explain variance efficiently, - Statistically uncorrelated with the others.
+
+Important note for interpretation: - PCA components are mathematical, not psychological "constructs." - Sometimes they *look like* factors (e.g., “negative affect”), but PCA itself is not a measurement model.
+
+::: {style="color: orange"}
+### Why Psychologists and ML Do In Practice
+:::
+
+-   **Noise reduction / denoising:**\
+    Keeping only the first few components can filter out random noise in low-variance directions.
+
+-   **Visualization:**\
+    We can project high-dimensional data down to 2D (PC1 vs PC2) and make scatterplots to see clusters or patterns.
+
+-   **Prediction pipeline:**\
+    Instead of feeding 20 correlated predictors into a model, we can feed the top 3–5 PCs.\
+    This can help with stability and reduce overfitting.
+
+-   **Collinearity fix:**\
+    PCs are guaranteed to be uncorrelated, which makes downstream regression estimates more stable.
+
+::: {style="color: yellow"}
+## Example: The Road to the Big Five Personality Traits
+:::
+
+::: {style="color: orange"}
+### The Basic Idea
+:::
+
+Researchers wanted to understand how people differ in personality. Instead of starting with a theory like "there are exactly 5 traits," they started with language.
+
+-   Allport & Odbert (1936) went through an English dictionary and collected thousands of adjectives that describe people (e.g., "talkative," "organized," "anxious," "creative").
+-   Participants rated themselves (or peers) on large sets of these adjectives.
+
+This produced a huge dataset: - Rows = people - Columns = adjectives (hundreds of them)
+
+Now the problem is: how do you make sense of hundreds of traits at once?
+
+::: {style="color: orange"}
+### A Solution
+:::
+
+PCA (Principal Components Analysis) was used to find patterns in how these adjectives go together.
+
+What PCA asks is basically: \> "Which adjectives tend to move together across people?"
+
+For example: - People who rate themselves as "talkative," "energetic," and "assertive" also tend to endorse "outgoing." - People who rate themselves as "organized," "reliable," and "careful" also tend to endorse "self-disciplined."
+
+PCA turns these clusters of related adjectives into new summary dimensions (components). Each component is a weighted combination of the original adjectives.
+
+So instead of saying: - "This person scored on 200 different trait words," we can say: - "This person is high on Component 1, medium on Component 2, low on Component 3," etc.
+
+That is dimensionality reduction.
+
+::: {style="color: orange"}
+### The Big Five
+:::
+
+Across multiple studies the same broad components kept showing up:
+
+1.  **Extraversion** (talkative, outgoing, energetic)
+2.  **Agreeableness** (kind, warm, cooperative)
+3.  **Conscientiousness** (organized, reliable, disciplined)
+4.  **Neuroticism / Emotional Stability** (anxious, moody, easily upset vs. calm)
+5.  **Openness / Intellect** (curious, imaginative, open to new ideas)
+
+These became known as the **Big Five**.
+
+::: {style="color: orange"}
+### Modern Takes on The Big Five
+:::
+
+There are a number of modern takes on the Big Five worth mentioning.
+
+::: {style="color: lightyellow"}
+#### Generalization of Big Five
+:::
+
+The Big Five claims there are five fundamental trait dimensions, but: - Different item sets, cultures, and languages don’t always give exactly five. - Maybe the Big Five may reflect English-language descriptors and Western norms more than a truly universal structure.
+
+::: {style="color: lightyellow"}
+#### Description versus Explanation
+:::
+
+Big Five scores summarize how people differ (e.g., high Neuroticism), but: - They don’t tell you **why** someone is that way — biology, development, stress exposure, culture, roles, trauma, etc. - They don’t model mechanisms or meaning. They’re statistical summaries, not causal theories.
+
+This makes the Big Five great for prediction, but shallow as an account of personality psychology.
+
+::: {style="color: lightyellow"}
+#### Too Broad for Psychological Utility
+:::
+
+Each Big Five trait bundles together many distinct sub-traits: - Two people can both be high Neuroticism, but one is mostly anxious and the other mostly angry — very different clinical stories. - Traits also shift across situations (friendly with friends, distant at work), but the Big Five treats traits as global and stable.
+
+For practice (clinical work, intervention targeting, workplace decisions) and for understanding everyday behavior, the broad five factors can be too coarse.
+
+::: {style="color: yellow"}
+## PCA in R
+:::
+
+We will demonstrate how to conduct factor analysis using the \`h2o' package in R. This tracts with the examples in the book.
+
+In sticking with our example we will use the Big 5 data from Kaggle. More information, including the codebook for this data, is presented at the end of this section. We have used this data previously for a number of different assignments. The only preproccessing we will do is to convert all variables to numeric.
+
+```{r, warning=FALSE,message=FALSE}
+library(h2o)
+data <- readRDS("data/data-final.RDS")
+#convert variables to numeric
+data <- data.frame(lapply(data, function(x) as.numeric(as.character(x))))
+```
+
+Next, we'll start up the `h2o` instance and convert our data frame to an H2O object.
+
+```{r, warning=FALSE,message=FALSE}
+#h2o.no_progress()  # turn off progress bars for brevity
+h2o.init(max_mem_size = "5g")  # connect to H2O instance
+
+# Convert data frame to H2O object  
+data_h2o <- as.h2o(data)
+```
+
+There are a number of parameters we can set when conducting PCA in `h2o`. These hyperparameters control how the PCA is conducted. The hyperparameters include:
+
+-   `pca_methpd`: The PCA algorithm to use. The book recommends using "GramSVD" when all predictors aere numeric and the dataset is not too large. If the dataset is very large, "Randomized" may be a better choice.
+-   `k`: The number of principal components to extract. It’s best to create the same number of PCs as there are features. We will review how to select a smaller number of features.
+-   `transform`: The data transformation method to apply before PCA (e.g., "STANDARDIZE", "NORMALIZE", "NONE").
+-   `max_iterations`: The maximum number of iterations for the PCA algorithm.
+-   `seed`: A random seed for reproducibility.
+-   `impute_missing`: Whether to impute missing values before PCA.
+
+```{r}
+# run PCA
+my_pca <- h2o.prcomp(
+  training_frame = data_h2o,
+  pca_method = "GramSVD",
+  k = ncol(data), 
+  transform = "STANDARDIZE", 
+  impute_missing = TRUE,
+  max_runtime_secs = 1000
+)
+
+```
+
+Our model contains the principal components and other useful information. We can print a summary of the PCA model to see the importance of each principal component.
+
+```{r}
+# Print PCA model summary
+summary(my_pca)
+```
+
+::: {style="color: orange"}
+### The Number of Components
+:::
+
+We might also be interested in looking at how many components to retain. There are a few different metrics people use to decide how many components to keep.
+
+One common approach is to look at the proportion of variance explained by each component. We can plot this information using a scree plot.
+
+```{r}
+data.frame(
+  PC  = my_pca@model$importance %>% seq_along,
+  PVE = my_pca@model$importance %>% .[2,] %>% unlist()) %>%
+  ggplot(aes(PC, PVE, group = 1, label = PC)) +
+  geom_point() +
+  geom_line() +
+  geom_text(nudge_y = -.002)
+```
+
+We might also look at the eigenvalue criterion. Here, we look for components with eigenvalues greater than 1. An eigenvalue greater than 1 indicates that the component explains more variance than a single original variable. The rationale is that we want to retain components that contribute more information than an individual variable.
+
+```{r}
+# Compute eigenvalues
+eigen <- unlist(my_pca@model$importance["Standard deviation", ])^2 
+  
+# Sum of all eigenvalues equals number of variables
+sum(eigen)
+
+
+# Find PCs where the sum of eigenvalues is greater than or equal to 1
+which(eigen >= 1)
+```
+
+Another approach looks at the proportion of variance explained by each additional component. We can look for the point where adding more components results in diminishing returns in terms of variance explained.
+
+```{r}
+# Extract and plot PVE and CVE
+data.frame(
+  PC  = my_pca@model$importance %>% seq_along(),
+  PVE = my_pca@model$importance %>% .[2,] %>% unlist(),
+  CVE = my_pca@model$importance %>% .[3,] %>% unlist()
+) %>%
+  tidyr::gather(metric, variance_explained, -PC) %>%
+  ggplot(aes(PC, variance_explained)) +
+  geom_point() +
+  facet_wrap(~ metric, ncol = 1, scales = "free")
+```
+
+::: {style="color: orange"}
+### Interpreting Loadings
+:::
+
+Although PCA components are mathematical constructs, we can still try to interpret them by looking at the loadings.
+
+First, let's take a look at the first five components since, theoretically at least, these should correspond to the Big Five personality traits.
+
+```{r}
+h2o.predict(my_pca, data_h2o)[,1:5]
+```
+
+Next, we can extract the loadings (the weights of each original variable on each principal component) from the PCA model.
+
+```{r}
+loadings <- my_pca@model$eigenvectors[,1:5]
+
+# threshold smaller loadings to zero for easier interpretation
+#loadings[abs(loadings) < 0.2] <- 0
+
+heatmap(as.matrix(loadings), Rowv = NA, Colv = NA)
+```
+
+We don't really see the big 5 emerge in our dataset. This may be due to the fact that we only used 1000 rows of data. You can try running the analysis again using more data to see if the Big Five traits emerge more clearly.
+
+Let's look at the loadings for the first principal component to see which variables contribute most to this component.
+
+```{r}
+my_pca@model$eigenvectors %>% 
+  as.data.frame() %>% 
+  mutate(feature = row.names(.)) %>%
+  ggplot(aes(pc1, reorder(feature, pc1))) +
+  geom_point()
+```
+
+What about the second component.
+
+```{r}
+my_pca@model$eigenvectors %>% 
+  as.data.frame() %>% 
+  mutate(feature = row.names(.)) %>%
+  ggplot(aes(pc2, reorder(feature, pc2))) +
+  geom_point()
+```
+
+And the third component.
+
+```{r}
+my_pca@model$eigenvectors %>% 
+  as.data.frame() %>% 
+  mutate(feature = row.names(.)) %>%
+  ggplot(aes(pc3, reorder(feature, pc3))) +
+  geom_point()
+```
+
+Finally, when we're done with our PCA analysis, we can shut down the H2O instance to free up resources.
+
+```{r}
+h2o.shutdown(prompt = FALSE)
+```
+
+::: {style="color: yellow"}
+## Big Five Data Info
+:::
+
+This data was collected (2016-2018) through an interactive on-line personality test. The personality test was constructed with the "Big-Five Factor Markers" from the IPIP. https://ipip.ori.org/newBigFive5broadKey.htm
+
+Participants were informed that their responses would be recorded and used for research at the beginning of the test, and asked to confirm their consent at the end of the test.
+
+The following items were presented on one page and each was rated on a five point scale using radio buttons. The order on page was was EXT1, AGR1, CSN1, EST1, OPN1, EXT2, etc. The scale was labeled 1=Disagree, 3=Neutral, 5=Agree
+
+EXT1 I am the life of the party. EXT2 I don't talk a lot. EXT3 I feel comfortable around people. EXT4 I keep in the background. EXT5 I start conversations. EXT6 I have little to say. EXT7 I talk to a lot of different people at parties. EXT8 I don't like to draw attention to myself. EXT9 I don't mind being the center of attention. EXT10 I am quiet around strangers. EST1 I get stressed out easily. EST2 I am relaxed most of the time. EST3 I worry about things. EST4 I seldom feel blue. EST5 I am easily disturbed. EST6 I get upset easily. EST7 I change my mood a lot. EST8 I have frequent mood swings. EST9 I get irritated easily. EST10 I often feel blue. AGR1 I feel little concern for others. AGR2 I am interested in people. AGR3 I insult people. AGR4 I sympathize with others' feelings. AGR5 I am not interested in other people's problems. AGR6 I have a soft heart. AGR7 I am not really interested in others. AGR8 I take time out for others. AGR9 I feel others' emotions. AGR10 I make people feel at ease. CSN1 I am always prepared. CSN2 I leave my belongings around. CSN3 I pay attention to details. CSN4 I make a mess of things. CSN5 I get chores done right away. CSN6 I often forget to put things back in their proper place. CSN7 I like order. CSN8 I shirk my duties. CSN9 I follow a schedule. CSN10 I am exacting in my work. OPN1 I have a rich vocabulary. OPN2 I have difficulty understanding abstract ideas. OPN3 I have a vivid imagination. OPN4 I am not interested in abstract ideas.
+
+::: {style="color: yellow"}
+## Grocery Data Example
+:::
+
+To illustrate dimension reduction techniques, we’ll use the `my_basket` data set. This data set identifies items and quantities purchased for 2,000 transactions from a grocery store. The objective is to identify common groupings of items purchased together.
+
+```{r}
+url <- "https://koalaverse.github.io/homlr/data/my_basket.csv"
+my_basket <- readr::read_csv(url)
+dim(my_basket)
+```

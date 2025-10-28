@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Principal Components Analysis – PSYC559: Applied Machine Learning in Psychology</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-121a38a6e2c75e451ef209d5f681333d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week6_1.html">Dimension Reduction</a></li><li class="breadcrumb-item"><a href="./week6_1.html">Principal Components Analysis</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">PSYC559: Applied Machine Learning in Psychology</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Table of Contents</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction to R</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic R Programming</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1_1b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R Packages</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reading in Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week1_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Describing Data Numerically</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week1_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Describing Data Visually</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction to Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Important Terms and Distinctions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Problem Classes in ML</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Splitting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bias and Variance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Feature Engineering</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Example Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Missing Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5d.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Feature Filtering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5e.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Numeric Feature Engineering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5f.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Categorical Feature Engineering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5g.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Workflow</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Regression Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularized Regression</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Tree Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week5_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Decision Trees</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week5_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bagging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week5_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Random Forests</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week5_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gradient Boosting</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Dimension Reduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week6_1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Principal Components Analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-brief-history-of-principal-components-in-psychology" id="toc-a-brief-history-of-principal-components-in-psychology" class="nav-link active" data-scroll-target="#a-brief-history-of-principal-components-in-psychology">A Brief History of Principal Components in Psychology</a></li>
+  <li><a href="#early-1900s-measuring-general-intelligence" id="toc-early-1900s-measuring-general-intelligence" class="nav-link" data-scroll-target="#early-1900s-measuring-general-intelligence">Early 1900s: Measuring General Intelligence</a></li>
+  <li><a href="#s1930s-multiple-factors-not-just-one" id="toc-s1930s-multiple-factors-not-just-one" class="nav-link" data-scroll-target="#s1930s-multiple-factors-not-just-one">1920s–1930s: Multiple Factors, Not Just One</a></li>
+  <li><a href="#s-principal-components-formalized" id="toc-s-principal-components-formalized" class="nav-link" data-scroll-target="#s-principal-components-formalized">1930s: “Principal Components” Formalized</a></li>
+  <li><a href="#mid-20th-century-personality-traits-and-tests" id="toc-mid-20th-century-personality-traits-and-tests" class="nav-link" data-scroll-target="#mid-20th-century-personality-traits-and-tests">Mid 20th century: Personality, Traits, and Tests</a></li>
+  <li><a href="#late-20th-century-pca-and-machine-learning" id="toc-late-20th-century-pca-and-machine-learning" class="nav-link" data-scroll-target="#late-20th-century-pca-and-machine-learning">Late 20th century: PCA and Machine Learning</a></li>
+  <li><a href="#difference-between-pca-and-factor-analysis" id="toc-difference-between-pca-and-factor-analysis" class="nav-link" data-scroll-target="#difference-between-pca-and-factor-analysis">Difference between PCA and Factor Analysis</a></li>
+  <li><a href="#pca-principal-components-analysis" id="toc-pca-principal-components-analysis" class="nav-link" data-scroll-target="#pca-principal-components-analysis">PCA (Principal Components Analysis):</a></li>
+  <li><a href="#factor-analysis" id="toc-factor-analysis" class="nav-link" data-scroll-target="#factor-analysis">Factor Analysis</a></li>
+  <li><a href="#introduction-to-pca" id="toc-introduction-to-pca" class="nav-link" data-scroll-target="#introduction-to-pca">Introduction to PCA</a></li>
+  <li><a href="#what-is-pca-and-why-do-we-use-it" id="toc-what-is-pca-and-why-do-we-use-it" class="nav-link" data-scroll-target="#what-is-pca-and-why-do-we-use-it">What is PCA and why do we use it?</a></li>
+  <li><a href="#goal-of-pca" id="toc-goal-of-pca" class="nav-link" data-scroll-target="#goal-of-pca">Goal of PCA</a></li>
+  <li><a href="#how-pca-actualy-works" id="toc-how-pca-actualy-works" class="nav-link" data-scroll-target="#how-pca-actualy-works">How PCA Actualy Works</a></li>
+  <li><a href="#why-psychologists-and-ml-do-in-practice" id="toc-why-psychologists-and-ml-do-in-practice" class="nav-link" data-scroll-target="#why-psychologists-and-ml-do-in-practice">Why Psychologists and ML Do In Practice</a></li>
+  <li><a href="#example-the-road-to-the-big-five-personality-traits" id="toc-example-the-road-to-the-big-five-personality-traits" class="nav-link" data-scroll-target="#example-the-road-to-the-big-five-personality-traits">Example: The Road to the Big Five Personality Traits</a></li>
+  <li><a href="#the-basic-idea" id="toc-the-basic-idea" class="nav-link" data-scroll-target="#the-basic-idea">The Basic Idea</a></li>
+  <li><a href="#a-solution" id="toc-a-solution" class="nav-link" data-scroll-target="#a-solution">A Solution</a></li>
+  <li><a href="#the-big-five" id="toc-the-big-five" class="nav-link" data-scroll-target="#the-big-five">The Big Five</a></li>
+  <li><a href="#modern-takes-on-the-big-five" id="toc-modern-takes-on-the-big-five" class="nav-link" data-scroll-target="#modern-takes-on-the-big-five">Modern Takes on The Big Five</a></li>
+  <li><a href="#pca-in-r" id="toc-pca-in-r" class="nav-link" data-scroll-target="#pca-in-r">PCA in R</a></li>
+  <li><a href="#the-number-of-components" id="toc-the-number-of-components" class="nav-link" data-scroll-target="#the-number-of-components">The Number of Components</a></li>
+  <li><a href="#interpreting-loadings" id="toc-interpreting-loadings" class="nav-link" data-scroll-target="#interpreting-loadings">Interpreting Loadings</a></li>
+  <li><a href="#big-five-data-info" id="toc-big-five-data-info" class="nav-link" data-scroll-target="#big-five-data-info">Big Five Data Info</a></li>
+  <li><a href="#grocery-data-example" id="toc-grocery-data-example" class="nav-link" data-scroll-target="#grocery-data-example">Grocery Data Example</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week6_1.html">Dimension Reduction</a></li><li class="breadcrumb-item"><a href="./week6_1.html">Principal Components Analysis</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Principal Components Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="a-brief-history-of-principal-components-in-psychology" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="a-brief-history-of-principal-components-in-psychology">A Brief History of Principal Components in Psychology</h2>
+</section>
+<section id="early-1900s-measuring-general-intelligence" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="early-1900s-measuring-general-intelligence">Early 1900s: Measuring General Intelligence</h3>
+</section>
+<p>Psychology was one of the first fields to seriously ask: can we summarize many test scores with just a few underlying dimensions?</p>
+<ul>
+<li><p>In 1904, Charles Spearman noticed that scores on different cognitive tasks (vocabulary, math, memory, etc.) tended to be positively correlated. He argued this was because they all reflected a single underlying factor he called <strong>g</strong>, or general intelligence.</p></li>
+<li><p>Mathematically, what Spearman was doing was very close to extracting a dominant dimension from a correlation matrix — which is basically what the <strong>first principal component</strong> does, even though he didn’t use that term.</p></li>
+</ul>
+<p>So from the very beginning, psychologists were already thinking in “one main dimension explains a lot of the variance.”</p>
+<section id="s1930s-multiple-factors-not-just-one" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="s1930s-multiple-factors-not-just-one">1920s–1930s: Multiple Factors, Not Just One</h3>
+</section>
+<p>Louis Thurstone (founder of the L. L. Thurstone Lab on the second floor of Davie) pushed back on the “one big g” idea. He argued that mental abilities might not boil down to just one thing, but instead several broad, relatively independent abilities (verbal, spatial, numeric, etc.).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/thurstone_lab.jpg" class="img-fluid figure-img"></p>
+<figcaption>L. L. Thurstone Lab in Davie Hall</figcaption>
+</figure>
+</div>
+<p>To support that view, he developed methods for taking a big correlation matrix of tests and reducing it to a smaller set of components or factors. The math here starts looking like what we now call <strong>factor analysis</strong> and <strong>principal components</strong>: represent a bunch of observed variables using a few weighted combinations.</p>
+<p>By the 1930s, psychology was already normalizing the idea that:</p>
+<ul>
+<li>You can replace a large set of test scores with a few summary scores.</li>
+<li>Those summary scores might map onto interpretable traits or abilities.</li>
+</ul>
+<section id="s-principal-components-formalized" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="s-principal-components-formalized">1930s: “Principal Components” Formalized</h3>
+</section>
+<p>In 1933, Harold Hotelling introduced Principal Components Analysis in the modern linear algebra sense: find new uncorrelated variables (components) that are weighted combinations of the original variables and that explain as much variance as possible, in order.</p>
+<section id="mid-20th-century-personality-traits-and-tests" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="mid-20th-century-personality-traits-and-tests">Mid 20th century: Personality, Traits, and Tests</h3>
+</section>
+<p>By the 1950s–1960s, psychologists were applying PCA-/factor-like methods to personality items, attitude scales, symptom checklists, etc. The logic was: if we give a long questionnaire, do the items naturally cluster? Do we get a small number of broad traits?</p>
+<p>This work helped build models like the <strong>Big Five</strong> personality traits, which emerged from running dimensionality-reduction (often PCA or exploratory factor analysis) on large adjective rating datasets.</p>
+<p>At this point PCA is doing two jobs in psychology:</p>
+<ol type="1">
+<li><strong>Data reduction</strong> – shrink a 100-item questionnaire down to a handful of composite scores.</li>
+<li><strong>Structure discovery</strong> – argue that those composites correspond to meaningful traits.</li>
+</ol>
+<section id="late-20th-century-pca-and-machine-learning" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="late-20th-century-pca-and-machine-learning">Late 20th century: PCA and Machine Learning</h3>
+</section>
+<p>As psychology got more quantitative (especially cognitive psychology, neuropsychology, and later neuroimaging), PCA became routine:</p>
+<ul>
+<li>In cognitive tasks: summarize lots of correlated performance measures into a few component scores.</li>
+<li>In clinical/psychopathology research: reduce symptom profiles to core dimensions (e.g., “internalizing,” “externalizing”).</li>
+<li>In modern machine learning: use principal components to de-noise and de-correlate predictors before clustering, regression, or classification.</li>
+</ul>
+<section id="difference-between-pca-and-factor-analysis" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="difference-between-pca-and-factor-analysis">Difference between PCA and Factor Analysis</h2>
+</section>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/pca_fa.jpg" class="img-fluid figure-img"></p>
+<figcaption>PVA vs FA</figcaption>
+</figure>
+</div>
+<section id="pca-principal-components-analysis" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="pca-principal-components-analysis">PCA (Principal Components Analysis):</h3>
+</section>
+<ul>
+<li>A data reduction technique. It builds new variables (components) that are weighted combinations of the original variables, chosen to capture as much <strong>total variance</strong> in the dataset as possible.</li>
+<li>Uses <em>all</em> the variance in each variable — common variance (shared with other variables) + unique variance (specific to that variable) + error.</li>
+<li>Are just mathematical directions in the data that maximize variance. They are not assumed to be “real” psychological traits. Interpretation is optional / post hoc.</li>
+</ul>
+<section id="factor-analysis" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="factor-analysis">Factor Analysis</h3>
+</section>
+<ul>
+<li>A latent variable model. It assumes there are unobserved psychological constructs (“factors”) that <strong>cause</strong> the correlations among the observed variables, and tries to recover those constructs.</li>
+<li>Tries to model only the <strong>common variance</strong> that is shared across variables.</li>
+<li>Are explicitly interpreted as latent constructs (e.g., “Negative Affect,” “Working Memory,” etc.). The whole point is psychological meaning.</li>
+</ul>
+<section id="introduction-to-pca" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="introduction-to-pca">Introduction to PCA</h2>
+</section>
+<section id="what-is-pca-and-why-do-we-use-it" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="what-is-pca-and-why-do-we-use-it">What is PCA and why do we use it?</h3>
+</section>
+<p>Principal Components Analysis (PCA) is a technique for <strong>dimension reduction</strong>.</p>
+<ul>
+<li><p>Many psychology datasets have lots of variables that are correlated.</p>
+<ul>
+<li>Example: multiple items measuring stress, mood, rumination, sleep quality, etc.</li>
+</ul></li>
+<li><p>Models like regression or clustering can struggle when predictors are:</p>
+<ul>
+<li>Highly correlated (“multicollinearity”)</li>
+<li>Too high-dimensional (too many variables relative to sample size)</li>
+</ul></li>
+</ul>
+<section id="goal-of-pca" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="goal-of-pca">Goal of PCA</h3>
+</section>
+<p>Create a smaller number of <em>new</em> variables (called <em>principal components</em>) that summarize most of the variation in the original variables.</p>
+<p>So instead of working with (say) 20 questionnaire items, we might work with the first 2–3 components.</p>
+<p><strong>Key idea:</strong> PCA is <em>unsupervised</em>.<br>
+It does <strong>not</strong> use an outcome / dependent variable.<br>
+It only looks at the relationships among the predictors themselves.</p>
+<section id="how-pca-actualy-works" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="how-pca-actualy-works">How PCA Actualy Works</h3>
+</section>
+<ol type="1">
+<li>Start with your variables (e.g., a set of standardized questionnaire items).</li>
+<li>PCA finds a new axis (a weighted combination of the original items) that captures as much variance as possible.
+<ul>
+<li>This new axis is called <strong>PC1</strong> (Principal Component 1).</li>
+</ul></li>
+<li>Then it finds a second axis (<strong>PC2</strong>) that:
+<ul>
+<li>Explains as much of the <em>remaining</em> variance as possible,</li>
+<li>Is uncorrelated with PC1.</li>
+</ul></li>
+<li>Then PC3, PC4, and so on.</li>
+</ol>
+<p>Each principal component is:</p>
+<ul>
+<li>A <strong>linear combination</strong> of the original variables<br>
+(e.g., PC1 = 0.40·stress + 0.41·rumination + 0.05·sleep + …),</li>
+<li>Chosen to explain variance efficiently, - Statistically uncorrelated with the others.</li>
+</ul>
+<p>Important note for interpretation: - PCA components are mathematical, not psychological “constructs.” - Sometimes they <em>look like</em> factors (e.g., “negative affect”), but PCA itself is not a measurement model.</p>
+<section id="why-psychologists-and-ml-do-in-practice" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="why-psychologists-and-ml-do-in-practice">Why Psychologists and ML Do In Practice</h3>
+</section>
+<ul>
+<li><p><strong>Noise reduction / denoising:</strong><br>
+Keeping only the first few components can filter out random noise in low-variance directions.</p></li>
+<li><p><strong>Visualization:</strong><br>
+We can project high-dimensional data down to 2D (PC1 vs PC2) and make scatterplots to see clusters or patterns.</p></li>
+<li><p><strong>Prediction pipeline:</strong><br>
+Instead of feeding 20 correlated predictors into a model, we can feed the top 3–5 PCs.<br>
+This can help with stability and reduce overfitting.</p></li>
+<li><p><strong>Collinearity fix:</strong><br>
+PCs are guaranteed to be uncorrelated, which makes downstream regression estimates more stable.</p></li>
+</ul>
+<section id="example-the-road-to-the-big-five-personality-traits" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="example-the-road-to-the-big-five-personality-traits">Example: The Road to the Big Five Personality Traits</h2>
+</section>
+<section id="the-basic-idea" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="the-basic-idea">The Basic Idea</h3>
+</section>
+<p>Researchers wanted to understand how people differ in personality. Instead of starting with a theory like “there are exactly 5 traits,” they started with language.</p>
+<ul>
+<li>Allport &amp; Odbert (1936) went through an English dictionary and collected thousands of adjectives that describe people (e.g., “talkative,” “organized,” “anxious,” “creative”).</li>
+<li>Participants rated themselves (or peers) on large sets of these adjectives.</li>
+</ul>
+<p>This produced a huge dataset: - Rows = people - Columns = adjectives (hundreds of them)</p>
+<p>Now the problem is: how do you make sense of hundreds of traits at once?</p>
+<section id="a-solution" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="a-solution">A Solution</h3>
+</section>
+<p>PCA (Principal Components Analysis) was used to find patterns in how these adjectives go together.</p>
+<p>What PCA asks is basically: &gt; “Which adjectives tend to move together across people?”</p>
+<p>For example: - People who rate themselves as “talkative,” “energetic,” and “assertive” also tend to endorse “outgoing.” - People who rate themselves as “organized,” “reliable,” and “careful” also tend to endorse “self-disciplined.”</p>
+<p>PCA turns these clusters of related adjectives into new summary dimensions (components). Each component is a weighted combination of the original adjectives.</p>
+<p>So instead of saying: - “This person scored on 200 different trait words,” we can say: - “This person is high on Component 1, medium on Component 2, low on Component 3,” etc.</p>
+<p>That is dimensionality reduction.</p>
+<section id="the-big-five" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="the-big-five">The Big Five</h3>
+</section>
+<p>Across multiple studies the same broad components kept showing up:</p>
+<ol type="1">
+<li><strong>Extraversion</strong> (talkative, outgoing, energetic)</li>
+<li><strong>Agreeableness</strong> (kind, warm, cooperative)</li>
+<li><strong>Conscientiousness</strong> (organized, reliable, disciplined)</li>
+<li><strong>Neuroticism / Emotional Stability</strong> (anxious, moody, easily upset vs.&nbsp;calm)</li>
+<li><strong>Openness / Intellect</strong> (curious, imaginative, open to new ideas)</li>
+</ol>
+<p>These became known as the <strong>Big Five</strong>.</p>
+<section id="modern-takes-on-the-big-five" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="modern-takes-on-the-big-five">Modern Takes on The Big Five</h3>
+</section>
+<p>There are a number of modern takes on the Big Five worth mentioning.</p>
+<section id="generalization-of-big-five" class="level4" style="color: lightyellow">
+<h4 class="anchored" data-anchor-id="generalization-of-big-five">Generalization of Big Five</h4>
+</section>
+<p>The Big Five claims there are five fundamental trait dimensions, but: - Different item sets, cultures, and languages don’t always give exactly five. - Maybe the Big Five may reflect English-language descriptors and Western norms more than a truly universal structure.</p>
+<section id="description-versus-explanation" class="level4" style="color: lightyellow">
+<h4 class="anchored" data-anchor-id="description-versus-explanation">Description versus Explanation</h4>
+</section>
+<p>Big Five scores summarize how people differ (e.g., high Neuroticism), but: - They don’t tell you <strong>why</strong> someone is that way — biology, development, stress exposure, culture, roles, trauma, etc. - They don’t model mechanisms or meaning. They’re statistical summaries, not causal theories.</p>
+<p>This makes the Big Five great for prediction, but shallow as an account of personality psychology.</p>
+<section id="too-broad-for-psychological-utility" class="level4" style="color: lightyellow">
+<h4 class="anchored" data-anchor-id="too-broad-for-psychological-utility">Too Broad for Psychological Utility</h4>
+</section>
+<p>Each Big Five trait bundles together many distinct sub-traits: - Two people can both be high Neuroticism, but one is mostly anxious and the other mostly angry — very different clinical stories. - Traits also shift across situations (friendly with friends, distant at work), but the Big Five treats traits as global and stable.</p>
+<p>For practice (clinical work, intervention targeting, workplace decisions) and for understanding everyday behavior, the broad five factors can be too coarse.</p>
+<section id="pca-in-r" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="pca-in-r">PCA in R</h2>
+</section>
+<p>We will demonstrate how to conduct factor analysis using the `h2o’ package in R. This tracts with the examples in the book.</p>
+<p>In sticking with our example we will use the Big 5 data from Kaggle. More information, including the codebook for this data, is presented at the end of this section. We have used this data previously for a number of different assignments. The only preproccessing we will do is to convert all variables to numeric.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(h2o)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/data-final.RDS"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#convert variables to numeric</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">lapply</span>(data, <span class="cf">function</span>(x) <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(x))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we’ll start up the <code>h2o</code> instance and convert our data frame to an H2O object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#h2o.no_progress()  # turn off progress bars for brevity</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">h2o.init</span>(<span class="at">max_mem_size =</span> <span class="st">"5g"</span>)  <span class="co"># connect to H2O instance</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+H2O is not running yet, starting it now...
+
+Note:  In case of errors look at the following log files:
+    /var/folders/v0/mqk96srs6nx1865cbg_q5z_r0000gp/T//RtmpksjNdZ/filee69863d3a4aa/h2o_zacharyfisher_started_from_r.out
+    /var/folders/v0/mqk96srs6nx1865cbg_q5z_r0000gp/T//RtmpksjNdZ/filee6985bdfc819/h2o_zacharyfisher_started_from_r.err
+
+
+Starting H2O JVM and connecting: ....... Connection successful!
+
+R is connected to the H2O cluster: 
+    H2O cluster uptime:         1 seconds 751 milliseconds 
+    H2O cluster timezone:       America/New_York 
+    H2O data parsing timezone:  UTC 
+    H2O cluster version:        3.44.0.3 
+    H2O cluster version age:    1 year, 10 months and 7 days 
+    H2O cluster name:           H2O_started_from_R_zacharyfisher_qvw079 
+    H2O cluster total nodes:    1 
+    H2O cluster total memory:   5.00 GB 
+    H2O cluster total cores:    16 
+    H2O cluster allowed cores:  16 
+    H2O cluster healthy:        TRUE 
+    H2O Connection ip:          localhost 
+    H2O Connection port:        54321 
+    H2O Connection proxy:       NA 
+    H2O Internal Security:      FALSE 
+    R Version:                  R version 4.5.1 (2025-06-13) </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert data frame to H2O object  </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data_h2o <span class="ot">&lt;-</span> <span class="fu">as.h2o</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+</div>
+<p>There are a number of parameters we can set when conducting PCA in <code>h2o</code>. These hyperparameters control how the PCA is conducted. The hyperparameters include:</p>
+<ul>
+<li><code>pca_methpd</code>: The PCA algorithm to use. The book recommends using “GramSVD” when all predictors aere numeric and the dataset is not too large. If the dataset is very large, “Randomized” may be a better choice.</li>
+<li><code>k</code>: The number of principal components to extract. It’s best to create the same number of PCs as there are features. We will review how to select a smaller number of features.</li>
+<li><code>transform</code>: The data transformation method to apply before PCA (e.g., “STANDARDIZE”, “NORMALIZE”, “NONE”).</li>
+<li><code>max_iterations</code>: The maximum number of iterations for the PCA algorithm.</li>
+<li><code>seed</code>: A random seed for reproducibility.</li>
+<li><code>impute_missing</code>: Whether to impute missing values before PCA.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run PCA</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>my_pca <span class="ot">&lt;-</span> <span class="fu">h2o.prcomp</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">training_frame =</span> data_h2o,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">pca_method =</span> <span class="st">"GramSVD"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="fu">ncol</span>(data), </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">transform =</span> <span class="st">"STANDARDIZE"</span>, </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">impute_missing =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_runtime_secs =</span> <span class="dv">1000</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+</div>
+<p>Our model contains the principal components and other useful information. We can print a summary of the PCA model to see the importance of each principal component.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print PCA model summary</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(my_pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model Details:
+==============
+
+H2ODimReductionModel: pca
+Model Key:  PCA_model_R_1761678858341_1 
+Importance of components: 
+                            pc1      pc2      pc3      pc4      pc5      pc6
+Standard deviation     2.726379 2.200609 1.973673 1.812745 1.662418 1.289290
+Proportion of Variance 0.148663 0.096854 0.077908 0.065721 0.055273 0.033245
+Cumulative Proportion  0.148663 0.245516 0.323424 0.389145 0.444418 0.477663
+                            pc7      pc8      pc9     pc10     pc11     pc12
+Standard deviation     1.178149 1.065502 1.032671 1.008572 0.964420 0.951257
+Proportion of Variance 0.027761 0.022706 0.021328 0.020344 0.018602 0.018098
+Cumulative Proportion  0.505424 0.528130 0.549458 0.569802 0.588404 0.606502
+                           pc13     pc14     pc15     pc16     pc17     pc18
+Standard deviation     0.935047 0.913351 0.901956 0.886021 0.882645 0.868826
+Proportion of Variance 0.017486 0.016684 0.016270 0.015701 0.015581 0.015097
+Cumulative Proportion  0.623988 0.640673 0.656943 0.672644 0.688225 0.703322
+                           pc19     pc20     pc21     pc22     pc23     pc24
+Standard deviation     0.828838 0.825764 0.810549 0.790482 0.789630 0.777218
+Proportion of Variance 0.013739 0.013638 0.013140 0.012497 0.012470 0.012081
+Cumulative Proportion  0.717062 0.730699 0.743839 0.756336 0.768807 0.780888
+                           pc25     pc26     pc27     pc28     pc29     pc30
+Standard deviation     0.776288 0.759688 0.752969 0.746334 0.732433 0.712552
+Proportion of Variance 0.012052 0.011543 0.011339 0.011140 0.010729 0.010155
+Cumulative Proportion  0.792940 0.804483 0.815822 0.826963 0.837692 0.847846
+                           pc31     pc32     pc33     pc34     pc35     pc36
+Standard deviation     0.699805 0.695443 0.686914 0.671967 0.667448 0.660672
+Proportion of Variance 0.009795 0.009673 0.009437 0.009031 0.008910 0.008730
+Cumulative Proportion  0.857641 0.867314 0.876751 0.885781 0.894691 0.903421
+                           pc37     pc38     pc39     pc40     pc41     pc42
+Standard deviation     0.656799 0.647636 0.637350 0.626300 0.605741 0.597968
+Proportion of Variance 0.008628 0.008389 0.008124 0.007845 0.007338 0.007151
+Cumulative Proportion  0.912049 0.920437 0.928562 0.936407 0.943745 0.950896
+                           pc43     pc44     pc45     pc46     pc47     pc48
+Standard deviation     0.594634 0.583688 0.576847 0.561780 0.546760 0.538934
+Proportion of Variance 0.007072 0.006814 0.006655 0.006312 0.005979 0.005809
+Cumulative Proportion  0.957968 0.964782 0.971437 0.977749 0.983728 0.989537
+                           pc49     pc50
+Standard deviation     0.532296 0.489712
+Proportion of Variance 0.005667 0.004796
+Cumulative Proportion  0.995204 1.000000
+
+H2ODimReductionMetrics: pca
+
+No model metrics available for PCA
+
+
+
+Scoring History for GramSVD: 
+            timestamp   duration iterations
+1 2025-10-28 15:14:20  0.067 sec          0
+
+Variable Importances: (Extract with `h2o.varimp`) 
+=================================================
+
+Importance of components: 
+                            pc1      pc2      pc3      pc4      pc5      pc6
+Standard deviation     2.726379 2.200609 1.973673 1.812745 1.662418 1.289290
+Proportion of Variance 0.148663 0.096854 0.077908 0.065721 0.055273 0.033245
+Cumulative Proportion  0.148663 0.245516 0.323424 0.389145 0.444418 0.477663
+                            pc7      pc8      pc9     pc10     pc11     pc12
+Standard deviation     1.178149 1.065502 1.032671 1.008572 0.964420 0.951257
+Proportion of Variance 0.027761 0.022706 0.021328 0.020344 0.018602 0.018098
+Cumulative Proportion  0.505424 0.528130 0.549458 0.569802 0.588404 0.606502
+                           pc13     pc14     pc15     pc16     pc17     pc18
+Standard deviation     0.935047 0.913351 0.901956 0.886021 0.882645 0.868826
+Proportion of Variance 0.017486 0.016684 0.016270 0.015701 0.015581 0.015097
+Cumulative Proportion  0.623988 0.640673 0.656943 0.672644 0.688225 0.703322
+                           pc19     pc20     pc21     pc22     pc23     pc24
+Standard deviation     0.828838 0.825764 0.810549 0.790482 0.789630 0.777218
+Proportion of Variance 0.013739 0.013638 0.013140 0.012497 0.012470 0.012081
+Cumulative Proportion  0.717062 0.730699 0.743839 0.756336 0.768807 0.780888
+                           pc25     pc26     pc27     pc28     pc29     pc30
+Standard deviation     0.776288 0.759688 0.752969 0.746334 0.732433 0.712552
+Proportion of Variance 0.012052 0.011543 0.011339 0.011140 0.010729 0.010155
+Cumulative Proportion  0.792940 0.804483 0.815822 0.826963 0.837692 0.847846
+                           pc31     pc32     pc33     pc34     pc35     pc36
+Standard deviation     0.699805 0.695443 0.686914 0.671967 0.667448 0.660672
+Proportion of Variance 0.009795 0.009673 0.009437 0.009031 0.008910 0.008730
+Cumulative Proportion  0.857641 0.867314 0.876751 0.885781 0.894691 0.903421
+                           pc37     pc38     pc39     pc40     pc41     pc42
+Standard deviation     0.656799 0.647636 0.637350 0.626300 0.605741 0.597968
+Proportion of Variance 0.008628 0.008389 0.008124 0.007845 0.007338 0.007151
+Cumulative Proportion  0.912049 0.920437 0.928562 0.936407 0.943745 0.950896
+                           pc43     pc44     pc45     pc46     pc47     pc48
+Standard deviation     0.594634 0.583688 0.576847 0.561780 0.546760 0.538934
+Proportion of Variance 0.007072 0.006814 0.006655 0.006312 0.005979 0.005809
+Cumulative Proportion  0.957968 0.964782 0.971437 0.977749 0.983728 0.989537
+                           pc49     pc50
+Standard deviation     0.532296 0.489712
+Proportion of Variance 0.005667 0.004796
+Cumulative Proportion  0.995204 1.000000</code></pre>
+</div>
+</div>
+<section id="the-number-of-components" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="the-number-of-components">The Number of Components</h3>
+</section>
+<p>We might also be interested in looking at how many components to retain. There are a few different metrics people use to decide how many components to keep.</p>
+<p>One common approach is to look at the proportion of variance explained by each component. We can plot this information using a scree plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">PC  =</span> my_pca<span class="sc">@</span>model<span class="sc">$</span>importance <span class="sc">%&gt;%</span> seq_along,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">PVE =</span> my_pca<span class="sc">@</span>model<span class="sc">$</span>importance <span class="sc">%&gt;%</span> .[<span class="dv">2</span>,] <span class="sc">%&gt;%</span> <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(PC, PVE, <span class="at">group =</span> <span class="dv">1</span>, <span class="at">label =</span> PC)) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">nudge_y =</span> <span class="sc">-</span>.<span class="dv">002</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We might also look at the eigenvalue criterion. Here, we look for components with eigenvalues greater than 1. An eigenvalue greater than 1 indicates that the component explains more variance than a single original variable. The rationale is that we want to retain components that contribute more information than an individual variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute eigenvalues</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>eigen <span class="ot">&lt;-</span> <span class="fu">unlist</span>(my_pca<span class="sc">@</span>model<span class="sc">$</span>importance[<span class="st">"Standard deviation"</span>, ])<span class="sc">^</span><span class="dv">2</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum of all eigenvalues equals number of variables</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(eigen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 50</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find PCs where the sum of eigenvalues is greater than or equal to 1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(eigen <span class="sc">&gt;=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> pc1  pc2  pc3  pc4  pc5  pc6  pc7  pc8  pc9 pc10 
+   1    2    3    4    5    6    7    8    9   10 </code></pre>
+</div>
+</div>
+<p>Another approach looks at the proportion of variance explained by each additional component. We can look for the point where adding more components results in diminishing returns in terms of variance explained.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract and plot PVE and CVE</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">PC  =</span> my_pca<span class="sc">@</span>model<span class="sc">$</span>importance <span class="sc">%&gt;%</span> <span class="fu">seq_along</span>(),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">PVE =</span> my_pca<span class="sc">@</span>model<span class="sc">$</span>importance <span class="sc">%&gt;%</span> .[<span class="dv">2</span>,] <span class="sc">%&gt;%</span> <span class="fu">unlist</span>(),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">CVE =</span> my_pca<span class="sc">@</span>model<span class="sc">$</span>importance <span class="sc">%&gt;%</span> .[<span class="dv">3</span>,] <span class="sc">%&gt;%</span> <span class="fu">unlist</span>()</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">gather</span>(metric, variance_explained, <span class="sc">-</span>PC) <span class="sc">%&gt;%</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(PC, variance_explained)) <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> metric, <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="interpreting-loadings" class="level3" style="color: orange">
+<h3 class="anchored" data-anchor-id="interpreting-loadings">Interpreting Loadings</h3>
+</section>
+<p>Although PCA components are mathematical constructs, we can still try to interpret them by looking at the loadings.</p>
+<p>First, let’s take a look at the first five components since, theoretically at least, these should correspond to the Big Five personality traits.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">h2o.predict</span>(my_pca, data_h2o)[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         PC1         PC2        PC3        PC4        PC5
+1  4.4034852 -0.02300749 -2.0925392 -1.2707968 -0.1786033
+2 -0.5744698  1.23053169  2.9613075  0.9753085  2.5325375
+3  0.5251728  1.36730817  1.5141661 -0.3939534  2.0181211
+4 -1.0094766  0.09271204 -1.3379007 -0.8932711  1.9281449
+5  4.1255449  1.17299246  4.1277119 -2.1655733  0.6668165
+6  1.8850982  2.08198500  0.5130477 -1.2376719  0.9641995
+
+[1000 rows x 5 columns] </code></pre>
+</div>
+</div>
+<p>Next, we can extract the loadings (the weights of each original variable on each principal component) from the PCA model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>loadings <span class="ot">&lt;-</span> my_pca<span class="sc">@</span>model<span class="sc">$</span>eigenvectors[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># threshold smaller loadings to zero for easier interpretation</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#loadings[abs(loadings) &lt; 0.2] &lt;- 0</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(<span class="fu">as.matrix</span>(loadings), <span class="at">Rowv =</span> <span class="cn">NA</span>, <span class="at">Colv =</span> <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We don’t really see the big 5 emerge in our dataset. This may be due to the fact that we only used 1000 rows of data. You can try running the analysis again using more data to see if the Big Five traits emerge more clearly.</p>
+<p>Let’s look at the loadings for the first principal component to see which variables contribute most to this component.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>my_pca<span class="sc">@</span>model<span class="sc">$</span>eigenvectors <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">feature =</span> <span class="fu">row.names</span>(.)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(pc1, <span class="fu">reorder</span>(feature, pc1))) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What about the second component.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>my_pca<span class="sc">@</span>model<span class="sc">$</span>eigenvectors <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">feature =</span> <span class="fu">row.names</span>(.)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(pc2, <span class="fu">reorder</span>(feature, pc2))) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>And the third component.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>my_pca<span class="sc">@</span>model<span class="sc">$</span>eigenvectors <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">feature =</span> <span class="fu">row.names</span>(.)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(pc3, <span class="fu">reorder</span>(feature, pc3))) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, when we’re done with our PCA analysis, we can shut down the H2O instance to free up resources.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">h2o.shutdown</span>(<span class="at">prompt =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="big-five-data-info" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="big-five-data-info">Big Five Data Info</h2>
+</section>
+<p>This data was collected (2016-2018) through an interactive on-line personality test. The personality test was constructed with the “Big-Five Factor Markers” from the IPIP. https://ipip.ori.org/newBigFive5broadKey.htm</p>
+<p>Participants were informed that their responses would be recorded and used for research at the beginning of the test, and asked to confirm their consent at the end of the test.</p>
+<p>The following items were presented on one page and each was rated on a five point scale using radio buttons. The order on page was was EXT1, AGR1, CSN1, EST1, OPN1, EXT2, etc. The scale was labeled 1=Disagree, 3=Neutral, 5=Agree</p>
+<p>EXT1 I am the life of the party. EXT2 I don’t talk a lot. EXT3 I feel comfortable around people. EXT4 I keep in the background. EXT5 I start conversations. EXT6 I have little to say. EXT7 I talk to a lot of different people at parties. EXT8 I don’t like to draw attention to myself. EXT9 I don’t mind being the center of attention. EXT10 I am quiet around strangers. EST1 I get stressed out easily. EST2 I am relaxed most of the time. EST3 I worry about things. EST4 I seldom feel blue. EST5 I am easily disturbed. EST6 I get upset easily. EST7 I change my mood a lot. EST8 I have frequent mood swings. EST9 I get irritated easily. EST10 I often feel blue. AGR1 I feel little concern for others. AGR2 I am interested in people. AGR3 I insult people. AGR4 I sympathize with others’ feelings. AGR5 I am not interested in other people’s problems. AGR6 I have a soft heart. AGR7 I am not really interested in others. AGR8 I take time out for others. AGR9 I feel others’ emotions. AGR10 I make people feel at ease. CSN1 I am always prepared. CSN2 I leave my belongings around. CSN3 I pay attention to details. CSN4 I make a mess of things. CSN5 I get chores done right away. CSN6 I often forget to put things back in their proper place. CSN7 I like order. CSN8 I shirk my duties. CSN9 I follow a schedule. CSN10 I am exacting in my work. OPN1 I have a rich vocabulary. OPN2 I have difficulty understanding abstract ideas. OPN3 I have a vivid imagination. OPN4 I am not interested in abstract ideas.</p>
+<section id="grocery-data-example" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="grocery-data-example">Grocery Data Example</h2>
+</section>
+<p>To illustrate dimension reduction techniques, we’ll use the <code>my_basket</code> data set. This data set identifies items and quantities purchased for 2,000 transactions from a grocery store. The objective is to identify common groupings of items purchased together.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://koalaverse.github.io/homlr/data/my_basket.csv"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>my_basket <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(url)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(my_basket)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2000   42</code></pre>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
