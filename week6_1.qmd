@@ -130,9 +130,11 @@ Create a smaller number of *new* variables (called *principal components*) that 
 
 So instead of working with (say) 20 questionnaire items, we might work with the first 2–3 components.
 
-**Key idea:** PCA is *unsupervised*.\
-It does **not** use an outcome / dependent variable.\
-It only looks at the relationships among the predictors themselves.
+- PCA is *unsupervised*.
+
+- It does **not** use an outcome / dependent variable.
+
+- It only looks at the relationships among the predictors themselves.
 
 ::: {style="color: orange"}
 ### How PCA Actualy Works
@@ -152,7 +154,11 @@ Each principal component is:
     (e.g., PC1 = 0.40·stress + 0.41·rumination + 0.05·sleep + ...),
 -   Chosen to explain variance efficiently, - Statistically uncorrelated with the others.
 
-Important note for interpretation: - PCA components are mathematical, not psychological "constructs." - Sometimes they *look like* factors (e.g., “negative affect”), but PCA itself is not a measurement model.
+Important note for interpretation: 
+
+- PCA components are mathematical, not psychological constructs. 
+
+- Sometimes they look like factors, but PCA itself is not a measurement model.
 
 ::: {style="color: orange"}
 ### Why Psychologists and ML Do In Practice

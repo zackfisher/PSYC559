@@ -519,9 +519,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <p>Create a smaller number of <em>new</em> variables (called <em>principal components</em>) that summarize most of the variation in the original variables.</p>
 <p>So instead of working with (say) 20 questionnaire items, we might work with the first 2–3 components.</p>
-<p><strong>Key idea:</strong> PCA is <em>unsupervised</em>.<br>
-It does <strong>not</strong> use an outcome / dependent variable.<br>
-It only looks at the relationships among the predictors themselves.</p>
+<ul>
+<li><p>PCA is <em>unsupervised</em>.</p></li>
+<li><p>It does <strong>not</strong> use an outcome / dependent variable.</p></li>
+<li><p>It only looks at the relationships among the predictors themselves.</p></li>
+</ul>
 <section id="how-pca-actualy-works" class="level3" style="color: orange">
 <h3 class="anchored" data-anchor-id="how-pca-actualy-works">How PCA Actualy Works</h3>
 </section>
@@ -544,7 +546,11 @@ It only looks at the relationships among the predictors themselves.</p>
 (e.g., PC1 = 0.40·stress + 0.41·rumination + 0.05·sleep + …),</li>
 <li>Chosen to explain variance efficiently, - Statistically uncorrelated with the others.</li>
 </ul>
-<p>Important note for interpretation: - PCA components are mathematical, not psychological “constructs.” - Sometimes they <em>look like</em> factors (e.g., “negative affect”), but PCA itself is not a measurement model.</p>
+<p>Important note for interpretation:</p>
+<ul>
+<li><p>PCA components are mathematical, not psychological constructs.</p></li>
+<li><p>Sometimes they look like factors, but PCA itself is not a measurement model.</p></li>
+</ul>
 <section id="why-psychologists-and-ml-do-in-practice" class="level3" style="color: orange">
 <h3 class="anchored" data-anchor-id="why-psychologists-and-ml-do-in-practice">Why Psychologists and ML Do In Practice</h3>
 </section>
@@ -637,25 +643,17 @@ PCs are guaranteed to be uncorrelated, which makes downstream regression estimat
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#h2o.no_progress()  # turn off progress bars for brevity</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">h2o.init</span>(<span class="at">max_mem_size =</span> <span class="st">"5g"</span>)  <span class="co"># connect to H2O instance</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-H2O is not running yet, starting it now...
-
-Note:  In case of errors look at the following log files:
-    /var/folders/v0/mqk96srs6nx1865cbg_q5z_r0000gp/T//RtmpuotthZ/file5365de512e/h2o_zacharyfisher_started_from_r.out
-    /var/folders/v0/mqk96srs6nx1865cbg_q5z_r0000gp/T//RtmpuotthZ/file53653a3a374/h2o_zacharyfisher_started_from_r.err
-
-
-Starting H2O JVM and connecting: ....... Connection successful!
+<pre><code> Connection successful!
 
 R is connected to the H2O cluster: 
-    H2O cluster uptime:         1 seconds 672 milliseconds 
+    H2O cluster uptime:         37 minutes 46 seconds 
     H2O cluster timezone:       America/New_York 
     H2O data parsing timezone:  UTC 
     H2O cluster version:        3.44.0.3 
     H2O cluster version age:    1 year, 10 months and 9 days 
-    H2O cluster name:           H2O_started_from_R_zacharyfisher_cee943 
+    H2O cluster name:           H2O_started_from_R_zacharyfisher_lpc629 
     H2O cluster total nodes:    1 
-    H2O cluster total memory:   5.00 GB 
+    H2O cluster total memory:   4.97 GB 
     H2O cluster total cores:    16 
     H2O cluster allowed cores:  16 
     H2O cluster healthy:        TRUE 
@@ -711,7 +709,7 @@ R is connected to the H2O cluster:
 ==============
 
 H2ODimReductionModel: pca
-Model Key:  PCA_model_R_1761848933266_1 
+Model Key:  PCA_model_R_1761849146482_7 
 Importance of components: 
                             pc1      pc2      pc3      pc4      pc5      pc6
 Standard deviation     2.726379 2.200609 1.973673 1.812745 1.662418 1.289290
@@ -758,7 +756,7 @@ No model metrics available for PCA
 
 Scoring History for GramSVD: 
             timestamp   duration iterations
-1 2025-10-30 14:28:55  0.072 sec          0
+1 2025-10-30 15:10:13  0.004 sec          0
 
 Variable Importances: (Extract with `h2o.varimp`) 
 =================================================
