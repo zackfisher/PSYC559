@@ -28,6 +28,7 @@ project:
     - week5_3.qmd
     - week5_4.qmd
     - week6_1.qmd
+    - week6_2.qmd
 website:
   title: "PSYC559: Applied Machine Learning in Psychology"
   sidebar:
@@ -75,6 +76,7 @@ website:
       - section: "Dimension Reduction"
         contents:   
           - week6_1.qmd
+          - week6_2.qmd
 format:
   html:
     theme: darkly
