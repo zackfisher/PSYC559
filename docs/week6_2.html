@@ -394,6 +394,12 @@ window.Quarto = {
  <span class="menu-text">Hierarchical Cluster Analysis</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week6_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">K-Means Cluster Analysis</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -417,15 +423,19 @@ window.Quarto = {
   <li><a href="#distances" id="toc-distances" class="nav-link" data-scroll-target="#distances">Distances</a></li>
   <li><a href="#distance-between-clusters" id="toc-distance-between-clusters" class="nav-link" data-scroll-target="#distance-between-clusters">Distance Between Clusters</a></li>
   <li><a href="#linkages-applied-example" id="toc-linkages-applied-example" class="nav-link" data-scroll-target="#linkages-applied-example">Linkages Applied Example</a></li>
+  <li><a href="#dendograms" id="toc-dendograms" class="nav-link" data-scroll-target="#dendograms">Dendograms</a></li>
   <li><a href="#interpreting-dendograms" id="toc-interpreting-dendograms" class="nav-link" data-scroll-target="#interpreting-dendograms">Interpreting Dendograms</a></li>
   <li><a href="#identifying-clusters-in-dendograms" id="toc-identifying-clusters-in-dendograms" class="nav-link" data-scroll-target="#identifying-clusters-in-dendograms">Identifying Clusters in Dendograms</a></li>
   <li><a href="#hierarchical-clustering-in-r" id="toc-hierarchical-clustering-in-r" class="nav-link" data-scroll-target="#hierarchical-clustering-in-r">Hierarchical Clustering in R</a></li>
+  <li><a href="#example-data" id="toc-example-data" class="nav-link" data-scroll-target="#example-data">Example Data</a></li>
   <li><a href="#preparing-data" id="toc-preparing-data" class="nav-link" data-scroll-target="#preparing-data">Preparing Data</a></li>
   <li><a href="#scaling" id="toc-scaling" class="nav-link" data-scroll-target="#scaling">Scaling</a></li>
   <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting">Plotting</a></li>
-  <li><a href="#distances-1" id="toc-distances-1" class="nav-link" data-scroll-target="#distances-1">Distances</a></li>
-  <li><a href="#hierarchical-clustering-2" id="toc-hierarchical-clustering-2" class="nav-link" data-scroll-target="#hierarchical-clustering-2">Hierarchical Clustering</a></li>
-  <li><a href="#two-step-approach" id="toc-two-step-approach" class="nav-link" data-scroll-target="#two-step-approach">Two-step Approach</a></li>
+  <li><a href="#clustering-algorithms-1" id="toc-clustering-algorithms-1" class="nav-link" data-scroll-target="#clustering-algorithms-1">Clustering Algorithms</a></li>
+  <li><a href="#agglomerative-clustering" id="toc-agglomerative-clustering" class="nav-link" data-scroll-target="#agglomerative-clustering">Agglomerative Clustering</a></li>
+  <li><a href="#divisive-hierarchical-clustering" id="toc-divisive-hierarchical-clustering" class="nav-link" data-scroll-target="#divisive-hierarchical-clustering">Divisive hierarchical clustering</a></li>
+  <li><a href="#determining-the-number-of-clusters" id="toc-determining-the-number-of-clusters" class="nav-link" data-scroll-target="#determining-the-number-of-clusters">Determining the number of clusters</a></li>
+  <li><a href="#dendograms-1" id="toc-dendograms-1" class="nav-link" data-scroll-target="#dendograms-1">Dendograms</a></li>
   <li><a href="#final-thoughts" id="toc-final-thoughts" class="nav-link" data-scroll-target="#final-thoughts">Final Thoughts</a></li>
   </ul>
 </nav>
@@ -648,14 +658,17 @@ window.Quarto = {
 <li>Average linkage would use the mean of the distances from NY and Boston</li>
 <li>Centroid linkage would place a new city half way between NY and Boston and calculate differences from this new city</li>
 </ul>
-<!-- ![Resulting Clusters](imgs/clust_slide4.jpg) -->
-<!-- ::: {style="color: orange"} -->
-<!-- ## Dendograms -->
-<!-- :::  -->
-<!-- Now let's look at the dendograms. -->
-<!-- ![Dendogram: Single Linkage](imgs/dend_single.png) ![Dendogram: Complete -->
-<!-- Linkage](imgs/dend_complete.png) Which one gives us a better solution -->
-<!-- for the underlying typology? -->
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imgs/clust_slide4.jpg" class="img-fluid figure-img"></p>
+<figcaption>Resulting Clusters</figcaption>
+</figure>
+</div>
+<section id="dendograms" class="level2" style="color: orange">
+<h2 class="anchored" data-anchor-id="dendograms">Dendograms</h2>
+</section>
+<p>Now let’s look at the dendograms.</p>
+<p><img src="imgs/dend_single.png" class="img-fluid" alt="Dendogram: Single Linkage"> <img src="imgs/dend_complete.png" class="img-fluid" alt="Dendogram: Complete Linkage"> Which one gives us a better solution for the underlying typology?</p>
 <section id="interpreting-dendograms" class="level3" style="color: lightorange">
 <h3 class="anchored" data-anchor-id="interpreting-dendograms">Interpreting Dendograms</h3>
 </section>
@@ -697,51 +710,43 @@ window.Quarto = {
 <section id="hierarchical-clustering-in-r" class="level1" style="color: yellow">
 <h1>Hierarchical Clustering in R</h1>
 </section>
-<p>Libraries used in this script. There are two main libraries that we will use <code>cluster</code> (namesake) and <code>fpc</code> (Flexible Procedures for Clustering). Some other functions are in the base package.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#general packages</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#cluster packages</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster) <span class="co">#clustering</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpc) <span class="co">#flexible procedures for clustering</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#library(clusterCrit) #cluster criteria</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="example-data" class="level2" style="color: orange">
+<h2 class="anchored" data-anchor-id="example-data">Example Data</h2>
+</section>
 <p>Our example makes use of an experience sampling data set, but treats these data as though they are cross-sectional. Getting the data and doing a bit of data management (new id variable)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#set filepath for data file</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>filepath <span class="ot">&lt;-</span> <span class="st">"https://quantdev.ssri.psu.edu/sites/qdev/files/AMIBbrief_raw_daily1.csv"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#read in the .csv file using the url() function</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>daily <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file=</span><span class="fu">url</span>(filepath),<span class="at">header=</span><span class="cn">TRUE</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#clean-up of variable names so that they are all lowercase</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>var.names.daily <span class="ot">&lt;-</span> <span class="fu">tolower</span>(<span class="fu">colnames</span>(daily))</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(daily)<span class="ot">&lt;-</span>var.names.daily</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#creating a new "id" variable</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#(we had repeated measures nested in people, now they all get different ids)</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>daily<span class="sc">$</span>id <span class="ot">&lt;-</span> daily<span class="sc">$</span>id<span class="sc">*</span><span class="dv">10</span><span class="sc">+</span>daily<span class="sc">$</span>day</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(daily)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#set filepath for data file</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>filepath <span class="ot">&lt;-</span> <span class="st">"https://quantdev.ssri.psu.edu/sites/qdev/files/AMIBbrief_raw_daily1.csv"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#read in the .csv file using the url() function</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>daily <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file=</span><span class="fu">url</span>(filepath),<span class="at">header=</span><span class="cn">TRUE</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#clean-up of variable names so that they are all lowercase</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>var.names.daily <span class="ot">&lt;-</span> <span class="fu">tolower</span>(<span class="fu">colnames</span>(daily))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(daily)<span class="ot">&lt;-</span>var.names.daily</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#creating a new "id" variable</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#(we had repeated measures nested in people, now they all get different ids)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>daily<span class="sc">$</span>id <span class="ot">&lt;-</span> daily<span class="sc">$</span>id<span class="sc">*</span><span class="dv">10</span><span class="sc">+</span>daily<span class="sc">$</span>day</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(daily)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "id"      "day"     "date"    "slphrs"  "weath"   "lteq"    "pss"    
  [8] "se"      "swls"    "evalday" "posaff"  "negaff"  "temp"    "hum"    
 [15] "wind"    "bar"     "prec"   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#reducing down to variable set</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>daily <span class="ot">&lt;-</span> daily[ ,<span class="fu">c</span>(<span class="st">"id"</span>,<span class="st">"slphrs"</span>,<span class="st">"weath"</span>,<span class="st">"lteq"</span>,<span class="st">"pss"</span>,<span class="st">"se"</span>,<span class="st">"swls"</span>,<span class="st">"evalday"</span>, <span class="st">"posaff"</span>,<span class="st">"negaff"</span>,<span class="st">"temp"</span>,<span class="st">"hum"</span>,<span class="st">"wind"</span>,<span class="st">"bar"</span>,<span class="st">"prec"</span>)]</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#names of variables</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(daily)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#reducing down to variable set</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>daily <span class="ot">&lt;-</span> daily[ ,<span class="fu">c</span>(<span class="st">"id"</span>,<span class="st">"slphrs"</span>,<span class="st">"weath"</span>,<span class="st">"lteq"</span>,<span class="st">"pss"</span>,<span class="st">"se"</span>,<span class="st">"swls"</span>,<span class="st">"evalday"</span>, <span class="st">"posaff"</span>,<span class="st">"negaff"</span>,<span class="st">"temp"</span>,<span class="st">"hum"</span>,<span class="st">"wind"</span>,<span class="st">"bar"</span>,<span class="st">"prec"</span>)]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#names of variables</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(daily)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "id"      "slphrs"  "weath"   "lteq"    "pss"     "se"      "swls"   
  [8] "evalday" "posaff"  "negaff"  "temp"    "hum"     "wind"    "bar"    
 [15] "prec"   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#looking at data    </span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(daily,<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#looking at data    </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(daily,<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     id slphrs weath lteq  pss se swls evalday posaff negaff temp  hum wind
 1  1010    6.0     1   10 2.50  2  3.8       1    3.9    3.0 28.0 0.79 11.0
@@ -767,14 +772,14 @@ window.Quarto = {
 10 30.17 0.00</code></pre>
 </div>
 </div>
-<section id="preparing-data" class="level2" style="color: orange">
-<h2 class="anchored" data-anchor-id="preparing-data">Preparing Data</h2>
+<section id="preparing-data" class="level3" style="color: lightyellow">
+<h3 class="anchored" data-anchor-id="preparing-data">Preparing Data</h3>
 </section>
 <p>Note that cluster analysis does NOT generally work with missing data. Here we simply delete incomplete cases. Other possibilities include imputation, and calculation of distances using most complete subsets.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#removing observations with NA</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dailysub <span class="ot">&lt;-</span> daily[<span class="fu">complete.cases</span>(daily), ] </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(dailysub)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#removing observations with NA</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dailysub <span class="ot">&lt;-</span> daily[<span class="fu">complete.cases</span>(daily), ] </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(dailysub)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        vars    n    mean      sd  median trimmed     mad     min     max
 id         1 1376 3276.28 1279.88 3271.50 3302.24 1497.43 1010.00 5327.00
@@ -810,27 +815,27 @@ bar        1.22 -0.39    -0.90  0.01
 prec       0.30  1.85     1.98  0.00</code></pre>
 </div>
 </div>
-<section id="scaling" class="level2" style="color: orange">
-<h2 class="anchored" data-anchor-id="scaling">Scaling</h2>
+<section id="scaling" class="level3" style="color: lightyellow">
+<h3 class="anchored" data-anchor-id="scaling">Scaling</h3>
 </section>
 <p>The unit of distance may be different for different variables. For example, one year of difference in age seems like it should be a larger difference than one dollar difference in income.</p>
 <p>Different variables will be “weighted” differently in the distance calculation. To alleviate this, a common approach is to rescale each variable into a standardized, <em>z-score</em> variable (i.e., by subtracting the mean and dividing by the standard deviation).</p>
 <p>Thus, all the variables would then have mean = 0, with differences scales in standard deviation units. Note that this scales everything in relation to the observed sample (which has plusses and minuses).</p>
 <p>The R function <code>scale()</code> makes it all very easy.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#scaling all the variables</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dailyscale <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">scale</span>(dailysub, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale=</span><span class="cn">TRUE</span>))</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#checking and fixing the id variable (which we did not want standardized)</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dailyscale<span class="sc">$</span>id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#scaling all the variables</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dailyscale <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">scale</span>(dailysub, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale=</span><span class="cn">TRUE</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#checking and fixing the id variable (which we did not want standardized)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dailyscale<span class="sc">$</span>id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> num [1:1376] -1.77 -1.77 -1.77 -1.77 -1.77 ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dailyscale<span class="sc">$</span>id <span class="ot">&lt;-</span> dailysub<span class="sc">$</span>id</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dailyscale<span class="sc">$</span>id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dailyscale<span class="sc">$</span>id <span class="ot">&lt;-</span> dailysub<span class="sc">$</span>id</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dailyscale<span class="sc">$</span>id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> num [1:1376] 1010 1011 1012 1013 1014 ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(dailyscale)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(dailyscale)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        vars    n    mean      sd  median trimmed     mad     min     max
 id         1 1376 3276.28 1279.88 3271.50 3302.24 1497.43 1010.00 5327.00
@@ -866,13 +871,61 @@ bar        3.65 -0.39    -0.90  0.03
 prec       3.21  1.85     1.98  0.03</code></pre>
 </div>
 </div>
-<section id="plotting" class="level2" style="color: orange">
-<h2 class="anchored" data-anchor-id="plotting">Plotting</h2>
+<section id="plotting" class="level3" style="color: lightyellow">
+<h3 class="anchored" data-anchor-id="plotting">Plotting</h3>
 </section>
 <p>We choose a small subset of variables for easy visualization in a bivariate space. We use <code>lteq</code>, a measure of physical activity (Leisure Time Exercise Questionnaire), and <code>posaff</code>, a measure of positive affect.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dailyscale,<span class="fu">aes</span>(<span class="at">x=</span>lteq,<span class="at">y=</span>posaff)) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dailyscale,<span class="fu">aes</span>(<span class="at">x=</span>lteq,<span class="at">y=</span>posaff)) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_2_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is a good toy data set for class purposes, but keep in mind the original nature of the data which might not be the best for cluster analytic purposes.</p>
+<section id="clustering-algorithms-1" class="level2" style="color: orange">
+<h2 class="anchored" data-anchor-id="clustering-algorithms-1">Clustering Algorithms</h2>
+</section>
+<p>We will consider two hierarchical clustering algorithms:</p>
+<p>1.<strong>Agglomerative clustering</strong>:</p>
+<ul>
+<li>Commonly referred to as AGNES (AGglomerative NESting)</li>
+<li>Bottom- up approachs works in a bottom-up manner.</li>
+<li>This is the same procedure we followed above when clustering US cities</li>
+<li>Vomplete linkage and Ward’s method are often preferred for AGNES</li>
+</ul>
+<ol start="2" type="1">
+<li><em>Divisive hierarchical clustering</em>:</li>
+</ol>
+<ul>
+<li>Commonly referred to as DIANA (DIvisive ANAlysis)</li>
+<li>Top-down approach works in a top-down manner.</li>
+<li>For DIANA, clusters are divided based on the maximum average dissimilarity</li>
+</ul>
+<section id="agglomerative-clustering" class="level3" style="color: lightyellow">
+<h3 class="anchored" data-anchor-id="agglomerative-clustering">Agglomerative Clustering</h3>
+</section>
+<p>To perform agglomerative HC with <code>hclust()</code>, we first compute the dissimilarity values with <code>dist()</code> and then feed these values into <code>hclust()</code> and specify the agglomeration method to be used (i.e.&nbsp;<code>"complete"</code>, <code>"average"</code>, <code>"single"</code>, or <code>"ward.D"</code>).</p>
+<p>First, however, let’s remember that when we think about distances we are imagining each individual as a point in a multivariate space. For example, let’s look at the first three individuals.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">&lt;-</span> dailyscale[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">12</span>),<span class="fu">c</span>(<span class="st">"id"</span>,<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data1,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     id       lteq     posaff
+1  1010 -0.2399597 -0.1889168
+3  1012 -0.2399597  0.9016850
+14 1025 -0.4318716  0.5381510</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>labels.abc <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data1,<span class="fu">aes</span>(<span class="at">x=</span>lteq,<span class="at">y=</span>posaff)) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="at">fill=</span><span class="st">"blue"</span>,<span class="at">alpha=</span>.<span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x=</span>lteq<span class="fl">-.1</span>,<span class="at">label=</span>labels.abc)) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -881,26 +934,20 @@ prec       3.21  1.85     1.98  0.03</code></pre>
 </div>
 </div>
 </div>
-<p>This is a good toy data set for class purposes, but keep in mind the original nature of the data which might not be the best for cluster analytic purposes.</p>
-<section id="distances-1" class="level2" style="color: orange">
-<h2 class="anchored" data-anchor-id="distances-1">Distances</h2>
-</section>
-<p>Each individual is conceptualized as a point in a multivariate space. For example, let’s look at the first three individuals.</p>
+<p>In <code>hclust</code> we first need to create a dissimilarity matrix. Here we use Euclidean distance and then perform hierarchical clustering using complete linkage.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">&lt;-</span> dailyscale[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">12</span>),<span class="fu">c</span>(<span class="st">"id"</span>,<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)]</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data1,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     id       lteq     posaff
-1  1010 -0.2399597 -0.1889168
-3  1012 -0.2399597  0.9016850
-14 1025 -0.4318716  0.5381510</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>labels.abc <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>,<span class="st">"C"</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data1,<span class="fu">aes</span>(<span class="at">x=</span>lteq,<span class="at">y=</span>posaff)) <span class="sc">+</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="at">fill=</span><span class="st">"blue"</span>,<span class="at">alpha=</span>.<span class="dv">6</span>) <span class="sc">+</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x=</span>lteq<span class="fl">-.1</span>,<span class="at">label=</span>labels.abc)) <span class="sc">+</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">xlim</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cluster)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># For reproducibility</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Dissimilarity matrix</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">dist</span>(dailyscale[,<span class="fu">c</span>(<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)], <span class="at">method =</span> <span class="st">"euclidean"</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Hierarchical clustering using Complete Linkage</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>hc1 <span class="ot">&lt;-</span> <span class="fu">hclust</span>(d, <span class="at">method =</span> <span class="st">"complete"</span> )</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hc1, <span class="at">cex =</span> <span class="fl">0.6</span>, <span class="at">hang =</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -909,68 +956,90 @@ prec       3.21  1.85     1.98  0.03</code></pre>
 </div>
 </div>
 </div>
-<p>Let’s look at the distances. Euclidean Distance is calculated as</p>
-<p><span class="math display">\[
-EuclideanDistance_{A,B} = \sqrt{(x_{a} - x_{b})^2 + (y_{a} - y_{b})^2}
-\]</span></p>
-<p>and easily implemented using the <code>dist()</code> function.</p>
+<p>Alternatively, we can use the <code>agnes()</code> function. This function behaves similar to <code>hclust()</code>; however, with the <code>agnes()</code> function you can also get the agglomerative coefficient (AC), which measures the amount of clustering structure found.</p>
+<p>Generally speaking, the closer AC is to 1, the more clustered the data are. An AC above 0.75 is considered strong clustering structure.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dist.abc <span class="ot">&lt;-</span> <span class="fu">dist</span>(data1[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>],<span class="at">method=</span><span class="st">"euclidean"</span>,<span class="at">diag=</span><span class="cn">TRUE</span>,<span class="at">upper=</span><span class="cn">FALSE</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dist.abc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For reproducibility</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute maximum or complete linkage clustering with agnes</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>hc2 <span class="ot">&lt;-</span> <span class="fu">agnes</span>(dailyscale[,<span class="fu">c</span>(<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)], <span class="at">method =</span> <span class="st">"complete"</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Agglomerative coefficient</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>hc2<span class="sc">$</span>ac</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           1         3        14
-1  0.0000000                    
-3  1.0906017 0.0000000          
-14 0.7519693 0.4110804 0.0000000</code></pre>
+<pre><code>[1] 0.9938078</code></pre>
 </div>
 </div>
-<p>Might also use a different distance measure, such as Manhattan Distance … The distance between two points in a grid based on a strictly horizontal and/or vertical path (that is, along the grid lines), as opposed to the diagonal or “as the crow flies” distance.</p>
-<p>The Manhattan distance is the simple sum of the horizontal and vertical components, whereas the diagonal distance might be computed by applying the Pythagorean theorem.</p>
-<p><span class="math display">\[
-ManhattanDistance_{A,B} = |x_{a} - x_{b}| + |y_{a} - y_{b}|$
-\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dist.abc2 <span class="ot">&lt;-</span> <span class="fu">dist</span>(data1[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>],<span class="at">method=</span><span class="st">"manhattan"</span>,<span class="at">diag=</span><span class="cn">TRUE</span>,<span class="at">upper=</span><span class="cn">FALSE</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>dist.abc2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># methods to assess</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"average"</span>, <span class="st">"single"</span>, <span class="st">"complete"</span>, <span class="st">"ward"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(m) <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="st">"average"</span>, <span class="st">"single"</span>, <span class="st">"complete"</span>, <span class="st">"ward"</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># function to compute coefficient</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>ac <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">agnes</span>(dailyscale[,<span class="fu">c</span>(<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)], <span class="at">method =</span> x)<span class="sc">$</span>ac</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># get agglomerative coefficient for each linkage method</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map_dbl</span>(m, ac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           1         3        14
-1  0.0000000                    
-3  1.0906017 0.0000000          
-14 0.9189797 0.5554458 0.0000000</code></pre>
+<pre><code>  average    single  complete      ward 
+0.9857270 0.9601860 0.9938078 0.9989668 </code></pre>
 </div>
 </div>
-<p>The great thing about the distances is that they scale up to distance in many dimensions.</p>
-<section id="hierarchical-clustering-2" class="level2" style="color: orange">
-<h2 class="anchored" data-anchor-id="hierarchical-clustering-2">Hierarchical Clustering</h2>
+<section id="divisive-hierarchical-clustering" class="level3" style="color: lightyellow">
+<h3 class="anchored" data-anchor-id="divisive-hierarchical-clustering">Divisive hierarchical clustering</h3>
 </section>
-<p>The <code>cluster</code> package provides a whole set of options … including both hierarchical and non-hierarchical methods.</p>
-<p>Let’s look at a hierarchical method - more explanations can be found here <a href="http://www.econ.upf.edu/~michael/stanford/maeb7.pdf" class="uri">http://www.econ.upf.edu/~michael/stanford/maeb7.pdf</a> .</p>
-<p>Prelim: we make distance matrix (not totally necessary, but we do here for conceptual value)</p>
+<p>To perform divisive hierarchical clustering with <code>diana()</code>, we simply feed the data frame into the function and specify the dissimilarity measure to be used (i.e.&nbsp;<code>"euclidean"</code>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dist.all <span class="ot">&lt;-</span> <span class="fu">daisy</span>(dailyscale[,<span class="fu">c</span>(<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)],<span class="at">metric=</span><span class="st">"euclidean"</span>,<span class="at">stand=</span><span class="cn">FALSE</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#loking at distances among first 5 persons</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">as.matrix</span>(dist.all)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># compute divisive hierarchical clustering</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>hc4 <span class="ot">&lt;-</span> <span class="fu">diana</span>(dailyscale[,<span class="fu">c</span>(<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)])</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Divise coefficient; amount of clustering structure found</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>hc4<span class="sc">$</span>dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           1          2         3         4         5
-1 0.00000000 0.09088348 1.0906017 1.5479960 0.8493762
-2 0.09088348 0.00000000 1.1814852 1.6387144 0.8920640
-3 1.09060171 1.18148519 0.0000000 0.4644381 1.0573130
-4 1.54799598 1.63871436 0.4644381 0.0000000 1.4634612
-5 0.84937623 0.89206403 1.0573130 1.4634612 0.0000000</code></pre>
+<pre><code>[1] 0.9929078</code></pre>
 </div>
 </div>
-<p>Note that <code>daisy()</code> does include some treatments for missing data. Be careful!</p>
-<p>Engage the hierarchical clustering … we use the <code>agnes()</code> (agglomerative nesting, aka hierarchical clustering, Ward’s method, …) function (which also allows for other linkage options)</p>
+<section id="determining-the-number-of-clusters" class="level3" style="color: lightyellow">
+<h3 class="anchored" data-anchor-id="determining-the-number-of-clusters">Determining the number of clusters</h3>
+</section>
+<p>Determining the optimal number of clusters is a key step in cluster analysis. Several methods can be used to evaluate the appropriate number of clusters in a dataset. Here are three commonly used methods:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute Ward clusters </span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>clusterward.pa <span class="ot">&lt;-</span> <span class="fu">agnes</span>(dist.all, <span class="at">diss =</span> <span class="cn">TRUE</span>, <span class="at">method =</span> <span class="st">"ward"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra) <span class="co"># for cluster visualization</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot cluster results</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">fviz_nbclust</span>(dailyscale[,<span class="fu">c</span>(<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)], <span class="at">FUN =</span> hcut, <span class="at">method =</span> <span class="st">"wss"</span>, </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">k.max =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"(A) Elbow method"</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">fviz_nbclust</span>(dailyscale[,<span class="fu">c</span>(<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)], <span class="at">FUN =</span> hcut, <span class="at">method =</span> <span class="st">"silhouette"</span>, </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">k.max =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"(B) Silhouette method"</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">fviz_nbclust</span>(dailyscale[,<span class="fu">c</span>(<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)], <span class="at">FUN =</span> hcut, <span class="at">method =</span> <span class="st">"gap_stat"</span>, </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">k.max =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"(C) Gap statistic"</span>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Display plots side by side</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>gridExtra<span class="sc">::</span><span class="fu">grid.arrange</span>(p1, p2, p3, <span class="at">nrow =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-<p>There are many choices for the <em>linkage method</em>. We have chosen Ward here, as a classic. Again, this is a well-trodden research area, and one can find recommendations of all types. Read widely to find the best for your specific purpose and data.</p>
-<p>Then we visualize it!</p>
+</div>
+</div>
+<section id="dendograms-1" class="level3" style="color: lightyellow">
+<h3 class="anchored" data-anchor-id="dendograms-1">Dendograms</h3>
+</section>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="dv">1</span>))</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(clusterward.pa, <span class="at">which.plot =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">"Ward clustering of PAPA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct dendorgram for the Ames housing example</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>hc5 <span class="ot">&lt;-</span> <span class="fu">hclust</span>(d, <span class="at">method =</span> <span class="st">"ward.D2"</span> )</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>dend_plot <span class="ot">&lt;-</span> <span class="fu">fviz_dend</span>(hc5)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>dend_data <span class="ot">&lt;-</span> <span class="fu">attr</span>(dend_plot, <span class="st">"dendrogram"</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>dend_cuts <span class="ot">&lt;-</span> <span class="fu">cut</span>(dend_data, <span class="at">h =</span> <span class="dv">8</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_dend</span>(dend_cuts<span class="sc">$</span>lower[[<span class="dv">2</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -979,203 +1048,54 @@ ManhattanDistance_{A,B} = |x_{a} - x_{b}| + |y_{a} - y_{b}|$
 </div>
 </div>
 </div>
-<p>This is a <strong>Dendrogram</strong> (basically an organized plot of the distance matrix) that indicates how far apart objects are and when they might be merged together. The y-axis indicates the distance between the clusters. Long vertical lines indicate that there is a lot of between-cluster distance. We determine a level at which to “cut the tree”. Generally we are looking for a level above which the lines are long (between-group heterogeneity) and below which the leaves are close (within-group homogeneity).</p>
-<p>We see that 3-4 clusters seems to be a good tradeoff for parsimony?</p>
-<p>Lets cut the tree and make cluster assignments.</p>
+<p>In order to identify sub-groups (i.e., clusters), we can cut the dendrogram with <code>cutree()</code>. The height of the cut to the dendrogram controls the number of clusters obtained. Here, we cut our agglomerative hierarchical clustering model into eight clusters. We can see that the concentration of observations are in clusters 1–3.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>wardcluster4 <span class="ot">&lt;-</span> <span class="fu">cutree</span>(clusterward.pa, <span class="at">k =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ward's method</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>hc5 <span class="ot">&lt;-</span> <span class="fu">hclust</span>(d, <span class="at">method =</span> <span class="st">"ward.D2"</span> )</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cut tree into 4 groups</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>sub_grp <span class="ot">&lt;-</span> <span class="fu">cutree</span>(hc5, <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of members in each cluster</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(sub_grp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>sub_grp
+  1   2   3 
+424 693 259 </code></pre>
 </div>
-<p>And look at some statistical criteria</p>
+</div>
+<p>Then we can visualize the clusters formed.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cluster.stats</span>(dist.all, <span class="at">clustering=</span>wardcluster4,</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">silhouette =</span> <span class="cn">TRUE</span>, <span class="at">sepindex =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$n
-[1] 1376
-
-$cluster.number
-[1] 4
-
-$cluster.size
-[1] 406 443 391 136
-
-$min.cluster.size
-[1] 136
-
-$noisen
-[1] 0
-
-$diameter
-[1] 3.121016 3.033785 4.649615 3.836619
-
-$average.distance
-[1] 0.9515763 0.8725114 1.3010421 1.0215396
-
-$median.distance
-[1] 0.8683727 0.8580223 1.1969701 0.9056211
-
-$separation
-[1] 0.09088348 0.09088348 0.09088348 0.09595597
-
-$average.toother
-[1] 2.039699 1.969837 2.087139 2.097578
-
-$separation.matrix
-           [,1]       [,2]       [,3]       [,4]
-[1,] 0.00000000 0.09088348 0.09088348 0.09595597
-[2,] 0.09088348 0.00000000 0.09088348 0.99700230
-[3,] 0.09088348 0.09088348 0.00000000 0.13216412
-[4,] 0.09595597 0.99700230 0.13216412 0.00000000
-
-$ave.between.matrix
-         [,1]     [,2]     [,3]     [,4]
-[1,] 0.000000 1.840489 2.349549 1.797779
-[2,] 1.840489 0.000000 1.903794 2.545854
-[3,] 2.349549 1.903794 0.000000 1.900985
-[4,] 1.797779 2.545854 1.900985 0.000000
-
-$average.between
-[1] 2.039079
-
-$average.within
-[1] 1.03234
-
-$n.between
-[1] 680457
-
-$n.within
-[1] 265543
-
-$max.diameter
-[1] 4.649615
-
-$min.separation
-[1] 0.09088348
-
-$within.cluster.ss
-[1] 999.8698
-
-$clus.avg.silwidths
-        1         2         3         4 
-0.3554560 0.4316384 0.1501337 0.3112777 
-
-$avg.silwidth
-[1] 0.3172725
-
-$g2
-NULL
-
-$g3
-NULL
-
-$pearsongamma
-[1] 0.4745141
-
-$dunn
-[1] 0.01954645
-
-$dunn2
-[1] 1.3818
-
-$entropy
-[1] 1.311299
-
-$wb.ratio
-[1] 0.5062774
-
-$ch
-[1] 800.4971
-
-$cwidegap
-[1] 0.4544174 0.6166206 0.9088348 0.7249194
-
-$widestgap
-[1] 0.9088348
-
-$sindex
-[1] 0.1321713
-
-$corrected.rand
-NULL
-
-$vi
-NULL</code></pre>
-</div>
-</div>
-<section id="two-step-approach" class="level2" style="color: orange">
-<h2 class="anchored" data-anchor-id="two-step-approach">Two-step Approach</h2>
-</section>
-<p>Often times, researchers are using a two-step approach …</p>
-<ol type="1">
-<li>Hierarchical Ward’s method to …<br>
-…evaluate optimal number of clusters<br>
-…produce starting seeds for subsequent step<br>
-</li>
-<li>Non-hierarchical k-means method to …<br>
-…determine final case location in the separate subgroups</li>
-</ol>
-<p>The two-step approach circumvents some drawbacks of each procedure<br>
-…Ward’s method does not allow revising assigned membership in later steps tends to produce clusters of similar size …k-means method produces optimal clusters only if starting seeds are pre-specified</p>
-<section id="k-medoids" class="level4" style="color: lightyellow">
-<h4 class="anchored" data-anchor-id="k-medoids">K-Medoids</h4>
-</section>
-<p>An alternative hierarchical clustering method … we use the <code>pam()</code> (partitioning around mediods) which is like k-means, but a bit more robust.</p>
-<div class="cell" data-warnings="hide" data-messages="hide">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute PAM clustering solution for k=4</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>clusterpam.pa <span class="ot">&lt;-</span> <span class="fu">pam</span>(dist.all, <span class="at">k=</span><span class="dv">4</span>, <span class="at">diss =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>clusterpam.pa<span class="sc">$</span>medoids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "154" "130" "739" "262"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Checking length</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>pamcluster <span class="ot">&lt;-</span> clusterpam.pa<span class="sc">$</span>clustering</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(pamcluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1376</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#binding to originaldata</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>dailyscale.pam <span class="ot">&lt;-</span> <span class="fu">cbind</span>(dailyscale,pamcluster)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co">#plotting clustered data points </span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dailyscale.pam,<span class="fu">aes</span>(<span class="at">x=</span>lteq,<span class="at">y=</span>posaff)) <span class="sc">+</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">6</span>, <span class="at">color=</span><span class="fu">factor</span>(pamcluster))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot full dendogram</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_dend</span>(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  hc5,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">3</span>,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">horiz =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">rect =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">rect_fill =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">rect_border =</span> <span class="st">"jco"</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">k_colors =</span> <span class="st">"jco"</span>,</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> <span class="fl">0.1</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="week6_2_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="week6_2_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Let’s run the autosearch and see what comes out.</p>
-<div class="cell" data-warnings="hide" data-messages="hide">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>pamauto <span class="ot">&lt;-</span> <span class="fu">pamk</span>(dist.all,<span class="at">krange=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>,<span class="at">criterion=</span><span class="st">"asw"</span>, <span class="at">usepam=</span><span class="cn">TRUE</span>,</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">scaling=</span><span class="cn">FALSE</span>, <span class="at">alpha=</span><span class="fl">0.001</span>, <span class="at">diss=</span><span class="cn">TRUE</span>,</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">critout=</span><span class="cn">FALSE</span>, <span class="at">ns=</span><span class="dv">10</span>, <span class="at">seed=</span><span class="cn">NULL</span>)</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>pamauto<span class="sc">$</span>pamobject<span class="sc">$</span>medoids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "653" "78"  "802"</code></pre>
-</div>
-</div>
-<p>Here, the suggestion is for <em>k</em> = 3. Only three clusters.</p>
+<p>We can also look at the clusters in the bivariate space.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Obtain medoids</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>pamauto<span class="sc">$</span>pamobject<span class="sc">$</span>id.med</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 598  63 738</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#binding new cluster assignment to originaldata</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>dailyscale.pam<span class="sc">$</span>pamnew <span class="ot">&lt;-</span> pamauto<span class="sc">$</span>pamobject<span class="sc">$</span>clustering</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co">#plotting clustered data points with the medoids</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dailyscale.pam,<span class="fu">aes</span>(<span class="at">x=</span>lteq,<span class="at">y=</span>posaff)) <span class="sc">+</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">6</span>, <span class="at">color=</span><span class="fu">factor</span>(dailyscale.pam<span class="sc">$</span>pamnew)) <span class="sc">+</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>dailyscale.pam[<span class="dv">598</span>,],<span class="fu">aes</span>(<span class="at">x=</span>lteq,<span class="at">y=</span>posaff),<span class="at">color=</span><span class="dv">2</span>,<span class="at">size=</span><span class="dv">5</span>,<span class="at">shape=</span><span class="dv">18</span>) <span class="sc">+</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>dailyscale.pam[<span class="dv">63</span>,],<span class="fu">aes</span>(<span class="at">x=</span>lteq,<span class="at">y=</span>posaff),<span class="at">color=</span><span class="dv">1</span>,<span class="at">size=</span><span class="dv">5</span>,<span class="at">shape=</span><span class="dv">18</span>) <span class="sc">+</span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>dailyscale.pam[<span class="dv">738</span>,],<span class="fu">aes</span>(<span class="at">x=</span>lteq,<span class="at">y=</span>posaff),<span class="at">color=</span><span class="dv">4</span>,<span class="at">size=</span><span class="dv">5</span>,<span class="at">shape=</span><span class="dv">18</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fviz_cluster</span>(<span class="fu">list</span>(<span class="at">data =</span> dailyscale[,<span class="fu">c</span>(<span class="st">"lteq"</span>,<span class="st">"posaff"</span>)], <span class="at">cluster =</span> sub_grp),</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">geom =</span> <span class="st">"point"</span>,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">ellipse.type =</span> <span class="st">"convex"</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="st">"jco"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">ggtheme =</span> <span class="fu">theme_minimal</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="week6_2_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="week6_2_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>

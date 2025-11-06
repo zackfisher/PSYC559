@@ -19,8 +19,8 @@ library(recipes)
 library(rsample)
 library(ipred)
 library(dplyr)
+library(psych)
 ```
-
 
 ::: {style="color: yellow"}
 # Introduction
@@ -30,17 +30,14 @@ This section of the course book covers the basics of cluster analysis. First, we
 
 ::: {style="color: orange"}
 ## Supervised Learning
-::: 
+:::
 
 **Objective: Prediction**
 
--   Access to a set of variables, $x_1,x_2,\dots,x_p$, measured on $n$
-    observations, and a response $y$ also measured on those same $n$
-    observations.
+-   Access to a set of variables, $x_1,x_2,\dots,x_p$, measured on $n$ observations, and a response $y$ also measured on those same $n$ observations.
 -   Objective is to predict $y$ using $x_1,x_2,\dots,x_p$
 
-In many common situations there are a well-developed set of tools for
-supervised learning:
+In many common situations there are a well-developed set of tools for supervised learning:
 
 -   Regression and classification
     -   logistic regression, trees, random forests, bagging, boosting
@@ -49,77 +46,53 @@ supervised learning:
 
 ::: {style="color: orange"}
 ## Unsupervised Learning
-::: 
+:::
 
 **Objective: Description**
 
--   A set of statistical tools intended for when we have a set of
-    variables, $x_1,x_2,\dots,x_p$, measured on $n$ observations.
--   Objective is to uncover interesting patterns in the measurements of
-    $x_1,x_2,\dots,x_p$
-    -   Not interested in prediction because we do not have an
-        associated response variable $y$
-    -   Can we discover subgroups among the variables or among the
-        observations?
+-   A set of statistical tools intended for when we have a set of variables, $x_1,x_2,\dots,x_p$, measured on $n$ observations.
+-   Objective is to uncover interesting patterns in the measurements of $x_1,x_2,\dots,x_p$
+    -   Not interested in prediction because we do not have an associated response variable $y$
+    -   Can we discover subgroups among the variables or among the observations?
     -   Is there an informative way to visualize the data?
 
-Unsupervised learning is, in some ways, more challenging than supervised
-learning.
+Unsupervised learning is, in some ways, more challenging than supervised learning.
 
 -   Tends to be more subjective.
 -   No simple goal for the analysis, such as prediction of a response
--   Often hard to assess the results obtained from unsupervised learning
-    methods because there is no universally accepted mechanism for
-    validating the results
--   No way to check our work because we do not know the true answer—the
-    problem is unsupervised
+-   Often hard to assess the results obtained from unsupervised learning methods because there is no universally accepted mechanism for validating the results
+-   No way to check our work because we do not know the true answer—the problem is unsupervised
 
-The importance of reliable unsupervised learning methods is growing in a
-number of fields:
+The importance of reliable unsupervised learning methods is growing in a number of fields:
 
--   A cancer researcher might assay gene expression levels in patients
-    with breast cancer to look for subgroups among the breast cancer
-    samples in order to obtain a better understanding of the disease
--   An online shopping site might try to identify groups of shoppers
-    with similar browsing and purchase histories to target coupons,
-    sales, etc.
--   A search engine might choose what search results to display to a
-    particular individual based on the click histories of other
-    individuals with similar search patterns.
+-   A cancer researcher might assay gene expression levels in patients with breast cancer to look for subgroups among the breast cancer samples in order to obtain a better understanding of the disease
+-   An online shopping site might try to identify groups of shoppers with similar browsing and purchase histories to target coupons, sales, etc.
+-   A search engine might choose what search results to display to a particular individual based on the click histories of other individuals with similar search patterns.
 
 ::: {style="color: yellow"}
 # Cluster Analysis
-::: 
+:::
 
-Cluster analysis or clustering is the task of grouping a set of objects
-in such a way that objects in the same group (a cluster) are more
-similar (in some sense or another) to each other than to those in other
-groups (clusters).
+Cluster analysis or clustering is the task of grouping a set of objects in such a way that objects in the same group (a cluster) are more similar (in some sense or another) to each other than to those in other groups (clusters).
 
 ![<https://en.wikipedia.org/wiki/Cluster_analy>](imgs/cluster.png)
 
-We seek to partition observations into distinct groups so that the
-observations within each group are quite similar to each other, while
-observations in different groups are quite different from each other.
+We seek to partition observations into distinct groups so that the observations within each group are quite similar to each other, while observations in different groups are quite different from each other.
 
-To make this concrete, we must define what it means for two or more
-observations to be similar or different
+To make this concrete, we must define what it means for two or more observations to be similar or different
 
 -   most often this is done by the measurement of distance
--   cluster analysis methods work from *dissimilarity* measures (e.g.,
-    distance matrix)
+-   cluster analysis methods work from *dissimilarity* measures (e.g., distance matrix)
 
 ::: {style="color: lightyellow"}
 #### Person-Oriented Clustering
-::: 
+:::
 
-We can think of cluster analysis as a person-oriented approach in that
-one objective of cluster analysis is to identify different *types of
-people*.
+We can think of cluster analysis as a person-oriented approach in that one objective of cluster analysis is to identify different *types of people*.
 
 ::: {style="color: yellow"}
 # Clustering Algorithms
-::: 
+:::
 
 Many clustering algorithms exist:
 
@@ -136,12 +109,11 @@ The majority of class today will cover (1) Hierarchical Clustering.
 
 ::: {style="color: orange"}
 ## Hierarchical Clustering
-::: 
+:::
 
 -   We do not know in advance how many clusters we want
 -   Bottom-up approach (grouping similar observations together)
--   End up with a tree-like visual representation of the observations
-    called a dendrogram
+-   End up with a tree-like visual representation of the observations called a dendrogram
 
 ::: {style="color: orange"}
 ## K-means Clustering
@@ -149,213 +121,146 @@ The majority of class today will cover (1) Hierarchical Clustering.
 
 K-means clustering:
 
--   Seek to partition the observations into a pre-specified number of
-    clusters
+-   Seek to partition the observations into a pre-specified number of clusters
 -   Top-down approach
 
 ::: {style="color: yellow"}
 # Hierarchical Clustering
-::: 
+:::
 
 Hierarchical clustering proceeds via an extremely simple algorithm:
 
-Begin by defining some sort of dissimilarity measure between each pair
-of observations (e.g., Euclidean distance).
+Begin by defining some sort of dissimilarity measure between each pair of observations (e.g., Euclidean distance).
 
 Algorithm proceeds iteratively:
 
 1.  Each of the $n$ observations is treated as its own cluster
-2.  The two clusters that are most similar are then fused so that there
-    now are $n-1$ clusters
-3.  Repeat Step 2 until all of the observations belong to one single
-    cluster
+2.  The two clusters that are most similar are then fused so that there now are $n-1$ clusters
+3.  Repeat Step 2 until all of the observations belong to one single cluster
 
-Note this produces not one clustering, but a family of clustering
-represented by a dendrogram.
+Note this produces not one clustering, but a family of clustering represented by a dendrogram.
 
 ![Hierarchical Clustering](imgs/hclust.jpg)
 
 ::: {style="color: orange"}
 ## Distances
-::: 
+:::
 
-Euclidean distance is a common distance measure. For two dimensions, it
-is equal to the sum of squares of difference on $x$ plus the sum of
-squares of difference on $y$. Note, variables can differ in scale so it
-is important to standardize our inputs.
+Euclidean distance is a common distance measure. For two dimensions, it is equal to the sum of squares of difference on $x$ plus the sum of squares of difference on $y$. Note, variables can differ in scale so it is important to standardize our inputs.
 
 ![Euclidian Distance](imgs/euclidian.jpg)
 
 There are many **distance measures**.
 
-![Distance Measures](imgs/manhattan.jpg) 
+![Distance Measures](imgs/manhattan.jpg)
 
-A taxicab geometry is a form of geometry in which the usual distance function or metric of Euclidean geometry is replaced by a new metric in which the distance between two
-points is the sum of the absolute differences of their Cartesian coordinates.
+A taxicab geometry is a form of geometry in which the usual distance function or metric of Euclidean geometry is replaced by a new metric in which the distance between two points is the sum of the absolute differences of their Cartesian coordinates.
 
-Taxicab geometry versus Euclidean distance: In taxicab geometry, the
-red, yellow, and blue paths all have the same shortest path length of
-12.
+Taxicab geometry versus Euclidean distance: In taxicab geometry, the red, yellow, and blue paths all have the same shortest path length of 12.
 
 ::: {style="color: lightyellow"}
 ### Distance Between Clusters
-::: 
+:::
 
-The concept of dissimilarity between a pair of observations needs to be
-extended to a pair of groups of observations – what’s the distance
-between clusters?
+The concept of dissimilarity between a pair of observations needs to be extended to a pair of groups of observations – what’s the distance between clusters?
 
-This extension is achieved by developing the notion of **linkage**,
-which defines the dissimilarity between two groups of observations. Four
-most common types of linkage: complete, average, single, and centroid.
-An important fifth is the Ward-method.
+This extension is achieved by developing the notion of **linkage**, which defines the dissimilarity between two groups of observations. Four most common types of linkage: complete, average, single, and centroid. An important fifth is the Ward-method.
 
-**Complete**: Maximal intercluster dissimilarity. Compute all pairwise
-dissimilarities between the observations in cluster A and the
-observations in cluster B, and record the largest of these
-dissimilarities. This is sometimes referred to as farthest neighbor
-clustering.
+**Complete**: Maximal intercluster dissimilarity. Compute all pairwise dissimilarities between the observations in cluster A and the observations in cluster B, and record the largest of these dissimilarities. This is sometimes referred to as farthest neighbor clustering.
 
 ![Complete Linkage](imgs/linkage_complete.jpg)
 
-**Single**: Minimal intercluster dissimilarity. Compute all pairwise
-dissimilarities between the observations in cluster A and the
-observations in cluster B, and record the smallest of these
-dissimilarities.
+**Single**: Minimal intercluster dissimilarity. Compute all pairwise dissimilarities between the observations in cluster A and the observations in cluster B, and record the smallest of these dissimilarities.
 
 ![Single Linkage](imgs/linkage_single.jpg)
 
-**Average**: Mean intercluster dissimilarity. Compute all pairwise
-dissimilarities between the observations in cluster A and the
-observations in cluster B, and record the average of these
-dissimilarities.
+**Average**: Mean intercluster dissimilarity. Compute all pairwise dissimilarities between the observations in cluster A and the observations in cluster B, and record the average of these dissimilarities.
 
 ![Average Linkage](imgs/linkage_average.jpg)
 
-**Centroid**: Dissimilarity between the centroid for cluster A (a mean
-vector of length p) and the centroid for cluster B.
+**Centroid**: Dissimilarity between the centroid for cluster A (a mean vector of length p) and the centroid for cluster B.
 
 ![Centroid Linkage](imgs/linkage_centroid.jpg)
 
-**Ward's Method**: minimize within cluster sum of squares. The linkage
-function specifying the distance between two clusters is computed as the
-increase in the error sum of squares after fusing two clusters into a
-single cluster.
+**Ward's Method**: minimize within cluster sum of squares. The linkage function specifying the distance between two clusters is computed as the increase in the error sum of squares after fusing two clusters into a single cluster.
 
 ![Centroid Linkage](imgs/linkage_ward.jpg)
 
 ::: {style="color: lightyellow"}
 ### Linkages Applied Example
-::: 
+:::
 
-Let's take a look at different linkages using this US cities example.
-First we can calculate the difference among the different cities
+Let's take a look at different linkages using this US cities example. First we can calculate the difference among the different cities
 
-![US Map](imgs/clust_slide1.jpg) ![Matrix of
-Dissimilarity](imgs/clust_slide2.jpg)
+![US Map](imgs/clust_slide1.jpg) ![Matrix of Dissimilarity](imgs/clust_slide2.jpg)
 
 Now, let's start by making a cluster of Boston and New York.
 
 ![US Map](imgs/clust_slide3.jpg)
 
-Now compute new dissimilarity matrix. New matrix depends on the linkage
-approach.
+Now compute new dissimilarity matrix. New matrix depends on the linkage approach.
 
--   Complete linkage would use distance from Boston to all other cities
-    because Boston is further than NY
--   Single linkage would use distance from NY to all other cities
-    because NY is closer than Boston
--   Average linkage would use the mean of the distances from NY and
-    Boston
--   Centroid linkage would place a new city half way between NY and
-    Boston and calculate differences from this new city
+-   Complete linkage would use distance from Boston to all other cities because Boston is further than NY
+-   Single linkage would use distance from NY to all other cities because NY is closer than Boston
+-   Average linkage would use the mean of the distances from NY and Boston
+-   Centroid linkage would place a new city half way between NY and Boston and calculate differences from this new city
 
-<!-- ![Resulting Clusters](imgs/clust_slide4.jpg) -->
+![Resulting Clusters](imgs/clust_slide4.jpg)
 
-<!-- ::: {style="color: orange"} -->
-<!-- ## Dendograms -->
-<!-- :::  -->
+::: {style="color: orange"}
+## Dendograms
+:::
 
-<!-- Now let's look at the dendograms. -->
+Now let's look at the dendograms.
 
-<!-- ![Dendogram: Single Linkage](imgs/dend_single.png) ![Dendogram: Complete -->
-<!-- Linkage](imgs/dend_complete.png) Which one gives us a better solution -->
-<!-- for the underlying typology? -->
+![Dendogram: Single Linkage](imgs/dend_single.png) ![Dendogram: Complete Linkage](imgs/dend_complete.png) Which one gives us a better solution for the underlying typology?
 
 ::: {style="color: lightorange"}
 ### Interpreting Dendograms
-::: 
+:::
 
 -   Each leaf of the dendrogram represents one of the $n$ observations
--   Moving up the tree, leaves begin to fuse into branches corresponding
-    to observations that are similar to each other
--   Moving higher up, branches fuse, either with leaves or other
-    branches
--   The height of the fusion, as measured on the vertical axis,
-    indicates how different the two observations are
--   Observations that fuse at the very bottom of the tree are quite
-    similar to each other
--   Observations that fuse close to the top of the tree will tend to be
-    quite different
+-   Moving up the tree, leaves begin to fuse into branches corresponding to observations that are similar to each other
+-   Moving higher up, branches fuse, either with leaves or other branches
+-   The height of the fusion, as measured on the vertical axis, indicates how different the two observations are
+-   Observations that fuse at the very bottom of the tree are quite similar to each other
+-   Observations that fuse close to the top of the tree will tend to be quite different
 
-We can draw conclusions about the similarity of two observations based
-on the location on the vertical axis where branches containing those two
-observations first are fused.
+We can draw conclusions about the similarity of two observations based on the location on the vertical axis where branches containing those two observations first are fused.
 
-Generally we are looking for a level above which the lines are long
-(between-group heterogeneity) and below which the leaves are close
-(within-group homogeneity).
+Generally we are looking for a level above which the lines are long (between-group heterogeneity) and below which the leaves are close (within-group homogeneity).
 
 ::: {style="color: lightorange"}
 ### Identifying Clusters in Dendograms
-::: 
+:::
 
 -   Make a horizontal cut across the dendrogram
--   The distinct sets of observations beneath the cut can be interpreted
-    as clusters
+-   The distinct sets of observations beneath the cut can be interpreted as clusters
 -   Therefore, a dendrogram can be used to obtain any number of clusters
 
-Researchers often look at the dendrogram and select by eye a sensible
-number of clusters based on the heights of the fusion and the number of
-clusters desired.
+Researchers often look at the dendrogram and select by eye a sensible number of clusters based on the heights of the fusion and the number of clusters desired.
 
 The choice of where to cut the dendrogram is not always clear.
 
 ![Example Dendogram](imgs/dend3.jpg)
 
-What should we do with this data? 1 2 or 3 groups? You as a researcher
-have to decide.
+What should we do with this data? 1 2 or 3 groups? You as a researcher have to decide.
 
 ::: {style="color: lightorange"}
 **Discussion Questions**
 :::
 
-1.  Identify a dimension or process central to your own interests or research where
-    you think there is a substantial between-person heterogeneity.
-2.  Identify a set of variables that might be used to classify
-    individuals into meaningful groups as a means to address this
-    heterogeneity.
-3.  With groups or clusters identified how might you empirically assess
-    these groupings?
+1.  Identify a dimension or process central to your own interests or research where you think there is a substantial between-person heterogeneity.
+2.  Identify a set of variables that might be used to classify individuals into meaningful groups as a means to address this heterogeneity.
+3.  With groups or clusters identified how might you empirically assess these groupings?
 
 ::: {style="color: yellow"}
 # Hierarchical Clustering in R
 :::
 
-Libraries used in this script. There are two main libraries that we will
-use `cluster` (namesake) and `fpc` (Flexible Procedures for Clustering).
-Some other functions are in the base package.
-
-```{r, warning=FALSE, message=FALSE}
-#general packages
-library(ggplot2)
-library(psych)
-
-#cluster packages
-library(cluster) #clustering
-library(fpc) #flexible procedures for clustering
-#library(clusterCrit) #cluster criteria
-```
+::: {style="color: orange"}
+## Example Data
+:::
 
 Our example makes use of an experience sampling data set, but treats these data as though they are cross-sectional. Getting the data and doing a bit of data management (new id variable)
 
@@ -384,13 +289,11 @@ names(daily)
 head(daily,10)
 ```
 
-::: {style="color: orange"}
-## Preparing Data
+::: {style="color: lightyellow"}
+### Preparing Data
 :::
 
-Note that cluster analysis does NOT generally work with missing data.
-Here we simply delete incomplete cases. Other possibilities include
-imputation, and calculation of distances using most complete subsets.
+Note that cluster analysis does NOT generally work with missing data. Here we simply delete incomplete cases. Other possibilities include imputation, and calculation of distances using most complete subsets.
 
 ```{r}
 #removing observations with NA
@@ -398,22 +301,15 @@ dailysub <- daily[complete.cases(daily), ]
 describe(dailysub)
 ```
 
-::: {style="color: orange"}
-## Scaling
+::: {style="color: lightyellow"}
+### Scaling
 :::
 
-The unit of distance may be different for different variables. For
-example, one year of difference in age seems like it should be a larger
-difference than one dollar difference in income.
+The unit of distance may be different for different variables. For example, one year of difference in age seems like it should be a larger difference than one dollar difference in income.
 
-Different variables will be "weighted" differently in the distance
-calculation. To alleviate this, a common approach is to rescale each
-variable into a standardized, *z-score* variable (i.e., by subtracting
-the mean and dividing by the standard deviation).
+Different variables will be "weighted" differently in the distance calculation. To alleviate this, a common approach is to rescale each variable into a standardized, *z-score* variable (i.e., by subtracting the mean and dividing by the standard deviation).
 
-Thus, all the variables would then have mean = 0, with differences
-scales in standard deviation units. Note that this scales everything in
-relation to the observed sample (which has plusses and minuses).
+Thus, all the variables would then have mean = 0, with differences scales in standard deviation units. Note that this scales everything in relation to the observed sample (which has plusses and minuses).
 
 The R function `scale()` makes it all very easy.
 
@@ -427,30 +323,45 @@ str(dailyscale$id)
 describe(dailyscale)
 ```
 
-::: {style="color: orange"}
-## Plotting
+::: {style="color: lightyellow"}
+### Plotting
 :::
 
-We choose a small subset of variables for easy visualization in a
-bivariate space. We use `lteq`, a measure of physical activity (Leisure
-Time Exercise Questionnaire), and `posaff`, a measure of positive
-affect.
+We choose a small subset of variables for easy visualization in a bivariate space. We use `lteq`, a measure of physical activity (Leisure Time Exercise Questionnaire), and `posaff`, a measure of positive affect.
 
 ```{r}
 ggplot(dailyscale,aes(x=lteq,y=posaff)) +
   geom_point()
 ```
 
-This is a good toy data set for class purposes, but keep in mind the
-original nature of the data which might not be the best for cluster
-analytic purposes.
+This is a good toy data set for class purposes, but keep in mind the original nature of the data which might not be the best for cluster analytic purposes.
 
 ::: {style="color: orange"}
-## Distances
+## Clustering Algorithms
 :::
 
-Each individual is conceptualized as a point in a multivariate space.
-For example, let's look at the first three individuals.
+We will consider two hierarchical clustering algorithms:
+
+1.**Agglomerative clustering**:
+
+-   Commonly referred to as AGNES (AGglomerative NESting)
+-   Bottom- up approachs works in a bottom-up manner.
+-   This is the same procedure we followed above when clustering US cities
+-   Vomplete linkage and Ward’s method are often preferred for AGNES
+
+2.  *Divisive hierarchical clustering*:
+
+-   Commonly referred to as DIANA (DIvisive ANAlysis)
+-   Top-down approach works in a top-down manner.
+-   For DIANA, clusters are divided based on the maximum average dissimilarity
+
+::: {style="color: lightyellow"}
+### Agglomerative Clustering
+:::
+
+To perform agglomerative HC with `hclust()`, we first compute the dissimilarity values with `dist()` and then feed these values into `hclust()` and specify the agglomeration method to be used (i.e. `"complete"`, `"average"`, `"single"`, or `"ward.D"`).
+
+First, however, let's remember that when we think about distances we are imagining each individual as a point in a multivariate space. For example, let's look at the first three individuals.
 
 ```{r}
 data1 <- dailyscale[c(1,3,12),c("id","lteq","posaff")]
@@ -463,180 +374,145 @@ ggplot(data1,aes(x=lteq,y=posaff)) +
   ylim(-1,1) + xlim(-1,1)
 ```
 
-Let's look at the distances. Euclidean Distance is calculated as
+In `hclust` we first need to create a dissimilarity matrix. Here we use Euclidean distance and then perform hierarchical clustering using complete linkage.
 
-$$
-EuclideanDistance_{A,B} = \sqrt{(x_{a} - x_{b})^2 + (y_{a} - y_{b})^2}
-$$
+```{r, warning=FALSE, message=FALSE}
+library(cluster)
 
-and easily implemented using the `dist()` function.
+# For reproducibility
+set.seed(123)
 
-```{r}
-dist.abc <- dist(data1[1:3,2:3],method="euclidean",diag=TRUE,upper=FALSE)
-dist.abc
+# Dissimilarity matrix
+d <- dist(dailyscale[,c("lteq","posaff")], method = "euclidean")
+
+# Hierarchical clustering using Complete Linkage
+hc1 <- hclust(d, method = "complete" )
+
+plot(hc1, cex = 0.6, hang = -1)
 ```
 
-Might also use a different distance measure, such as Manhattan Distance
-... The distance between two points in a grid based on a strictly
-horizontal and/or vertical path (that is, along the grid lines), as
-opposed to the diagonal or "as the crow flies" distance.
+Alternatively, we can use the `agnes()` function. This function behaves similar to `hclust()`; however, with the `agnes()` function you can also get the agglomerative coefficient (AC), which measures the amount of clustering structure found.
 
-The Manhattan distance is the simple sum of the horizontal and vertical
-components, whereas the diagonal distance might be computed by applying
-the Pythagorean theorem.
+Generally speaking, the closer AC is to 1, the more clustered the data are. An AC above 0.75 is considered strong clustering structure.
 
-$$
-ManhattanDistance_{A,B} = |x_{a} - x_{b}| + |y_{a} - y_{b}|$
-$$
+```{r, warning=FALSE, message=FALSE}
+# For reproducibility
+set.seed(123)
 
-```{r}
-dist.abc2 <- dist(data1[1:3,2:3],method="manhattan",diag=TRUE,upper=FALSE)
-dist.abc2
+# Compute maximum or complete linkage clustering with agnes
+hc2 <- agnes(dailyscale[,c("lteq","posaff")], method = "complete")
+
+# Agglomerative coefficient
+hc2$ac
+
 ```
 
-The great thing about the distances is that they scale up to distance in
-many dimensions.
-
-::: {style="color: orange"}
-## Hierarchical Clustering
-:::
-
-The `cluster` package provides a whole set of options ... including both
-hierarchical and non-hierarchical methods.
-
-Let's look at a hierarchical method - more explanations can be found
-here <http://www.econ.upf.edu/~michael/stanford/maeb7.pdf> .
-
-Prelim: we make distance matrix (not totally necessary, but we do here
-for conceptual value)
-
 ```{r}
-dist.all <- daisy(dailyscale[,c("lteq","posaff")],metric="euclidean",stand=FALSE)
-#loking at distances among first 5 persons
-as.matrix(dist.all)[1:5,1:5]
+# methods to assess
+m <- c( "average", "single", "complete", "ward")
+names(m) <- c( "average", "single", "complete", "ward")
+
+# function to compute coefficient
+ac <- function(x) {
+  agnes(dailyscale[,c("lteq","posaff")], method = x)$ac
+}
+
+# get agglomerative coefficient for each linkage method
+purrr::map_dbl(m, ac)
 ```
- 
-
-Note that `daisy()` does include some treatments for missing data. Be
-careful!
-
-Engage the hierarchical clustering ... we use the `agnes()`
-(agglomerative nesting, aka hierarchical clustering, Ward's method, ...)
-function (which also allows for other linkage options)
-
-```{r}
-# Compute Ward clusters 
-clusterward.pa <- agnes(dist.all, diss = TRUE, method = "ward")
-```
-
-There are many choices for the *linkage method*. We have chosen Ward
-here, as a classic. Again, this is a well-trodden research area, and one
-can find recommendations of all types. Read widely to find the best for
-your specific purpose and data.
-
-Then we visualize it!
-
-```{r}
-# Plot
-layout(matrix(1))
-plot(clusterward.pa, which.plot = 2, main = "Ward clustering of PAPA")
-```
-
-This is a **Dendrogram** (basically an organized plot of the distance
-matrix) that indicates how far apart objects are and when they might be
-merged together. The y-axis indicates the distance between the clusters.
-Long vertical lines indicate that there is a lot of between-cluster
-distance. We determine a level at which to "cut the tree". Generally we
-are looking for a level above which the lines are long (between-group
-heterogeneity) and below which the leaves are close (within-group
-homogeneity).
-
-We see that 3-4 clusters seems to be a good tradeoff for parsimony?
-
-Lets cut the tree and make cluster assignments.
-
-```{r}
-wardcluster4 <- cutree(clusterward.pa, k = 4)
-```
-
-And look at some statistical criteria
-
-```{r}
-cluster.stats(dist.all, clustering=wardcluster4,
-              silhouette = TRUE, sepindex = TRUE)
-```
-
-::: {style="color: orange"}
-## Two-step Approach
-:::
-
-Often times, researchers are using a two-step approach ...
-
-1.  Hierarchical Ward's method to ...\
-    ...evaluate optimal number of clusters\
-    ...produce starting seeds for subsequent step\
-2.  Non-hierarchical k-means method to ...\
-    ...determine final case location in the separate subgroups
-
-The two-step approach circumvents some drawbacks of each procedure\
-...Ward's method does not allow revising assigned membership in later
-steps tends to produce clusters of similar size ...k-means method
-produces optimal clusters only if starting seeds are pre-specified
 
 ::: {style="color: lightyellow"}
-#### K-Medoids
+### Divisive hierarchical clustering
 :::
 
-An alternative hierarchical clustering method ... we use the `pam()`
-(partitioning around mediods) which is like k-means, but a bit more
-robust.
+To perform divisive hierarchical clustering with `diana()`, we simply feed the data frame into the function and specify the dissimilarity measure to be used (i.e. `"euclidean"`).
 
-```{r, warnings = "hide", messages = "hide"} 
-# Compute PAM clustering solution for k=4
-clusterpam.pa <- pam(dist.all, k=4, diss = TRUE)
-clusterpam.pa$medoids
+```{r, warning=FALSE, message=FALSE}
+# compute divisive hierarchical clustering
+hc4 <- diana(dailyscale[,c("lteq","posaff")])
 
-#Checking length
-pamcluster <- clusterpam.pa$clustering
-length(pamcluster)
-#binding to originaldata
-dailyscale.pam <- cbind(dailyscale,pamcluster)
-#plotting clustered data points 
-ggplot(dailyscale.pam,aes(x=lteq,y=posaff)) +
-  geom_point(alpha=.6, color=factor(pamcluster))
+# Divise coefficient; amount of clustering structure found
+hc4$dc
 ```
 
-Let's run the autosearch and see what comes out.
+::: {style="color: lightyellow"}
+### Determining the number of clusters
+:::
 
-```{r, warnings = "hide", messages = "hide"} 
-pamauto <- pamk(dist.all,krange=2:10,criterion="asw", usepam=TRUE,
-                scaling=FALSE, alpha=0.001, diss=TRUE,
-                critout=FALSE, ns=10, seed=NULL)
-pamauto$pamobject$medoids
+Determining the optimal number of clusters is a key step in cluster analysis. Several methods can be used to evaluate the appropriate number of clusters in a dataset. Here are three commonly used methods:
+
+```{r, warning=FALSE, message=FALSE}
+library(factoextra) # for cluster visualization
+
+# Plot cluster results
+p1 <- fviz_nbclust(dailyscale[,c("lteq","posaff")], FUN = hcut, method = "wss", 
+                   k.max = 10) +
+  ggtitle("(A) Elbow method")
+p2 <- fviz_nbclust(dailyscale[,c("lteq","posaff")], FUN = hcut, method = "silhouette", 
+                   k.max = 10) +
+  ggtitle("(B) Silhouette method")
+p3 <- fviz_nbclust(dailyscale[,c("lteq","posaff")], FUN = hcut, method = "gap_stat", 
+                   k.max = 10) +
+  ggtitle("(C) Gap statistic")
+
+# Display plots side by side
+gridExtra::grid.arrange(p1, p2, p3, nrow = 1)
 ```
 
-Here, the suggestion is for *k* = 3. Only three clusters.
+::: {style="color: lightyellow"}
+### Dendograms
+:::
 
 ```{r}
-#Obtain medoids
-pamauto$pamobject$id.med
-#binding new cluster assignment to originaldata
-dailyscale.pam$pamnew <- pamauto$pamobject$clustering
-
-#plotting clustered data points with the medoids
-ggplot(dailyscale.pam,aes(x=lteq,y=posaff)) +
-  geom_point(alpha=.6, color=factor(dailyscale.pam$pamnew)) +
-  geom_point(data=dailyscale.pam[598,],aes(x=lteq,y=posaff),color=2,size=5,shape=18) +
-  geom_point(data=dailyscale.pam[63,],aes(x=lteq,y=posaff),color=1,size=5,shape=18) +
-  geom_point(data=dailyscale.pam[738,],aes(x=lteq,y=posaff),color=4,size=5,shape=18)
-  
+# Construct dendorgram for the Ames housing example
+hc5 <- hclust(d, method = "ward.D2" )
+dend_plot <- fviz_dend(hc5)
+dend_data <- attr(dend_plot, "dendrogram")
+dend_cuts <- cut(dend_data, h = 8)
+fviz_dend(dend_cuts$lower[[2]])
 ```
 
+In order to identify sub-groups (i.e., clusters), we can cut the dendrogram with `cutree()`. The height of the cut to the dendrogram controls the number of clusters obtained. Here, we cut our agglomerative hierarchical clustering model into eight clusters. We can see that the concentration of observations are in clusters 1–3.
 
+```{r, warning=FALSE, message=FALSE}
+# Ward's method
+hc5 <- hclust(d, method = "ward.D2" )
+
+# Cut tree into 4 groups
+sub_grp <- cutree(hc5, k = 3)
+
+# Number of members in each cluster
+table(sub_grp)
+
+```
+
+Then we can visualize the clusters formed.
+
+```{r , warning=FALSE, message=FALSE}
+# Plot full dendogram
+fviz_dend(
+  hc5,
+  k = 3,
+  horiz = TRUE,
+  rect = TRUE,
+  rect_fill = TRUE,
+  rect_border = "jco",
+  k_colors = "jco",
+  cex = 0.1
+)
+```
+
+We can also look at the clusters in the bivariate space.
+
+```{r}
+fviz_cluster(list(data = dailyscale[,c("lteq","posaff")], cluster = sub_grp),
+             geom = "point",
+             ellipse.type = "convex",
+             palette = "jco",
+             ggtheme = theme_minimal())
+
+```
 
 ### Final Thoughts
 
-Please remember the usual caution. Our intention here has been simple
-exposure. When using these methods for a paper or project, do the
-research necessary to engage the method precisely and with good form.
-
+Please remember the usual caution. Our intention here has been simple exposure. When using these methods for a paper or project, do the research necessary to engage the method precisely and with good form.
