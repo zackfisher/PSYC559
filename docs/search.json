@@ -1,0 +1,106 @@
+[
+  {
+    "objectID": "week1_3.html",
+    "href": "week1_3.html",
+    "title": "Describing Data Numerically",
+    "section": "",
+    "text": "Once you have read in a data frame it can be useful to know how the variables are understood by R. For example, let’s look at some Kaggle Marketing Analytics Data. You can download the raw data here.",
+    "crumbs": [
+      "Introduction to R",
+      "Describing Data Numerically"
+    ]
+  },
+  {
+    "objectID": "1_1b.html",
+    "href": "1_1b.html",
+    "title": "R Packages",
+    "section": "",
+    "text": "One of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the ggplot2 package for plotting and visualizing data and the psych package for describing data numerically.\nTo install R packages you can use the install.packages() function directly in the console as follows:\ninstall.packages(\"ggplot2\")\nor you can do so from the Packages tab of the Files pane in RStudio using the following steps:\nOnce a package is installed you can load it into your environment using the library() function. Once loaded you have access to all the R functions supplied by that package.\nlibrary(\"ggplot2\")\nThere are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the CRAN Task Views. For example, there is an interesting Task View for Machine Learning that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the Sports Analytics Task View there is a f1dataR package that provides historical data from the beginning of Formula 1.",
+    "crumbs": [
+      "Introduction to R",
+      "R Packages"
+    ]
+  },
+  {
+    "objectID": "1_1b.html#using-r-packages",
+    "href": "1_1b.html#using-r-packages",
+    "title": "R Packages",
+    "section": "Using R Packages",
+    "text": "Using R Packages",
+    "crumbs": [
+      "Introduction to R",
+      "R Packages"
+    ]
+  },
+  {
+    "objectID": "1_1b.html#finding-useful-r-packages",
+    "href": "1_1b.html#finding-useful-r-packages",
+    "title": "R Packages",
+    "section": "Finding Useful R Packages",
+    "text": "Finding Useful R Packages",
+    "crumbs": [
+      "Introduction to R",
+      "R Packages"
+    ]
+  },
+  {
+    "objectID": "introduction.html",
+    "href": "introduction.html",
+    "title": "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY",
+    "section": "",
+    "text": "Welcome to Applied Machine Learning in Psychology.",
+    "crumbs": [
+      "Table of Contents"
+    ]
+  },
+  {
+    "objectID": "introduction.html#the-syllabus",
+    "href": "introduction.html#the-syllabus",
+    "title": "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY",
+    "section": "The Syllabus",
+    "text": "The Syllabus\nStudents may review the syllabus on Canvas.",
+    "crumbs": [
+      "Table of Contents"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PSC559: Applied Machine Learning in Psychology",
+    "section": "",
+    "text": "Welcome to the PSC559: Applied Machine Learning in Psychology!\nAs the class progresses I will update this front matter with a general course overview and important announcements.\nIf you find errors or typos in any of these materials please let me know."
+  },
+  {
+    "objectID": "1_1.html",
+    "href": "1_1.html",
+    "title": "Basic R Programming",
+    "section": "",
+    "text": "Before getting started we will need to install R and RStudio.",
+    "crumbs": [
+      "Introduction to R",
+      "Basic R Programming"
+    ]
+  },
+  {
+    "objectID": "1_2.html",
+    "href": "1_2.html",
+    "title": "Reading in Data",
+    "section": "",
+    "text": "One of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.\nBy reading in data we are generally refering to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabularobject where columns representing variables and rows representing cases. This is not always the case but covers the most basic use case.\nMany different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.",
+    "crumbs": [
+      "Introduction to R",
+      "Reading in Data"
+    ]
+  },
+  {
+    "objectID": "week1_4.html",
+    "href": "week1_4.html",
+    "title": "Describing Data Visually",
+    "section": "",
+    "text": "This section will briefly introduce you to visualizing data using the ggplot2 package. R has a number of systems for making graphs but ggplot2 is by far the most developed option. ggplot2 implements the grammar of graphics, and if you’d like to learn more about the motivation for this work take a look at The Layered Grammar of Graphics.",
+    "crumbs": [
+      "Introduction to R",
+      "Describing Data Visually"
+    ]
+  }
+]

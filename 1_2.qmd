@@ -24,7 +24,7 @@ Many different data file formats can be read into R as data frames, such as .csv
 One of the trickiest parts of loading data from your hard drive into R is knowing how to locate it. Depending on whether you are using a Mac or Windows machine you can read in .csv files directly if you know the path. For example, I can load a .csv file into R and save it as a data frame labeled `df` as follows:
 
 ```{r}
-df <- read.csv("/Users/zacharyfisher/Dropbox/Macbook/UNC/Teaching/Courses/PSYC559/PSYC559-Site/data/ifood_df.csv")
+df <- read.csv("/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data/ifood_df.csv")
 ```
 
 Once the .csv file is loaded I can look at it using the `View()` function
@@ -46,7 +46,7 @@ Another way to load data is to set the working directory to the folder where the
 ![Set the working directory in RStudio.](images/working_directory.png)
 
 ```{r}
-setwd("/Users/zacharyfisher/Dropbox/Macbook/UNC/Teaching/Courses/PSYC559/PSYC559-Site/data")
+setwd("/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data")
 df <- read.csv("ifood_df.csv")
 ```
 

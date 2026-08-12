@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Basic R Programming – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Describing Data Numerically – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_1.html">Basic R Programming</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./week1_3.html">Describing Data Numerically</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -150,7 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_1.html" class="sidebar-item-text sidebar-link active">
+  <a href="./1_1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basic R Programming</span></a>
   </div>
 </li>
@@ -168,7 +168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week1_3.html" class="sidebar-item-text sidebar-link">
+  <a href="./week1_3.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Describing Data Numerically</span></a>
   </div>
 </li>
@@ -245,23 +245,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setting-up-your-environment" id="toc-setting-up-your-environment" class="nav-link active" data-scroll-target="#setting-up-your-environment">Setting Up Your Environment</a></li>
-  <li><a href="#installing-r" id="toc-installing-r" class="nav-link" data-scroll-target="#installing-r">Installing R</a></li>
-  <li><a href="#installing-rstudio" id="toc-installing-rstudio" class="nav-link" data-scroll-target="#installing-rstudio">Installing RStudio</a></li>
-  <li><a href="#helpful-links" id="toc-helpful-links" class="nav-link" data-scroll-target="#helpful-links">Helpful Links</a></li>
-  <li><a href="#difference-between-r-and-rstudio" id="toc-difference-between-r-and-rstudio" class="nav-link" data-scroll-target="#difference-between-r-and-rstudio">Difference between R and RStudio</a></li>
-  <li><a href="#interacting-with-rstudio" id="toc-interacting-with-rstudio" class="nav-link" data-scroll-target="#interacting-with-rstudio">Interacting with RStudio</a></li>
-  <li><a href="#coding-in-rstudio" id="toc-coding-in-rstudio" class="nav-link" data-scroll-target="#coding-in-rstudio">Coding in RStudio</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#numerical-summaries-of-data-frames" id="toc-numerical-summaries-of-data-frames" class="nav-link active" data-scroll-target="#numerical-summaries-of-data-frames">Numerical Summaries of Data Frames</a></li>
+  <li><a href="#read-in-marketing-data" id="toc-read-in-marketing-data" class="nav-link" data-scroll-target="#read-in-marketing-data">Read in Marketing Data</a></li>
+  <li><a href="#install-and-load-psych-package" id="toc-install-and-load-psych-package" class="nav-link" data-scroll-target="#install-and-load-psych-package">Install and Load <code>psych</code> Package</a></li>
+  <li><a href="#describe-the-data" id="toc-describe-the-data" class="nav-link" data-scroll-target="#describe-the-data">Describe the Data</a></li>
+  <li><a href="#describe-the-data-by-group" id="toc-describe-the-data-by-group" class="nav-link" data-scroll-target="#describe-the-data-by-group">Describe the Data by Group</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_1.html">Basic R Programming</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./week1_3.html">Describing Data Numerically</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Basic R Programming</h1>
+<h1 class="title">Describing Data Numerically</h1>
 </div>
 
 
@@ -278,249 +275,342 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="setting-up-your-environment" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="setting-up-your-environment">Setting Up Your Environment</h2>
+<section id="numerical-summaries-of-data-frames" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="numerical-summaries-of-data-frames">Numerical Summaries of Data Frames</h2>
 </section>
-<p>Before getting started we will need to install R and RStudio.</p>
-<section id="installing-r" class="level3">
-<h3 class="anchored" data-anchor-id="installing-r">Installing R</h3>
-<p>We can download R from CRAN, the <strong>c</strong>omprehensive <strong>R</strong> <strong>a</strong>rchive <strong>n</strong>etwork. CRAN is a server used to distribute R and R packages. If you don’t have R installed already you can do so <a href="https://cloud.r-project.org">here</a>.</p>
-</section>
-<section id="installing-rstudio" class="level3">
-<h3 class="anchored" data-anchor-id="installing-rstudio">Installing RStudio</h3>
-<p>With R installed, let’s go ahead and install RStudio. RStudio is a convenient IDE (integrated development environment) for R programming. <a href="https://posit.co/downloads/">Download</a> and install the RStudio Desktop client.</p>
-</section>
-<section id="helpful-links" class="level3">
-<h3 class="anchored" data-anchor-id="helpful-links">Helpful Links</h3>
-<p><em>From the <a href="https://education.rstudio.com/learn/beginner/">RStudio Education</a> page</em>:</p>
-<blockquote class="blockquote">
-<p>For beginner-friendly installation instructions, we recommend the free online ModernDive chapter <a href="https://moderndive.netlify.com/1-getting-started.html"><em>Getting Started with R and RStudio</em></a>. You may also enjoy the <a href="https://rladiessydney.org/courses/ryouwithme/basicbasics"><em>Basic Basics</em></a> lesson unit from <a href="https://rladiessydney.org">R-Ladies Sydney</a>, which provides an <a href="https://rladiessydney.org/courses/ryouwithme/01-basicbasics-1/">opinionated tour of RStudio</a> for new users and a <a href="https://rladiessydney.org/courses/ryouwithme/01-basicbasics-2/">step-by-step guide to installing and using R packages</a>.</p>
-</blockquote>
-</section>
-<section id="difference-between-r-and-rstudio" class="level3">
-<h3 class="anchored" data-anchor-id="difference-between-r-and-rstudio">Difference between R and RStudio</h3>
-<p>For those of you who may be unfamiliar with using an IDE, RStudio is simply a convenient way for us to interact with R. You can think of R as the engine, powering the car, and RStudio as the controls and dashboard for driving. For 559, we won’t interact directly with R very often, instead we will work with R directly from RStudio.</p>
+<p>Once you have read in a data frame it can be useful to know how the variables are understood by R. For example, let’s look at some <a href="https://www.kaggle.com/datasets/jackdaoud/marketing-data" class="uri">Kaggle Marketing Analytics Data</a>. You can download the raw data <a href="https://github.com/nailson/ifood-data-business-analyst-test">here</a>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/R_vs_RStudio.png" class="img-fluid figure-img"></p>
-<figcaption>Image from https://moderndive.com/1-getting-started.html</figcaption>
+<p><img src="images/dictionary.png" class="img-fluid figure-img"></p>
+<figcaption>Data dictionary for marketing data</figcaption>
 </figure>
 </div>
-</section>
-<section id="interacting-with-rstudio" class="level3">
-<h3 class="anchored" data-anchor-id="interacting-with-rstudio">Interacting with RStudio</h3>
-<p>After opening RStudio you will see something similar to the image below, where the application is divided into different <em>panes</em>. Each pane serves a different purpose:</p>
-<ul>
-<li><p><strong>Q1</strong>: contains scripts you are working from and sometimes data views</p></li>
-<li><p><strong>Q2</strong>: the console where you run the code</p></li>
-<li><p><strong>Q3</strong>: the environment page, code history, and build tools</p></li>
-<li><p><strong>Q4</strong>: files, plots, packages, help documentation</p></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/panes.jpg" class="img-fluid figure-img"></p>
-<figcaption>Image from https://rladiessydney.org/courses/01-basicbasics-1</figcaption>
-</figure>
+<section id="read-in-marketing-data" class="level3">
+<h3 class="anchored" data-anchor-id="read-in-marketing-data">Read in Marketing Data</h3>
+<p>Let’s read in the data using the <code>read.csv()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="coding-in-rstudio" class="level3">
-<h3 class="anchored" data-anchor-id="coding-in-rstudio">Coding in RStudio</h3>
-<p>Let’s begin by using the Console to interact with R.</p>
-<section id="using-r-as-a-calculator" class="level4">
-<h4 class="anchored" data-anchor-id="using-r-as-a-calculator">Using R as a Calculator</h4>
-<p>We can use R as a basic calculator.</p>
+<section id="install-and-load-psych-package" class="level3">
+<h3 class="anchored" data-anchor-id="install-and-load-psych-package">Install and Load <code>psych</code> Package</h3>
+<p>Once we know the data has been read into R we can look at how R understands the data file using the structure function <code>str()</code></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">/</span> <span class="dv">200</span> <span class="sc">*</span> <span class="dv">30</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.15</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>(<span class="dv">59</span> <span class="sc">+</span> <span class="dv">73</span> <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 44.66667</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sin</span>(pi <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   2205 obs. of  39 variables:
+ $ Income              : num  58138 46344 71613 26646 58293 ...
+ $ Kidhome             : int  0 1 0 1 1 0 0 1 1 1 ...
+ $ Teenhome            : int  0 1 0 0 0 1 1 0 0 1 ...
+ $ Recency             : int  58 38 26 26 94 16 34 32 19 68 ...
+ $ MntWines            : int  635 11 426 11 173 520 235 76 14 28 ...
+ $ MntFruits           : int  88 1 49 4 43 42 65 10 0 0 ...
+ $ MntMeatProducts     : int  546 6 127 20 118 98 164 56 24 6 ...
+ $ MntFishProducts     : int  172 2 111 10 46 0 50 3 3 1 ...
+ $ MntSweetProducts    : int  88 1 21 3 27 42 49 1 3 1 ...
+ $ MntGoldProds        : int  88 6 42 5 15 14 27 23 2 13 ...
+ $ NumDealsPurchases   : int  3 2 1 2 5 2 4 2 1 1 ...
+ $ NumWebPurchases     : int  8 1 8 2 5 6 7 4 3 1 ...
+ $ NumCatalogPurchases : int  10 1 2 0 3 4 3 0 0 0 ...
+ $ NumStorePurchases   : int  4 2 10 4 6 10 7 4 2 0 ...
+ $ NumWebVisitsMonth   : int  7 5 4 6 5 6 6 8 9 20 ...
+ $ AcceptedCmp3        : int  0 0 0 0 0 0 0 0 0 1 ...
+ $ AcceptedCmp4        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ AcceptedCmp5        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ AcceptedCmp1        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ AcceptedCmp2        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ Complain            : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ Z_CostContact       : int  3 3 3 3 3 3 3 3 3 3 ...
+ $ Z_Revenue           : int  11 11 11 11 11 11 11 11 11 11 ...
+ $ Response            : int  1 0 0 0 0 0 0 0 1 0 ...
+ $ Age                 : int  63 66 55 36 39 53 49 35 46 70 ...
+ $ Customer_Days       : int  2822 2272 2471 2298 2320 2452 2752 2576 2547 2267 ...
+ $ marital_Divorced    : int  0 0 0 0 0 0 1 0 0 0 ...
+ $ marital_Married     : int  0 0 0 0 1 0 0 1 0 0 ...
+ $ marital_Single      : int  1 1 0 0 0 0 0 0 0 0 ...
+ $ marital_Together    : int  0 0 1 1 0 1 0 0 1 1 ...
+ $ marital_Widow       : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ education_2n.Cycle  : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ education_Basic     : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ education_Graduation: int  1 1 1 1 0 0 1 0 0 0 ...
+ $ education_Master    : int  0 0 0 0 0 1 0 0 0 0 ...
+ $ education_PhD       : int  0 0 0 0 1 0 0 1 1 1 ...
+ $ MntTotal            : int  1529 21 734 48 407 702 563 146 44 36 ...
+ $ MntRegularProds     : int  1441 15 692 43 392 688 536 123 42 23 ...
+ $ AcceptedCmpOverall  : int  0 0 0 0 0 0 0 0 0 1 ...</code></pre>
+</div>
+</div>
+<p>The <code>psych</code> package in R provides some useful function for describing data. Let’s install <code>psyc</code>, load the package, and look at our data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"psych"</span>) <span class="co"># install the package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"psych"</span>) <span class="co"># load the library</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="creating-new-objects" class="level4">
-<h4 class="anchored" data-anchor-id="creating-new-objects">Creating New Objects</h4>
-<p>We can create new object using the assignment operator <code>&lt;-</code> as follows:</p>
+<section id="describe-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="describe-the-data">Describe the Data</h3>
+<p>Now let’s use the <code>describe()</code> function from <code>psych</code> to look at our marketing data.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> <span class="dv">4</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>secret_password <span class="ot">&lt;-</span> <span class="st">"password1234"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>In R, object names are case sensitive, must start with a letter and can contain numbers, letters, underscores and periods.</p>
-<p>You can look at objects by typing their name into the console:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df) <span class="co"># describe our marketing data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 12</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>secret_password</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "password1234"</code></pre>
-</div>
-</div>
-<p>If you type an object that hasn’t been defined yet you will get an error. For example,</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Secret_Password</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: object 'Secret_Password' not found</code></pre>
-</div>
-</div>
-</section>
-<section id="calling-functions-in-r" class="level4">
-<h4 class="anchored" data-anchor-id="calling-functions-in-r">Calling Functions in R</h4>
-<p>R has many built-in functions and you can also create your own. Functions can be used to perform tasks in R. They take <em>arguments</em> as inputs, and return <em>outputs</em>. Often you will supply arguments to a function, and it is also possible to use a function’s default values.</p>
-<p>For example, there is a function in R called <code>seq(from, to)</code> that creates a sequence of numbers starting at <code>from</code> and ending at <code>to</code>. For example, if we want a sequences of numbers <code>from = 10</code> all the way <code>to = 20</code>:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can add comments to your code using the # key</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># anything after the # will not be run as code</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># note the code below is equivalent to seq(10, 20)</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">10</span>, <span class="at">to =</span> <span class="dv">20</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] 10 11 12 13 14 15 16 17 18 19 20</code></pre>
-</div>
-</div>
-<p>If you want to better understand what a specific function in R does you can always look to the documentation by typing a question mark before the function name in the R console, for example <code>?seq</code> or <code>?rep</code>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>?seq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="adding-comments-to-your-code" class="level4">
-<h4 class="anchored" data-anchor-id="adding-comments-to-your-code">Adding Comments to Your Code</h4>
-<p>It is good practice to add comments to your code. These comments can help others understand what you are doing, and more importantly, they will help you remember what you did. How to effectively use comments is part of a larger discussion on how to write effective and understandable code, and if you’re interested take a look at different <a href="http://adv-r.had.co.nz/Style.html">style guides for R</a>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can add comments to your code using the # key </span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># anything after the # will not be run as code </span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># note: the code below is equivalent to seq(10, 20)</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">10</span>, <span class="at">to =</span> <span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] 10 11 12 13 14 15 16 17 18 19 20</code></pre>
-</div>
-</div>
-</section>
-<section id="common-data-types-in-r" class="level4">
-<h4 class="anchored" data-anchor-id="common-data-types-in-r">Common Data Types in R</h4>
-<p>Four of the most common data types used in R are discussed below:</p>
-<ul>
-<li><p><strong>Numeric</strong>: The most common data type in R is numeric. A variable or a series will be stored as numeric data if the values are numbers or if the values contains decimals. For example, the following two series are stored as numeric by default:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># numeric series without decimals</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>num_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">2</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>num_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3 7 2</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(num_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "numeric"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># numeric series with decimals</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>num_data_dec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.4</span>, <span class="fl">7.1</span>, <span class="fl">2.9</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>num_data_dec</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.4 7.1 2.9</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(num_data_dec)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "numeric"</code></pre>
-</div>
-</div></li>
-<li><p><strong>Character</strong>: The data type character is used when storing text, known as strings in R. The simplest ways to store data under the character format is by using <code>""</code> around the piece of text:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>char <span class="ot">&lt;-</span> <span class="st">"some text"</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>char</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "some text"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(char)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "character"</code></pre>
-</div>
-</div></li>
-<li><p><strong>Factor</strong>: Factor variables are a special case of character variables in the sense that it also contains text. However, factor variables are used when there are a limited number of unique character strings. It often represents a categorical variable.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>text <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"test1"</span>, <span class="st">"test2"</span>, <span class="st">"test1"</span>, <span class="st">"test1"</span>) <span class="co"># create a character vector</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(text) <span class="co"># to know the class</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "character"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>text_factor <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(text) <span class="co"># transform to factor</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(text_factor) <span class="co"># recheck the class</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "factor"</code></pre>
-</div>
-</div></li>
-<li><p><strong>Logical</strong>: A logical variable is a variable with only two values; <code>TRUE</code> or <code>FALSE</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>value1 <span class="ot">&lt;-</span> <span class="dv">7</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>value2 <span class="ot">&lt;-</span> <span class="dv">9</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># is value1 greater than value2?</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>greater <span class="ot">&lt;-</span> value1 <span class="sc">&gt;</span> value2</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>greater</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(greater)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "logical"</code></pre>
-</div>
-</div></li>
-</ul>
-<p>These are four common R data types you’ll see in this class. There are others not listed here. For more detailed descriptions of data types in R there are a number of helpful resources available online, including this discussion of <a href="https://resbaz.github.io/2014-r-materials/lessons/01-intro_r/data-structures.html">data structures</a>.</p>
-</section>
-<section id="conditional-statements-in-r" class="level4">
-<h4 class="anchored" data-anchor-id="conditional-statements-in-r">Conditional Statements in R</h4>
-<p>Conditional statements are another useful R tool. These operators work similar in other programming languages but may look unfamiliar if you don’t have experience with R.</p>
-<section id="if-statements" class="level5">
-<h5 class="anchored" data-anchor-id="if-statements">If Statements</h5>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">&gt;</span> <span class="dv">6</span>) {</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"x is greater than 6"</span>)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "x is greater than 6"</code></pre>
+<pre><code>                     vars    n     mean       sd median  trimmed      mad  min
+Income                  1 2205 51622.09 20713.06  51287 51625.17 24408.04 1730
+Kidhome                 2 2205     0.44     0.54      0     0.40     0.00    0
+Teenhome                3 2205     0.51     0.54      0     0.48     0.00    0
+Recency                 4 2205    49.01    28.93     49    49.00    37.06    0
+MntWines                5 2205   306.16   337.49    178   251.45   249.08    0
+MntFruits               6 2205    26.40    39.78      8    17.12    11.86    0
+MntMeatProducts         7 2205   165.31   217.78     68   119.54    88.96    0
+MntFishProducts         8 2205    37.76    54.82     12    25.31    17.79    0
+MntSweetProducts        9 2205    27.13    41.13      8    17.48    11.86    0
+MntGoldProds           10 2205    44.06    51.74     25    33.57    28.17    0
+NumDealsPurchases      11 2205     2.32     1.89      2     1.97     1.48    0
+NumWebPurchases        12 2205     4.10     2.74      4     3.83     2.97    0
+NumCatalogPurchases    13 2205     2.65     2.80      2     2.22     2.97    0
+NumStorePurchases      14 2205     5.82     3.24      5     5.52     2.97    0
+NumWebVisitsMonth      15 2205     5.34     2.41      6     5.41     2.97    0
+AcceptedCmp3           16 2205     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp4           17 2205     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp5           18 2205     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp1           19 2205     0.06     0.25      0     0.00     0.00    0
+AcceptedCmp2           20 2205     0.01     0.12      0     0.00     0.00    0
+Complain               21 2205     0.01     0.09      0     0.00     0.00    0
+Z_CostContact          22 2205     3.00     0.00      3     3.00     0.00    3
+Z_Revenue              23 2205    11.00     0.00     11    11.00     0.00   11
+Response               24 2205     0.15     0.36      0     0.06     0.00    0
+Age                    25 2205    51.10    11.71     50    51.04    13.34   24
+Customer_Days          26 2205  2512.72   202.56   2515  2513.15   259.46 2159
+marital_Divorced       27 2205     0.10     0.31      0     0.01     0.00    0
+marital_Married        28 2205     0.39     0.49      0     0.36     0.00    0
+marital_Single         29 2205     0.22     0.41      0     0.15     0.00    0
+marital_Together       30 2205     0.26     0.44      0     0.20     0.00    0
+marital_Widow          31 2205     0.03     0.18      0     0.00     0.00    0
+education_2n.Cycle     32 2205     0.09     0.29      0     0.00     0.00    0
+education_Basic        33 2205     0.02     0.15      0     0.00     0.00    0
+education_Graduation   34 2205     0.50     0.50      1     0.51     0.00    0
+education_Master       35 2205     0.17     0.37      0     0.08     0.00    0
+education_PhD          36 2205     0.22     0.41      0     0.15     0.00    0
+MntTotal               37 2205   562.76   575.94    343   482.34   459.61    4
+MntRegularProds        38 2205   518.71   553.85    288   436.84   400.30 -283
+AcceptedCmpOverall     39 2205     0.30     0.68      0     0.13     0.00    0
+                        max  range  skew kurtosis     se
+Income               113734 112004  0.01    -0.85 441.10
+Kidhome                   2      2  0.63    -0.79   0.01
+Teenhome                  2      2  0.40    -0.99   0.01
+Recency                  99     99  0.00    -1.20   0.62
+MntWines               1493   1493  1.17     0.57   7.19
+MntFruits               199    199  2.10     4.03   0.85
+MntMeatProducts        1725   1725  1.82     3.23   4.64
+MntFishProducts         259    259  1.91     3.04   1.17
+MntSweetProducts        262    262  2.10     4.06   0.88
+MntGoldProds            321    321  1.83     3.13   1.10
+NumDealsPurchases        15     15  2.31     8.16   0.04
+NumWebPurchases          27     27  1.20     4.08   0.06
+NumCatalogPurchases      28     28  1.37     3.19   0.06
+NumStorePurchases        13     13  0.71    -0.64   0.07
+NumWebVisitsMonth        20     20  0.23     1.89   0.05
+AcceptedCmp3              1      1  3.25     8.60   0.01
+AcceptedCmp4              1      1  3.24     8.52   0.01
+AcceptedCmp5              1      1  3.28     8.76   0.01
+AcceptedCmp1              1      1  3.55    10.58   0.01
+AcceptedCmp2              1      1  8.39    68.45   0.00
+Complain                  1      1 10.35   105.16   0.00
+Z_CostContact             3      0   NaN      NaN   0.00
+Z_Revenue                11      0   NaN      NaN   0.00
+Response                  1      1  1.95     1.80   0.01
+Age                      80     56  0.09    -0.80   0.25
+Customer_Days          2858    699 -0.02    -1.20   4.31
+marital_Divorced          1      1  2.59     4.70   0.01
+marital_Married           1      1  0.46    -1.79   0.01
+marital_Single            1      1  1.38    -0.10   0.01
+marital_Together          1      1  1.11    -0.77   0.01
+marital_Widow             1      1  5.10    24.02   0.00
+education_2n.Cycle        1      1  2.87     6.23   0.01
+education_Basic           1      1  6.15    35.82   0.00
+education_Graduation      1      1 -0.02    -2.00   0.01
+education_Master          1      1  1.80     1.25   0.01
+education_PhD             1      1  1.38    -0.09   0.01
+MntTotal               2491   2487  0.91    -0.22  12.27
+MntRegularProds        2458   2741  0.98    -0.06  11.79
+AcceptedCmpOverall        4      4  2.72     7.94   0.01</code></pre>
 </div>
 </div>
 </section>
-<section id="if-else-statements" class="level5">
-<h5 class="anchored" data-anchor-id="if-else-statements">If-Else Statements</h5>
+<section id="describe-the-data-by-group" class="level3">
+<h3 class="anchored" data-anchor-id="describe-the-data-by-group">Describe the Data by Group</h3>
+<p>We may also be interested in describing the data based on a specific grouping factor. For example, let’s look at our summaries based on whether or not a customer has lodged a formal complaint.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">&gt;</span> <span class="dv">6</span>) {</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"x is greater than 6"</span>)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"x is less than or equal to 6"</span>)</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describeBy</span>(df, <span class="at">group =</span> <span class="st">"Complain"</span>) <span class="co"># describe our marketing data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "x is less than or equal to 6"</code></pre>
+<pre><code>
+ Descriptive statistics by group 
+Complain: 0
+                     vars    n     mean       sd median  trimmed      mad  min
+Income                  1 2185 51676.55 20719.18  51369 51687.17 24529.62 1730
+Kidhome                 2 2185     0.44     0.54      0     0.40     0.00    0
+Teenhome                3 2185     0.51     0.54      0     0.48     0.00    0
+Recency                 4 2185    48.99    28.95     49    48.98    37.06    0
+MntWines                5 2185   307.35   338.23    179   252.68   250.56    0
+MntFruits               6 2185    26.42    39.80      8    17.13    11.86    0
+MntMeatProducts         7 2185   165.75   218.21     68   119.91    88.96    0
+MntFishProducts         8 2185    37.86    54.95     12    25.37    17.79    0
+MntSweetProducts        9 2185    27.21    41.21      8    17.55    11.86    0
+MntGoldProds           10 2185    44.21    51.81     25    33.74    28.17    0
+NumDealsPurchases      11 2185     2.32     1.89      2     1.96     1.48    0
+NumWebPurchases        12 2185     4.10     2.74      4     3.83     2.97    0
+NumCatalogPurchases    13 2185     2.65     2.80      2     2.22     2.97    0
+NumStorePurchases      14 2185     5.83     3.24      5     5.52     2.97    0
+NumWebVisitsMonth      15 2185     5.33     2.41      6     5.41     2.97    0
+AcceptedCmp3           16 2185     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp4           17 2185     0.08     0.26      0     0.00     0.00    0
+AcceptedCmp5           18 2185     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp1           19 2185     0.06     0.25      0     0.00     0.00    0
+AcceptedCmp2           20 2185     0.01     0.12      0     0.00     0.00    0
+Complain               21 2185     0.00     0.00      0     0.00     0.00    0
+Z_CostContact          22 2185     3.00     0.00      3     3.00     0.00    3
+Z_Revenue              23 2185    11.00     0.00     11    11.00     0.00   11
+Response               24 2185     0.15     0.36      0     0.06     0.00    0
+Age                    25 2185    51.09    11.68     50    51.03    13.34   24
+Customer_Days          26 2185  2512.02   202.56   2514  2512.30   257.97 2159
+marital_Divorced       27 2185     0.10     0.31      0     0.01     0.00    0
+marital_Married        28 2185     0.39     0.49      0     0.36     0.00    0
+marital_Single         29 2185     0.22     0.41      0     0.14     0.00    0
+marital_Together       30 2185     0.26     0.44      0     0.20     0.00    0
+marital_Widow          31 2185     0.03     0.18      0     0.00     0.00    0
+education_2n.Cycle     32 2185     0.09     0.29      0     0.00     0.00    0
+education_Basic        33 2185     0.02     0.16      0     0.00     0.00    0
+education_Graduation   34 2185     0.50     0.50      1     0.50     0.00    0
+education_Master       35 2185     0.17     0.37      0     0.08     0.00    0
+education_PhD          36 2185     0.22     0.41      0     0.15     0.00    0
+MntTotal               37 2185   564.58   576.90    344   484.26   461.09    4
+MntRegularProds        38 2185   520.37   554.76    288   438.58   400.30 -283
+AcceptedCmpOverall     39 2185     0.30     0.68      0     0.14     0.00    0
+                        max  range  skew kurtosis     se
+Income               113734 112004  0.01    -0.85 443.25
+Kidhome                   2      2  0.64    -0.79   0.01
+Teenhome                  2      2  0.40    -1.00   0.01
+Recency                  99     99  0.00    -1.20   0.62
+MntWines               1493   1493  1.16     0.55   7.24
+MntFruits               199    199  2.10     4.05   0.85
+MntMeatProducts        1725   1725  1.81     3.22   4.67
+MntFishProducts         259    259  1.91     3.03   1.18
+MntSweetProducts        262    262  2.09     4.05   0.88
+MntGoldProds            321    321  1.83     3.11   1.11
+NumDealsPurchases        15     15  2.31     8.15   0.04
+NumWebPurchases          27     27  1.20     4.13   0.06
+NumCatalogPurchases      28     28  1.37     3.22   0.06
+NumStorePurchases        13     13  0.70    -0.64   0.07
+NumWebVisitsMonth        20     20  0.24     1.92   0.05
+AcceptedCmp3              1      1  3.26     8.64   0.01
+AcceptedCmp4              1      1  3.22     8.39   0.01
+AcceptedCmp5              1      1  3.27     8.72   0.01
+AcceptedCmp1              1      1  3.53    10.44   0.01
+AcceptedCmp2              1      1  8.35    67.78   0.00
+Complain                  0      0   NaN      NaN   0.00
+Z_CostContact             3      0   NaN      NaN   0.00
+Z_Revenue                11      0   NaN      NaN   0.00
+Response                  1      1  1.95     1.79   0.01
+Age                      80     56  0.09    -0.80   0.25
+Customer_Days          2858    699 -0.01    -1.20   4.33
+marital_Divorced          1      1  2.58     4.65   0.01
+marital_Married           1      1  0.46    -1.79   0.01
+marital_Single            1      1  1.38    -0.09   0.01
+marital_Together          1      1  1.11    -0.77   0.01
+marital_Widow             1      1  5.07    23.76   0.00
+education_2n.Cycle        1      1  2.88     6.29   0.01
+education_Basic           1      1  6.12    35.45   0.00
+education_Graduation      1      1 -0.01    -2.00   0.01
+education_Master          1      1  1.80     1.23   0.01
+education_PhD             1      1  1.37    -0.12   0.01
+MntTotal               2491   2487  0.91    -0.23  12.34
+MntRegularProds        2458   2741  0.98    -0.07  11.87
+AcceptedCmpOverall        4      4  2.71     7.91   0.01
+------------------------------------------------------------ 
+Complain: 1
+                     vars  n     mean       sd  median  trimmed      mad   min
+Income                  1 20 45672.40 19618.60 39341.0 44737.81 22307.94 15716
+Kidhome                 2 20     0.65     0.59     1.0     0.62     0.00     0
+Teenhome                3 20     0.55     0.60     0.5     0.50     0.74     0
+Recency                 4 20    50.75    27.20    48.5    50.62    28.17     8
+MntWines                5 20   176.70   211.11    34.0   147.88    48.18     1
+MntFruits               6 20    25.10    39.13     6.0    16.31     8.90     0
+MntMeatProducts         7 20   117.70   162.23    32.5    85.00    45.96     1
+MntFishProducts         8 20    26.70    38.73     6.5    20.50     9.64     0
+MntSweetProducts        9 20    18.20    31.36     4.5    11.19     5.93     0
+MntGoldProds           10 20    27.60    40.93    13.5    18.00    12.60     2
+NumDealsPurchases      11 20     2.40     1.43     2.0     2.19     1.48     1
+NumWebPurchases        12 20     3.70     2.96     3.0     3.31     2.22     0
+NumCatalogPurchases    13 20     2.10     2.90     0.5     1.56     0.74     0
+NumStorePurchases      14 20     5.40     3.60     3.5     4.94     2.22     2
+NumWebVisitsMonth      15 20     5.85     2.41     7.0     6.06     1.48     1
+AcceptedCmp3           16 20     0.10     0.31     0.0     0.00     0.00     0
+AcceptedCmp4           17 20     0.00     0.00     0.0     0.00     0.00     0
+AcceptedCmp5           18 20     0.05     0.22     0.0     0.00     0.00     0
+AcceptedCmp1           19 20     0.00     0.00     0.0     0.00     0.00     0
+AcceptedCmp2           20 20     0.00     0.00     0.0     0.00     0.00     0
+Complain               21 20     1.00     0.00     1.0     1.00     0.00     1
+Z_CostContact          22 20     3.00     0.00     3.0     3.00     0.00     3
+Z_Revenue              23 20    11.00     0.00    11.0    11.00     0.00    11
+Response               24 20     0.15     0.37     0.0     0.06     0.00     0
+Age                    25 20    51.65    15.04    50.0    51.81    17.79    25
+Customer_Days          26 20  2588.70   193.28  2685.0  2602.06   164.57  2250
+marital_Divorced       27 20     0.05     0.22     0.0     0.00     0.00     0
+marital_Married        28 20     0.40     0.50     0.0     0.38     0.00     0
+marital_Single         29 20     0.30     0.47     0.0     0.25     0.00     0
+marital_Together       30 20     0.25     0.44     0.0     0.19     0.00     0
+marital_Widow          31 20     0.00     0.00     0.0     0.00     0.00     0
+education_2n.Cycle     32 20     0.15     0.37     0.0     0.06     0.00     0
+education_Basic        33 20     0.00     0.00     0.0     0.00     0.00     0
+education_Graduation   34 20     0.70     0.47     1.0     0.75     0.00     0
+education_Master       35 20     0.10     0.31     0.0     0.00     0.00     0
+education_PhD          36 20     0.05     0.22     0.0     0.00     0.00     0
+MntTotal               37 20   364.40   424.05    77.5   300.19   101.56     9
+MntRegularProds        38 20   336.80   414.50    63.5   271.94    84.51     0
+AcceptedCmpOverall     39 20     0.15     0.49     0.0     0.00     0.00     0
+                       max range  skew kurtosis      se
+Income               83257 67541  0.35    -0.97 4386.85
+Kidhome                  2     2  0.18    -0.93    0.13
+Teenhome                 2     2  0.50    -0.87    0.14
+Recency                 93    85  0.11    -1.28    6.08
+MntWines               629   628  0.84    -0.88   47.21
+MntFruits              137   137  1.58     1.39    8.75
+MntMeatProducts        590   589  1.58     1.50   36.28
+MntFishProducts        104   104  1.05    -0.69    8.66
+MntSweetProducts       107   107  1.74     1.58    7.01
+MntGoldProds           176   174  2.48     5.90    9.15
+NumDealsPurchases        7     6  1.48     2.74    0.32
+NumWebPurchases         11    11  1.01    -0.07    0.66
+NumCatalogPurchases     10    10  1.25     0.52    0.65
+NumStorePurchases       13    11  0.87    -0.81    0.81
+NumWebVisitsMonth        9     8 -0.67    -1.02    0.54
+AcceptedCmp3             1     1  2.47     4.32    0.07
+AcceptedCmp4             0     0   NaN      NaN    0.00
+AcceptedCmp5             1     1  3.82    13.29    0.05
+AcceptedCmp1             0     0   NaN      NaN    0.00
+AcceptedCmp2             0     0   NaN      NaN    0.00
+Complain                 1     0   NaN      NaN    0.00
+Z_CostContact            3     0   NaN      NaN    0.00
+Z_Revenue               11     0   NaN      NaN    0.00
+Response                 1     1  1.82     1.37    0.08
+Age                     77    52 -0.02    -1.46    3.36
+Customer_Days         2823   573 -0.49    -1.30   43.22
+marital_Divorced         1     1  3.82    13.29    0.05
+marital_Married          1     1  0.38    -1.95    0.11
+marital_Single           1     1  0.81    -1.41    0.11
+marital_Together         1     1  1.07    -0.89    0.10
+marital_Widow            0     0   NaN      NaN    0.00
+education_2n.Cycle       1     1  1.82     1.37    0.08
+education_Basic          0     0   NaN      NaN    0.00
+education_Graduation     1     1 -0.81    -1.41    0.11
+education_Master         1     1  2.47     4.32    0.07
+education_PhD            1     1  3.82    13.29    0.05
+MntTotal              1298  1289  0.85    -0.73   94.82
+MntRegularProds       1231  1231  0.90    -0.72   92.68
+AcceptedCmpOverall       2     2  2.94     7.68    0.11</code></pre>
 </div>
 </div>
-<p><strong>Nested If Statements</strong></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">8</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">&gt;</span> <span class="dv">6</span>) {</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (y <span class="sc">&lt;</span> <span class="dv">6</span>) {</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">"x is greater than 6 and y is less than 6"</span>)</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "x is greater than 6 and y is less than 6"</code></pre>
-</div>
-</div>
-</section>
-</section>
-</section>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section"></h2>
 
 
 </section>
