@@ -2,6 +2,8 @@ project:
   type: website
   output-dir: docs
   render:
+    - index.qmd
+    - introduction.qmd
     - 1_1.qmd
     - 1_1b.qmd
     - 1_2.qmd
@@ -32,13 +34,73 @@ project:
     - week6_3.qmd
 website:
   title: "PSYC559: Applied Machine Learning in Psychology"
+
+  # -----------------------------------------------------------------
+  # SEQUENTIAL CONTENT RELEASE (fully manual)
+  #
+  # Every page listed under `drafts:` is hidden from the published
+  # site: it renders as an empty page with no sidebar link and no
+  # search entry.
+  #
+  # To release content: delete (or comment out with #) its lines
+  # below, re-render the site, review, and push to GitHub. Nothing
+  # is released until you do all of that yourself.
+  #
+  # The date comments are the planned class days from the Fall 2026
+  # syllabus — they are labels for you, nothing reads them.
+  # -----------------------------------------------------------------
+  draft-mode: gone
+  drafts:
+    # 8/18 — Course introduction / R basics
+    - 1_1.qmd
+    - 1_1b.qmd
+    - 1_2.qmd
+    # 8/20 — Fundamentals of machine learning
+    - week2_1.qmd
+    - week2_2.qmd
+    # 8/25 — Lab: Introduction to R (describing data)
+    - week1_3.qmd
+    - week1_4.qmd
+    # 8/27 — General modeling pipelines
+    - week2_3.qmd
+    - week2_4.qmd
+    # 9/1 — Data preprocessing and feature engineering
+    - week2_5a.qmd
+    - week2_5b.qmd
+    - week2_5c.qmd
+    - week2_5d.qmd
+    - week2_5e.qmd
+    - week2_5f.qmd
+    - week2_5g.qmd
+    # 9/3 — Linear regression
+    - week3_1.qmd
+    - week3_2.qmd
+    # 9/8 — Logistic regression
+    - week3_3.qmd
+    - week3_4.qmd
+    # 9/10 — Regularized regression
+    - week4_1.qmd
+    # 9/22 — KNN and decision trees
+    - week5_1.qmd
+    # 9/24 — Bagging and random forests
+    - week5_2.qmd
+    - week5_3.qmd
+    # 9/29 — Gradient boosting
+    - week5_4.qmd
+    # 10/22 — K-means clustering
+    - week6_3.qmd
+    # 10/27 — Hierarchical clustering
+    - week6_2.qmd
+    # 11/5 — Principal components analysis
+    - week6_1.qmd
+
   sidebar:
     style: "docked"
     search: false
     contents:
       - text: "Table of Contents"
         href: introduction.qmd
-        contents: 
+        contents:
       - section: "Introduction to R"
         contents:
           - 1_1.qmd
@@ -53,7 +115,7 @@ website:
           - week2_3.qmd
           - week2_4.qmd
       - section: "Feature Engineering"
-        contents:    
+        contents:
           - week2_5a.qmd
           - week2_5b.qmd
           - week2_5c.qmd
@@ -62,20 +124,20 @@ website:
           - week2_5f.qmd
           - week2_5g.qmd
       - section: "Regression Methods"
-        contents:    
+        contents:
           - week3_1.qmd
           - week3_2.qmd
           - week3_3.qmd
           - week3_4.qmd
           - week4_1.qmd
       - section: "Tree Methods"
-        contents:   
+        contents:
           - week5_1.qmd
           - week5_2.qmd
           - week5_3.qmd
           - week5_4.qmd
       - section: "Dimension Reduction"
-        contents:   
+        contents:
           - week6_1.qmd
           - week6_2.qmd
           - week6_3.qmd
@@ -88,5 +150,3 @@ execute:
   warning: false
   message: false
 editor: visual
-
-
