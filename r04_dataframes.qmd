@@ -13,7 +13,7 @@ editor_options:
 
 Nearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we'll practice pulling pieces out of a data frame, creating new variables, and chaining operations together — the skills you'll use in every single lab and assignment.
 
-Let's read in the marketing data we saw previously.
+Let's read in the marketing data we saw previously (download: [ifood_df.csv](data/ifood_df.csv)).
 
 ```{r}
 df <- read.csv("data/ifood_df.csv")
@@ -68,6 +68,38 @@ nrow(high_income)
 ```
 
 Read that as: "keep the rows of `df` where `df$Income > 75000` is `TRUE`, and all columns."
+
+::: {style="color: yellow"}
+## Missing Values: `NA`
+:::
+
+Real data is rarely complete. R represents a missing value with `NA` ("not available"), and `NA` behaves differently than you might expect: most computations involving a missing value return a missing value.
+
+```{r}
+x <- c(4, 7, NA, 2)
+mean(x)
+```
+
+That `NA` answer is R being honest — it can't know the mean of numbers it doesn't have. If you've decided that ignoring the missing values is appropriate, say so explicitly with `na.rm = TRUE`:
+
+```{r}
+mean(x, na.rm = TRUE)
+```
+
+To find missing values, use `is.na()` — asking `x == NA` does *not* work, because comparing anything to an unknown is also unknown:
+
+```{r}
+is.na(x)        # which entries are missing?
+sum(is.na(x))   # how many are missing?
+```
+
+For a whole data frame, `colSums(is.na(df))` shows the missing count per variable. Our marketing data happens to be a cleaned dataset:
+
+```{r}
+sum(is.na(df))  # no missing values here
+```
+
+Real psychological data will rarely be this kind — the General Social Survey data in your first assignment certainly won't be. Handling missingness *well* is a modeling topic we'll treat properly in the feature engineering unit; for now, the essential skills are noticing missing values and understanding why `NA`s propagate through your calculations.
 
 ::: {style="color: yellow"}
 ## The Pipe Operator `%>%`

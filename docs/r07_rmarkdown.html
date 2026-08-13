@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Reading in Data – PSYC559: Applied Machine Learning in Psychology</title>
+<title>R Markdown and Course Setup – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_2.html">Reading in Data</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r01_basics.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./r07_rmarkdown.html">R Markdown and Course Setup</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -150,43 +150,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_1.html" class="sidebar-item-text sidebar-link">
+  <a href="./r01_basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basic R Programming</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_1b.html" class="sidebar-item-text sidebar-link">
+  <a href="./r02_packages.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">R Packages</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_2.html" class="sidebar-item-text sidebar-link active">
+  <a href="./r03_reading_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Reading in Data</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_3.html" class="sidebar-item-text sidebar-link">
+  <a href="./r04_dataframes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Working with Data Frames</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week1_3.html" class="sidebar-item-text sidebar-link">
+  <a href="./r05_describing_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Describing Data Numerically</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week1_4.html" class="sidebar-item-text sidebar-link">
+  <a href="./r06_visualizing_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Describing Data Visually</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week1_5.html" class="sidebar-item-text sidebar-link">
+  <a href="./r07_rmarkdown.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">R Markdown and Course Setup</span></a>
   </div>
 </li>
@@ -257,18 +257,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#loading-data" id="toc-loading-data" class="nav-link active" data-scroll-target="#loading-data">Loading Data</a></li>
-  <li><a href="#location-of-the-data-file" id="toc-location-of-the-data-file" class="nav-link" data-scroll-target="#location-of-the-data-file">Location of the Data File</a></li>
-  <li><a href="#loading-data-from-the-working-directory" id="toc-loading-data-from-the-working-directory" class="nav-link" data-scroll-target="#loading-data-from-the-working-directory">Loading Data from the Working Directory</a></li>
+  <li><a href="#r-markdown" id="toc-r-markdown" class="nav-link active" data-scroll-target="#r-markdown">R Markdown</a></li>
+  <li><a href="#creating-an-r-markdown-document" id="toc-creating-an-r-markdown-document" class="nav-link" data-scroll-target="#creating-an-r-markdown-document">Creating an R Markdown Document</a></li>
+  <li><a href="#the-anatomy-of-an-r-markdown-file" id="toc-the-anatomy-of-an-r-markdown-file" class="nav-link" data-scroll-target="#the-anatomy-of-an-r-markdown-file">The Anatomy of an R Markdown File</a></li>
+  <li><a href="#knitting" id="toc-knitting" class="nav-link" data-scroll-target="#knitting">Knitting</a></li>
+  <li><a href="#one-rstudio-setting-worth-changing" id="toc-one-rstudio-setting-worth-changing" class="nav-link" data-scroll-target="#one-rstudio-setting-worth-changing">One RStudio Setting Worth Changing</a></li>
+  <li><a href="#reading-error-messages" id="toc-reading-error-messages" class="nav-link" data-scroll-target="#reading-error-messages">Reading Error Messages</a></li>
+  <li><a href="#install-the-course-packages" id="toc-install-the-course-packages" class="nav-link" data-scroll-target="#install-the-course-packages">Install the Course Packages</a></li>
+  <li><a href="#check-your-setup" id="toc-check-your-setup" class="nav-link" data-scroll-target="#check-your-setup">Check Your Setup</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_2.html">Reading in Data</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r01_basics.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./r07_rmarkdown.html">R Markdown and Course Setup</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Reading in Data</h1>
+<h1 class="title">R Markdown and Course Setup</h1>
 </div>
 
 
@@ -285,105 +290,76 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="loading-data" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="loading-data">Loading Data</h2>
+<section id="r-markdown" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="r-markdown">R Markdown</h2>
 </section>
-<p>One of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.</p>
-<p>By reading in data we are generally refering to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabularobject where columns representing variables and rows representing cases. This is not always the case but covers the most basic use case.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/tabular.png" class="img-fluid figure-img"></p>
-<figcaption>Example of tabular data</figcaption>
-</figure>
-</div>
-<p>Many different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.</p>
-<section id="location-of-the-data-file" class="level3">
-<h3 class="anchored" data-anchor-id="location-of-the-data-file">Location of the Data File</h3>
-<p>One of the trickiest parts of loading data from your hard drive into R is knowing how to locate it. Depending on whether you are using a Mac or Windows machine you can read in .csv files directly if you know the path. For example, I can load a .csv file into R and save it as a data frame labeled <code>df</code> as follows:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Once the .csv file is loaded I can look at it using the <code>View()</code> function</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>or simple examine the first few cases using <code>head()</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts
-1  58138       0        0      58      635        88             546
-2  46344       1        1      38       11         1               6
-3  71613       0        0      26      426        49             127
-4  26646       1        0      26       11         4              20
-5  58293       1        0      94      173        43             118
-6  62513       0        1      16      520        42              98
-  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases
-1             172               88           88                 3
-2               2                1            6                 2
-3             111               21           42                 1
-4              10                3            5                 2
-5              46               27           15                 5
-6               0               42           14                 2
-  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth
-1               8                  10                 4                 7
-2               1                   1                 2                 5
-3               8                   2                10                 4
-4               2                   0                 4                 6
-5               5                   3                 6                 5
-6               6                   4                10                 6
-  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain
-1            0            0            0            0            0        0
-2            0            0            0            0            0        0
-3            0            0            0            0            0        0
-4            0            0            0            0            0        0
-5            0            0            0            0            0        0
-6            0            0            0            0            0        0
-  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced
-1             3        11        1  63          2822                0
-2             3        11        0  66          2272                0
-3             3        11        0  55          2471                0
-4             3        11        0  36          2298                0
-5             3        11        0  39          2320                0
-6             3        11        0  53          2452                0
-  marital_Married marital_Single marital_Together marital_Widow
-1               0              1                0             0
-2               0              1                0             0
-3               0              0                1             0
-4               0              0                1             0
-5               1              0                0             0
-6               0              0                1             0
-  education_2n.Cycle education_Basic education_Graduation education_Master
-1                  0               0                    1                0
-2                  0               0                    1                0
-3                  0               0                    1                0
-4                  0               0                    1                0
-5                  0               0                    0                0
-6                  0               0                    0                1
-  education_PhD MntTotal MntRegularProds AcceptedCmpOverall
-1             0     1529            1441                  0
-2             0       21              15                  0
-3             0      734             692                  0
-4             0       48              43                  0
-5             1      407             392                  0
-6             0      702             688                  0</code></pre>
-</div>
-</div>
+<p>In-class exercises and assignments in this course are distributed as <strong>R Markdown</strong> (<code>.Rmd</code>) files. An R Markdown file mixes written text with runnable R code. You will complete the code, <strong>knit</strong> the document into a polished HTML or PDF report, and submit it on Canvas. Learning this workflow now means the first graded exercise will hold no surprises.</p>
+<section id="creating-an-r-markdown-document" class="level3">
+<h3 class="anchored" data-anchor-id="creating-an-r-markdown-document">Creating an R Markdown Document</h3>
+<p>In RStudio, choose <strong>File &gt; New File &gt; R Markdown…</strong>, give it a title, and click OK. RStudio opens a template document you can knit immediately — try it before changing anything.</p>
 </section>
-<section id="loading-data-from-the-working-directory" class="level3">
-<h3 class="anchored" data-anchor-id="loading-data-from-the-working-directory">Loading Data from the Working Directory</h3>
-<p>Another way to load data is to set the working directory to the folder where the data is located. This can be helpful if you are having trouble finding the path to the data. From RStudio, use the menu to change your working directory under <strong>Session &gt; Set Working Directory &gt; Choose Directory</strong>. Then set the working directory to the folder where you have stored your data. Conveniently, you will also now see a path to the data in your R console you can use to Copy-Paste a path. Now you can simply use the filename of the .csv file to read in the data. See the example below.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/working_directory.png" class="img-fluid figure-img"></p>
-<figcaption>Set the working directory in RStudio.</figcaption>
-</figure>
-</div>
+<section id="the-anatomy-of-an-r-markdown-file" class="level3">
+<h3 class="anchored" data-anchor-id="the-anatomy-of-an-r-markdown-file">The Anatomy of an R Markdown File</h3>
+<p>An <code>.Rmd</code> file has three ingredients:</p>
+<ol type="1">
+<li><p><strong>The YAML header</strong> — the block between <code>---</code> lines at the very top. It stores the title, author, date, and output format.</p></li>
+<li><p><strong>Prose</strong> — ordinary text, with light formatting: <code>**bold**</code>, <code>*italics*</code>, <code># headings</code>.</p></li>
+<li><p><strong>Code chunks</strong> — R code between <code>```{r}</code> and <code>```</code> fences. Insert a new chunk with the toolbar button or the shortcut <strong>Cmd+Option+I</strong> (Mac) / <strong>Ctrl+Alt+I</strong> (Windows).</p></li>
+</ol>
+<p>You can run a single chunk with the green “play” button on its right edge — useful for checking your work as you go.</p>
+</section>
+<section id="knitting" class="level3">
+<h3 class="anchored" data-anchor-id="knitting">Knitting</h3>
+<p>The <strong>Knit</strong> button at the top of the editor runs the entire document <em>top to bottom in a fresh R session</em> and produces the output file. That “fresh session” detail explains the most common student pitfalls:</p>
+<ul>
+<li><p><strong>“It works in my console but won’t knit.”</strong> Objects you created in the console don’t exist when knitting. Every object your document uses must be created <em>by code chunks in the document</em>, in order.</p></li>
+<li><p><strong>Never put <code>install.packages()</code> in a code chunk.</strong> Install packages once, from the console. A document should <em>load</em> packages with <code>library()</code>, not install them.</p></li>
+<li><p><strong>Keep the <code>.Rmd</code> and any data files in the same folder</strong>, and refer to data by filename (<code>read.csv("mydata.csv")</code>). Knitting looks for files relative to where the <code>.Rmd</code> lives.</p></li>
+</ul>
+</section>
+<section id="one-rstudio-setting-worth-changing" class="level3">
+<h3 class="anchored" data-anchor-id="one-rstudio-setting-worth-changing">One RStudio Setting Worth Changing</h3>
+<p>By default, RStudio offers to save everything in your environment when you quit and restore it next time. This sounds convenient but causes deeply confusing bugs: objects from last Tuesday silently lurk in your session, your code “works” only because of leftovers, and then it fails to knit. Turn it off now:</p>
+<p><strong>Tools &gt; Global Options &gt; General</strong>: set <em>“Save workspace to .RData on exit”</em> to <strong>Never</strong>, and uncheck <em>“Restore .RData into workspace at startup.”</em></p>
+<p>Every session starts clean, which matches how knitting works — if your code runs in a fresh session, it will knit, and it will run for me too. Your scripts and documents are the permanent record of your work, not the workspace.</p>
+</section>
+<section id="reading-error-messages" class="level3">
+<h3 class="anchored" data-anchor-id="reading-error-messages">Reading Error Messages</h3>
+<p>You will see many error messages this semester — that’s what learning a language looks like. When one appears: read the <strong>first line only</strong> (the rest is usually internal detail), note <strong>which function</strong> the error came from, and look for a mention of what R was looking for and couldn’t find (a file, an object, a package). Most errors in this course are one of three things: a typo in a name, a file that isn’t where R is looking, or a package that isn’t loaded. If you’re stuck after checking those, copy the full error message and bring it to class or office hours — “it didn’t work” is unsolvable, but an exact error message usually takes one minute.</p>
+</section>
+<section id="install-the-course-packages" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="install-the-course-packages">Install the Course Packages</h2>
+</section>
+<p>Throughout the semester we will lean on a set of R packages for wrangling, visualization, and machine learning. Install them all now by pasting this into your <strong>console</strong> (not an R Markdown chunk!):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidyverse"</span>,    <span class="co"># data wrangling and ggplot2 graphics</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"psych"</span>,        <span class="co"># describing data</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidymodels"</span>,   <span class="co"># modeling framework (includes rsample, recipes)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"caret"</span>,        <span class="co"># classic ML toolkit</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"rpart"</span>,        <span class="co"># decision trees</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ipred"</span>,        <span class="co"># bagging</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ranger"</span>,       <span class="co"># random forests</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"gbm"</span>,          <span class="co"># gradient boosting</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"glmnet"</span>,       <span class="co"># regularized regression</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"vip"</span>,          <span class="co"># variable importance plots</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AmesHousing"</span>,  <span class="co"># housing data used in the regression unit</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cluster"</span>,      <span class="co"># clustering methods</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"factoextra"</span>    <span class="co"># clustering and PCA visualizations</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>In addition to <code>setwd()</code> you can also find what your current working directory is using the <code>getwd()</code> command.</p>
+<p>This can take a while — <code>tidyverse</code>, <code>tidymodels</code>, and <code>caret</code> are large. Start it, get a coffee, and let it finish. Do this <strong>before the first lab</strong> so class time isn’t spent watching progress bars.</p>
+<p>A few assignment-specific packages (for example, <code>gssr</code> for working with the General Social Survey) will be installed later with instructions provided in the assignment itself.</p>
+<section id="check-your-setup" class="level3">
+<h3 class="anchored" data-anchor-id="check-your-setup">Check Your Setup</h3>
+<p>If this runs without errors, you are ready for the semester:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If something fails to load, re-run <code>install.packages()</code> for that package and read the error message — and if you’re stuck, bring the error to class or office hours. Getting your machine working is a course goal in week one, not an obstacle.</p>
 
 
 </section>

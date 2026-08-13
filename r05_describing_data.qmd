@@ -17,11 +17,10 @@ Once you have read in a data frame it can be useful to know how the variables ar
 
 ### Read in Marketing Data
 
-Let's read in the data using the `read.csv()` function.
+Let's read in the data using the `read.csv()` function. (If you don't have the file yet, download it here: [ifood_df.csv](data/ifood_df.csv) — and remember our habit: keep it next to your script.)
 
 ```{r}
-setwd("/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data")
-df <- read.csv("ifood_df.csv")
+df <- read.csv("data/ifood_df.csv")
 ```
 
 ### Install and Load `psych` Package

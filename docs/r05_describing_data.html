@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Describing Data Visually – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Describing Data Numerically – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./week1_4.html">Describing Data Visually</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r01_basics.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./r05_describing_data.html">Describing Data Numerically</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -150,43 +150,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_1.html" class="sidebar-item-text sidebar-link">
+  <a href="./r01_basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basic R Programming</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_1b.html" class="sidebar-item-text sidebar-link">
+  <a href="./r02_packages.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">R Packages</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_2.html" class="sidebar-item-text sidebar-link">
+  <a href="./r03_reading_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Reading in Data</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_3.html" class="sidebar-item-text sidebar-link">
+  <a href="./r04_dataframes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Working with Data Frames</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week1_3.html" class="sidebar-item-text sidebar-link">
+  <a href="./r05_describing_data.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Describing Data Numerically</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week1_4.html" class="sidebar-item-text sidebar-link active">
+  <a href="./r06_visualizing_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Describing Data Visually</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week1_5.html" class="sidebar-item-text sidebar-link">
+  <a href="./r07_rmarkdown.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">R Markdown and Course Setup</span></a>
   </div>
 </li>
@@ -257,19 +257,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#data-visualization" id="toc-data-visualization" class="nav-link active" data-scroll-target="#data-visualization">Data Visualization</a></li>
-  <li><a href="#install-and-load-ggplot2-package" id="toc-install-and-load-ggplot2-package" class="nav-link" data-scroll-target="#install-and-load-ggplot2-package">Install and Load <code>ggplot2</code> Package</a></li>
-  <li><a href="#the-mpg-dataset" id="toc-the-mpg-dataset" class="nav-link" data-scroll-target="#the-mpg-dataset">The <code>mpg</code> Dataset</a></li>
-  <li><a href="#creating-a-basic-ggplot" id="toc-creating-a-basic-ggplot" class="nav-link" data-scroll-target="#creating-a-basic-ggplot">Creating a Basic ggplot</a></li>
+  <li><a href="#numerical-summaries-of-data-frames" id="toc-numerical-summaries-of-data-frames" class="nav-link active" data-scroll-target="#numerical-summaries-of-data-frames">Numerical Summaries of Data Frames</a></li>
+  <li><a href="#read-in-marketing-data" id="toc-read-in-marketing-data" class="nav-link" data-scroll-target="#read-in-marketing-data">Read in Marketing Data</a></li>
+  <li><a href="#install-and-load-psych-package" id="toc-install-and-load-psych-package" class="nav-link" data-scroll-target="#install-and-load-psych-package">Install and Load <code>psych</code> Package</a></li>
+  <li><a href="#describe-the-data" id="toc-describe-the-data" class="nav-link" data-scroll-target="#describe-the-data">Describe the Data</a></li>
+  <li><a href="#describe-the-data-by-group" id="toc-describe-the-data-by-group" class="nav-link" data-scroll-target="#describe-the-data-by-group">Describe the Data by Group</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./week1_4.html">Describing Data Visually</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r01_basics.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./r05_describing_data.html">Describing Data Numerically</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Describing Data Visually</h1>
+<h1 class="title">Describing Data Numerically</h1>
 </div>
 
 
@@ -286,97 +287,339 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="data-visualization" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="data-visualization">Data Visualization</h2>
+<section id="numerical-summaries-of-data-frames" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="numerical-summaries-of-data-frames">Numerical Summaries of Data Frames</h2>
 </section>
-<p>This section will briefly introduce you to visualizing data using the <code>ggplot2</code> package. R has a number of systems for making graphs but ggplot2 is by far the most developed option. ggplot2 implements the <strong>grammar of graphics</strong>, and if you’d like to learn more about the motivation for this work take a look at <a href="http://vita.had.co.nz/papers/layered-grammar.pdf">The Layered Grammar of Graphics</a>.</p>
-<section id="install-and-load-ggplot2-package" class="level3">
-<h3 class="anchored" data-anchor-id="install-and-load-ggplot2-package">Install and Load <code>ggplot2</code> Package</h3>
+<p>Once you have read in a data frame it can be useful to know how the variables are understood by R. For example, let’s look at some <a href="https://www.kaggle.com/datasets/jackdaoud/marketing-data" class="uri">Kaggle Marketing Analytics Data</a>. You can download the raw data <a href="https://github.com/nailson/ifood-data-business-analyst-test">here</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/dictionary.png" class="img-fluid figure-img"></p>
+<figcaption>Data dictionary for marketing data</figcaption>
+</figure>
+</div>
+<section id="read-in-marketing-data" class="level3">
+<h3 class="anchored" data-anchor-id="read-in-marketing-data">Read in Marketing Data</h3>
+<p>Let’s read in the data using the <code>read.csv()</code> function. (If you don’t have the file yet, download it here: <a href="data/ifood_df.csv">ifood_df.csv</a> — and remember our habit: keep it next to your script.)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="install-and-load-psych-package" class="level3">
+<h3 class="anchored" data-anchor-id="install-and-load-psych-package">Install and Load <code>psych</code> Package</h3>
 <p>Once we know the data has been read into R we can look at how R understands the data file using the structure function <code>str()</code></p>
-<p>Let’s install <code>ggplot2</code>, and then load the package.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>) <span class="co"># install the package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>) <span class="co"># load the library</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="the-mpg-dataset" class="level3">
-<h3 class="anchored" data-anchor-id="the-mpg-dataset">The <code>mpg</code> Dataset</h3>
-<p><code>ggplot2</code> contains a dataset titled <code>mpg</code> that contains observations collected by the US Environmental Protection Agency on 38 models of car. Let’s look at the dataset using the <code>describe()</code> function.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"psych"</span>) <span class="co"># load the library</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(mpg)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>              vars   n    mean    sd median trimmed   mad    min  max range
-manufacturer*    1 234    7.76  5.13    6.0    7.68  5.93    1.0   15  14.0
-model*           2 234   19.09 11.15   18.5   18.98 14.08    1.0   38  37.0
-displ            3 234    3.47  1.29    3.3    3.39  1.33    1.6    7   5.4
-year             4 234 2003.50  4.51 2003.5 2003.50  6.67 1999.0 2008   9.0
-cyl              5 234    5.89  1.61    6.0    5.86  2.97    4.0    8   4.0
-trans*           6 234    5.65  2.88    4.0    5.53  1.48    1.0   10   9.0
-drv*             7 234    1.67  0.66    2.0    1.59  1.48    1.0    3   2.0
-cty              8 234   16.86  4.26   17.0   16.61  4.45    9.0   35  26.0
-hwy              9 234   23.44  5.95   24.0   23.23  7.41   12.0   44  32.0
-fl*             10 234    4.63  0.70    5.0    4.77  0.00    1.0    5   4.0
-class*          11 234    4.59  1.99    5.0    4.64  2.97    1.0    7   6.0
-               skew kurtosis   se
-manufacturer*  0.21    -1.63 0.34
-model*         0.11    -1.23 0.73
-displ          0.44    -0.91 0.08
-year           0.00    -2.01 0.29
-cyl            0.11    -1.46 0.11
-trans*         0.29    -1.65 0.19
-drv*           0.48    -0.76 0.04
-cty            0.79     1.43 0.28
-hwy            0.36     0.14 0.39
-fl*           -2.25     5.76 0.05
-class*        -0.14    -1.52 0.13</code></pre>
+<pre><code>'data.frame':   2205 obs. of  39 variables:
+ $ Income              : num  58138 46344 71613 26646 58293 ...
+ $ Kidhome             : int  0 1 0 1 1 0 0 1 1 1 ...
+ $ Teenhome            : int  0 1 0 0 0 1 1 0 0 1 ...
+ $ Recency             : int  58 38 26 26 94 16 34 32 19 68 ...
+ $ MntWines            : int  635 11 426 11 173 520 235 76 14 28 ...
+ $ MntFruits           : int  88 1 49 4 43 42 65 10 0 0 ...
+ $ MntMeatProducts     : int  546 6 127 20 118 98 164 56 24 6 ...
+ $ MntFishProducts     : int  172 2 111 10 46 0 50 3 3 1 ...
+ $ MntSweetProducts    : int  88 1 21 3 27 42 49 1 3 1 ...
+ $ MntGoldProds        : int  88 6 42 5 15 14 27 23 2 13 ...
+ $ NumDealsPurchases   : int  3 2 1 2 5 2 4 2 1 1 ...
+ $ NumWebPurchases     : int  8 1 8 2 5 6 7 4 3 1 ...
+ $ NumCatalogPurchases : int  10 1 2 0 3 4 3 0 0 0 ...
+ $ NumStorePurchases   : int  4 2 10 4 6 10 7 4 2 0 ...
+ $ NumWebVisitsMonth   : int  7 5 4 6 5 6 6 8 9 20 ...
+ $ AcceptedCmp3        : int  0 0 0 0 0 0 0 0 0 1 ...
+ $ AcceptedCmp4        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ AcceptedCmp5        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ AcceptedCmp1        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ AcceptedCmp2        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ Complain            : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ Z_CostContact       : int  3 3 3 3 3 3 3 3 3 3 ...
+ $ Z_Revenue           : int  11 11 11 11 11 11 11 11 11 11 ...
+ $ Response            : int  1 0 0 0 0 0 0 0 1 0 ...
+ $ Age                 : int  63 66 55 36 39 53 49 35 46 70 ...
+ $ Customer_Days       : int  2822 2272 2471 2298 2320 2452 2752 2576 2547 2267 ...
+ $ marital_Divorced    : int  0 0 0 0 0 0 1 0 0 0 ...
+ $ marital_Married     : int  0 0 0 0 1 0 0 1 0 0 ...
+ $ marital_Single      : int  1 1 0 0 0 0 0 0 0 0 ...
+ $ marital_Together    : int  0 0 1 1 0 1 0 0 1 1 ...
+ $ marital_Widow       : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ education_2n.Cycle  : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ education_Basic     : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ education_Graduation: int  1 1 1 1 0 0 1 0 0 0 ...
+ $ education_Master    : int  0 0 0 0 0 1 0 0 0 0 ...
+ $ education_PhD       : int  0 0 0 0 1 0 0 1 1 1 ...
+ $ MntTotal            : int  1529 21 734 48 407 702 563 146 44 36 ...
+ $ MntRegularProds     : int  1441 15 692 43 392 688 536 123 42 23 ...
+ $ AcceptedCmpOverall  : int  0 0 0 0 0 0 0 0 0 1 ...</code></pre>
+</div>
+</div>
+<p>The <code>psych</code> package in R provides some useful function for describing data. Let’s install <code>psyc</code>, load the package, and look at our data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"psych"</span>) <span class="co"># install the package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"psych"</span>) <span class="co"># load the library</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="describe-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="describe-the-data">Describe the Data</h3>
+<p>Now let’s use the <code>describe()</code> function from <code>psych</code> to look at our marketing data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df) <span class="co"># describe our marketing data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     vars    n     mean       sd median  trimmed      mad  min
+Income                  1 2205 51622.09 20713.06  51287 51625.17 24408.04 1730
+Kidhome                 2 2205     0.44     0.54      0     0.40     0.00    0
+Teenhome                3 2205     0.51     0.54      0     0.48     0.00    0
+Recency                 4 2205    49.01    28.93     49    49.00    37.06    0
+MntWines                5 2205   306.16   337.49    178   251.45   249.08    0
+MntFruits               6 2205    26.40    39.78      8    17.12    11.86    0
+MntMeatProducts         7 2205   165.31   217.78     68   119.54    88.96    0
+MntFishProducts         8 2205    37.76    54.82     12    25.31    17.79    0
+MntSweetProducts        9 2205    27.13    41.13      8    17.48    11.86    0
+MntGoldProds           10 2205    44.06    51.74     25    33.57    28.17    0
+NumDealsPurchases      11 2205     2.32     1.89      2     1.97     1.48    0
+NumWebPurchases        12 2205     4.10     2.74      4     3.83     2.97    0
+NumCatalogPurchases    13 2205     2.65     2.80      2     2.22     2.97    0
+NumStorePurchases      14 2205     5.82     3.24      5     5.52     2.97    0
+NumWebVisitsMonth      15 2205     5.34     2.41      6     5.41     2.97    0
+AcceptedCmp3           16 2205     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp4           17 2205     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp5           18 2205     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp1           19 2205     0.06     0.25      0     0.00     0.00    0
+AcceptedCmp2           20 2205     0.01     0.12      0     0.00     0.00    0
+Complain               21 2205     0.01     0.09      0     0.00     0.00    0
+Z_CostContact          22 2205     3.00     0.00      3     3.00     0.00    3
+Z_Revenue              23 2205    11.00     0.00     11    11.00     0.00   11
+Response               24 2205     0.15     0.36      0     0.06     0.00    0
+Age                    25 2205    51.10    11.71     50    51.04    13.34   24
+Customer_Days          26 2205  2512.72   202.56   2515  2513.15   259.46 2159
+marital_Divorced       27 2205     0.10     0.31      0     0.01     0.00    0
+marital_Married        28 2205     0.39     0.49      0     0.36     0.00    0
+marital_Single         29 2205     0.22     0.41      0     0.15     0.00    0
+marital_Together       30 2205     0.26     0.44      0     0.20     0.00    0
+marital_Widow          31 2205     0.03     0.18      0     0.00     0.00    0
+education_2n.Cycle     32 2205     0.09     0.29      0     0.00     0.00    0
+education_Basic        33 2205     0.02     0.15      0     0.00     0.00    0
+education_Graduation   34 2205     0.50     0.50      1     0.51     0.00    0
+education_Master       35 2205     0.17     0.37      0     0.08     0.00    0
+education_PhD          36 2205     0.22     0.41      0     0.15     0.00    0
+MntTotal               37 2205   562.76   575.94    343   482.34   459.61    4
+MntRegularProds        38 2205   518.71   553.85    288   436.84   400.30 -283
+AcceptedCmpOverall     39 2205     0.30     0.68      0     0.13     0.00    0
+                        max  range  skew kurtosis     se
+Income               113734 112004  0.01    -0.85 441.10
+Kidhome                   2      2  0.63    -0.79   0.01
+Teenhome                  2      2  0.40    -0.99   0.01
+Recency                  99     99  0.00    -1.20   0.62
+MntWines               1493   1493  1.17     0.57   7.19
+MntFruits               199    199  2.10     4.03   0.85
+MntMeatProducts        1725   1725  1.82     3.23   4.64
+MntFishProducts         259    259  1.91     3.04   1.17
+MntSweetProducts        262    262  2.10     4.06   0.88
+MntGoldProds            321    321  1.83     3.13   1.10
+NumDealsPurchases        15     15  2.31     8.16   0.04
+NumWebPurchases          27     27  1.20     4.08   0.06
+NumCatalogPurchases      28     28  1.37     3.19   0.06
+NumStorePurchases        13     13  0.71    -0.64   0.07
+NumWebVisitsMonth        20     20  0.23     1.89   0.05
+AcceptedCmp3              1      1  3.25     8.60   0.01
+AcceptedCmp4              1      1  3.24     8.52   0.01
+AcceptedCmp5              1      1  3.28     8.76   0.01
+AcceptedCmp1              1      1  3.55    10.58   0.01
+AcceptedCmp2              1      1  8.39    68.45   0.00
+Complain                  1      1 10.35   105.16   0.00
+Z_CostContact             3      0   NaN      NaN   0.00
+Z_Revenue                11      0   NaN      NaN   0.00
+Response                  1      1  1.95     1.80   0.01
+Age                      80     56  0.09    -0.80   0.25
+Customer_Days          2858    699 -0.02    -1.20   4.31
+marital_Divorced          1      1  2.59     4.70   0.01
+marital_Married           1      1  0.46    -1.79   0.01
+marital_Single            1      1  1.38    -0.10   0.01
+marital_Together          1      1  1.11    -0.77   0.01
+marital_Widow             1      1  5.10    24.02   0.00
+education_2n.Cycle        1      1  2.87     6.23   0.01
+education_Basic           1      1  6.15    35.82   0.00
+education_Graduation      1      1 -0.02    -2.00   0.01
+education_Master          1      1  1.80     1.25   0.01
+education_PhD             1      1  1.38    -0.09   0.01
+MntTotal               2491   2487  0.91    -0.22  12.27
+MntRegularProds        2458   2741  0.98    -0.06  11.79
+AcceptedCmpOverall        4      4  2.72     7.94   0.01</code></pre>
 </div>
 </div>
 </section>
-<section id="creating-a-basic-ggplot" class="level3">
-<h3 class="anchored" data-anchor-id="creating-a-basic-ggplot">Creating a Basic ggplot</h3>
-<p>Let’s take a look at two variables in the <code>mpg</code> dataset.</p>
-<ul>
-<li><p><code>displ</code>, a car’s engine size, in litres.</p></li>
-<li><p><code>hwy</code>, a car’s fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.</p></li>
-</ul>
-<p>To plot <code>mpg</code>, run this code to put <code>displ</code> on the x-axis and <code>hwy</code> on the y-axis:</p>
+<section id="describe-the-data-by-group" class="level3">
+<h3 class="anchored" data-anchor-id="describe-the-data-by-group">Describe the Data by Group</h3>
+<p>We may also be interested in describing the data based on a specific grouping factor. For example, let’s look at our summaries based on whether or not a customer has lodged a formal complaint.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="week1_4_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>We can also convey information about our data by mapping the aesthetics in our plots to the variables in our dataset. For example, we can map the colors of the data points to the <code>class</code> variable to reveal the class of each car.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy, <span class="at">color =</span> class))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="week1_4_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Lastly, we can use facets to split a larger plot into subplots. This can be helpful when we want to break apart our data based on a categorical variable.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> class, <span class="at">nrow =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="week1_4_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describeBy</span>(df, <span class="at">group =</span> <span class="st">"Complain"</span>) <span class="co"># describe our marketing data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Descriptive statistics by group 
+Complain: 0
+                     vars    n     mean       sd median  trimmed      mad  min
+Income                  1 2185 51676.55 20719.18  51369 51687.17 24529.62 1730
+Kidhome                 2 2185     0.44     0.54      0     0.40     0.00    0
+Teenhome                3 2185     0.51     0.54      0     0.48     0.00    0
+Recency                 4 2185    48.99    28.95     49    48.98    37.06    0
+MntWines                5 2185   307.35   338.23    179   252.68   250.56    0
+MntFruits               6 2185    26.42    39.80      8    17.13    11.86    0
+MntMeatProducts         7 2185   165.75   218.21     68   119.91    88.96    0
+MntFishProducts         8 2185    37.86    54.95     12    25.37    17.79    0
+MntSweetProducts        9 2185    27.21    41.21      8    17.55    11.86    0
+MntGoldProds           10 2185    44.21    51.81     25    33.74    28.17    0
+NumDealsPurchases      11 2185     2.32     1.89      2     1.96     1.48    0
+NumWebPurchases        12 2185     4.10     2.74      4     3.83     2.97    0
+NumCatalogPurchases    13 2185     2.65     2.80      2     2.22     2.97    0
+NumStorePurchases      14 2185     5.83     3.24      5     5.52     2.97    0
+NumWebVisitsMonth      15 2185     5.33     2.41      6     5.41     2.97    0
+AcceptedCmp3           16 2185     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp4           17 2185     0.08     0.26      0     0.00     0.00    0
+AcceptedCmp5           18 2185     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp1           19 2185     0.06     0.25      0     0.00     0.00    0
+AcceptedCmp2           20 2185     0.01     0.12      0     0.00     0.00    0
+Complain               21 2185     0.00     0.00      0     0.00     0.00    0
+Z_CostContact          22 2185     3.00     0.00      3     3.00     0.00    3
+Z_Revenue              23 2185    11.00     0.00     11    11.00     0.00   11
+Response               24 2185     0.15     0.36      0     0.06     0.00    0
+Age                    25 2185    51.09    11.68     50    51.03    13.34   24
+Customer_Days          26 2185  2512.02   202.56   2514  2512.30   257.97 2159
+marital_Divorced       27 2185     0.10     0.31      0     0.01     0.00    0
+marital_Married        28 2185     0.39     0.49      0     0.36     0.00    0
+marital_Single         29 2185     0.22     0.41      0     0.14     0.00    0
+marital_Together       30 2185     0.26     0.44      0     0.20     0.00    0
+marital_Widow          31 2185     0.03     0.18      0     0.00     0.00    0
+education_2n.Cycle     32 2185     0.09     0.29      0     0.00     0.00    0
+education_Basic        33 2185     0.02     0.16      0     0.00     0.00    0
+education_Graduation   34 2185     0.50     0.50      1     0.50     0.00    0
+education_Master       35 2185     0.17     0.37      0     0.08     0.00    0
+education_PhD          36 2185     0.22     0.41      0     0.15     0.00    0
+MntTotal               37 2185   564.58   576.90    344   484.26   461.09    4
+MntRegularProds        38 2185   520.37   554.76    288   438.58   400.30 -283
+AcceptedCmpOverall     39 2185     0.30     0.68      0     0.14     0.00    0
+                        max  range  skew kurtosis     se
+Income               113734 112004  0.01    -0.85 443.25
+Kidhome                   2      2  0.64    -0.79   0.01
+Teenhome                  2      2  0.40    -1.00   0.01
+Recency                  99     99  0.00    -1.20   0.62
+MntWines               1493   1493  1.16     0.55   7.24
+MntFruits               199    199  2.10     4.05   0.85
+MntMeatProducts        1725   1725  1.81     3.22   4.67
+MntFishProducts         259    259  1.91     3.03   1.18
+MntSweetProducts        262    262  2.09     4.05   0.88
+MntGoldProds            321    321  1.83     3.11   1.11
+NumDealsPurchases        15     15  2.31     8.15   0.04
+NumWebPurchases          27     27  1.20     4.13   0.06
+NumCatalogPurchases      28     28  1.37     3.22   0.06
+NumStorePurchases        13     13  0.70    -0.64   0.07
+NumWebVisitsMonth        20     20  0.24     1.92   0.05
+AcceptedCmp3              1      1  3.26     8.64   0.01
+AcceptedCmp4              1      1  3.22     8.39   0.01
+AcceptedCmp5              1      1  3.27     8.72   0.01
+AcceptedCmp1              1      1  3.53    10.44   0.01
+AcceptedCmp2              1      1  8.35    67.78   0.00
+Complain                  0      0   NaN      NaN   0.00
+Z_CostContact             3      0   NaN      NaN   0.00
+Z_Revenue                11      0   NaN      NaN   0.00
+Response                  1      1  1.95     1.79   0.01
+Age                      80     56  0.09    -0.80   0.25
+Customer_Days          2858    699 -0.01    -1.20   4.33
+marital_Divorced          1      1  2.58     4.65   0.01
+marital_Married           1      1  0.46    -1.79   0.01
+marital_Single            1      1  1.38    -0.09   0.01
+marital_Together          1      1  1.11    -0.77   0.01
+marital_Widow             1      1  5.07    23.76   0.00
+education_2n.Cycle        1      1  2.88     6.29   0.01
+education_Basic           1      1  6.12    35.45   0.00
+education_Graduation      1      1 -0.01    -2.00   0.01
+education_Master          1      1  1.80     1.23   0.01
+education_PhD             1      1  1.37    -0.12   0.01
+MntTotal               2491   2487  0.91    -0.23  12.34
+MntRegularProds        2458   2741  0.98    -0.07  11.87
+AcceptedCmpOverall        4      4  2.71     7.91   0.01
+------------------------------------------------------------ 
+Complain: 1
+                     vars  n     mean       sd  median  trimmed      mad   min
+Income                  1 20 45672.40 19618.60 39341.0 44737.81 22307.94 15716
+Kidhome                 2 20     0.65     0.59     1.0     0.62     0.00     0
+Teenhome                3 20     0.55     0.60     0.5     0.50     0.74     0
+Recency                 4 20    50.75    27.20    48.5    50.62    28.17     8
+MntWines                5 20   176.70   211.11    34.0   147.88    48.18     1
+MntFruits               6 20    25.10    39.13     6.0    16.31     8.90     0
+MntMeatProducts         7 20   117.70   162.23    32.5    85.00    45.96     1
+MntFishProducts         8 20    26.70    38.73     6.5    20.50     9.64     0
+MntSweetProducts        9 20    18.20    31.36     4.5    11.19     5.93     0
+MntGoldProds           10 20    27.60    40.93    13.5    18.00    12.60     2
+NumDealsPurchases      11 20     2.40     1.43     2.0     2.19     1.48     1
+NumWebPurchases        12 20     3.70     2.96     3.0     3.31     2.22     0
+NumCatalogPurchases    13 20     2.10     2.90     0.5     1.56     0.74     0
+NumStorePurchases      14 20     5.40     3.60     3.5     4.94     2.22     2
+NumWebVisitsMonth      15 20     5.85     2.41     7.0     6.06     1.48     1
+AcceptedCmp3           16 20     0.10     0.31     0.0     0.00     0.00     0
+AcceptedCmp4           17 20     0.00     0.00     0.0     0.00     0.00     0
+AcceptedCmp5           18 20     0.05     0.22     0.0     0.00     0.00     0
+AcceptedCmp1           19 20     0.00     0.00     0.0     0.00     0.00     0
+AcceptedCmp2           20 20     0.00     0.00     0.0     0.00     0.00     0
+Complain               21 20     1.00     0.00     1.0     1.00     0.00     1
+Z_CostContact          22 20     3.00     0.00     3.0     3.00     0.00     3
+Z_Revenue              23 20    11.00     0.00    11.0    11.00     0.00    11
+Response               24 20     0.15     0.37     0.0     0.06     0.00     0
+Age                    25 20    51.65    15.04    50.0    51.81    17.79    25
+Customer_Days          26 20  2588.70   193.28  2685.0  2602.06   164.57  2250
+marital_Divorced       27 20     0.05     0.22     0.0     0.00     0.00     0
+marital_Married        28 20     0.40     0.50     0.0     0.38     0.00     0
+marital_Single         29 20     0.30     0.47     0.0     0.25     0.00     0
+marital_Together       30 20     0.25     0.44     0.0     0.19     0.00     0
+marital_Widow          31 20     0.00     0.00     0.0     0.00     0.00     0
+education_2n.Cycle     32 20     0.15     0.37     0.0     0.06     0.00     0
+education_Basic        33 20     0.00     0.00     0.0     0.00     0.00     0
+education_Graduation   34 20     0.70     0.47     1.0     0.75     0.00     0
+education_Master       35 20     0.10     0.31     0.0     0.00     0.00     0
+education_PhD          36 20     0.05     0.22     0.0     0.00     0.00     0
+MntTotal               37 20   364.40   424.05    77.5   300.19   101.56     9
+MntRegularProds        38 20   336.80   414.50    63.5   271.94    84.51     0
+AcceptedCmpOverall     39 20     0.15     0.49     0.0     0.00     0.00     0
+                       max range  skew kurtosis      se
+Income               83257 67541  0.35    -0.97 4386.85
+Kidhome                  2     2  0.18    -0.93    0.13
+Teenhome                 2     2  0.50    -0.87    0.14
+Recency                 93    85  0.11    -1.28    6.08
+MntWines               629   628  0.84    -0.88   47.21
+MntFruits              137   137  1.58     1.39    8.75
+MntMeatProducts        590   589  1.58     1.50   36.28
+MntFishProducts        104   104  1.05    -0.69    8.66
+MntSweetProducts       107   107  1.74     1.58    7.01
+MntGoldProds           176   174  2.48     5.90    9.15
+NumDealsPurchases        7     6  1.48     2.74    0.32
+NumWebPurchases         11    11  1.01    -0.07    0.66
+NumCatalogPurchases     10    10  1.25     0.52    0.65
+NumStorePurchases       13    11  0.87    -0.81    0.81
+NumWebVisitsMonth        9     8 -0.67    -1.02    0.54
+AcceptedCmp3             1     1  2.47     4.32    0.07
+AcceptedCmp4             0     0   NaN      NaN    0.00
+AcceptedCmp5             1     1  3.82    13.29    0.05
+AcceptedCmp1             0     0   NaN      NaN    0.00
+AcceptedCmp2             0     0   NaN      NaN    0.00
+Complain                 1     0   NaN      NaN    0.00
+Z_CostContact            3     0   NaN      NaN    0.00
+Z_Revenue               11     0   NaN      NaN    0.00
+Response                 1     1  1.82     1.37    0.08
+Age                     77    52 -0.02    -1.46    3.36
+Customer_Days         2823   573 -0.49    -1.30   43.22
+marital_Divorced         1     1  3.82    13.29    0.05
+marital_Married          1     1  0.38    -1.95    0.11
+marital_Single           1     1  0.81    -1.41    0.11
+marital_Together         1     1  1.07    -0.89    0.10
+marital_Widow            0     0   NaN      NaN    0.00
+education_2n.Cycle       1     1  1.82     1.37    0.08
+education_Basic          0     0   NaN      NaN    0.00
+education_Graduation     1     1 -0.81    -1.41    0.11
+education_Master         1     1  2.47     4.32    0.07
+education_PhD            1     1  3.82    13.29    0.05
+MntTotal              1298  1289  0.85    -0.73   94.82
+MntRegularProds       1231  1231  0.90    -0.72   92.68
+AcceptedCmpOverall       2     2  2.94     7.68    0.11</code></pre>
 </div>
 </div>
 

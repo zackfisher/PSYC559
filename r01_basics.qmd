@@ -177,21 +177,25 @@ Four of the most common data types used in R are discussed below:
 
 These are four common R data types you'll see in this class. There are others not listed here. For more detailed descriptions of data types in R there are a number of helpful resources available online, including this discussion of [data structures](https://resbaz.github.io/2014-r-materials/lessons/01-intro_r/data-structures.html).
 
-#### Conditional Statements in R
+#### Making Decisions with `ifelse()`
 
-Conditional statements are another useful R tool. These operators work similar in other programming languages but may look unfamiliar if you don't have experience with R.
-
-##### If Statements
+Often we want R to choose between two values based on a condition — for example, labeling cases as "high" or "low" on some variable. The `ifelse()` function does this for an *entire vector at once*, following the pattern `ifelse(condition, value_if_true, value_if_false)`:
 
 ```{r}
-x <- 10
+scores <- c(12, 31, 25, 8, 19)
 
-if (x > 6) {
-  print("x is greater than 6")
-}
+ifelse(scores > 20, "high", "low")
 ```
 
-##### If-Else Statements
+Each element is checked against the condition and replaced with the appropriate label. This vectorized style is how we'll create binary features and recode variables all semester, so it's worth internalizing now.
+
+`ifelse()` also works with numbers. For example, converting scores to a 0/1 indicator:
+
+```{r}
+ifelse(scores > 20, 1, 0)
+```
+
+*A related tool you may know from other languages:* R also has `if (condition) { ... } else { ... }` blocks, which choose between two *chunks of code* rather than two values, and operate on a single condition rather than a whole vector. We'll see them occasionally, but in data analysis `ifelse()` is the one you'll reach for constantly.
 
 ```{r}
 x <- 3
@@ -202,19 +206,3 @@ if (x > 6) {
   print("x is less than or equal to 6")
 }
 ```
-
-**Nested If Statements**
-
-```{r}
-x <- 8
-y <- 3
-
-if (x > 6) {
-  if (y < 6) {
-    print("x is greater than 6 and y is less than 6")
-  }
-}
-
-```
-
-## 

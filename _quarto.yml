@@ -6,13 +6,13 @@ project:
   render:
     - index.qmd
     - introduction.qmd
-    - 1_1.qmd
-    - 1_1b.qmd
-    - 1_2.qmd
-    - 1_3.qmd
-    - week1_3.qmd
-    - week1_4.qmd
-    - week1_5.qmd
+    - r01_basics.qmd
+    - r02_packages.qmd
+    - r03_reading_data.qmd
+    - r04_dataframes.qmd
+    - r05_describing_data.qmd
+    - r06_visualizing_data.qmd
+    - r07_rmarkdown.qmd
     - week2_1.qmd
     - week2_2.qmd
     - week2_3.qmd
@@ -101,13 +101,13 @@ website:
         contents:
       - section: "Introduction to R"
         contents:
-          - 1_1.qmd
-          - 1_1b.qmd
-          - 1_2.qmd
-          - 1_3.qmd
-          - week1_3.qmd
-          - week1_4.qmd
-          - week1_5.qmd
+          - r01_basics.qmd
+          - r02_packages.qmd
+          - r03_reading_data.qmd
+          - r04_dataframes.qmd
+          - r05_describing_data.qmd
+          - r06_visualizing_data.qmd
+          - r07_rmarkdown.qmd
       - section: "Introduction to Machine Learning"
         contents:
           - week2_1.qmd

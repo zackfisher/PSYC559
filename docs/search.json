@@ -1,7 +1,7 @@
 [
   {
-    "objectID": "week1_4.html",
-    "href": "week1_4.html",
+    "objectID": "r06_visualizing_data.html",
+    "href": "r06_visualizing_data.html",
     "title": "Describing Data Visually",
     "section": "",
     "text": "This section will briefly introduce you to visualizing data using the ggplot2 package. R has a number of systems for making graphs but ggplot2 is by far the most developed option. ggplot2 implements the grammar of graphics, and if you’d like to learn more about the motivation for this work take a look at The Layered Grammar of Graphics.",
@@ -11,19 +11,19 @@
     ]
   },
   {
-    "objectID": "1_3.html",
-    "href": "1_3.html",
+    "objectID": "r04_dataframes.html",
+    "href": "r04_dataframes.html",
     "title": "Working with Data Frames",
     "section": "",
-    "text": "Nearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we’ll practice pulling pieces out of a data frame, creating new variables, and chaining operations together — the skills you’ll use in every single lab and assignment.\nLet’s read in the marketing data we saw previously.\ndf &lt;- read.csv(\"data/ifood_df.csv\")\nA few functions are useful for getting oriented whenever you load a new dataset:\ndim(df)      # number of rows and columns\n\n[1] 2205   39\n\nnrow(df)     # number of rows (cases)\n\n[1] 2205\n\nnames(df)    # variable names\n\n [1] \"Income\"               \"Kidhome\"              \"Teenhome\"            \n [4] \"Recency\"              \"MntWines\"             \"MntFruits\"           \n [7] \"MntMeatProducts\"      \"MntFishProducts\"      \"MntSweetProducts\"    \n[10] \"MntGoldProds\"         \"NumDealsPurchases\"    \"NumWebPurchases\"     \n[13] \"NumCatalogPurchases\"  \"NumStorePurchases\"    \"NumWebVisitsMonth\"   \n[16] \"AcceptedCmp3\"         \"AcceptedCmp4\"         \"AcceptedCmp5\"        \n[19] \"AcceptedCmp1\"         \"AcceptedCmp2\"         \"Complain\"            \n[22] \"Z_CostContact\"        \"Z_Revenue\"            \"Response\"            \n[25] \"Age\"                  \"Customer_Days\"        \"marital_Divorced\"    \n[28] \"marital_Married\"      \"marital_Single\"       \"marital_Together\"    \n[31] \"marital_Widow\"        \"education_2n.Cycle\"   \"education_Basic\"     \n[34] \"education_Graduation\" \"education_Master\"     \"education_PhD\"       \n[37] \"MntTotal\"             \"MntRegularProds\"      \"AcceptedCmpOverall\"\nhead(df[, 1:6])  # first few rows of the first 6 columns\n\n  Income Kidhome Teenhome Recency MntWines MntFruits\n1  58138       0        0      58      635        88\n2  46344       1        1      38       11         1\n3  71613       0        0      26      426        49\n4  26646       1        0      26       11         4\n5  58293       1        0      94      173        43\n6  62513       0        1      16      520        42\nThe $ operator pulls a single variable out of a data frame as a vector. This is one of the most common operations in R, and you will see it constantly in this course.\nmean(df$Income)    # average household income\n\n[1] 51622.09\n\ntable(df$Complain) # how many customers lodged a complaint?\n\n\n   0    1 \n2185   20\nWe can also use $ to create a new variable in the data frame. For example, the number of children at home is split across two variables, Kidhome and Teenhome. Let’s combine them:\ndf$TotalKids &lt;- df$Kidhome + df$Teenhome\ntable(df$TotalKids)\n\n\n   0    1    2    3 \n 628 1112  415   50\nSquare brackets let us take a subset of a data frame using the pattern df[rows, columns]. Leaving either slot empty means “keep everything.”\ndf[1:5, ]                        # first five rows, all columns\n\n  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts\n1  58138       0        0      58      635        88             546\n2  46344       1        1      38       11         1               6\n3  71613       0        0      26      426        49             127\n4  26646       1        0      26       11         4              20\n5  58293       1        0      94      173        43             118\n  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases\n1             172               88           88                 3\n2               2                1            6                 2\n3             111               21           42                 1\n4              10                3            5                 2\n5              46               27           15                 5\n  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth\n1               8                  10                 4                 7\n2               1                   1                 2                 5\n3               8                   2                10                 4\n4               2                   0                 4                 6\n5               5                   3                 6                 5\n  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain\n1            0            0            0            0            0        0\n2            0            0            0            0            0        0\n3            0            0            0            0            0        0\n4            0            0            0            0            0        0\n5            0            0            0            0            0        0\n  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced\n1             3        11        1  63          2822                0\n2             3        11        0  66          2272                0\n3             3        11        0  55          2471                0\n4             3        11        0  36          2298                0\n5             3        11        0  39          2320                0\n  marital_Married marital_Single marital_Together marital_Widow\n1               0              1                0             0\n2               0              1                0             0\n3               0              0                1             0\n4               0              0                1             0\n5               1              0                0             0\n  education_2n.Cycle education_Basic education_Graduation education_Master\n1                  0               0                    1                0\n2                  0               0                    1                0\n3                  0               0                    1                0\n4                  0               0                    1                0\n5                  0               0                    0                0\n  education_PhD MntTotal MntRegularProds AcceptedCmpOverall TotalKids\n1             0     1529            1441                  0         0\n2             0       21              15                  0         2\n3             0      734             692                  0         0\n4             0       48              43                  0         1\n5             1      407             392                  0         1\n\nhead(df[, c(\"Income\", \"Age\")])   # all rows, two named columns\n\n  Income Age\n1  58138  63\n2  46344  66\n3  71613  55\n4  26646  36\n5  58293  39\n6  62513  53\nWe can also select rows using a logical condition. For example, customers with incomes above $75,000:\nhigh_income &lt;- df[df$Income &gt; 75000, ]\nnrow(high_income)\n\n[1] 350\nRead that as: “keep the rows of df where df$Income &gt; 75000 is TRUE, and all columns.”\nAs our analyses grow, we often want to perform several operations in sequence. The pipe operator %&gt;% takes the object on its left and passes it to the function on its right. These two lines do exactly the same thing:\nlibrary(dplyr)\n\nhead(df[, 1:4])      # without the pipe\n\n  Income Kidhome Teenhome Recency\n1  58138       0        0      58\n2  46344       1        1      38\n3  71613       0        0      26\n4  26646       1        0      26\n5  58293       1        0      94\n6  62513       0        1      16\n\ndf[, 1:4] %&gt;% head() # with the pipe\n\n  Income Kidhome Teenhome Recency\n1  58138       0        0      58\n2  46344       1        1      38\n3  71613       0        0      26\n4  26646       1        0      26\n5  58293       1        0      94\n6  62513       0        1      16\nThat looks like a small change, but pipes let us read a chain of steps top-to-bottom like a recipe, instead of inside-out. You will see %&gt;% throughout the course materials, especially once we start building preprocessing and modeling pipelines.\nNote: newer versions of R also have a built-in pipe written |&gt;. It works the same way for our purposes, and you may see either form in the wild.\nThe dplyr package (loaded above) provides a set of verbs for working with data frames that pair naturally with the pipe. The four you’ll see most often:\ndf %&gt;% select(Income, Age, MntWines) %&gt;% head()\n\n  Income Age MntWines\n1  58138  63      635\n2  46344  66       11\n3  71613  55      426\n4  26646  36       11\n5  58293  39      173\n6  62513  53      520\ndf %&gt;% filter(Income &gt; 75000) %&gt;% nrow()\n\n[1] 350\ndf %&gt;%\n  mutate(TotalKids = Kidhome + Teenhome) %&gt;%\n  select(Income, TotalKids) %&gt;%\n  head()\n\n  Income TotalKids\n1  58138         0\n2  46344         2\n3  71613         0\n4  26646         1\n5  58293         1\n6  62513         1\nChaining verbs together is where this style shines. For example: among customers who did and did not complain, what is the average wine spending and group size?\ndf %&gt;%\n  group_by(Complain) %&gt;%\n  summarise(\n    avg_wine = mean(MntWines),\n    n = n()\n  )\n\n# A tibble: 2 × 3\n  Complain avg_wine     n\n     &lt;int&gt;    &lt;dbl&gt; &lt;int&gt;\n1        0     307.  2185\n2        1     177.    20\nBase R subsetting ($, [ , ]) and dplyr verbs are two ways of doing the same things, and this course uses both — base R for quick one-liners, dplyr chains for multi-step preprocessing. You should be comfortable reading both. When writing your own code, use whichever feels clearer to you.",
+    "text": "Nearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we’ll practice pulling pieces out of a data frame, creating new variables, and chaining operations together — the skills you’ll use in every single lab and assignment.\nLet’s read in the marketing data we saw previously (download: ifood_df.csv).\ndf &lt;- read.csv(\"data/ifood_df.csv\")\nA few functions are useful for getting oriented whenever you load a new dataset:\ndim(df)      # number of rows and columns\n\n[1] 2205   39\n\nnrow(df)     # number of rows (cases)\n\n[1] 2205\n\nnames(df)    # variable names\n\n [1] \"Income\"               \"Kidhome\"              \"Teenhome\"            \n [4] \"Recency\"              \"MntWines\"             \"MntFruits\"           \n [7] \"MntMeatProducts\"      \"MntFishProducts\"      \"MntSweetProducts\"    \n[10] \"MntGoldProds\"         \"NumDealsPurchases\"    \"NumWebPurchases\"     \n[13] \"NumCatalogPurchases\"  \"NumStorePurchases\"    \"NumWebVisitsMonth\"   \n[16] \"AcceptedCmp3\"         \"AcceptedCmp4\"         \"AcceptedCmp5\"        \n[19] \"AcceptedCmp1\"         \"AcceptedCmp2\"         \"Complain\"            \n[22] \"Z_CostContact\"        \"Z_Revenue\"            \"Response\"            \n[25] \"Age\"                  \"Customer_Days\"        \"marital_Divorced\"    \n[28] \"marital_Married\"      \"marital_Single\"       \"marital_Together\"    \n[31] \"marital_Widow\"        \"education_2n.Cycle\"   \"education_Basic\"     \n[34] \"education_Graduation\" \"education_Master\"     \"education_PhD\"       \n[37] \"MntTotal\"             \"MntRegularProds\"      \"AcceptedCmpOverall\"\nhead(df[, 1:6])  # first few rows of the first 6 columns\n\n  Income Kidhome Teenhome Recency MntWines MntFruits\n1  58138       0        0      58      635        88\n2  46344       1        1      38       11         1\n3  71613       0        0      26      426        49\n4  26646       1        0      26       11         4\n5  58293       1        0      94      173        43\n6  62513       0        1      16      520        42\nThe $ operator pulls a single variable out of a data frame as a vector. This is one of the most common operations in R, and you will see it constantly in this course.\nmean(df$Income)    # average household income\n\n[1] 51622.09\n\ntable(df$Complain) # how many customers lodged a complaint?\n\n\n   0    1 \n2185   20\nWe can also use $ to create a new variable in the data frame. For example, the number of children at home is split across two variables, Kidhome and Teenhome. Let’s combine them:\ndf$TotalKids &lt;- df$Kidhome + df$Teenhome\ntable(df$TotalKids)\n\n\n   0    1    2    3 \n 628 1112  415   50\nSquare brackets let us take a subset of a data frame using the pattern df[rows, columns]. Leaving either slot empty means “keep everything.”\ndf[1:5, ]                        # first five rows, all columns\n\n  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts\n1  58138       0        0      58      635        88             546\n2  46344       1        1      38       11         1               6\n3  71613       0        0      26      426        49             127\n4  26646       1        0      26       11         4              20\n5  58293       1        0      94      173        43             118\n  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases\n1             172               88           88                 3\n2               2                1            6                 2\n3             111               21           42                 1\n4              10                3            5                 2\n5              46               27           15                 5\n  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth\n1               8                  10                 4                 7\n2               1                   1                 2                 5\n3               8                   2                10                 4\n4               2                   0                 4                 6\n5               5                   3                 6                 5\n  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain\n1            0            0            0            0            0        0\n2            0            0            0            0            0        0\n3            0            0            0            0            0        0\n4            0            0            0            0            0        0\n5            0            0            0            0            0        0\n  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced\n1             3        11        1  63          2822                0\n2             3        11        0  66          2272                0\n3             3        11        0  55          2471                0\n4             3        11        0  36          2298                0\n5             3        11        0  39          2320                0\n  marital_Married marital_Single marital_Together marital_Widow\n1               0              1                0             0\n2               0              1                0             0\n3               0              0                1             0\n4               0              0                1             0\n5               1              0                0             0\n  education_2n.Cycle education_Basic education_Graduation education_Master\n1                  0               0                    1                0\n2                  0               0                    1                0\n3                  0               0                    1                0\n4                  0               0                    1                0\n5                  0               0                    0                0\n  education_PhD MntTotal MntRegularProds AcceptedCmpOverall TotalKids\n1             0     1529            1441                  0         0\n2             0       21              15                  0         2\n3             0      734             692                  0         0\n4             0       48              43                  0         1\n5             1      407             392                  0         1\n\nhead(df[, c(\"Income\", \"Age\")])   # all rows, two named columns\n\n  Income Age\n1  58138  63\n2  46344  66\n3  71613  55\n4  26646  36\n5  58293  39\n6  62513  53\nWe can also select rows using a logical condition. For example, customers with incomes above $75,000:\nhigh_income &lt;- df[df$Income &gt; 75000, ]\nnrow(high_income)\n\n[1] 350\nRead that as: “keep the rows of df where df$Income &gt; 75000 is TRUE, and all columns.”\nReal data is rarely complete. R represents a missing value with NA (“not available”), and NA behaves differently than you might expect: most computations involving a missing value return a missing value.\nx &lt;- c(4, 7, NA, 2)\nmean(x)\n\n[1] NA\nThat NA answer is R being honest — it can’t know the mean of numbers it doesn’t have. If you’ve decided that ignoring the missing values is appropriate, say so explicitly with na.rm = TRUE:\nmean(x, na.rm = TRUE)\n\n[1] 4.333333\nTo find missing values, use is.na() — asking x == NA does not work, because comparing anything to an unknown is also unknown:\nis.na(x)        # which entries are missing?\n\n[1] FALSE FALSE  TRUE FALSE\n\nsum(is.na(x))   # how many are missing?\n\n[1] 1\nFor a whole data frame, colSums(is.na(df)) shows the missing count per variable. Our marketing data happens to be a cleaned dataset:\nsum(is.na(df))  # no missing values here\n\n[1] 0\nReal psychological data will rarely be this kind — the General Social Survey data in your first assignment certainly won’t be. Handling missingness well is a modeling topic we’ll treat properly in the feature engineering unit; for now, the essential skills are noticing missing values and understanding why NAs propagate through your calculations.\nAs our analyses grow, we often want to perform several operations in sequence. The pipe operator %&gt;% takes the object on its left and passes it to the function on its right. These two lines do exactly the same thing:\nlibrary(dplyr)\n\nhead(df[, 1:4])      # without the pipe\n\n  Income Kidhome Teenhome Recency\n1  58138       0        0      58\n2  46344       1        1      38\n3  71613       0        0      26\n4  26646       1        0      26\n5  58293       1        0      94\n6  62513       0        1      16\n\ndf[, 1:4] %&gt;% head() # with the pipe\n\n  Income Kidhome Teenhome Recency\n1  58138       0        0      58\n2  46344       1        1      38\n3  71613       0        0      26\n4  26646       1        0      26\n5  58293       1        0      94\n6  62513       0        1      16\nThat looks like a small change, but pipes let us read a chain of steps top-to-bottom like a recipe, instead of inside-out. You will see %&gt;% throughout the course materials, especially once we start building preprocessing and modeling pipelines.\nNote: newer versions of R also have a built-in pipe written |&gt;. It works the same way for our purposes, and you may see either form in the wild.\nThe dplyr package (loaded above) provides a set of verbs for working with data frames that pair naturally with the pipe. The four you’ll see most often:\ndf %&gt;% select(Income, Age, MntWines) %&gt;% head()\n\n  Income Age MntWines\n1  58138  63      635\n2  46344  66       11\n3  71613  55      426\n4  26646  36       11\n5  58293  39      173\n6  62513  53      520\ndf %&gt;% filter(Income &gt; 75000) %&gt;% nrow()\n\n[1] 350\ndf %&gt;%\n  mutate(TotalKids = Kidhome + Teenhome) %&gt;%\n  select(Income, TotalKids) %&gt;%\n  head()\n\n  Income TotalKids\n1  58138         0\n2  46344         2\n3  71613         0\n4  26646         1\n5  58293         1\n6  62513         1\nChaining verbs together is where this style shines. For example: among customers who did and did not complain, what is the average wine spending and group size?\ndf %&gt;%\n  group_by(Complain) %&gt;%\n  summarise(\n    avg_wine = mean(MntWines),\n    n = n()\n  )\n\n# A tibble: 2 × 3\n  Complain avg_wine     n\n     &lt;int&gt;    &lt;dbl&gt; &lt;int&gt;\n1        0     307.  2185\n2        1     177.    20\nBase R subsetting ($, [ , ]) and dplyr verbs are two ways of doing the same things, and this course uses both — base R for quick one-liners, dplyr chains for multi-step preprocessing. You should be comfortable reading both. When writing your own code, use whichever feels clearer to you.",
     "crumbs": [
       "Introduction to R",
       "Working with Data Frames"
     ]
   },
   {
-    "objectID": "1_3.html#selecting-a-variable-with",
-    "href": "1_3.html#selecting-a-variable-with",
+    "objectID": "r04_dataframes.html#selecting-a-variable-with",
+    "href": "r04_dataframes.html#selecting-a-variable-with",
     "title": "Working with Data Frames",
     "section": "Selecting a Variable with $",
     "text": "Selecting a Variable with $",
@@ -33,8 +33,8 @@
     ]
   },
   {
-    "objectID": "1_3.html#subsetting-with-rows-columns",
-    "href": "1_3.html#subsetting-with-rows-columns",
+    "objectID": "r04_dataframes.html#subsetting-with-rows-columns",
+    "href": "r04_dataframes.html#subsetting-with-rows-columns",
     "title": "Working with Data Frames",
     "section": "Subsetting with [rows, columns]",
     "text": "Subsetting with [rows, columns]",
@@ -44,8 +44,19 @@
     ]
   },
   {
-    "objectID": "1_3.html#the-pipe-operator",
-    "href": "1_3.html#the-pipe-operator",
+    "objectID": "r04_dataframes.html#missing-values-na",
+    "href": "r04_dataframes.html#missing-values-na",
+    "title": "Working with Data Frames",
+    "section": "Missing Values: NA",
+    "text": "Missing Values: NA",
+    "crumbs": [
+      "Introduction to R",
+      "Working with Data Frames"
+    ]
+  },
+  {
+    "objectID": "r04_dataframes.html#the-pipe-operator",
+    "href": "r04_dataframes.html#the-pipe-operator",
     "title": "Working with Data Frames",
     "section": "The Pipe Operator %>%",
     "text": "The Pipe Operator %&gt;%",
@@ -55,8 +66,8 @@
     ]
   },
   {
-    "objectID": "1_3.html#data-wrangling-with-dplyr",
-    "href": "1_3.html#data-wrangling-with-dplyr",
+    "objectID": "r04_dataframes.html#data-wrangling-with-dplyr",
+    "href": "r04_dataframes.html#data-wrangling-with-dplyr",
     "title": "Working with Data Frames",
     "section": "Data Wrangling with dplyr",
     "text": "Data Wrangling with dplyr",
@@ -66,8 +77,8 @@
     ]
   },
   {
-    "objectID": "1_3.html#two-dialects-one-language",
-    "href": "1_3.html#two-dialects-one-language",
+    "objectID": "r04_dataframes.html#two-dialects-one-language",
+    "href": "r04_dataframes.html#two-dialects-one-language",
     "title": "Working with Data Frames",
     "section": "Two Dialects, One Language",
     "text": "Two Dialects, One Language",
@@ -77,8 +88,8 @@
     ]
   },
   {
-    "objectID": "1_1b.html",
-    "href": "1_1b.html",
+    "objectID": "r02_packages.html",
+    "href": "r02_packages.html",
     "title": "R Packages",
     "section": "",
     "text": "One of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the ggplot2 package for plotting and visualizing data and the psych package for describing data numerically.\nTo install R packages you can use the install.packages() function directly in the console as follows:\ninstall.packages(\"ggplot2\")\nor you can do so from the Packages tab of the Files pane in RStudio using the following steps:\nOnce a package is installed you can load it into your environment using the library() function. Once loaded you have access to all the R functions supplied by that package.\nlibrary(\"ggplot2\")\nThere are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the CRAN Task Views. For example, there is an interesting Task View for Machine Learning that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the Sports Analytics Task View there is a f1dataR package that provides historical data from the beginning of Formula 1.",
@@ -88,8 +99,8 @@
     ]
   },
   {
-    "objectID": "1_1b.html#using-r-packages",
-    "href": "1_1b.html#using-r-packages",
+    "objectID": "r02_packages.html#using-r-packages",
+    "href": "r02_packages.html#using-r-packages",
     "title": "R Packages",
     "section": "Using R Packages",
     "text": "Using R Packages",
@@ -99,8 +110,8 @@
     ]
   },
   {
-    "objectID": "1_1b.html#finding-useful-r-packages",
-    "href": "1_1b.html#finding-useful-r-packages",
+    "objectID": "r02_packages.html#finding-useful-r-packages",
+    "href": "r02_packages.html#finding-useful-r-packages",
     "title": "R Packages",
     "section": "Finding Useful R Packages",
     "text": "Finding Useful R Packages",
@@ -158,8 +169,8 @@
     "text": "Quick Links\n\n\n\n📚 Course Materials\nLecture pages and labs, released as the semester progresses.\nBrowse materials\n\n\n\n\n📄 Syllabus & Canvas\nThe syllabus, readings, and assignment submissions live on Canvas.\nOpen Canvas\n\n\n\n\n⬇️ Install R & RStudio\nBoth are free — install them before the first lab.\nR RStudio\n\n\n\n\nIf you find errors or typos in any of the course materials, please let me know."
   },
   {
-    "objectID": "1_1.html",
-    "href": "1_1.html",
+    "objectID": "r01_basics.html",
+    "href": "r01_basics.html",
     "title": "Basic R Programming",
     "section": "",
     "text": "Before getting started we will need to install R and RStudio.",
@@ -169,19 +180,19 @@
     ]
   },
   {
-    "objectID": "1_2.html",
-    "href": "1_2.html",
+    "objectID": "r03_reading_data.html",
+    "href": "r03_reading_data.html",
     "title": "Reading in Data",
     "section": "",
-    "text": "One of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.\nBy reading in data we are generally refering to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabularobject where columns representing variables and rows representing cases. This is not always the case but covers the most basic use case.\nMany different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.",
+    "text": "One of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.\nBy reading in data we are generally referring to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabular object where columns represent variables and rows represent cases. This is not always the case but covers the most basic use case.\nMany different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.",
     "crumbs": [
       "Introduction to R",
       "Reading in Data"
     ]
   },
   {
-    "objectID": "week1_3.html",
-    "href": "week1_3.html",
+    "objectID": "r05_describing_data.html",
+    "href": "r05_describing_data.html",
     "title": "Describing Data Numerically",
     "section": "",
     "text": "Once you have read in a data frame it can be useful to know how the variables are understood by R. For example, let’s look at some Kaggle Marketing Analytics Data. You can download the raw data here.",
@@ -191,8 +202,8 @@
     ]
   },
   {
-    "objectID": "week1_5.html",
-    "href": "week1_5.html",
+    "objectID": "r07_rmarkdown.html",
+    "href": "r07_rmarkdown.html",
     "title": "R Markdown and Course Setup",
     "section": "",
     "text": "In-class exercises and assignments in this course are distributed as R Markdown (.Rmd) files. An R Markdown file mixes written text with runnable R code. You will complete the code, knit the document into a polished HTML or PDF report, and submit it on Canvas. Learning this workflow now means the first graded exercise will hold no surprises.\nThroughout the semester we will lean on a set of R packages for wrangling, visualization, and machine learning. Install them all now by pasting this into your console (not an R Markdown chunk!):\ninstall.packages(c(\n  \"tidyverse\",    # data wrangling and ggplot2 graphics\n  \"psych\",        # describing data\n  \"tidymodels\",   # modeling framework (includes rsample, recipes)\n  \"caret\",        # classic ML toolkit\n  \"rpart\",        # decision trees\n  \"ipred\",        # bagging\n  \"ranger\",       # random forests\n  \"gbm\",          # gradient boosting\n  \"glmnet\",       # regularized regression\n  \"vip\",          # variable importance plots\n  \"AmesHousing\",  # housing data used in the regression unit\n  \"cluster\",      # clustering methods\n  \"factoextra\"    # clustering and PCA visualizations\n))\nThis can take a while — tidyverse, tidymodels, and caret are large. Start it, get a coffee, and let it finish. Do this before the first lab so class time isn’t spent watching progress bars.\nA few assignment-specific packages (for example, gssr for working with the General Social Survey) will be installed later with instructions provided in the assignment itself.",
@@ -202,8 +213,8 @@
     ]
   },
   {
-    "objectID": "week1_5.html#install-the-course-packages",
-    "href": "week1_5.html#install-the-course-packages",
+    "objectID": "r07_rmarkdown.html#install-the-course-packages",
+    "href": "r07_rmarkdown.html#install-the-course-packages",
     "title": "R Markdown and Course Setup",
     "section": "Install the Course Packages",
     "text": "Install the Course Packages",
