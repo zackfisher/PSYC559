@@ -292,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="data-frames" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="data-frames">Data Frames</h2>
 </section>
-<p>Nearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we’ll practice pulling pieces out of a data frame, creating new variables, and chaining operations together — the skills you’ll use in every single lab and assignment.</p>
+<p>Nearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we’ll practice pulling pieces out of a data frame, creating new variables, and chaining operations together. These are the skills you’ll use in every single lab and assignment.</p>
 <p>Let’s read in the marketing data we saw previously (download: <a href="data/ifood_df.csv">ifood_df.csv</a>).</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -449,14 +449,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] NA</code></pre>
 </div>
 </div>
-<p>That <code>NA</code> answer is R being honest — it can’t know the mean of numbers it doesn’t have. If you’ve decided that ignoring the missing values is appropriate, say so explicitly with <code>na.rm = TRUE</code>:</p>
+<p>That <code>NA</code> answer is R being honest: it can’t know the mean of numbers it doesn’t have. If you’ve decided that ignoring the missing values is appropriate, say so explicitly with <code>na.rm = TRUE</code>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.333333</code></pre>
 </div>
 </div>
-<p>To find missing values, use <code>is.na()</code> — asking <code>x == NA</code> does <em>not</em> work, because comparing anything to an unknown is also unknown:</p>
+<p>To find missing values, use <code>is.na()</code>. Asking <code>x == NA</code> does <em>not</em> work, because comparing anything to an unknown is also unknown:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(x)        <span class="co"># which entries are missing?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -474,7 +474,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] 0</code></pre>
 </div>
 </div>
-<p>Real psychological data will rarely be this kind — the General Social Survey data in your first assignment certainly won’t be. Handling missingness <em>well</em> is a modeling topic we’ll treat properly in the feature engineering unit; for now, the essential skills are noticing missing values and understanding why <code>NA</code>s propagate through your calculations.</p>
+<p>Real psychological data will rarely be this kind; the General Social Survey data in your first assignment certainly won’t be. Handling missingness <em>well</em> is a modeling topic we’ll treat properly in the feature engineering unit; for now, the essential skills are noticing missing values and understanding why <code>NA</code>s propagate through your calculations.</p>
 <section id="the-pipe-operator" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="the-pipe-operator">The Pipe Operator <code>%&gt;%</code></h2>
 </section>
@@ -510,10 +510,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <p>The <code>dplyr</code> package (loaded above) provides a set of verbs for working with data frames that pair naturally with the pipe. The four you’ll see most often:</p>
 <ul>
-<li><p><code>select()</code> — choose columns</p></li>
-<li><p><code>filter()</code> — choose rows matching a condition</p></li>
-<li><p><code>mutate()</code> — create new variables</p></li>
-<li><p><code>summarise()</code> — collapse rows into summary values (often with <code>group_by()</code>)</p></li>
+<li><p><code>select()</code>: choose columns</p></li>
+<li><p><code>filter()</code>: choose rows matching a condition</p></li>
+<li><p><code>mutate()</code>: create new variables</p></li>
+<li><p><code>summarise()</code>: collapse rows into summary values (often with <code>group_by()</code>)</p></li>
 </ul>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">select</span>(Income, Age, MntWines) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -567,7 +567,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="two-dialects-one-language" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="two-dialects-one-language">Two Dialects, One Language</h2>
 </section>
-<p>Base R subsetting (<code>$</code>, <code>[ , ]</code>) and <code>dplyr</code> verbs are two ways of doing the same things, and this course uses both — base R for quick one-liners, <code>dplyr</code> chains for multi-step preprocessing. You should be comfortable <em>reading</em> both. When writing your own code, use whichever feels clearer to you.</p>
+<p>Base R subsetting (<code>$</code>, <code>[ , ]</code>) and <code>dplyr</code> verbs are two ways of doing the same things, and this course uses both: base R for quick one-liners, <code>dplyr</code> chains for multi-step preprocessing. You should be comfortable <em>reading</em> both. When writing your own code, use whichever feels clearer to you.</p>
 
 
 

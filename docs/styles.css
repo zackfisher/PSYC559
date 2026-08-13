@@ -22,6 +22,14 @@ hr {
    text-align: center;
 }
 
+/* Inline code inside headings: drop the light background chip and
+   match the heading's color (fixes yellow-on-white section titles) */
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
 /* Homepage quick-link cards */
 .quick-links .card {
   transition: transform 0.15s ease;

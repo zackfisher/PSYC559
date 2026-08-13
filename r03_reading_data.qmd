@@ -27,13 +27,13 @@ The examples in this section use a marketing dataset. Download it here: [ifood_d
 
 ### Where Is Your Data File? Paths in R
 
-To read a file into R, R needs to know where the file lives on your computer. The most explicit way to say so is a **full path** — the complete address of the file, starting from the root of your hard drive. For example, on my computer the path to the marketing data looks like this:
+To read a file into R, R needs to know where the file lives on your computer. The most explicit way to say so is a **full path**: the complete address of the file, starting from the root of your hard drive. For example, on my computer the path to the marketing data looks like this:
 
 ```{r, eval=FALSE}
 df <- read.csv("/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data/ifood_df.csv")
 ```
 
-Your path will look different — it depends on your username, operating system, and where you saved the file. A convenient way to find a file's full path is with `file.choose()`, which opens a file picker and prints the path of whatever you select:
+Your path will look different, since it depends on your username, operating system, and where you saved the file. A convenient way to find a file's full path is with `file.choose()`, which opens a file picker and prints the path of whatever you select:
 
 ```{r, eval=FALSE}
 file.choose()
@@ -49,7 +49,7 @@ The habit we will use in this class: **keep your data file in the same folder as
 df <- read.csv("data/ifood_df.csv")
 ```
 
-This is called a **relative path** — R looks for the file relative to where it is currently working. When you knit an R Markdown document, R automatically works from the folder where the `.Rmd` file lives, so if the data sits next to your document (or in a `data/` subfolder, as above), everything just works — on your machine, on your groupmate's, and on mine.
+This is called a **relative path**: R looks for the file relative to where it is currently working. When you knit an R Markdown document, R automatically works from the folder where the `.Rmd` file lives, so if the data sits next to your document (or in a `data/` subfolder, as above), everything just works on your machine, on your groupmate's, and on mine.
 
 If you are working in a plain R script and R can't find your file, check where R is currently looking with:
 

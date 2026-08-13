@@ -12,15 +12,15 @@ toc: false
 
 <!-- Newest first. Add a line here whenever you release content or have news. -->
 
-- **8/12** — The Introduction to R pages are now available in the sidebar. If you've never used R, start there.
-- Welcome to PSYC559! This page is updated throughout the semester — check back for announcements and newly released materials.
+- **8/12:** The Introduction to R pages are now available in the sidebar. If you've never used R, start there.
+- Welcome to PSYC559! This page is updated throughout the semester, so check back for announcements and newly released materials.
 
 ## 🗓️ This Week
 
 <!-- Update this callout as the semester unfolds (dates/topics are in the syllabus). -->
 
 ::: {.callout-note appearance="simple" icon="false"}
-**Week of August 18 — Getting Started**
+**Week of August 18: Getting Started**
 
 - **Tue 8/18:** Introduction to the course
 - **Thu 8/20:** Fundamentals of machine learning · *Read: Yarkoni & Westfall (2017)*
@@ -52,7 +52,7 @@ The syllabus, readings, and assignment submissions live on Canvas.
 ::: {.g-col-12 .g-col-md-4}
 ::: {.card .h-100 .p-4 .text-center}
 ### ⬇️ Install R & RStudio
-Both are free — install them before the first lab.
+Both are free. Install them before the first lab.
 
 [R](https://ftp.osuosl.org/pub/cran/){.btn .btn-primary} [RStudio](https://posit.co/download/rstudio-desktop/){.btn .btn-primary}
 :::

@@ -15,19 +15,19 @@ In-class exercises and assignments in this course are distributed as **R Markdow
 
 ### Creating an R Markdown Document
 
-In RStudio, choose **File \> New File \> R Markdown...**, give it a title, and click OK. RStudio opens a template document you can knit immediately — try it before changing anything.
+In RStudio, choose **File \> New File \> R Markdown...**, give it a title, and click OK. RStudio opens a template document you can knit immediately. Try it before changing anything.
 
 ### The Anatomy of an R Markdown File
 
 An `.Rmd` file has three ingredients:
 
-1.  **The YAML header** — the block between `---` lines at the very top. It stores the title, author, date, and output format.
+1.  **The YAML header**: the block between `---` lines at the very top. It stores the title, author, date, and output format.
 
-2.  **Prose** — ordinary text, with light formatting: `**bold**`, `*italics*`, `# headings`.
+2.  **Prose**: ordinary text, with light formatting: `**bold**`, `*italics*`, `# headings`.
 
-3.  **Code chunks** — R code between ```` ```{r} ```` and ```` ``` ```` fences. Insert a new chunk with the toolbar button or the shortcut **Cmd+Option+I** (Mac) / **Ctrl+Alt+I** (Windows).
+3.  **Code chunks**: R code between ```` ```{r} ```` and ```` ``` ```` fences. Insert a new chunk with the toolbar button or the shortcut **Cmd+Option+I** (Mac) / **Ctrl+Alt+I** (Windows).
 
-You can run a single chunk with the green "play" button on its right edge — useful for checking your work as you go.
+You can run a single chunk with the green "play" button on its right edge, which is useful for checking your work as you go.
 
 ### Knitting
 
@@ -45,11 +45,11 @@ By default, RStudio offers to save everything in your environment when you quit 
 
 **Tools \> Global Options \> General**: set *"Save workspace to .RData on exit"* to **Never**, and uncheck *"Restore .RData into workspace at startup."*
 
-Every session starts clean, which matches how knitting works — if your code runs in a fresh session, it will knit, and it will run for me too. Your scripts and documents are the permanent record of your work, not the workspace.
+Every session starts clean, which matches how knitting works: if your code runs in a fresh session, it will knit, and it will run for me too. Your scripts and documents are the permanent record of your work, not the workspace.
 
 ### Reading Error Messages
 
-You will see many error messages this semester — that's what learning a language looks like. When one appears: read the **first line only** (the rest is usually internal detail), note **which function** the error came from, and look for a mention of what R was looking for and couldn't find (a file, an object, a package). Most errors in this course are one of three things: a typo in a name, a file that isn't where R is looking, or a package that isn't loaded. If you're stuck after checking those, copy the full error message and bring it to class or office hours — "it didn't work" is unsolvable, but an exact error message usually takes one minute.
+You will see many error messages this semester; that's what learning a language looks like. When one appears: read the **first line only** (the rest is usually internal detail), note **which function** the error came from, and look for a mention of what R was looking for and couldn't find (a file, an object, a package). Most errors in this course are one of three things: a typo in a name, a file that isn't where R is looking, or a package that isn't loaded. If you're stuck after checking those, copy the full error message and bring it to class or office hours. "It didn't work" is unsolvable, but an exact error message usually takes one minute.
 
 ::: {style="color: yellow"}
 ## Install the Course Packages
@@ -75,7 +75,7 @@ install.packages(c(
 ))
 ```
 
-This can take a while — `tidyverse`, `tidymodels`, and `caret` are large. Start it, get a coffee, and let it finish. Do this **before the first lab** so class time isn't spent watching progress bars.
+This can take a while, since `tidyverse`, `tidymodels`, and `caret` are large. Start it, get a coffee, and let it finish. Do this **before the first lab** so class time isn't spent watching progress bars.
 
 A few assignment-specific packages (for example, `gssr` for working with the General Social Survey) will be installed later with instructions provided in the assignment itself.
 
@@ -90,4 +90,4 @@ library(caret)
 library(psych)
 ```
 
-If something fails to load, re-run `install.packages()` for that package and read the error message — and if you're stuck, bring the error to class or office hours. Getting your machine working is a course goal in week one, not an obstacle.
+If something fails to load, re-run `install.packages()` for that package and read the error message. If you're still stuck, bring the error to class or office hours. Getting your machine working is a course goal in week one, not an obstacle.

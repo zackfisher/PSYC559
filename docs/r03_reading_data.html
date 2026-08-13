@@ -313,11 +313,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="where-is-your-data-file-paths-in-r" class="level3">
 <h3 class="anchored" data-anchor-id="where-is-your-data-file-paths-in-r">Where Is Your Data File? Paths in R</h3>
-<p>To read a file into R, R needs to know where the file lives on your computer. The most explicit way to say so is a <strong>full path</strong> — the complete address of the file, starting from the root of your hard drive. For example, on my computer the path to the marketing data looks like this:</p>
+<p>To read a file into R, R needs to know where the file lives on your computer. The most explicit way to say so is a <strong>full path</strong>: the complete address of the file, starting from the root of your hard drive. For example, on my computer the path to the marketing data looks like this:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Your path will look different — it depends on your username, operating system, and where you saved the file. A convenient way to find a file’s full path is with <code>file.choose()</code>, which opens a file picker and prints the path of whatever you select:</p>
+<p>Your path will look different, since it depends on your username, operating system, and where you saved the file. A convenient way to find a file’s full path is with <code>file.choose()</code>, which opens a file picker and prints the path of whatever you select:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.choose</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -329,7 +329,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This is called a <strong>relative path</strong> — R looks for the file relative to where it is currently working. When you knit an R Markdown document, R automatically works from the folder where the <code>.Rmd</code> file lives, so if the data sits next to your document (or in a <code>data/</code> subfolder, as above), everything just works — on your machine, on your groupmate’s, and on mine.</p>
+<p>This is called a <strong>relative path</strong>: R looks for the file relative to where it is currently working. When you knit an R Markdown document, R automatically works from the folder where the <code>.Rmd</code> file lives, so if the data sits next to your document (or in a <code>data/</code> subfolder, as above), everything just works on your machine, on your groupmate’s, and on mine.</p>
 <p>If you are working in a plain R script and R can’t find your file, check where R is currently looking with:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>

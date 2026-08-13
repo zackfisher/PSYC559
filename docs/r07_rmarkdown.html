@@ -296,17 +296,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In-class exercises and assignments in this course are distributed as <strong>R Markdown</strong> (<code>.Rmd</code>) files. An R Markdown file mixes written text with runnable R code. You will complete the code, <strong>knit</strong> the document into a polished HTML or PDF report, and submit it on Canvas. Learning this workflow now means the first graded exercise will hold no surprises.</p>
 <section id="creating-an-r-markdown-document" class="level3">
 <h3 class="anchored" data-anchor-id="creating-an-r-markdown-document">Creating an R Markdown Document</h3>
-<p>In RStudio, choose <strong>File &gt; New File &gt; R Markdown…</strong>, give it a title, and click OK. RStudio opens a template document you can knit immediately — try it before changing anything.</p>
+<p>In RStudio, choose <strong>File &gt; New File &gt; R Markdown…</strong>, give it a title, and click OK. RStudio opens a template document you can knit immediately. Try it before changing anything.</p>
 </section>
 <section id="the-anatomy-of-an-r-markdown-file" class="level3">
 <h3 class="anchored" data-anchor-id="the-anatomy-of-an-r-markdown-file">The Anatomy of an R Markdown File</h3>
 <p>An <code>.Rmd</code> file has three ingredients:</p>
 <ol type="1">
-<li><p><strong>The YAML header</strong> — the block between <code>---</code> lines at the very top. It stores the title, author, date, and output format.</p></li>
-<li><p><strong>Prose</strong> — ordinary text, with light formatting: <code>**bold**</code>, <code>*italics*</code>, <code># headings</code>.</p></li>
-<li><p><strong>Code chunks</strong> — R code between <code>```{r}</code> and <code>```</code> fences. Insert a new chunk with the toolbar button or the shortcut <strong>Cmd+Option+I</strong> (Mac) / <strong>Ctrl+Alt+I</strong> (Windows).</p></li>
+<li><p><strong>The YAML header</strong>: the block between <code>---</code> lines at the very top. It stores the title, author, date, and output format.</p></li>
+<li><p><strong>Prose</strong>: ordinary text, with light formatting: <code>**bold**</code>, <code>*italics*</code>, <code># headings</code>.</p></li>
+<li><p><strong>Code chunks</strong>: R code between <code>```{r}</code> and <code>```</code> fences. Insert a new chunk with the toolbar button or the shortcut <strong>Cmd+Option+I</strong> (Mac) / <strong>Ctrl+Alt+I</strong> (Windows).</p></li>
 </ol>
-<p>You can run a single chunk with the green “play” button on its right edge — useful for checking your work as you go.</p>
+<p>You can run a single chunk with the green “play” button on its right edge, which is useful for checking your work as you go.</p>
 </section>
 <section id="knitting" class="level3">
 <h3 class="anchored" data-anchor-id="knitting">Knitting</h3>
@@ -321,11 +321,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="one-rstudio-setting-worth-changing">One RStudio Setting Worth Changing</h3>
 <p>By default, RStudio offers to save everything in your environment when you quit and restore it next time. This sounds convenient but causes deeply confusing bugs: objects from last Tuesday silently lurk in your session, your code “works” only because of leftovers, and then it fails to knit. Turn it off now:</p>
 <p><strong>Tools &gt; Global Options &gt; General</strong>: set <em>“Save workspace to .RData on exit”</em> to <strong>Never</strong>, and uncheck <em>“Restore .RData into workspace at startup.”</em></p>
-<p>Every session starts clean, which matches how knitting works — if your code runs in a fresh session, it will knit, and it will run for me too. Your scripts and documents are the permanent record of your work, not the workspace.</p>
+<p>Every session starts clean, which matches how knitting works: if your code runs in a fresh session, it will knit, and it will run for me too. Your scripts and documents are the permanent record of your work, not the workspace.</p>
 </section>
 <section id="reading-error-messages" class="level3">
 <h3 class="anchored" data-anchor-id="reading-error-messages">Reading Error Messages</h3>
-<p>You will see many error messages this semester — that’s what learning a language looks like. When one appears: read the <strong>first line only</strong> (the rest is usually internal detail), note <strong>which function</strong> the error came from, and look for a mention of what R was looking for and couldn’t find (a file, an object, a package). Most errors in this course are one of three things: a typo in a name, a file that isn’t where R is looking, or a package that isn’t loaded. If you’re stuck after checking those, copy the full error message and bring it to class or office hours — “it didn’t work” is unsolvable, but an exact error message usually takes one minute.</p>
+<p>You will see many error messages this semester; that’s what learning a language looks like. When one appears: read the <strong>first line only</strong> (the rest is usually internal detail), note <strong>which function</strong> the error came from, and look for a mention of what R was looking for and couldn’t find (a file, an object, a package). Most errors in this course are one of three things: a typo in a name, a file that isn’t where R is looking, or a package that isn’t loaded. If you’re stuck after checking those, copy the full error message and bring it to class or office hours. “It didn’t work” is unsolvable, but an exact error message usually takes one minute.</p>
 </section>
 <section id="install-the-course-packages" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="install-the-course-packages">Install the Course Packages</h2>
@@ -348,7 +348,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"factoextra"</span>    <span class="co"># clustering and PCA visualizations</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This can take a while — <code>tidyverse</code>, <code>tidymodels</code>, and <code>caret</code> are large. Start it, get a coffee, and let it finish. Do this <strong>before the first lab</strong> so class time isn’t spent watching progress bars.</p>
+<p>This can take a while, since <code>tidyverse</code>, <code>tidymodels</code>, and <code>caret</code> are large. Start it, get a coffee, and let it finish. Do this <strong>before the first lab</strong> so class time isn’t spent watching progress bars.</p>
 <p>A few assignment-specific packages (for example, <code>gssr</code> for working with the General Social Survey) will be installed later with instructions provided in the assignment itself.</p>
 <section id="check-your-setup" class="level3">
 <h3 class="anchored" data-anchor-id="check-your-setup">Check Your Setup</h3>
@@ -359,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>If something fails to load, re-run <code>install.packages()</code> for that package and read the error message — and if you’re stuck, bring the error to class or office hours. Getting your machine working is a course goal in week one, not an obstacle.</p>
+<p>If something fails to load, re-run <code>install.packages()</code> for that package and read the error message. If you’re still stuck, bring the error to class or office hours. Getting your machine working is a course goal in week one, not an obstacle.</p>
 
 
 </section>

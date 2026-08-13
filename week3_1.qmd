@@ -106,7 +106,7 @@ The first argument to `lm()` is a **formula**, written with the tilde `~`. Read 
 -   Multiple features are joined with `+`, e.g. `y ~ x1 + x2` (next section).
 -   `y ~ .` is shorthand for "use *all* other variables in the data as features."
 
-This formula syntax isn't specific to `lm()` — the same pattern reappears in `glm()`, `caret`, `tidymodels`, and most modeling functions in R, so it's worth getting comfortable with it now.
+This formula syntax isn't specific to `lm()`. The same pattern reappears in `glm()`, `caret`, `tidymodels`, and most modeling functions in R, so it's worth getting comfortable with it now.
 :::
 
 For example, if we want to predict sale price (`Sale_Price`) based on house square footage (`Gr_Liv_Area`), we can use the following code:

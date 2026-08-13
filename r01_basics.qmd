@@ -179,7 +179,7 @@ These are four common R data types you'll see in this class. There are others no
 
 #### Making Decisions with `ifelse()`
 
-Often we want R to choose between two values based on a condition — for example, labeling cases as "high" or "low" on some variable. The `ifelse()` function does this for an *entire vector at once*, following the pattern `ifelse(condition, value_if_true, value_if_false)`:
+Often we want R to choose between two values based on a condition, such as labeling cases as "high" or "low" on some variable. The `ifelse()` function does this for an *entire vector at once*, following the pattern `ifelse(condition, value_if_true, value_if_false)`:
 
 ```{r}
 scores <- c(12, 31, 25, 8, 19)
