@@ -98,7 +98,18 @@ table(ames$Neighborhood)
 
 We can fit a simple linear regression model using the `lm()` function in R. Note we are not using cross-validation here, simply fitting the training data to illustrate the concept of simple linear regression.
 
-For example, if we want to predict happiness (`Sale_Price`) based on house square footage (`Gr_Liv_Area`), we can use the following code:
+::: callout-note
+## R's Formula Syntax: `y ~ x`
+
+The first argument to `lm()` is a **formula**, written with the tilde `~`. Read the tilde as "modeled as a function of": `Sale_Price ~ Gr_Liv_Area` means "predict `Sale_Price` using `Gr_Liv_Area`." The target always goes on the left of the `~` and the features go on the right. Two extensions you'll see soon:
+
+-   Multiple features are joined with `+`, e.g. `y ~ x1 + x2` (next section).
+-   `y ~ .` is shorthand for "use *all* other variables in the data as features."
+
+This formula syntax isn't specific to `lm()` — the same pattern reappears in `glm()`, `caret`, `tidymodels`, and most modeling functions in R, so it's worth getting comfortable with it now.
+:::
+
+For example, if we want to predict sale price (`Sale_Price`) based on house square footage (`Gr_Liv_Area`), we can use the following code:
 
 ```{r, eval=T}
 fit_slr <- lm(

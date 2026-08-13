@@ -1,14 +1,18 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - data/ifood_df.csv
   render:
     - index.qmd
     - introduction.qmd
     - 1_1.qmd
     - 1_1b.qmd
     - 1_2.qmd
+    - 1_3.qmd
     - week1_3.qmd
     - week1_4.qmd
+    - week1_5.qmd
     - week2_1.qmd
     - week2_2.qmd
     - week2_3.qmd
@@ -100,8 +104,10 @@ website:
           - 1_1.qmd
           - 1_1b.qmd
           - 1_2.qmd
+          - 1_3.qmd
           - week1_3.qmd
           - week1_4.qmd
+          - week1_5.qmd
       - section: "Introduction to Machine Learning"
         contents:
           - week2_1.qmd

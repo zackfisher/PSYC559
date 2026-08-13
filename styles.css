@@ -21,3 +21,18 @@ hr {
 .caption{
    text-align: center;
 }
+
+/* Homepage quick-link cards */
+.quick-links .card {
+  transition: transform 0.15s ease;
+}
+.quick-links .card:hover {
+  transform: translateY(-4px);
+}
+.quick-links .card h3 {
+  margin-top: 0;
+  border-bottom: none;
+}
+.quick-links .btn {
+  margin: 0.25em;
+}

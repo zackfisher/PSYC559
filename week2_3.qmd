@@ -202,3 +202,26 @@ To tune hyperparameters using cross-validation:\
 
 -   If you set aside a test set at the very beginning, now is the time to use it.\
 -   This gives an unbiased estimate of how the tuned model will perform on brand-new data.
+
+::: {style="color: yellow"}
+# A Note on Randomness and Reproducibility: `set.seed()`
+:::
+
+Notice that every splitting procedure above starts by *randomly* shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits — and different results. Run it twice yourself and you'll get two answers:
+
+```{r}
+sample(1:10, 3) # randomly draw 3 numbers
+sample(1:10, 3) # run it again... different draw
+```
+
+R's random numbers are actually *pseudo*-random: they come from a sequence determined by a starting point called the **seed**. If we set the seed ourselves, the "random" results become exactly reproducible:
+
+```{r}
+set.seed(559)
+sample(1:10, 3)
+
+set.seed(559)
+sample(1:10, 3) # same seed, same draw
+```
+
+This is why nearly every machine learning script you'll see this semester begins with `set.seed()` before splitting data or fitting models that involve randomness. It doesn't make the analysis less random in spirit — it makes your random choices *repeatable*, so your results can be checked by others (including the you of next week, and me when grading).

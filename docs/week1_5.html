@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>R Packages – PSYC559: Applied Machine Learning in Psychology</title>
+<title>R Markdown and Course Setup – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_1b.html">R Packages</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./week1_5.html">R Markdown and Course Setup</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -156,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_1b.html" class="sidebar-item-text sidebar-link active">
+  <a href="./1_1b.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">R Packages</span></a>
   </div>
 </li>
@@ -186,7 +186,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week1_5.html" class="sidebar-item-text sidebar-link">
+  <a href="./week1_5.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">R Markdown and Course Setup</span></a>
   </div>
 </li>
@@ -257,18 +257,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#installing-r-packages" id="toc-installing-r-packages" class="nav-link active" data-scroll-target="#installing-r-packages">Installing R Packages</a></li>
-  <li><a href="#using-r-packages" id="toc-using-r-packages" class="nav-link" data-scroll-target="#using-r-packages">Using R Packages</a></li>
-  <li><a href="#finding-useful-r-packages" id="toc-finding-useful-r-packages" class="nav-link" data-scroll-target="#finding-useful-r-packages">Finding Useful R Packages</a></li>
+  <li><a href="#r-markdown" id="toc-r-markdown" class="nav-link active" data-scroll-target="#r-markdown">R Markdown</a></li>
+  <li><a href="#creating-an-r-markdown-document" id="toc-creating-an-r-markdown-document" class="nav-link" data-scroll-target="#creating-an-r-markdown-document">Creating an R Markdown Document</a></li>
+  <li><a href="#the-anatomy-of-an-r-markdown-file" id="toc-the-anatomy-of-an-r-markdown-file" class="nav-link" data-scroll-target="#the-anatomy-of-an-r-markdown-file">The Anatomy of an R Markdown File</a></li>
+  <li><a href="#knitting" id="toc-knitting" class="nav-link" data-scroll-target="#knitting">Knitting</a></li>
+  <li><a href="#install-the-course-packages" id="toc-install-the-course-packages" class="nav-link" data-scroll-target="#install-the-course-packages">Install the Course Packages</a></li>
+  <li><a href="#check-your-setup" id="toc-check-your-setup" class="nav-link" data-scroll-target="#check-your-setup">Check Your Setup</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_1b.html">R Packages</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./week1_5.html">R Markdown and Course Setup</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">R Packages</h1>
+<h1 class="title">R Markdown and Course Setup</h1>
 </div>
 
 
@@ -285,40 +288,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="installing-r-packages" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="installing-r-packages">Installing R Packages</h2>
+<section id="r-markdown" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="r-markdown">R Markdown</h2>
 </section>
-<p>One of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the <code>ggplot2</code> package for plotting and visualizing data and the <code>psych</code> package for describing data numerically.</p>
-<p>To install R packages you can use the <code>install.packages()</code> function directly in the console as follows:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>or you can do so from the Packages tab of the Files pane in RStudio using the following steps:</p>
+<p>In-class exercises and assignments in this course are distributed as <strong>R Markdown</strong> (<code>.Rmd</code>) files. An R Markdown file mixes written text with runnable R code. You will complete the code, <strong>knit</strong> the document into a polished HTML or PDF report, and submit it on Canvas. Learning this workflow now means the first graded exercise will hold no surprises.</p>
+<section id="creating-an-r-markdown-document" class="level3">
+<h3 class="anchored" data-anchor-id="creating-an-r-markdown-document">Creating an R Markdown Document</h3>
+<p>In RStudio, choose <strong>File &gt; New File &gt; R Markdown…</strong>, give it a title, and click OK. RStudio opens a template document you can knit immediately — try it before changing anything.</p>
+</section>
+<section id="the-anatomy-of-an-r-markdown-file" class="level3">
+<h3 class="anchored" data-anchor-id="the-anatomy-of-an-r-markdown-file">The Anatomy of an R Markdown File</h3>
+<p>An <code>.Rmd</code> file has three ingredients:</p>
 <ol type="1">
-<li><p>Click on the “Packages” tab.</p></li>
-<li><p>Click on “Install” next to Update.</p></li>
-<li><p>Type the name of the package under “Packages (separate multiple with space or comma):” In this case, type <code>ggplot2</code>.</p></li>
-<li><p>Click “Install.”</p></li>
+<li><p><strong>The YAML header</strong> — the block between <code>---</code> lines at the very top. It stores the title, author, date, and output format.</p></li>
+<li><p><strong>Prose</strong> — ordinary text, with light formatting: <code>**bold**</code>, <code>*italics*</code>, <code># headings</code>.</p></li>
+<li><p><strong>Code chunks</strong> — R code between <code>```{r}</code> and <code>```</code> fences. Insert a new chunk with the toolbar button or the shortcut <strong>Cmd+Option+I</strong> (Mac) / <strong>Ctrl+Alt+I</strong> (Windows).</p></li>
 </ol>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/install_packages_easy_way.png" class="img-fluid figure-img"></p>
-<figcaption>Install packages using RStudio</figcaption>
-</figure>
-</div>
-<section id="using-r-packages" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="using-r-packages">Using R Packages</h2>
+<p>You can run a single chunk with the green “play” button on its right edge — useful for checking your work as you go.</p>
 </section>
-<p>Once a package is installed you can load it into your environment using the <code>library()</code> function. Once loaded you have access to all the R functions supplied by that package.</p>
+<section id="knitting" class="level3">
+<h3 class="anchored" data-anchor-id="knitting">Knitting</h3>
+<p>The <strong>Knit</strong> button at the top of the editor runs the entire document <em>top to bottom in a fresh R session</em> and produces the output file. That “fresh session” detail explains the most common student pitfalls:</p>
+<ul>
+<li><p><strong>“It works in my console but won’t knit.”</strong> Objects you created in the console don’t exist when knitting. Every object your document uses must be created <em>by code chunks in the document</em>, in order.</p></li>
+<li><p><strong>Never put <code>install.packages()</code> in a code chunk.</strong> Install packages once, from the console. A document should <em>load</em> packages with <code>library()</code>, not install them.</p></li>
+<li><p><strong>Keep the <code>.Rmd</code> and any data files in the same folder</strong>, and refer to data by filename (<code>read.csv("mydata.csv")</code>). Knitting looks for files relative to where the <code>.Rmd</code> lives.</p></li>
+</ul>
+</section>
+<section id="install-the-course-packages" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="install-the-course-packages">Install the Course Packages</h2>
+</section>
+<p>Throughout the semester we will lean on a set of R packages for wrangling, visualization, and machine learning. Install them all now by pasting this into your <strong>console</strong> (not an R Markdown chunk!):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidyverse"</span>,    <span class="co"># data wrangling and ggplot2 graphics</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"psych"</span>,        <span class="co"># describing data</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidymodels"</span>,   <span class="co"># modeling framework (includes rsample, recipes)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"caret"</span>,        <span class="co"># classic ML toolkit</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"rpart"</span>,        <span class="co"># decision trees</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ipred"</span>,        <span class="co"># bagging</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ranger"</span>,       <span class="co"># random forests</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"gbm"</span>,          <span class="co"># gradient boosting</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"glmnet"</span>,       <span class="co"># regularized regression</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"vip"</span>,          <span class="co"># variable importance plots</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AmesHousing"</span>,  <span class="co"># housing data used in the regression unit</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cluster"</span>,      <span class="co"># clustering methods</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"factoextra"</span>    <span class="co"># clustering and PCA visualizations</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="finding-useful-r-packages" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="finding-useful-r-packages">Finding Useful R Packages</h2>
+<p>This can take a while — <code>tidyverse</code>, <code>tidymodels</code>, and <code>caret</code> are large. Start it, get a coffee, and let it finish. Do this <strong>before the first lab</strong> so class time isn’t spent watching progress bars.</p>
+<p>A few assignment-specific packages (for example, <code>gssr</code> for working with the General Social Survey) will be installed later with instructions provided in the assignment itself.</p>
+<section id="check-your-setup" class="level3">
+<h3 class="anchored" data-anchor-id="check-your-setup">Check Your Setup</h3>
+<p>If this runs without errors, you are ready for the semester:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If something fails to load, re-run <code>install.packages()</code> for that package and read the error message — and if you’re stuck, bring the error to class or office hours. Getting your machine working is a course goal in week one, not an obstacle.</p>
+
+
 </section>
-<p>There are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the <a href="https://cran.r-project.org/web/views/">CRAN Task Views</a>. For example, there is an interesting <a href="https://cran.r-project.org/web/views/MachineLearning.html">Task View for Machine Learning</a> that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the S<a href="https://cran.r-project.org/web/views/SportsAnalytics.html">ports Analytics Task View</a> there is a <a href="https://cran.r-project.org/web/packages/f1dataR/index.html"><code>f1dataR</code></a> package that provides historical data from the beginning of Formula 1.</p>
-
-
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

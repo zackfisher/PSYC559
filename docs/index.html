@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>PSC559: Applied Machine Learning in Psychology – PSYC559: Applied Machine Learning in Psychology</title>
+<title>PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-932b3046337f5c054d0c428ad2bce24f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-48f44f563a2e18ff5f622a3c21889622.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -82,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">PSC559: Applied Machine Learning in Psychology</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">PSYC559: Applied Machine Learning in Psychology</li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -133,6 +133,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./1_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Working with Data Frames</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./week1_3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Describing Data Numerically</span></a>
   </div>
@@ -141,6 +147,12 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="./week1_4.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Describing Data Visually</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week1_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R Markdown and Course Setup</span></a>
   </div>
 </li>
       </ul>
@@ -205,15 +217,14 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">PSC559: Applied Machine Learning in Psychology</h1>
+<h1 class="title">PSYC559: Applied Machine Learning in Psychology</h1>
+<p class="subtitle lead">Fall 2026 · Tuesdays &amp; Thursdays 2:00–3:15 pm · Davie Hall 301</p>
 </div>
 
 
@@ -230,11 +241,65 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome to the PSC559: Applied Machine Learning in Psychology!</p>
-<p>As the class progresses I will update this front matter with a general course overview and important announcements.</p>
-<p>If you find errors or typos in any of these materials please let me know.</p>
+<p><strong>Zachary Fisher</strong> · <a href="mailto:fisherz@unc.edu">fisherz@unc.edu</a> · 337A Davie Hall · Office hours by appointment</p>
+<hr>
+<section id="announcements" class="level2">
+<h2 class="anchored" data-anchor-id="announcements">📣 Announcements</h2>
+<!-- Newest first. Add a line here whenever you release content or have news. -->
+<ul>
+<li><strong>8/12</strong> — The Introduction to R pages are now available in the sidebar. If you’ve never used R, start there.</li>
+<li>Welcome to PSYC559! This page is updated throughout the semester — check back for announcements and newly released materials.</li>
+</ul>
+</section>
+<section id="this-week" class="level2">
+<h2 class="anchored" data-anchor-id="this-week">🗓️ This Week</h2>
+<!-- Update this callout as the semester unfolds (dates/topics are in the syllabus). -->
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Week of August 18 — Getting Started</strong></p>
+<ul>
+<li><strong>Tue 8/18:</strong> Introduction to the course</li>
+<li><strong>Thu 8/20:</strong> Fundamentals of machine learning · <em>Read: Yarkoni &amp; Westfall (2017)</em></li>
+<li>Before the first R lab (8/25), install R and RStudio using the links below.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="quick-links" class="level2">
+<h2 class="anchored" data-anchor-id="quick-links">Quick Links</h2>
+<div class="grid quick-links">
+<div class="g-col-12 g-col-md-4">
+<section id="course-materials" class="level3 card h-100 p-4 text-center">
+<h3 class="anchored" data-anchor-id="course-materials">📚 Course Materials</h3>
+<p>Lecture pages and labs, released as the semester progresses.</p>
+<p><a href="./introduction.html" class="btn btn-primary">Browse materials</a></p>
+</section>
+</div>
+<div class="g-col-12 g-col-md-4">
+<section id="syllabus-canvas" class="level3 card h-100 p-4 text-center">
+<h3 class="anchored" data-anchor-id="syllabus-canvas">📄 Syllabus &amp; Canvas</h3>
+<p>The syllabus, readings, and assignment submissions live on Canvas.</p>
+<p><a href="https://canvas.unc.edu/" class="btn btn-primary">Open Canvas</a></p>
+</section>
+</div>
+<div class="g-col-12 g-col-md-4">
+<section id="install-r-rstudio" class="level3 card h-100 p-4 text-center">
+<h3 class="anchored" data-anchor-id="install-r-rstudio">⬇️ Install R &amp; RStudio</h3>
+<p>Both are free — install them before the first lab.</p>
+<p><a href="https://ftp.osuosl.org/pub/cran/" class="btn btn-primary">R</a> <a href="https://posit.co/download/rstudio-desktop/" class="btn btn-primary">RStudio</a></p>
+</section>
+</div>
+</div>
+<hr>
+<p>If you find errors or typos in any of the course materials, please let me know.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

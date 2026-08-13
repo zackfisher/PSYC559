@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>R Packages – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Working with Data Frames – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_1b.html">R Packages</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_3.html">Working with Data Frames</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -156,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_1b.html" class="sidebar-item-text sidebar-link active">
+  <a href="./1_1b.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">R Packages</span></a>
   </div>
 </li>
@@ -168,7 +168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1_3.html" class="sidebar-item-text sidebar-link">
+  <a href="./1_3.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Working with Data Frames</span></a>
   </div>
 </li>
@@ -257,18 +257,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#installing-r-packages" id="toc-installing-r-packages" class="nav-link active" data-scroll-target="#installing-r-packages">Installing R Packages</a></li>
-  <li><a href="#using-r-packages" id="toc-using-r-packages" class="nav-link" data-scroll-target="#using-r-packages">Using R Packages</a></li>
-  <li><a href="#finding-useful-r-packages" id="toc-finding-useful-r-packages" class="nav-link" data-scroll-target="#finding-useful-r-packages">Finding Useful R Packages</a></li>
+  <li><a href="#data-frames" id="toc-data-frames" class="nav-link active" data-scroll-target="#data-frames">Data Frames</a></li>
+  <li><a href="#selecting-a-variable-with" id="toc-selecting-a-variable-with" class="nav-link" data-scroll-target="#selecting-a-variable-with">Selecting a Variable with <code>$</code></a></li>
+  <li><a href="#subsetting-with-rows-columns" id="toc-subsetting-with-rows-columns" class="nav-link" data-scroll-target="#subsetting-with-rows-columns">Subsetting with <code>[rows, columns]</code></a></li>
+  <li><a href="#the-pipe-operator" id="toc-the-pipe-operator" class="nav-link" data-scroll-target="#the-pipe-operator">The Pipe Operator <code>%&gt;%</code></a></li>
+  <li><a href="#data-wrangling-with-dplyr" id="toc-data-wrangling-with-dplyr" class="nav-link" data-scroll-target="#data-wrangling-with-dplyr">Data Wrangling with <code>dplyr</code></a></li>
+  <li><a href="#two-dialects-one-language" id="toc-two-dialects-one-language" class="nav-link" data-scroll-target="#two-dialects-one-language">Two Dialects, One Language</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_1b.html">R Packages</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_1.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./1_3.html">Working with Data Frames</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">R Packages</h1>
+<h1 class="title">Working with Data Frames</h1>
 </div>
 
 
@@ -285,38 +288,248 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="installing-r-packages" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="installing-r-packages">Installing R Packages</h2>
+<section id="data-frames" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="data-frames">Data Frames</h2>
 </section>
-<p>One of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the <code>ggplot2</code> package for plotting and visualizing data and the <code>psych</code> package for describing data numerically.</p>
-<p>To install R packages you can use the <code>install.packages()</code> function directly in the console as follows:</p>
+<p>Nearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we’ll practice pulling pieces out of a data frame, creating new variables, and chaining operations together — the skills you’ll use in every single lab and assignment.</p>
+<p>Let’s read in the marketing data we saw previously.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>or you can do so from the Packages tab of the Files pane in RStudio using the following steps:</p>
-<ol type="1">
-<li><p>Click on the “Packages” tab.</p></li>
-<li><p>Click on “Install” next to Update.</p></li>
-<li><p>Type the name of the package under “Packages (separate multiple with space or comma):” In this case, type <code>ggplot2</code>.</p></li>
-<li><p>Click “Install.”</p></li>
-</ol>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/install_packages_easy_way.png" class="img-fluid figure-img"></p>
-<figcaption>Install packages using RStudio</figcaption>
-</figure>
-</div>
-<section id="using-r-packages" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="using-r-packages">Using R Packages</h2>
-</section>
-<p>Once a package is installed you can load it into your environment using the <code>library()</code> function. Once loaded you have access to all the R functions supplied by that package.</p>
+<p>A few functions are useful for getting oriented whenever you load a new dataset:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)      <span class="co"># number of rows and columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2205   39</code></pre>
 </div>
-<section id="finding-useful-r-packages" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="finding-useful-r-packages">Finding Useful R Packages</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(df)     <span class="co"># number of rows (cases)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2205</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df)    <span class="co"># variable names</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Income"               "Kidhome"              "Teenhome"            
+ [4] "Recency"              "MntWines"             "MntFruits"           
+ [7] "MntMeatProducts"      "MntFishProducts"      "MntSweetProducts"    
+[10] "MntGoldProds"         "NumDealsPurchases"    "NumWebPurchases"     
+[13] "NumCatalogPurchases"  "NumStorePurchases"    "NumWebVisitsMonth"   
+[16] "AcceptedCmp3"         "AcceptedCmp4"         "AcceptedCmp5"        
+[19] "AcceptedCmp1"         "AcceptedCmp2"         "Complain"            
+[22] "Z_CostContact"        "Z_Revenue"            "Response"            
+[25] "Age"                  "Customer_Days"        "marital_Divorced"    
+[28] "marital_Married"      "marital_Single"       "marital_Together"    
+[31] "marital_Widow"        "education_2n.Cycle"   "education_Basic"     
+[34] "education_Graduation" "education_Master"     "education_PhD"       
+[37] "MntTotal"             "MntRegularProds"      "AcceptedCmpOverall"  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df[, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>])  <span class="co"># first few rows of the first 6 columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Kidhome Teenhome Recency MntWines MntFruits
+1  58138       0        0      58      635        88
+2  46344       1        1      38       11         1
+3  71613       0        0      26      426        49
+4  26646       1        0      26       11         4
+5  58293       1        0      94      173        43
+6  62513       0        1      16      520        42</code></pre>
+</div>
+</div>
+<section id="selecting-a-variable-with" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="selecting-a-variable-with">Selecting a Variable with <code>$</code></h2>
 </section>
-<p>There are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the <a href="https://cran.r-project.org/web/views/">CRAN Task Views</a>. For example, there is an interesting <a href="https://cran.r-project.org/web/views/MachineLearning.html">Task View for Machine Learning</a> that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the S<a href="https://cran.r-project.org/web/views/SportsAnalytics.html">ports Analytics Task View</a> there is a <a href="https://cran.r-project.org/web/packages/f1dataR/index.html"><code>f1dataR</code></a> package that provides historical data from the beginning of Formula 1.</p>
+<p>The <code>$</code> operator pulls a single variable out of a data frame as a vector. This is one of the most common operations in R, and you will see it constantly in this course.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(df<span class="sc">$</span>Income)    <span class="co"># average household income</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 51622.09</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>Complain) <span class="co"># how many customers lodged a complaint?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   0    1 
+2185   20 </code></pre>
+</div>
+</div>
+<p>We can also use <code>$</code> to create a new variable in the data frame. For example, the number of children at home is split across two variables, <code>Kidhome</code> and <code>Teenhome</code>. Let’s combine them:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>TotalKids <span class="ot">&lt;-</span> df<span class="sc">$</span>Kidhome <span class="sc">+</span> df<span class="sc">$</span>Teenhome</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>TotalKids)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   0    1    2    3 
+ 628 1112  415   50 </code></pre>
+</div>
+</div>
+<section id="subsetting-with-rows-columns" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="subsetting-with-rows-columns">Subsetting with <code>[rows, columns]</code></h2>
+</section>
+<p>Square brackets let us take a subset of a data frame using the pattern <code>df[rows, columns]</code>. Leaving either slot empty means “keep everything.”</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]                        <span class="co"># first five rows, all columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts
+1  58138       0        0      58      635        88             546
+2  46344       1        1      38       11         1               6
+3  71613       0        0      26      426        49             127
+4  26646       1        0      26       11         4              20
+5  58293       1        0      94      173        43             118
+  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases
+1             172               88           88                 3
+2               2                1            6                 2
+3             111               21           42                 1
+4              10                3            5                 2
+5              46               27           15                 5
+  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth
+1               8                  10                 4                 7
+2               1                   1                 2                 5
+3               8                   2                10                 4
+4               2                   0                 4                 6
+5               5                   3                 6                 5
+  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain
+1            0            0            0            0            0        0
+2            0            0            0            0            0        0
+3            0            0            0            0            0        0
+4            0            0            0            0            0        0
+5            0            0            0            0            0        0
+  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced
+1             3        11        1  63          2822                0
+2             3        11        0  66          2272                0
+3             3        11        0  55          2471                0
+4             3        11        0  36          2298                0
+5             3        11        0  39          2320                0
+  marital_Married marital_Single marital_Together marital_Widow
+1               0              1                0             0
+2               0              1                0             0
+3               0              0                1             0
+4               0              0                1             0
+5               1              0                0             0
+  education_2n.Cycle education_Basic education_Graduation education_Master
+1                  0               0                    1                0
+2                  0               0                    1                0
+3                  0               0                    1                0
+4                  0               0                    1                0
+5                  0               0                    0                0
+  education_PhD MntTotal MntRegularProds AcceptedCmpOverall TotalKids
+1             0     1529            1441                  0         0
+2             0       21              15                  0         2
+3             0      734             692                  0         0
+4             0       48              43                  0         1
+5             1      407             392                  0         1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df[, <span class="fu">c</span>(<span class="st">"Income"</span>, <span class="st">"Age"</span>)])   <span class="co"># all rows, two named columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Age
+1  58138  63
+2  46344  66
+3  71613  55
+4  26646  36
+5  58293  39
+6  62513  53</code></pre>
+</div>
+</div>
+<p>We can also select rows using a logical condition. For example, customers with incomes above $75,000:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>high_income <span class="ot">&lt;-</span> df[df<span class="sc">$</span>Income <span class="sc">&gt;</span> <span class="dv">75000</span>, ]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(high_income)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 350</code></pre>
+</div>
+</div>
+<p>Read that as: “keep the rows of <code>df</code> where <code>df$Income &gt; 75000</code> is <code>TRUE</code>, and all columns.”</p>
+<section id="the-pipe-operator" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="the-pipe-operator">The Pipe Operator <code>%&gt;%</code></h2>
+</section>
+<p>As our analyses grow, we often want to perform several operations in sequence. The <strong>pipe</strong> operator <code>%&gt;%</code> takes the object on its left and passes it to the function on its right. These two lines do exactly the same thing:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])      <span class="co"># without the pipe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Kidhome Teenhome Recency
+1  58138       0        0      58
+2  46344       1        1      38
+3  71613       0        0      26
+4  26646       1        0      26
+5  58293       1        0      94
+6  62513       0        1      16</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>] <span class="sc">%&gt;%</span> <span class="fu">head</span>() <span class="co"># with the pipe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Kidhome Teenhome Recency
+1  58138       0        0      58
+2  46344       1        1      38
+3  71613       0        0      26
+4  26646       1        0      26
+5  58293       1        0      94
+6  62513       0        1      16</code></pre>
+</div>
+</div>
+<p>That looks like a small change, but pipes let us read a chain of steps top-to-bottom like a recipe, instead of inside-out. You will see <code>%&gt;%</code> throughout the course materials, especially once we start building preprocessing and modeling pipelines.</p>
+<p><em>Note:</em> newer versions of R also have a built-in pipe written <code>|&gt;</code>. It works the same way for our purposes, and you may see either form in the wild.</p>
+<section id="data-wrangling-with-dplyr" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="data-wrangling-with-dplyr">Data Wrangling with <code>dplyr</code></h2>
+</section>
+<p>The <code>dplyr</code> package (loaded above) provides a set of verbs for working with data frames that pair naturally with the pipe. The four you’ll see most often:</p>
+<ul>
+<li><p><code>select()</code> — choose columns</p></li>
+<li><p><code>filter()</code> — choose rows matching a condition</p></li>
+<li><p><code>mutate()</code> — create new variables</p></li>
+<li><p><code>summarise()</code> — collapse rows into summary values (often with <code>group_by()</code>)</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">select</span>(Income, Age, MntWines) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Age MntWines
+1  58138  63      635
+2  46344  66       11
+3  71613  55      426
+4  26646  36       11
+5  58293  39      173
+6  62513  53      520</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Income <span class="sc">&gt;</span> <span class="dv">75000</span>) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 350</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TotalKids =</span> Kidhome <span class="sc">+</span> Teenhome) <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Income, TotalKids) <span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income TotalKids
+1  58138         0
+2  46344         2
+3  71613         0
+4  26646         1
+5  58293         1
+6  62513         1</code></pre>
+</div>
+</div>
+<p>Chaining verbs together is where this style shines. For example: among customers who did and did not complain, what is the average wine spending and group size?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Complain) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_wine =</span> <span class="fu">mean</span>(MntWines),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>()</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  Complain avg_wine     n
+     &lt;int&gt;    &lt;dbl&gt; &lt;int&gt;
+1        0     307.  2185
+2        1     177.    20</code></pre>
+</div>
+</div>
+<section id="two-dialects-one-language" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="two-dialects-one-language">Two Dialects, One Language</h2>
+</section>
+<p>Base R subsetting (<code>$</code>, <code>[ , ]</code>) and <code>dplyr</code> verbs are two ways of doing the same things, and this course uses both — base R for quick one-liners, <code>dplyr</code> chains for multi-step preprocessing. You should be comfortable <em>reading</em> both. When writing your own code, use whichever feels clearer to you.</p>
 
 
 

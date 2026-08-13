@@ -1,0 +1,81 @@
+---
+title: "R Markdown and Course Setup"
+format:
+  html:
+    fontsize: 25px
+editor_options:
+  chunk_output_type: console
+---
+
+::: {style="color: yellow"}
+## R Markdown
+:::
+
+In-class exercises and assignments in this course are distributed as **R Markdown** (`.Rmd`) files. An R Markdown file mixes written text with runnable R code. You will complete the code, **knit** the document into a polished HTML or PDF report, and submit it on Canvas. Learning this workflow now means the first graded exercise will hold no surprises.
+
+### Creating an R Markdown Document
+
+In RStudio, choose **File \> New File \> R Markdown...**, give it a title, and click OK. RStudio opens a template document you can knit immediately — try it before changing anything.
+
+### The Anatomy of an R Markdown File
+
+An `.Rmd` file has three ingredients:
+
+1.  **The YAML header** — the block between `---` lines at the very top. It stores the title, author, date, and output format.
+
+2.  **Prose** — ordinary text, with light formatting: `**bold**`, `*italics*`, `# headings`.
+
+3.  **Code chunks** — R code between ```` ```{r} ```` and ```` ``` ```` fences. Insert a new chunk with the toolbar button or the shortcut **Cmd+Option+I** (Mac) / **Ctrl+Alt+I** (Windows).
+
+You can run a single chunk with the green "play" button on its right edge — useful for checking your work as you go.
+
+### Knitting
+
+The **Knit** button at the top of the editor runs the entire document *top to bottom in a fresh R session* and produces the output file. That "fresh session" detail explains the most common student pitfalls:
+
+-   **"It works in my console but won't knit."** Objects you created in the console don't exist when knitting. Every object your document uses must be created *by code chunks in the document*, in order.
+
+-   **Never put `install.packages()` in a code chunk.** Install packages once, from the console. A document should *load* packages with `library()`, not install them.
+
+-   **Keep the `.Rmd` and any data files in the same folder**, and refer to data by filename (`read.csv("mydata.csv")`). Knitting looks for files relative to where the `.Rmd` lives.
+
+::: {style="color: yellow"}
+## Install the Course Packages
+:::
+
+Throughout the semester we will lean on a set of R packages for wrangling, visualization, and machine learning. Install them all now by pasting this into your **console** (not an R Markdown chunk!):
+
+```{r, eval=FALSE}
+install.packages(c(
+  "tidyverse",    # data wrangling and ggplot2 graphics
+  "psych",        # describing data
+  "tidymodels",   # modeling framework (includes rsample, recipes)
+  "caret",        # classic ML toolkit
+  "rpart",        # decision trees
+  "ipred",        # bagging
+  "ranger",       # random forests
+  "gbm",          # gradient boosting
+  "glmnet",       # regularized regression
+  "vip",          # variable importance plots
+  "AmesHousing",  # housing data used in the regression unit
+  "cluster",      # clustering methods
+  "factoextra"    # clustering and PCA visualizations
+))
+```
+
+This can take a while — `tidyverse`, `tidymodels`, and `caret` are large. Start it, get a coffee, and let it finish. Do this **before the first lab** so class time isn't spent watching progress bars.
+
+A few assignment-specific packages (for example, `gssr` for working with the General Social Survey) will be installed later with instructions provided in the assignment itself.
+
+### Check Your Setup
+
+If this runs without errors, you are ready for the semester:
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(tidymodels)
+library(caret)
+library(psych)
+```
+
+If something fails to load, re-run `install.packages()` for that package and read the error message — and if you're stuck, bring the error to class or office hours. Getting your machine working is a course goal in week one, not an obstacle.
