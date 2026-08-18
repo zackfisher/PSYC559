@@ -6,6 +6,8 @@ project:
   render:
     - index.qmd
     - introduction.qmd
+    - f01_welcome.qmd
+    - f02_explanation_prediction.qmd
     - r01_basics.qmd
     - r02_packages.qmd
     - r03_reading_data.qmd
@@ -99,6 +101,10 @@ website:
       - text: "Table of Contents"
         href: introduction.qmd
         contents:
+      - section: "Course Foundations"
+        contents:
+          - f01_welcome.qmd
+          - f02_explanation_prediction.qmd
       - section: "Introduction to R"
         contents:
           - r01_basics.qmd

@@ -30,6 +30,15 @@ h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
   padding: 0;
 }
 
+/* Note callouts (e.g., Further Information boxes): match the site's
+   yellow accent instead of Quarto's default blue */
+div.callout-note.callout {
+  border-left-color: yellow;
+}
+div.callout-note.callout-style-default > .callout-header {
+  background-color: rgba(255, 255, 0, 0.18);
+}
+
 /* Homepage quick-link cards */
 .quick-links .card {
   transition: transform 0.15s ease;

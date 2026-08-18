@@ -121,6 +121,83 @@
     ]
   },
   {
+    "objectID": "f02_explanation_prediction.html",
+    "href": "f02_explanation_prediction.html",
+    "title": "From Explanation to Prediction",
+    "section": "",
+    "text": "Today’s reading, Yarkoni & Westfall (2017), makes the case we develop here: psychology has much to gain from taking prediction seriously.\nOverwhelmingly, psychological research is explanatory in nature.\nThe working assumption goes like this: there is a data-generating model out there in the world that produced these data, and our job is to figure out what it is.\nWe estimate the true parameters that led from the input to the output, test whether they differ from zero, and build theories about why X is related to Y.\nMore recently, a prediction focus (a la machine learning) has emerged in the social sciences.\nThe starting assumption is humbler: there is some process that led to the data, but we may never know its true form.\nRather than recovering nature’s mechanism, we aim to find a model that maps the inputs to the outputs as accurately as possible, using whatever algorithm does the job.\nThis framing of “two cultures” of statistical modeling comes from Leo Breiman (2001), and it is one of the most useful lenses for everything we do this semester.\nSide by side, the two cultures look like this:\nBreiman, L. (2001). Statistical modeling: The two cultures. Statistical Science, 16(3), 199-231.\nYarkoni, T., & Westfall, J. (2017). Choosing prediction over explanation in psychology: Lessons from machine learning. Perspectives on Psychological Science, 12(6), 1100-1122.\nYarkoni & Westfall do not just describe the two cultures; they take a side, and their argument has three parts worth separating.\nPsychology has spent decades optimizing for explanation, yet the theories this produced often predict poorly, and sometimes barely better than chance.\nTheir uncomfortable suggestion is that an explanation that cannot predict may not be much of an explanation at all: the appearance of understanding without its substance.\nThink about what p-hacking and researcher degrees of freedom actually do: they tune an analysis until it fits the idiosyncrasies of one particular sample.\nIn machine learning vocabulary, that is overfitting, and a finding that fails to replicate is a model that failed out of sample.\nThe replication crisis, on this view, is not a moral failing unique to psychology; it is what happens to any field that evaluates its models on the same data used to build them.\nTheir proposed remedies are the core machinery of machine learning: hold out test data, use cross-validation, think in terms of the bias-variance trade-off, and use regularization to keep models honest.\nLook at the course schedule and you will notice something: that list is, almost line for line, the next month of this class. Data splitting and cross-validation arrive next week, bias and variance right beside them, and regularized regression in mid-September.\nOne important nuance, the paper does not argue that psychology should abandon explanation. The argument is that prediction disciplines explanation. If your theory is right, it should show up as predictive accuracy on people you have never seen; if it does not, that is evidence worth taking seriously.\nWhere does machine learning sit within data analysis as a whole?\nDonoho (2017), inspired by earlier work from Cleveland and Chambers, divides data science into six areas:\nNotice that data modeling, which includes machine learning, is just one item on the list, and arguably the easiest part of data analysis. Most of the work is getting data into a workable shape, making sense of predictors and outcomes, and dealing with anomalies. Here is the good news: as behavioral scientists, trained to think hard about measurement, sampling, and people, we are very well equipped to do exactly that.\nDonoho, D. (2017). 50 years of data science. Journal of Computational and Graphical Statistics, 26(4), 745-766.\nHere is a safe bet: you already used machine learning today. If you asked a chatbot a question, unlocked your phone with your face, or opened any app with a feed, a learned model was involved. So what makes all of these “machine learning”?\nThe definition that has aged best comes from Mitchell (1997). A system is said to learn from experience E, with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.\nWatch that definition at work on the most talked-about AI systems of the moment, large language models:\nA definition written in 1997 describes the flagship AI of the 2020s without modification. That is worth pausing on: underneath the remarkable behavior sits a system getting better at a precisely specified prediction task by processing experience.\nNow a second example, closer to home for a psychology course. Consider the recommendation feed on TikTok, YouTube, or Spotify:\nNotice whose behavior is being learned here: yours. A recommender system is a machine running a continuous learning loop on human behavior, which makes it one of the most psychologically interesting objects in modern technology. (Recall the Screenome participants from Tuesday: the feed is on the other side of many of those sessions.)\nThree lessons from these examples will return all semester:\nMitchell, T. M. (1997). Machine Learning. McGraw-Hill.\nBuolamwini, J., & Gebru, T. (2018). Gender shades: Intersectional accuracy disparities in commercial gender classification. Proceedings of Machine Learning Research, 81, 77-91.\nThese examples may sound like Silicon Valley’s concerns, but the same framework is reshaping our field:\nIn each case the question is not “what is the true coefficient?” but “how accurately can we predict, for a person we have not seen yet?” That is exactly the shift Yarkoni & Westfall argue for in today’s reading.\nWalsh, C. G., Ribeiro, J. D., & Franklin, J. C. (2017). Predicting risk of suicide attempts over time through machine learning. Clinical Psychological Science, 5(3), 457-469.\nOnnela, J. P., & Rauch, S. L. (2016). Harnessing smartphone-based digital phenotyping to enhance behavioral and mental health. Neuropsychopharmacology, 41(7), 1691-1696.\nChekroud, A. M., Zotti, R. J., Shehzad, Z., Gueorguieva, R., Johnson, M. K., Trivedi, M. H., Cannon, T. D., Krystal, J. H., & Corlett, P. R. (2016). Cross-trial prediction of treatment outcome in depression: A machine learning approach. The Lancet Psychiatry, 3(3), 243-250.\nNow apply Mitchell’s framework to something familiar: ordinary data analysis. Suppose we want to estimate a respondent’s depression score (the CES-D) from respondent characteristics.\nThe outcome is the CES-D score, and the predictors are things like clinical history, current treatment, age, and sex. A natural model is regression:\n\\[\n\\widehat{CESD} = b_0 + b_1 X_1 + b_2 X_2 + \\dots + b_{20} X_{20} + e_i\n\\]\nTo evaluate performance, we use the fitted equation to obtain a predicted score for each person and compare it to the score we observed. Did we overestimate? Underestimate? Get it just right?\nSo, is regression a machine learning model? In our statistics training, we’ve typically been interested in the significance of regression coefficients: standard errors, p-values, confidence intervals, and theories about why X is related to Y. If we instead treat regression as a machine learning algorithm, the emphasis shifts. We learn patterns in one dataset and evaluate the model in another, and we care about generalizability: keeping the model from becoming too complex, and preventing it from learning idiosyncrasies of our sample that will not hold up in new data. A model that predicts perfectly in the learning phase might generalize terribly. Notice this is precisely Yarkoni & Westfall’s diagnosis from earlier: a p-hacked regression is a model that learned its sample’s noise, evaluated on the data that produced it.\nHere is the punchline. Our regression model is just one choice of the function connecting predictors to outcome:\n\\[\n\\widehat{CESD} = f(X) + e_i\n\\]\nMachine learning models are, at heart, different choices of \\(f(X)\\). The function may be:\nAnd here is one more way to see the continuum. Our CES-D regression has 21 learned parameters: an intercept and 20 slopes. A frontier language model has on the order of a trillion. Both are instances of the same template: an outcome, a function of the inputs learned from experience, and error. What differs is how flexible \\(f\\) is allowed to be and how much experience it learns from. In a real sense, that one equation is the entire course.\nIf you have ever fit a regression, congratulations: you were doing machine learning. This course is about expanding your collection of \\(f(X)\\)’s, and, just as importantly, learning the machinery for choosing among them honestly. That machinery is exactly what today’s reading prescribes for the field.\nMachine learning methods come in two primary flavors, and they organize the entire course:\nBut what exactly are these, and how do they differ? That is the subject of this week’s pages in the Introduction to Machine Learning section, Important Terms and Distinctions and Problem Classes in ML, which pick up exactly here.",
+    "crumbs": [
+      "Course Foundations",
+      "From Explanation to Prediction"
+    ]
+  },
+  {
+    "objectID": "f02_explanation_prediction.html#the-explanatory-culture-of-the-social-sciences",
+    "href": "f02_explanation_prediction.html#the-explanatory-culture-of-the-social-sciences",
+    "title": "From Explanation to Prediction",
+    "section": "The Explanatory Culture of the Social Sciences",
+    "text": "The Explanatory Culture of the Social Sciences",
+    "crumbs": [
+      "Course Foundations",
+      "From Explanation to Prediction"
+    ]
+  },
+  {
+    "objectID": "f02_explanation_prediction.html#a-prediction-focus",
+    "href": "f02_explanation_prediction.html#a-prediction-focus",
+    "title": "From Explanation to Prediction",
+    "section": "A Prediction Focus",
+    "text": "A Prediction Focus",
+    "crumbs": [
+      "Course Foundations",
+      "From Explanation to Prediction"
+    ]
+  },
+  {
+    "objectID": "f02_explanation_prediction.html#the-bigger-picture-of-data-science",
+    "href": "f02_explanation_prediction.html#the-bigger-picture-of-data-science",
+    "title": "From Explanation to Prediction",
+    "section": "The Bigger Picture of Data Science",
+    "text": "The Bigger Picture of Data Science",
+    "crumbs": [
+      "Course Foundations",
+      "From Explanation to Prediction"
+    ]
+  },
+  {
+    "objectID": "f02_explanation_prediction.html#what-is-machine-learning",
+    "href": "f02_explanation_prediction.html#what-is-machine-learning",
+    "title": "From Explanation to Prediction",
+    "section": "What Is Machine Learning?",
+    "text": "What Is Machine Learning?",
+    "crumbs": [
+      "Course Foundations",
+      "From Explanation to Prediction"
+    ]
+  },
+  {
+    "objectID": "f02_explanation_prediction.html#were-you-already-doing-machine-learning",
+    "href": "f02_explanation_prediction.html#were-you-already-doing-machine-learning",
+    "title": "From Explanation to Prediction",
+    "section": "Were You Already Doing Machine Learning?",
+    "text": "Were You Already Doing Machine Learning?",
+    "crumbs": [
+      "Course Foundations",
+      "From Explanation to Prediction"
+    ]
+  },
+  {
+    "objectID": "f02_explanation_prediction.html#two-flavors-of-machine-learning",
+    "href": "f02_explanation_prediction.html#two-flavors-of-machine-learning",
+    "title": "From Explanation to Prediction",
+    "section": "Two Flavors of Machine Learning",
+    "text": "Two Flavors of Machine Learning",
+    "crumbs": [
+      "Course Foundations",
+      "From Explanation to Prediction"
+    ]
+  },
+  {
     "objectID": "introduction.html",
     "href": "introduction.html",
     "title": "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY",
@@ -167,6 +244,61 @@
     "title": "PSYC559: Applied Machine Learning in Psychology",
     "section": "Quick Links",
     "text": "Quick Links\n\n\n\n📚 Course Materials\nLecture pages and labs, released as the semester progresses.\nBrowse materials\n\n\n\n\n📄 Syllabus & Canvas\nThe syllabus, readings, and assignment submissions live on Canvas.\nOpen Canvas\n\n\n\n\n⬇️ Install R & RStudio\nBoth are free. Install them before the first lab.\nR RStudio\n\n\n\n\nIf you find errors or typos in any of the course materials, please let me know."
+  },
+  {
+    "objectID": "f01_welcome.html",
+    "href": "f01_welcome.html",
+    "title": "Welcome to PSYC559",
+    "section": "",
+    "text": "Welcome to Applied Machine Learning in Psychology. This page covers our first meeting: why psychology and machine learning belong in the same sentence, what “big data” actually means for behavioral scientists, and how this course will run.\nG. Stanley Hall began questionnaire research in 1882 hoping to understand “the contents of children’s minds.”\nThe use of questionnaires and surveys only grew during the First World War, when psychologists faced data collection at military scale. As Young (2018) recounts:\nIn other words, one of the most familiar tools in all of psychology, the Likert scale, was itself born from a big data problem.\nThe shift came at a cost, though. Young (2018) describes it as a move from thick description to thin: flattening a person’s experience to a number on a scale made mass data easy to refine, combine, and plot, but the individual all but disappeared into the aggregate. Psychology has been navigating that trade-off between rich, messy description and manageable, aggregable numbers ever since.\nActually, the big data story runs through the very building you are sitting in…\nL. L. Thurstone spent his final years at UNC, moving here from Chicago in 1952, and the university’s Psychometric Laboratory still bears his name.\nIn 1959 the lab acquired the first computer at UNC, a Royal McBee LGP-30. It was the first of a series of installations that made the Lab “one of the few places in the world where computers were used for psychological data collection and statistical analysis in the 1960s” (Thissen, 2016).\nBelow is Davie Hall around 1967, shortly after it opened, along with a floor plan of the Lab’s computer-based facilities on its third floor, the same floor as our classroom: an IBM 1130 for data processing, a PDP-8 minicomputer running banks of teletype and display stations, and dedicated rooms for waiting, testing, and debriefing participants.\nPsychologists were building big data pipelines in this very building for half a century before data science as a field existed.\nJones, L. V., Johnson, E. S., & Young, F. W. (1973). Computer control of experiments in problem solving, psychophysics, and decision making. In B. Weiss (Ed.), Digital computers in the behavior laboratory (pp. 309-340). New York: Appleton-Century-Crofts.\nThissen, D. (2016). Remembering Lyle V. Jones (1924-2016). Psychometrika, 81(3), 904-905. https://doi.org/10.1007/s11336-016-9510-4\nToday, large and complex datasets appear across nearly every corner of the field, including research on:\nYoung, J. L. (2018). The long history of big data in psychology. The American Journal of Psychology, 131(4), 477-482. https://doi.org/10.5406/amerjpsyc.131.4.0477\n“Big Data” is a buzzword in academia and industry, but its meaning is shrouded in conceptual vagueness.\nThe term gets used to describe everything from the technological ability to store, aggregate, and process data to the sheer excess of information available in daily life.\nDe Mauro et al. (2015) reviewed the many competing definitions and identified four key themes:\nTwo of these themes matter most for this course.\nA few useful terms for thinking about where all this data comes from:\nAnalyzing data at this scale pushes us beyond traditional statistical techniques in several ways: a shift away from explanation towards prediction, machine learning techniques (both supervised and unsupervised, terms we will define on Thursday), and methods that protect against false discovery, that is, seeing patterns where none exist simply because we have enormous quantities of data.\nDe Mauro, A., Greco, M., & Grimaldi, M. (2015). What is big data? A consensual definition and a review of key research topics. AIP Conference Proceedings, 1644(1), 97-104.\nTo make this concrete, consider the Human Screenome Project (Reeves, Robinson, & Ram, 2020).\nInstead of asking people to estimate their “screen time,” researchers record moment-by-moment changes on a person’s screens: a screenshot every 5 seconds, compressed and encrypted on the device, for many months at a time.\nThe result is what they call a screenome, by analogy to the genome: a high-resolution record of a person’s digital life. The project has collected over 30 million screenshots from more than 600 people. To get a feel for what a screenome actually looks like, watch this sample video from the project: a real stretch of one person’s screen life, played back frame by frame.\nEach captured frame is an ordinary moment of phone use, like this one:\nWhy does this level of detail matter? Consider two 14-year-olds living in the same northern California community. By a conventional “screen time” measure they are nearly identical, but the screenome tells a different story:\nA single summary number (e.g. “about 4 hours per week”) would treat these two adolescents as the same.\nThe patterns that plausibly matter for their well-being live in the structure that the summary throws away.\nThis is the century-old tension from Young’s history returning with the polarity reversed.\nData like this is why this course exists: it is rich, complex, far beyond what a t-test was built for, and the question of what to do with it is exactly where machine learning enters.\nReeves, B., Robinson, T., & Ram, N. (2020). Time for the human screenome project. Nature, 577(7790), 314-317.",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
+  },
+  {
+    "objectID": "f01_welcome.html#the-long-history-of-big-data-in-psychology",
+    "href": "f01_welcome.html#the-long-history-of-big-data-in-psychology",
+    "title": "Welcome to PSYC559",
+    "section": "The Long History of Big Data in Psychology",
+    "text": "The Long History of Big Data in Psychology",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
+  },
+  {
+    "objectID": "f01_welcome.html#but-what-is-big-data",
+    "href": "f01_welcome.html#but-what-is-big-data",
+    "title": "Welcome to PSYC559",
+    "section": "But What Is “Big Data”?",
+    "text": "But What Is “Big Data”?",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
+  },
+  {
+    "objectID": "f01_welcome.html#an-example-the-human-screenome-project",
+    "href": "f01_welcome.html#an-example-the-human-screenome-project",
+    "title": "Welcome to PSYC559",
+    "section": "An Example: The Human Screenome Project",
+    "text": "An Example: The Human Screenome Project",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
+  },
+  {
+    "objectID": "f01_welcome.html#about-this-course",
+    "href": "f01_welcome.html#about-this-course",
+    "title": "Welcome to PSYC559",
+    "section": "About This Course",
+    "text": "About This Course",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
   },
   {
     "objectID": "r01_basics.html",
@@ -221,6 +353,28 @@
     "crumbs": [
       "Introduction to R",
       "R Markdown and Course Setup"
+    ]
+  },
+  {
+    "objectID": "f02_explanation_prediction.html#prediction-is-already-in-psychology",
+    "href": "f02_explanation_prediction.html#prediction-is-already-in-psychology",
+    "title": "From Explanation to Prediction",
+    "section": "Prediction Is Already in Psychology",
+    "text": "Prediction Is Already in Psychology",
+    "crumbs": [
+      "Course Foundations",
+      "From Explanation to Prediction"
+    ]
+  },
+  {
+    "objectID": "f02_explanation_prediction.html#what-todays-reading-argues",
+    "href": "f02_explanation_prediction.html#what-todays-reading-argues",
+    "title": "From Explanation to Prediction",
+    "section": "What Today’s Reading Argues",
+    "text": "What Today’s Reading Argues",
+    "crumbs": [
+      "Course Foundations",
+      "From Explanation to Prediction"
     ]
   }
 ]

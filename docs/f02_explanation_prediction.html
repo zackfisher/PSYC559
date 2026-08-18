@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Reading in Data – PSYC559: Applied Machine Learning in Psychology</title>
+<title>From Explanation to Prediction – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,41 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -104,6 +69,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -117,7 +111,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r01_basics.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./r03_reading_data.html">Reading in Data</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./f01_welcome.html">Course Foundations</a></li><li class="breadcrumb-item"><a href="./f02_explanation_prediction.html">From Explanation to Prediction</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -156,7 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./f02_explanation_prediction.html" class="sidebar-item-text sidebar-link">
+  <a href="./f02_explanation_prediction.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">From Explanation to Prediction</span></a>
   </div>
 </li>
@@ -185,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./r03_reading_data.html" class="sidebar-item-text sidebar-link active">
+  <a href="./r03_reading_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Reading in Data</span></a>
   </div>
 </li>
@@ -280,19 +274,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#loading-data" id="toc-loading-data" class="nav-link active" data-scroll-target="#loading-data">Loading Data</a></li>
-  <li><a href="#where-is-your-data-file-paths-in-r" id="toc-where-is-your-data-file-paths-in-r" class="nav-link" data-scroll-target="#where-is-your-data-file-paths-in-r">Where Is Your Data File? Paths in R</a></li>
-  <li><a href="#a-better-habit-keep-data-next-to-your-script" id="toc-a-better-habit-keep-data-next-to-your-script" class="nav-link" data-scroll-target="#a-better-habit-keep-data-next-to-your-script">A Better Habit: Keep Data Next to Your Script</a></li>
-  <li><a href="#looking-at-the-data" id="toc-looking-at-the-data" class="nav-link" data-scroll-target="#looking-at-the-data">Looking at the Data</a></li>
+  <li><a href="#the-explanatory-culture-of-the-social-sciences" id="toc-the-explanatory-culture-of-the-social-sciences" class="nav-link active" data-scroll-target="#the-explanatory-culture-of-the-social-sciences">The Explanatory Culture of the Social Sciences</a></li>
+  <li><a href="#a-prediction-focus" id="toc-a-prediction-focus" class="nav-link" data-scroll-target="#a-prediction-focus">A Prediction Focus</a></li>
+  <li><a href="#what-todays-reading-argues" id="toc-what-todays-reading-argues" class="nav-link" data-scroll-target="#what-todays-reading-argues">What Today’s Reading Argues</a></li>
+  <li><a href="#criticism-of-status-quo" id="toc-criticism-of-status-quo" class="nav-link" data-scroll-target="#criticism-of-status-quo">Criticism of Status Quo</a></li>
+  <li><a href="#the-replication-crisis-as-overfitting" id="toc-the-replication-crisis-as-overfitting" class="nav-link" data-scroll-target="#the-replication-crisis-as-overfitting">The Replication Crisis as Overfitting</a></li>
+  <li><a href="#a-path-forward" id="toc-a-path-forward" class="nav-link" data-scroll-target="#a-path-forward">A Path Forward</a></li>
+  <li><a href="#the-bigger-picture-of-data-science" id="toc-the-bigger-picture-of-data-science" class="nav-link" data-scroll-target="#the-bigger-picture-of-data-science">The Bigger Picture of Data Science</a></li>
+  <li><a href="#what-is-machine-learning" id="toc-what-is-machine-learning" class="nav-link" data-scroll-target="#what-is-machine-learning">What Is Machine Learning?</a></li>
+  <li><a href="#prediction-is-already-in-psychology" id="toc-prediction-is-already-in-psychology" class="nav-link" data-scroll-target="#prediction-is-already-in-psychology">Prediction Is Already in Psychology</a></li>
+  <li><a href="#were-you-already-doing-machine-learning" id="toc-were-you-already-doing-machine-learning" class="nav-link" data-scroll-target="#were-you-already-doing-machine-learning">Were You Already Doing Machine Learning?</a></li>
+  <li><a href="#two-flavors-of-machine-learning" id="toc-two-flavors-of-machine-learning" class="nav-link" data-scroll-target="#two-flavors-of-machine-learning">Two Flavors of Machine Learning</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r01_basics.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./r03_reading_data.html">Reading in Data</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./f01_welcome.html">Course Foundations</a></li><li class="breadcrumb-item"><a href="./f02_explanation_prediction.html">From Explanation to Prediction</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Reading in Data</h1>
+<h1 class="title">From Explanation to Prediction</h1>
 </div>
 
 
@@ -309,127 +310,251 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="loading-data" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="loading-data">Loading Data</h2>
+<p><em>Today’s reading, Yarkoni &amp; Westfall (2017), makes the case we develop here: psychology has much to gain from taking prediction seriously.</em></p>
+<section id="the-explanatory-culture-of-the-social-sciences" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="the-explanatory-culture-of-the-social-sciences">The Explanatory Culture of the Social Sciences</h2>
 </section>
-<p>One of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.</p>
-<p>By reading in data we are generally referring to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabular object where columns represent variables and rows represent cases. This is not always the case but covers the most basic use case.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/tabular.png" class="img-fluid figure-img"></p>
-<figcaption>Example of tabular data</figcaption>
-</figure>
+<p>Overwhelmingly, psychological research is <strong>explanatory</strong> in nature.</p>
+<p>The working assumption goes like this: there is a data-generating model out there in the world that produced these data, and our job is to figure out what it is.</p>
+<p>We estimate the true parameters that led from the input to the output, test whether they differ from zero, and build theories about <em>why</em> X is related to Y.</p>
+<div style="text-align: center; font-size: 1.1em; margin: 1em 0;">
+<p><strong>X</strong> &nbsp;⟶&nbsp; [ regression, logistic regression ] &nbsp;⟶&nbsp; <strong>Y</strong></p>
 </div>
-<p>Many different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<section id="a-prediction-focus" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="a-prediction-focus">A Prediction Focus</h2>
+</section>
+<p>More recently, a prediction focus (a la machine learning) has emerged in the social sciences.</p>
+<p>The starting assumption is humbler: there is <em>some</em> process that led to the data, but we may never know its true form.</p>
+<p>Rather than recovering nature’s mechanism, we aim to find a model that maps the inputs to the outputs as accurately as possible, using whatever algorithm does the job.</p>
+<div style="text-align: center; font-size: 1.1em; margin: 1em 0;">
+<p><strong>X</strong> &nbsp;⟶&nbsp; [ nature: unknown ] &nbsp;⟶&nbsp; <strong>Y</strong><br> <strong>X</strong> &nbsp;⟶&nbsp; [ trees, random forests, neural networks, … ] &nbsp;⟶&nbsp; <strong>Y</strong></p>
+</div>
+<p>This framing of “two cultures” of statistical modeling comes from Leo Breiman (2001), and it is one of the most useful lenses for everything we do this semester.</p>
+<p>Side by side, the two cultures look like this:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Explanatory culture</th>
+<th>Predictive culture</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Goal</strong></td>
+<td>Recover the true data-generating process</td>
+<td>Predict new observations accurately</td>
+</tr>
+<tr class="even">
+<td><strong>Typical question</strong></td>
+<td>Is this coefficient significant? Why does X relate to Y?</td>
+<td>How well does the model predict people it has never seen?</td>
+</tr>
+<tr class="odd">
+<td><strong>Success looks like</strong></td>
+<td>Interpretable parameters, supported theory</td>
+<td>Small out-of-sample error</td>
+</tr>
+<tr class="even">
+<td><strong>Main risk</strong></td>
+<td>A story that fits this sample but generalizes poorly</td>
+<td>Accurate predictions nobody can explain</td>
+</tr>
+<tr class="odd">
+<td><strong>Typical tools</strong></td>
+<td>Regression, ANOVA, SEM</td>
+<td>Trees, ensembles, neural networks, and regression too</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Download the Data
+<span class="screen-reader-only">Tip</span>The Two Cultures
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The examples in this section use a marketing dataset. Download it here: <a href="data/ifood_df.csv">ifood_df.csv</a> (right-click → “Save Link As…” if it opens in your browser). Save it in the same folder where you keep your R scripts for this class.</p>
+<p>In groups of 2-4 (about 5 minutes): What are the pros and cons of these two approaches? Does knowing how a process works mean you can make better predictions? Does making good predictions mean you have a good sense of how a process works? Have one concrete example ready to share.</p>
 </div>
 </div>
-<section id="where-is-your-data-file-paths-in-r" class="level3">
-<h3 class="anchored" data-anchor-id="where-is-your-data-file-paths-in-r">Where Is Your Data File? Paths in R</h3>
-<p>To read a file into R, R needs to know where the file lives on your computer. The most explicit way to say so is a <strong>full path</strong>: the complete address of the file, starting from the root of your hard drive. For example, on my computer the path to the marketing data looks like this:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Your path will look different, since it depends on your username, operating system, and where you saved the file. A convenient way to find a file’s full path is with <code>file.choose()</code>, which opens a file picker and prints the path of whatever you select:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.choose</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p><em>Breiman, L. (2001). Statistical modeling: The two cultures. Statistical Science, 16(3), 199-231.</em></p>
+<p><em>Yarkoni, T., &amp; Westfall, J. (2017). Choosing prediction over explanation in psychology: Lessons from machine learning. Perspectives on Psychological Science, 12(6), 1100-1122.</em></p>
+<section id="what-todays-reading-argues" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="what-todays-reading-argues">What Today’s Reading Argues</h2>
 </section>
-<section id="a-better-habit-keep-data-next-to-your-script" class="level3">
-<h3 class="anchored" data-anchor-id="a-better-habit-keep-data-next-to-your-script">A Better Habit: Keep Data Next to Your Script</h3>
-<p>Full paths work, but they are fragile: the code breaks the moment a folder gets moved or renamed, and it can never run on anyone else’s computer (including mine, when I am trying to help you debug or grade your work).</p>
-<p>The habit we will use in this class: <strong>keep your data file in the same folder as the script (or R Markdown document) that uses it</strong>, and refer to the file by name:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>This is called a <strong>relative path</strong>: R looks for the file relative to where it is currently working. When you knit an R Markdown document, R automatically works from the folder where the <code>.Rmd</code> file lives, so if the data sits next to your document (or in a <code>data/</code> subfolder, as above), everything just works on your machine, on your groupmate’s, and on mine.</p>
-<p>If you are working in a plain R script and R can’t find your file, check where R is currently looking with:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>and make sure your data is in that folder (or open your script through RStudio’s <strong>File</strong> menu, which usually sets things up correctly).</p>
+<p>Yarkoni &amp; Westfall do not just describe the two cultures; they take a side, and their argument has three parts worth separating.</p>
+<section id="criticism-of-status-quo" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="criticism-of-status-quo">Criticism of Status Quo</h3>
 </section>
-<section id="looking-at-the-data" class="level3">
-<h3 class="anchored" data-anchor-id="looking-at-the-data">Looking at the Data</h3>
-<p>Once the .csv file is loaded you can look at it using the <code>View()</code> function</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Psychology has spent decades optimizing for explanation, yet the theories this produced often predict poorly, and sometimes barely better than chance.</p>
+<p>Their uncomfortable suggestion is that an explanation that cannot predict may not be much of an explanation at all: the appearance of understanding without its substance.</p>
+<section id="the-replication-crisis-as-overfitting" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="the-replication-crisis-as-overfitting">The Replication Crisis as Overfitting</h3>
+</section>
+<p>Think about what p-hacking and researcher degrees of freedom actually do: they tune an analysis until it fits the idiosyncrasies of one particular sample.</p>
+<p>In machine learning vocabulary, that is <em>overfitting</em>, and a finding that fails to replicate is a model that failed <em>out of sample</em>.</p>
+<p>The replication crisis, on this view, is not a moral failing unique to psychology; it is what happens to any field that evaluates its models on the same data used to build them.</p>
+<section id="a-path-forward" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="a-path-forward">A Path Forward</h3>
+</section>
+<p>Their proposed remedies are the core machinery of machine learning: hold out test data, use cross-validation, think in terms of the bias-variance trade-off, and use regularization to keep models honest.</p>
+<p>Look at the course schedule and you will notice something: that list is, almost line for line, the next month of this class. Data splitting and cross-validation arrive next week, bias and variance right beside them, and regularized regression in mid-September.</p>
+<p>One important nuance, the paper does not argue that psychology should abandon explanation. The argument is that prediction <em>disciplines</em> explanation. If your theory is right, it should show up as predictive accuracy on people you have never seen; if it does not, that is evidence worth taking seriously.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<p>or simply examine the first few cases using <code>head()</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts
-1  58138       0        0      58      635        88             546
-2  46344       1        1      38       11         1               6
-3  71613       0        0      26      426        49             127
-4  26646       1        0      26       11         4              20
-5  58293       1        0      94      173        43             118
-6  62513       0        1      16      520        42              98
-  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases
-1             172               88           88                 3
-2               2                1            6                 2
-3             111               21           42                 1
-4              10                3            5                 2
-5              46               27           15                 5
-6               0               42           14                 2
-  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth
-1               8                  10                 4                 7
-2               1                   1                 2                 5
-3               8                   2                10                 4
-4               2                   0                 4                 6
-5               5                   3                 6                 5
-6               6                   4                10                 6
-  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain
-1            0            0            0            0            0        0
-2            0            0            0            0            0        0
-3            0            0            0            0            0        0
-4            0            0            0            0            0        0
-5            0            0            0            0            0        0
-6            0            0            0            0            0        0
-  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced
-1             3        11        1  63          2822                0
-2             3        11        0  66          2272                0
-3             3        11        0  55          2471                0
-4             3        11        0  36          2298                0
-5             3        11        0  39          2320                0
-6             3        11        0  53          2452                0
-  marital_Married marital_Single marital_Together marital_Widow
-1               0              1                0             0
-2               0              1                0             0
-3               0              0                1             0
-4               0              0                1             0
-5               1              0                0             0
-6               0              0                1             0
-  education_2n.Cycle education_Basic education_Graduation education_Master
-1                  0               0                    1                0
-2                  0               0                    1                0
-3                  0               0                    1                0
-4                  0               0                    1                0
-5                  0               0                    0                0
-6                  0               0                    0                1
-  education_PhD MntTotal MntRegularProds AcceptedCmpOverall
-1             0     1529            1441                  0
-2             0       21              15                  0
-3             0      734             692                  0
-4             0       48              43                  0
-5             1      407             392                  0
-6             0      702             688                  0</code></pre>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Explanation Without Prediction?
 </div>
 </div>
+<div class="callout-body-container callout-body">
+<p>In groups of 2-4 (about 5 minutes): Yarkoni &amp; Westfall suggest that an explanation that cannot predict may not be much of an explanation at all. Do you buy that? Try to come up with a counterexample: something scientists genuinely understand but cannot predict well, from psychology or any other field. Then decide as a group whether your counterexample weakens their argument or is a case they would happily concede. Share your counterexample and your verdict.</p>
+</div>
+</div>
+<section id="the-bigger-picture-of-data-science" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="the-bigger-picture-of-data-science">The Bigger Picture of Data Science</h2>
+</section>
+<p>Where does machine learning sit within data analysis as a whole?</p>
+<p>Donoho (2017), inspired by earlier work from Cleveland and Chambers, divides data science into six areas:</p>
+<ol type="1">
+<li>Data gathering, preparation, and exploration</li>
+<li>Data representation and transformation (images, sound, text, …)</li>
+<li>Computing with data (software)</li>
+<li>Data modeling (statistics training)</li>
+<li>Data visualization and presentation (communication)</li>
+<li>Science about data science (studying current practices)</li>
+</ol>
+<p>Notice that data modeling, which includes machine learning, is just one item on the list, and arguably the <em>easiest</em> part of data analysis. Most of the work is getting data into a workable shape, making sense of predictors and outcomes, and dealing with anomalies. Here is the good news: as behavioral scientists, trained to think hard about measurement, sampling, and people, we are very well equipped to do exactly that.</p>
+<p><em>Donoho, D. (2017). 50 years of data science. Journal of Computational and Graphical Statistics, 26(4), 745-766.</em></p>
+<section id="what-is-machine-learning" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="what-is-machine-learning">What Is Machine Learning?</h2>
+</section>
+<p>Here is a safe bet: you already used machine learning today. If you asked a chatbot a question, unlocked your phone with your face, or opened any app with a feed, a learned model was involved. So what makes all of these “machine learning”?</p>
+<p>The definition that has aged best comes from Mitchell (1997). A system is said to <strong>learn</strong> from experience <strong>E</strong>, with respect to some class of tasks <strong>T</strong> and performance measure <strong>P</strong>, if its performance at tasks in <strong>T</strong>, as measured by <strong>P</strong>, improves with experience <strong>E</strong>.</p>
+<p>Watch that definition at work on the most talked-about AI systems of the moment, large language models:</p>
+<ul>
+<li><strong>Task T</strong>: predict the next word (technically a <em>token</em>, a fragment of a word), given everything written so far</li>
+<li><strong>Experience E</strong>: an enormous corpus of text</li>
+<li><strong>Performance P</strong>: how much probability the model gave to the token that actually came next (the less surprised it was, the better)</li>
+</ul>
+<p>A definition written in 1997 describes the flagship AI of the 2020s without modification. That is worth pausing on: underneath the remarkable behavior sits a system getting better at a precisely specified prediction task by processing experience.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Further Information
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Next-token prediction is the engine, but the chatbots you actually use get two further rounds of training. First the model is tuned on curated example responses, so its Experience becomes demonstrations written by people. Then it is trained against human preferences: people compare pairs of candidate responses, a second model learns to predict which one a person would prefer, and that predicted approval becomes the Performance measure. The final polish on modern AI is optimized against a model of human judgment, which is behavioral science sitting inside the machine learning pipeline.</p>
+</div>
+</div>
+<p>Now a second example, closer to home for a psychology course. Consider the recommendation feed on TikTok, YouTube, or Spotify:</p>
+<ul>
+<li><strong>Task T</strong>: choose what you see or hear next</li>
+<li><strong>Experience E</strong>: your watch, skip, replay, and scroll history (and everyone else’s)</li>
+<li><strong>Performance P</strong>: how long you keep watching</li>
+</ul>
+<p>Notice whose behavior is being learned here: <em>yours</em>. A recommender system is a machine running a continuous learning loop on human behavior, which makes it one of the most psychologically interesting objects in modern technology. (Recall the Screenome participants from Tuesday: the feed is on the other side of many of those sessions.)</p>
+<p>Three lessons from these examples will return all semester:</p>
+<ul>
+<li><strong>Clearly specify the aims.</strong> Every learning problem needs a defined task, performance metric, and source of experience.</li>
+<li><strong>The training experience matters.</strong> A model knows only the world its data shows it. Commercial facial analysis systems have performed worst for the people least represented in their training data (Buolamwini &amp; Gebru, 2018), and models are routinely confidently wrong in situations unlike their experience.</li>
+<li><strong>Focus on generalizability.</strong> The goal is never performance on the data you learned from; it is performance on the data that comes next.</li>
+</ul>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Activity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With a partner (about 3 minutes): pick an app one of you used today. Specify its Task, Experience, and Performance measure. Then ask: what could go wrong with its training experience, and who would be affected?</p>
+</div>
+</div>
+<p><em>Mitchell, T. M. (1997). Machine Learning. McGraw-Hill.</em></p>
+<p><em>Buolamwini, J., &amp; Gebru, T. (2018). Gender shades: Intersectional accuracy disparities in commercial gender classification. Proceedings of Machine Learning Research, 81, 77-91.</em></p>
+<section id="prediction-is-already-in-psychology" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="prediction-is-already-in-psychology">Prediction Is Already in Psychology</h2>
+</section>
+<p>These examples may sound like Silicon Valley’s concerns, but the same framework is reshaping our field:</p>
+<ul>
+<li><strong>Suicide risk.</strong> Machine learning models applied to electronic health records predict risk of suicide attempts substantially better than traditional approaches, in a domain where unaided clinical prediction has hovered near chance for decades (Walsh, Ribeiro, &amp; Franklin, 2017).</li>
+<li><strong>Digital phenotyping.</strong> Smartphone signals (movement, sleep, typing, sociability) are being used to detect changes in mood and mental health as they unfold in daily life (Onnela &amp; Rauch, 2016).</li>
+<li><strong>Treatment selection.</strong> Models trained on clinical trial data can predict which patients are likely to respond to which depression treatment, a step toward genuinely personalized care (Chekroud et al., 2016).</li>
+</ul>
+<p>In each case the question is not “what is the true coefficient?” but “how accurately can we predict, for a person we have not seen yet?” That is exactly the shift Yarkoni &amp; Westfall argue for in today’s reading.</p>
+<p><em>Walsh, C. G., Ribeiro, J. D., &amp; Franklin, J. C. (2017). Predicting risk of suicide attempts over time through machine learning. Clinical Psychological Science, 5(3), 457-469.</em></p>
+<p><em>Onnela, J. P., &amp; Rauch, S. L. (2016). Harnessing smartphone-based digital phenotyping to enhance behavioral and mental health. Neuropsychopharmacology, 41(7), 1691-1696.</em></p>
+<p><em>Chekroud, A. M., Zotti, R. J., Shehzad, Z., Gueorguieva, R., Johnson, M. K., Trivedi, M. H., Cannon, T. D., Krystal, J. H., &amp; Corlett, P. R. (2016). Cross-trial prediction of treatment outcome in depression: A machine learning approach. The Lancet Psychiatry, 3(3), 243-250.</em></p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Breakout 3: Design a Prediction System
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In groups of 3-4 (about 10 minutes): choose one of the three applications above (suicide risk, digital phenotyping, or treatment selection) and design the system on paper. Specify its Task, Experience, and Performance measure. Then stress-test it: Whose data would it be trained on, and who might be missing? What kind of prediction errors would it make, and which errors are costly? How accurate would it need to be before you would let it inform real clinical decisions, and who is accountable when it is wrong? Each group shares its T/E/P and its single biggest concern.</p>
+</div>
+</div>
+<section id="were-you-already-doing-machine-learning" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="were-you-already-doing-machine-learning">Were You Already Doing Machine Learning?</h2>
+</section>
+<p>Now apply Mitchell’s framework to something familiar: ordinary data analysis. Suppose we want to estimate a respondent’s depression score (the CES-D) from respondent characteristics.</p>
+<ul>
+<li><strong>Task T</strong>: estimate the respondent’s CES-D score from their characteristics</li>
+<li><strong>Experience E</strong>: a dataset with scores and characteristics from many respondents</li>
+<li><strong>Performance P</strong>: the difference between the observed and estimated scores</li>
+</ul>
+<p>The outcome is the CES-D score, and the predictors are things like clinical history, current treatment, age, and sex. A natural model is regression:</p>
+<p><span class="math display">\[
+\widehat{CESD} = b_0 + b_1 X_1 + b_2 X_2 + \dots + b_{20} X_{20} + e_i
+\]</span></p>
+<p>To evaluate performance, we use the fitted equation to obtain a predicted score for each person and compare it to the score we observed. Did we overestimate? Underestimate? Get it just right?</p>
+<p><strong>So, is regression a machine learning model?</strong> In our statistics training, we’ve typically been interested in the <em>significance</em> of regression coefficients: standard errors, p-values, confidence intervals, and theories about why X is related to Y. If we instead treat regression as a machine learning algorithm, the emphasis shifts. We <em>learn</em> patterns in one dataset and <em>evaluate</em> the model in another, and we care about generalizability: keeping the model from becoming too complex, and preventing it from learning idiosyncrasies of our sample that will not hold up in new data. A model that predicts perfectly in the learning phase might generalize terribly. Notice this is precisely Yarkoni &amp; Westfall’s diagnosis from earlier: a p-hacked regression is a model that learned its sample’s noise, evaluated on the data that produced it.</p>
+<p>Here is the punchline. Our regression model is just one choice of the function connecting predictors to outcome:</p>
+<p><span class="math display">\[
+\widehat{CESD} = f(X) + e_i
+\]</span></p>
+<p>Machine learning models are, at heart, different choices of <span class="math inline">\(f(X)\)</span>. The function may be:</p>
+<ul>
+<li>linearly related to the outcome</li>
+<li>nonlinearly related to the outcome</li>
+<li>estimated via nonparametric methods</li>
+<li>sparse, where only some predictors matter</li>
+<li>black-box-ish and difficult to interpret</li>
+</ul>
+<p>And here is one more way to see the continuum. Our CES-D regression has 21 learned parameters: an intercept and 20 slopes. A frontier language model has on the order of a <em>trillion</em>. Both are instances of the same template: an outcome, a function of the inputs learned from experience, and error. What differs is how flexible <span class="math inline">\(f\)</span> is allowed to be and how much experience it learns from. In a real sense, that one equation is the entire course.</p>
+<p>If you have ever fit a regression, congratulations: you were doing machine learning. This course is about expanding your collection of <span class="math inline">\(f(X)\)</span>’s, and, just as importantly, learning the machinery for choosing among them honestly. That machinery is exactly what today’s reading prescribes for the field.</p>
+<section id="two-flavors-of-machine-learning" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="two-flavors-of-machine-learning">Two Flavors of Machine Learning</h2>
+</section>
+<p>Machine learning methods come in two primary flavors, and they organize the entire course:</p>
+<ul>
+<li><strong>Supervised learning</strong>, where an outcome supervises the learning: regression problems (numeric outcomes) and classification problems (categorical outcomes)</li>
+<li><strong>Unsupervised learning</strong>, where there is no outcome to supervise: clustering and dimension reduction</li>
+</ul>
+<p>But what exactly are these, and how do they differ? That is the subject of this week’s pages in the Introduction to Machine Learning section, <em>Important Terms and Distinctions</em> and <em>Problem Classes in ML</em>, which pick up exactly here.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

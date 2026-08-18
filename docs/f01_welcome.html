@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Reading in Data – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Welcome to PSYC559 – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,41 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -117,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r01_basics.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./r03_reading_data.html">Reading in Data</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./f01_welcome.html">Course Foundations</a></li><li class="breadcrumb-item"><a href="./f01_welcome.html">Welcome to PSYC559</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -150,7 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./f01_welcome.html" class="sidebar-item-text sidebar-link">
+  <a href="./f01_welcome.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Welcome to PSYC559</span></a>
   </div>
 </li>
@@ -185,7 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./r03_reading_data.html" class="sidebar-item-text sidebar-link active">
+  <a href="./r03_reading_data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Reading in Data</span></a>
   </div>
 </li>
@@ -280,19 +245,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#loading-data" id="toc-loading-data" class="nav-link active" data-scroll-target="#loading-data">Loading Data</a></li>
-  <li><a href="#where-is-your-data-file-paths-in-r" id="toc-where-is-your-data-file-paths-in-r" class="nav-link" data-scroll-target="#where-is-your-data-file-paths-in-r">Where Is Your Data File? Paths in R</a></li>
-  <li><a href="#a-better-habit-keep-data-next-to-your-script" id="toc-a-better-habit-keep-data-next-to-your-script" class="nav-link" data-scroll-target="#a-better-habit-keep-data-next-to-your-script">A Better Habit: Keep Data Next to Your Script</a></li>
-  <li><a href="#looking-at-the-data" id="toc-looking-at-the-data" class="nav-link" data-scroll-target="#looking-at-the-data">Looking at the Data</a></li>
+  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
+  <li><a href="#the-long-history-of-big-data-in-psychology" id="toc-the-long-history-of-big-data-in-psychology" class="nav-link" data-scroll-target="#the-long-history-of-big-data-in-psychology">The Long History of Big Data in Psychology</a></li>
+  <li><a href="#questionnaire-research" id="toc-questionnaire-research" class="nav-link" data-scroll-target="#questionnaire-research">Questionnaire Research</a></li>
+  <li><a href="#thurstone-and-likert" id="toc-thurstone-and-likert" class="nav-link" data-scroll-target="#thurstone-and-likert">Thurstone and Likert</a></li>
+  <li><a href="#l.-l.-thurstone-psychometric-laboratory" id="toc-l.-l.-thurstone-psychometric-laboratory" class="nav-link" data-scroll-target="#l.-l.-thurstone-psychometric-laboratory">L. L. Thurstone Psychometric Laboratory</a></li>
+  <li><a href="#modern-big-data-in-psychology" id="toc-modern-big-data-in-psychology" class="nav-link" data-scroll-target="#modern-big-data-in-psychology">Modern Big Data in Psychology</a></li>
+  <li><a href="#but-what-is-big-data" id="toc-but-what-is-big-data" class="nav-link" data-scroll-target="#but-what-is-big-data">But What Is “Big Data”?</a></li>
+  <li><a href="#information" id="toc-information" class="nav-link" data-scroll-target="#information">Information</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
+  <li><a href="#an-example-the-human-screenome-project" id="toc-an-example-the-human-screenome-project" class="nav-link" data-scroll-target="#an-example-the-human-screenome-project">An Example: The Human Screenome Project</a></li>
+  <li><a href="#about-this-course" id="toc-about-this-course" class="nav-link" data-scroll-target="#about-this-course">About This Course</a></li>
+  <li><a href="#this-course-is" id="toc-this-course-is" class="nav-link" data-scroll-target="#this-course-is">This course is …</a></li>
+  <li><a href="#goals" id="toc-goals" class="nav-link" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#how-you-will-be-evaluated" id="toc-how-you-will-be-evaluated" class="nav-link" data-scroll-target="#how-you-will-be-evaluated">How You Will Be Evaluated</a></li>
+  <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
+  <li><a href="#the-road-ahead" id="toc-the-road-ahead" class="nav-link" data-scroll-target="#the-road-ahead">The Road Ahead</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r01_basics.html">Introduction to R</a></li><li class="breadcrumb-item"><a href="./r03_reading_data.html">Reading in Data</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./f01_welcome.html">Course Foundations</a></li><li class="breadcrumb-item"><a href="./f01_welcome.html">Welcome to PSYC559</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Reading in Data</h1>
+<h1 class="title">Welcome to PSYC559</h1>
 </div>
 
 
@@ -309,122 +286,248 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="loading-data" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="loading-data">Loading Data</h2>
+<section id="welcome" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="welcome">Welcome</h2>
 </section>
-<p>One of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.</p>
-<p>By reading in data we are generally referring to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabular object where columns represent variables and rows represent cases. This is not always the case but covers the most basic use case.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/tabular.png" class="img-fluid figure-img"></p>
-<figcaption>Example of tabular data</figcaption>
-</figure>
-</div>
-<p>Many different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<p>Welcome to Applied Machine Learning in Psychology. This page covers our first meeting: why psychology and machine learning belong in the same sentence, what “big data” actually means for behavioral scientists, and how this course will run.</p>
+<section id="the-long-history-of-big-data-in-psychology" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="the-long-history-of-big-data-in-psychology">The Long History of Big Data in Psychology</h2>
+</section>
+<ul>
+<li>It is tempting to think of “big data” as a recent arrival, but in psychology big data has been around since the earliest years of the field.</li>
+<li>Even by the late 1800s, psychologists were collecting “massive and often unmanageable” amounts of data via standardized questionnaires (Young, 2018).</li>
+<li>Large amounts of data presented new problems and interesting opportunities for research scientists, and those struggles often catalyzed methodological development.</li>
+</ul>
+<section id="questionnaire-research" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="questionnaire-research">Questionnaire Research</h3>
+</section>
+<p>G. Stanley Hall began questionnaire research in 1882 hoping to understand “the contents of children’s minds.”</p>
+<ul>
+<li>Between 1894 and 1915, Hall circulated more than 200 different questionnaires</li>
+<li>Topics ranged from anger to dolls to “the early sense of self”</li>
+<li>Hall hoped to produce “a composite photograph” of each construct</li>
+<li>By 1896 over one hundred thousand questionnaires had been returned</li>
+</ul>
+<blockquote class="blockquote">
+<p>When these returns come in, one at first feels helpless before them. We have now at least a hundred thousand returns, some of them comprising forty and fifty pages of manuscript. Statistical methods have been used, and the very best trained statisticians have to be employed, and we have no money for these. We have kept four people at work off and on for nearly a year. (Hall, 1897, quoted in Young, 2018)</p>
+</blockquote>
+<section id="thurstone-and-likert" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="thurstone-and-likert">Thurstone and Likert</h3>
+</section>
+<p>The use of questionnaires and surveys only grew during the First World War, when psychologists faced data collection at military scale. As Young (2018) recounts:</p>
+<blockquote class="blockquote">
+<p>A concerted effort was made to assess the intellectual capacities of army recruits (Carson, 2007). Faced with the challenges of the mass testing of millions of recruits, psychologists opted to use intelligence tests with restricted answer sets and set about analyzing the abundant data with new statistical techniques. These innovations informed Thurstone and Likert in their creation of scaled questionnaires, including the latter’s eponymous and now ubiquitous Likert scale (Likert, 1932; see Young, 2017).</p>
+</blockquote>
+<p><strong>In other words, one of the most familiar tools in all of psychology, the Likert scale, was itself born from a big data problem.</strong></p>
+<p>The shift came at a cost, though. Young (2018) describes it as a move from <em>thick</em> description to <em>thin</em>: flattening a person’s experience to a number on a scale made mass data easy to refine, combine, and plot, but the individual all but disappeared into the aggregate. Psychology has been navigating that trade-off between rich, messy description and manageable, aggregable numbers ever since.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
-<i class="callout-icon"></i>
+<i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Download the Data
+<span class="screen-reader-only">Note</span>Further Information
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The examples in this section use a marketing dataset. Download it here: <a href="data/ifood_df.csv">ifood_df.csv</a> (right-click → “Save Link As…” if it opens in your browser). Save it in the same folder where you keep your R scripts for this class.</p>
+<p>Decades later, Peter Molenaar showed that the individual’s disappearance into the aggregate is not just a descriptive loss but a mathematical problem. His “manifesto” (Molenaar, 2004) argued that findings from aggregated data, which describe differences <em>between</em> people, only transfer to the processes unfolding <em>within</em> a person under restrictive conditions (i.e.&nbsp;ergodicity) that psychological processes rarely satisfy. A structure discovered in the aggregate may describe no actual individual at all. Molenaar’s call to bring “the person back into scientific psychology” through person-specific analysis of intensive time series helped motivate the modern wave of intensive longitudinal data collection.</p>
+<p><em>Molenaar, P. C. M. (2004). A manifesto on psychology as idiographic science: Bringing the person back into scientific psychology, this time forever. Measurement: Interdisciplinary Research and Perspectives, 2(4), 201-218.</em> <a href="https://doi.org/10.1207/s15366359mea0204_1">https://doi.org/10.1207/s15366359mea0204_1</a></p>
 </div>
 </div>
-<section id="where-is-your-data-file-paths-in-r" class="level3">
-<h3 class="anchored" data-anchor-id="where-is-your-data-file-paths-in-r">Where Is Your Data File? Paths in R</h3>
-<p>To read a file into R, R needs to know where the file lives on your computer. The most explicit way to say so is a <strong>full path</strong>: the complete address of the file, starting from the root of your hard drive. For example, on my computer the path to the marketing data looks like this:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Your path will look different, since it depends on your username, operating system, and where you saved the file. A convenient way to find a file’s full path is with <code>file.choose()</code>, which opens a file picker and prints the path of whatever you select:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.choose</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<section id="l.-l.-thurstone-psychometric-laboratory" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="l.-l.-thurstone-psychometric-laboratory">L. L. Thurstone Psychometric Laboratory</h3>
 </section>
-<section id="a-better-habit-keep-data-next-to-your-script" class="level3">
-<h3 class="anchored" data-anchor-id="a-better-habit-keep-data-next-to-your-script">A Better Habit: Keep Data Next to Your Script</h3>
-<p>Full paths work, but they are fragile: the code breaks the moment a folder gets moved or renamed, and it can never run on anyone else’s computer (including mine, when I am trying to help you debug or grade your work).</p>
-<p>The habit we will use in this class: <strong>keep your data file in the same folder as the script (or R Markdown document) that uses it</strong>, and refer to the file by name:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Actually, the big data story runs through the very building you are sitting in…</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/thurstone_lab_entrance.png" class="img-fluid figure-img"></p>
+<figcaption>The entrance to the L. L. Thurstone Psychometric Laboratory in Davie Hall today.</figcaption>
+</figure>
 </div>
-<p>This is called a <strong>relative path</strong>: R looks for the file relative to where it is currently working. When you knit an R Markdown document, R automatically works from the folder where the <code>.Rmd</code> file lives, so if the data sits next to your document (or in a <code>data/</code> subfolder, as above), everything just works on your machine, on your groupmate’s, and on mine.</p>
-<p>If you are working in a plain R script and R can’t find your file, check where R is currently looking with:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>L. L. Thurstone spent his final years at UNC, moving here from Chicago in 1952, and the university’s Psychometric Laboratory still bears his name.</p>
+<p><strong>In 1959 the lab acquired the first computer at UNC</strong>, a Royal McBee LGP-30. It was the first of a series of installations that made the Lab “one of the few places in the world where computers were used for psychological data collection and statistical analysis in the 1960s” (Thissen, 2016).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/lgp30.png" class="img-fluid figure-img"></p>
+<figcaption>The Royal McBee LGP-30, the Psychometric Laboratory’s first computer, rented for $1,000 per month in 1959 (roughly $8,500 in today’s dollars; image from David Thissen).</figcaption>
+</figure>
 </div>
-<p>and make sure your data is in that folder (or open your script through RStudio’s <strong>File</strong> menu, which usually sets things up correctly).</p>
+<p>Below is Davie Hall around 1967, shortly after it opened, along with a floor plan of the Lab’s computer-based facilities on its third floor, the same floor as our classroom: an IBM 1130 for data processing, a PDP-8 minicomputer running banks of teletype and display stations, and dedicated rooms for waiting, testing, and debriefing participants.</p>
+<p>Psychologists were building big data pipelines in this very building for half a century before data science as a field existed.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/davie_hall_1967.png" class="img-fluid figure-img"></p>
+<figcaption>Davie Hall at UNC-Chapel Hill, circa 1967 (image from David Thissen).</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/davie_hall_floorplan.png" class="img-fluid figure-img"></p>
+<figcaption>The computer-based laboratory on the third floor of Davie Hall: an IBM 1130 for data processing and a PDP-8 controlling teletype and display stations (Jones, Johnson, &amp; Young, 1973; image from David Thissen).</figcaption>
+</figure>
+</div>
+<p><em>Jones, L. V., Johnson, E. S., &amp; Young, F. W. (1973). Computer control of experiments in problem solving, psychophysics, and decision making. In B. Weiss (Ed.), Digital computers in the behavior laboratory (pp.&nbsp;309-340). New York: Appleton-Century-Crofts.</em></p>
+<p><em>Thissen, D. (2016). Remembering Lyle V. Jones (1924-2016). Psychometrika, 81(3), 904-905.</em> <a href="https://doi.org/10.1007/s11336-016-9510-4">https://doi.org/10.1007/s11336-016-9510-4</a></p>
+<section id="modern-big-data-in-psychology" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="modern-big-data-in-psychology">Modern Big Data in Psychology</h3>
 </section>
-<section id="looking-at-the-data" class="level3">
-<h3 class="anchored" data-anchor-id="looking-at-the-data">Looking at the Data</h3>
-<p>Once the .csv file is loaded you can look at it using the <code>View()</code> function</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Today, large and complex datasets appear across nearly every corner of the field, including research on:</p>
+<ul>
+<li>wellness, mental health, and depression</li>
+<li>substance use and behavioral health</li>
+<li>behavior change</li>
+<li>social media</li>
+<li>workplace well-being and effectiveness</li>
+<li>student learning and adjustment</li>
+<li>behavioral genetics</li>
+</ul>
+<p><em>Young, J. L. (2018). The long history of big data in psychology. The American Journal of Psychology, 131(4), 477-482.</em> <a href="https://doi.org/10.5406/amerjpsyc.131.4.0477">https://doi.org/10.5406/amerjpsyc.131.4.0477</a></p>
+<section id="but-what-is-big-data" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="but-what-is-big-data">But What Is “Big Data”?</h2>
+</section>
+<p>“Big Data” is a buzzword in academia and industry, but its meaning is shrouded in conceptual vagueness.</p>
+<p>The term gets used to describe everything from the technological ability to store, aggregate, and process data to the sheer excess of information available in daily life.</p>
+<p>De Mauro et al.&nbsp;(2015) reviewed the many competing definitions and identified four key themes:</p>
+<ol type="1">
+<li><strong>Information</strong>: the raw material itself</li>
+<li><strong>Technology</strong>: the storage and computing power to handle it</li>
+<li><strong>Methods</strong>: the analytic techniques it demands</li>
+<li><strong>Impact</strong>: its effects on science and society</li>
+</ol>
+<p>Two of these themes matter most for this course.</p>
+<section id="information" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="information">Information</h3>
+</section>
+<p>A few useful terms for thinking about where all this data comes from:</p>
+<ul>
+<li><strong>Digitization</strong>: converting continuous, analog information into a discrete, machine-readable format</li>
+<li><strong>Datafication</strong>: putting a phenomenon in a quantified format so it can be tabulated and analyzed</li>
+<li><strong>Structured data</strong>: traditional text and numeric information, arranged in rows and columns</li>
+<li><strong>Unstructured data</strong>: social media feeds, conversations, images, and other formats that don’t arrive as a tidy table</li>
+</ul>
+<section id="methods" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="methods">Methods</h3>
+</section>
+<p>Analyzing data at this scale pushes us beyond traditional statistical techniques in several ways: a shift away from explanation towards prediction, machine learning techniques (both <strong>supervised</strong> and <strong>unsupervised</strong>, terms we will define on Thursday), and methods that protect against false discovery, that is, seeing patterns where none exist simply because we have enormous quantities of data.</p>
+<p><em>De Mauro, A., Greco, M., &amp; Grimaldi, M. (2015). What is big data? A consensual definition and a review of key research topics. AIP Conference Proceedings, 1644(1), 97-104.</em></p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<p>or simply examine the first few cases using <code>head()</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts
-1  58138       0        0      58      635        88             546
-2  46344       1        1      38       11         1               6
-3  71613       0        0      26      426        49             127
-4  26646       1        0      26       11         4              20
-5  58293       1        0      94      173        43             118
-6  62513       0        1      16      520        42              98
-  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases
-1             172               88           88                 3
-2               2                1            6                 2
-3             111               21           42                 1
-4              10                3            5                 2
-5              46               27           15                 5
-6               0               42           14                 2
-  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth
-1               8                  10                 4                 7
-2               1                   1                 2                 5
-3               8                   2                10                 4
-4               2                   0                 4                 6
-5               5                   3                 6                 5
-6               6                   4                10                 6
-  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain
-1            0            0            0            0            0        0
-2            0            0            0            0            0        0
-3            0            0            0            0            0        0
-4            0            0            0            0            0        0
-5            0            0            0            0            0        0
-6            0            0            0            0            0        0
-  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced
-1             3        11        1  63          2822                0
-2             3        11        0  66          2272                0
-3             3        11        0  55          2471                0
-4             3        11        0  36          2298                0
-5             3        11        0  39          2320                0
-6             3        11        0  53          2452                0
-  marital_Married marital_Single marital_Together marital_Widow
-1               0              1                0             0
-2               0              1                0             0
-3               0              0                1             0
-4               0              0                1             0
-5               1              0                0             0
-6               0              0                1             0
-  education_2n.Cycle education_Basic education_Graduation education_Master
-1                  0               0                    1                0
-2                  0               0                    1                0
-3                  0               0                    1                0
-4                  0               0                    1                0
-5                  0               0                    0                0
-6                  0               0                    0                1
-  education_PhD MntTotal MntRegularProds AcceptedCmpOverall
-1             0     1529            1441                  0
-2             0       21              15                  0
-3             0      734             692                  0
-4             0       48              43                  0
-5             1      407             392                  0
-6             0      702             688                  0</code></pre>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Discussion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In small groups of 3-4, come up with an example of “big data” in the social, health, or behavioral sciences, and discuss why each qualifies. Then consider: what is different about the data we see in psychological research compared to typical big data applications? Think about measurement, heterogeneity across people, and any other themes that come to mind.</p>
+</div>
+</div>
+<section id="an-example-the-human-screenome-project" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="an-example-the-human-screenome-project">An Example: The Human Screenome Project</h2>
+</section>
+<p>To make this concrete, consider the <a href="https://screenomics.stanford.edu">Human Screenome Project</a> (Reeves, Robinson, &amp; Ram, 2020).</p>
+<p>Instead of asking people to estimate their “screen time,” researchers record moment-by-moment changes on a person’s screens: a screenshot every 5 seconds, compressed and encrypted on the device, for many months at a time.</p>
+<p>The result is what they call a <em>screenome</em>, by analogy to the genome: a high-resolution record of a person’s digital life. The project has collected over 30 million screenshots from more than 600 people. To get a feel for what a screenome actually looks like, <a href="https://screenomics.stanford.edu/wp-content/uploads/2024/11/ScreenomeSampleforPublic_2020_0127.mp4">watch this sample video</a> from the project: a real stretch of one person’s screen life, played back frame by frame.</p>
+<p>Each captured frame is an ordinary moment of phone use, like this one:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/screenome_frame.png" class="img-fluid figure-img"></p>
+<figcaption>A single screenome frame: one screenshot from one moment of one person’s day (Reeves et al., 2020).</figcaption>
+</figure>
+</div>
+<p>Why does this level of detail matter? Consider two 14-year-olds living in the same northern California community. By a conventional “screen time” measure they are nearly identical, but the screenome tells a different story:</p>
+<ul>
+<li><strong>Dose</strong>: A uses their phone 3.67 hours per week; B uses 4.68</li>
+<li><strong>Pattern</strong>: A’s use is spread over 186 sessions per day of about 1.2 minutes each; B has 26 longer sessions of about 2.5 minutes</li>
+<li><strong>Interactivity</strong>: A creates content in 2.6% of frames; B in 7%</li>
+<li><strong>Content</strong>: 53% of A’s use is social media; 37% of B’s is food-related</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/screenome_participant_a.png" class="img-fluid figure-img"></p>
+<figcaption>Participant A: 186 brief sessions per day, dominated by social media (Reeves et al., 2020).</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/screenome_participant_b.png" class="img-fluid figure-img"></p>
+<figcaption>Participant B: 26 longer sessions per day with a very different content mix (Reeves et al., 2020).</figcaption>
+</figure>
+</div>
+<p>A single summary number (e.g.&nbsp;“about 4 hours per week”) would treat these two adolescents as the same.</p>
+<p>The patterns that plausibly matter for their well-being live in the structure that the summary throws away.</p>
+<p>This is the century-old tension from Young’s history returning with the polarity reversed.</p>
+<p>Data like this is why this course exists: it is rich, complex, far beyond what a t-test was built for, and the question of what to do with it is exactly where machine learning enters.</p>
+<p><em>Reeves, B., Robinson, T., &amp; Ram, N. (2020). Time for the human screenome project. Nature, 577(7790), 314-317.</em></p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Discussion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What types of questions would you ask if you had access to the human screenome data? Are there any difficulties you foresee in analyzing this type of data? “Big data” is often described as the motivation for machine learning techniques. Why is that?</p>
+</div>
+</div>
+<section id="about-this-course" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="about-this-course">About This Course</h2>
+</section>
+<section id="this-course-is" class="level3">
+<h3 class="anchored" data-anchor-id="this-course-is">This course is …</h3>
+<ul>
+<li><strong>Inherently a statistics course.</strong> We focus on what each algorithm does and how to carry it out, with plenty of discussion of broader data science issues along the way.</li>
+<li><strong>An introductory course.</strong> For every method we cover, there are many venues to learn more.</li>
+<li><strong>Partly a programming course.</strong> We will carry out all of our analyses using the R statistical platform, and no prior coding experience is assumed.</li>
+<li><strong>A psychology course.</strong> We will keep applications in psychology and neighboring behavioral sciences in view throughout.</li>
+</ul>
+</section>
+<section id="goals" class="level3">
+<h3 class="anchored" data-anchor-id="goals">Goals</h3>
+<p>By the end of the semester you should be able to:</p>
+<ol type="1">
+<li>Differentiate between explanatory and predictive approaches to data analysis.</li>
+<li>Competently use R to fit, diagnose, evaluate, and interpret machine learning algorithms.</li>
+<li>Communicate effectively, in writing and verbally, what machine learning algorithms are doing and when to use them.</li>
+</ol>
+</section>
+<section id="how-you-will-be-evaluated" class="level3">
+<h3 class="anchored" data-anchor-id="how-you-will-be-evaluated">How You Will Be Evaluated</h3>
+<ul>
+<li><strong>Participation (10%)</strong>: in-class activities, discussions, and group exercises.</li>
+<li><strong>In-class exercises (30%)</strong>: up to six structured coding exercises completed and submitted during class; your lowest grade is dropped.</li>
+<li><strong>Lab reports (30%)</strong>: three reports covering regression methods, tree-based methods, and clustering approaches.</li>
+<li><strong>Final project (30%)</strong>: a flash talk proposing your idea, a final presentation, and a written paper.</li>
+</ul>
+</section>
+<section id="readings" class="level3">
+<h3 class="anchored" data-anchor-id="readings">Readings</h3>
+<p>The primary texts are Boehmke &amp; Greenwell’s <em>Hands-On Machine Learning with R</em> (<strong>BG</strong>) and James et al.’s <em>An Introduction to Statistical Learning</em> (<strong>ISL</strong>). Both are freely available online. Supplemental readings will be posted as PDFs on Canvas.</p>
+</section>
+<section id="the-road-ahead" class="level3">
+<h3 class="anchored" data-anchor-id="the-road-ahead">The Road Ahead</h3>
+<p>The course has three major parts, mirroring the syllabus modules:</p>
+<ol type="1">
+<li><strong>Foundations of Machine Learning</strong> (mid-August through early September): core concepts, R, and the modeling pipeline</li>
+<li><strong>Supervised Learning</strong> (September through mid-October): regression methods, trees and ensembles, deep learning, and interpretability</li>
+<li><strong>Unsupervised Learning</strong> (late October through November): clustering and dimension reduction</li>
+</ol>
+<p>The complete schedule, policies, and grading details live in the syllabus on <a href="https://canvas.unc.edu/">Canvas</a>.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Reading for Thursday
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before our next class, read Yarkoni &amp; Westfall (2017), available as a PDF on Canvas. It makes the case that psychology has much to gain from taking prediction seriously, and it frames Thursday’s discussion of explanatory versus predictive approaches to data analysis. As you read, keep one question in mind: does making good predictions require understanding how a process works?</p>
+<p><em>Yarkoni, T., &amp; Westfall, J. (2017). Choosing prediction over explanation in psychology: Lessons from machine learning. Perspectives on Psychological Science, 12(6), 1100-1122.</em> <a href="https://doi.org/10.1177/1745691617693393">https://doi.org/10.1177/1745691617693393</a></p>
 </div>
 </div>
 
