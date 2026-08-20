@@ -39,6 +39,44 @@ div.callout-note.callout-style-default > .callout-header {
   background-color: rgba(255, 255, 0, 0.18);
 }
 
+/* Floating page controls: text size and sidebar toggle */
+#psyc-controls {
+  position: fixed;
+  bottom: 0.75rem;
+  right: 0.9rem;
+  z-index: 1080;
+  display: flex;
+  gap: 0.3rem;
+}
+
+#psyc-controls button {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid #777;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #ddd;
+  cursor: pointer;
+}
+
+#psyc-controls button:hover {
+  background: rgba(255, 255, 0, 0.35);
+  color: #fff;
+}
+
+body.sidebar-hidden #quarto-sidebar {
+  display: none !important;
+}
+
+body.sidebar-hidden main.content {
+  grid-column: body-start-outset / body-end-outset !important;
+}
+
+@media print {
+  #psyc-controls { display: none; }
+}
+
 /* Homepage quick-link cards */
 .quick-links .card {
   transition: transform 0.15s ease;

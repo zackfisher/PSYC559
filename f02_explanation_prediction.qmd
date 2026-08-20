@@ -23,15 +23,161 @@ We estimate the true parameters that led from the input to the output, test whet
 **X** &nbsp;⟶&nbsp; [ regression, logistic regression ] &nbsp;⟶&nbsp; **Y**
 :::
 
+::: {style="color: lightblue"}
+### Moderation and Mediation as Explanatory Tools
+:::
+
+```{=html}
+<svg viewBox="0 0 880 440" role="img" aria-label="Diagram of mediator and moderator variables" style="max-width: 100%; height: auto; display: block; margin: 1em auto;">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#aaaaaa"/>
+    </marker>
+  </defs>
+  <line x1="235" y1="185" x2="330" y2="95" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="550" y1="95" x2="645" y2="185" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="265" y1="220" x2="608" y2="220" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="440" y1="335" x2="440" y2="232" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="30" y="190" width="235" height="60" rx="10" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="147" y="227" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Independent variable (X)</text>
+  <rect x="322" y="35" width="235" height="60" rx="10" fill="#d5f2ea" stroke="#2bb59a" stroke-width="2"/>
+  <text x="440" y="72" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Mediator (M)</text>
+  <rect x="615" y="190" width="235" height="60" rx="10" fill="#f3e0f0" stroke="#c06ab5" stroke-width="2"/>
+  <text x="732" y="227" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Dependent variable (Y)</text>
+  <rect x="322" y="345" width="235" height="60" rx="10" fill="#fdf3d0" stroke="#e0b62c" stroke-width="2"/>
+  <text x="440" y="382" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Moderator (W)</text>
+</svg>
+```
+
+Moderation and mediation are two examples of explanatory tools that decompose the overall effect of X on Y into interpretable parameters:
+
+-   **Moderation asks *when* or *for whom*.** A moderator W changes the strength (or even the direction) of the X to Y effect. 
+
+-   **Mediation asks *how* or *why*.** The effect of X on Y flows *through* a mediator M. 
+
+-   **Both are explanation machines.** Each decomposes an overall effect into interpretable parameters (paths, interactions) that are then tested for significance. The parameters *are* the scientific story.
+
+-   **A preview of the contrast to come.** A flexible predictive model can capture these same patterns, interactions and indirect pathways alike, without ever naming them. 
+
+::: {style="color: lightblue"}
+### Structural Equation Models as Explanatory Tools
+:::
+
+Further still, structural equation models (SEMs) are a generalization of regression that can handle multiple outcomes, latent variables, and complex causal structures. SEMs are often used to test theoretical models that specify how variables relate to each other.
+
+```{=html}
+<svg viewBox="0 0 900 500" role="img" aria-label="Two factor confirmatory factor analysis with a latent regression" style="max-width: 100%; height: auto; display: block; margin: 1em auto;">
+  <defs>
+    <marker id="semarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#aaaaaa"/>
+    </marker>
+  </defs>
+
+  <line x1="200" y1="150" x2="90" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"/>
+  <line x1="225" y1="156" x2="225" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"/>
+  <line x1="250" y1="150" x2="360" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"/>
+
+  <line x1="650" y1="150" x2="540" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"/>
+  <line x1="675" y1="156" x2="675" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"/>
+  <line x1="700" y1="150" x2="810" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"/>
+
+  <line x1="317" y1="110" x2="583" y2="110" stroke="#aaaaaa" stroke-width="3" marker-end="url(#semarrow)"/>
+  <text x="450" y="96" text-anchor="middle" font-size="24" fill="#cccccc" font-style="italic">&#946;</text>
+
+  <ellipse cx="225" cy="110" rx="92" ry="45" fill="#d5f2ea" stroke="#2bb59a" stroke-width="2"/>
+  <text x="225" y="105" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Stress</text>
+  <text x="225" y="129" text-anchor="middle" font-size="16" fill="#1a1a2e">(latent)</text>
+
+  <ellipse cx="675" cy="110" rx="92" ry="45" fill="#f3e0f0" stroke="#c06ab5" stroke-width="2"/>
+  <text x="675" y="105" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Depression</text>
+  <text x="675" y="129" text-anchor="middle" font-size="16" fill="#1a1a2e">(latent)</text>
+
+  <rect x="25" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="90" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">x1</text>
+  <rect x="160" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="225" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">x2</text>
+  <rect x="295" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="360" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">x3</text>
+
+  <rect x="475" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="540" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">y1</text>
+  <rect x="610" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="675" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">y2</text>
+  <rect x="745" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="810" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">y3</text>
+
+  <line x1="90" y1="338" x2="90" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"/>
+  <line x1="225" y1="338" x2="225" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"/>
+  <line x1="360" y1="338" x2="360" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"/>
+  <line x1="540" y1="338" x2="540" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"/>
+  <line x1="675" y1="338" x2="675" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"/>
+  <line x1="810" y1="338" x2="810" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"/>
+
+  <circle cx="90" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"/>
+  <text x="90" y="366" text-anchor="middle" font-size="17" fill="#cccccc">&#949;1</text>
+  <circle cx="225" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"/>
+  <text x="225" y="366" text-anchor="middle" font-size="17" fill="#cccccc">&#949;2</text>
+  <circle cx="360" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"/>
+  <text x="360" y="366" text-anchor="middle" font-size="17" fill="#cccccc">&#949;3</text>
+  <circle cx="540" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"/>
+  <text x="540" y="366" text-anchor="middle" font-size="17" fill="#cccccc">&#949;4</text>
+  <circle cx="675" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"/>
+  <text x="675" y="366" text-anchor="middle" font-size="17" fill="#cccccc">&#949;5</text>
+  <circle cx="810" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"/>
+  <text x="810" y="366" text-anchor="middle" font-size="17" fill="#cccccc">&#949;6</text>
+
+  <line x1="798" y1="72" x2="770" y2="92" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"/>
+  <circle cx="818" cy="58" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"/>
+  <text x="818" y="66" text-anchor="middle" font-size="17" fill="#cccccc">&#950;</text>
+
+  <ellipse cx="58" cy="440" rx="34" ry="18" fill="#d5f2ea" stroke="#2bb59a" stroke-width="2"/>
+  <text x="105" y="446" font-size="17" fill="#cccccc">latent (unobserved)</text>
+  <rect x="345" y="422" width="58" height="36" rx="5" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"/>
+  <text x="415" y="446" font-size="17" fill="#cccccc">measured item</text>
+  <circle cx="650" cy="440" r="18" fill="none" stroke="#aaaaaa" stroke-width="2"/>
+  <text x="680" y="446" font-size="17" fill="#cccccc">error / disturbance</text>
+</svg>
+```
+
+-  Typically, every quantity in an SEM is interpretable and testable.
+
+-   An SEM is often a formal statement of how the world works, drawn as a picture and estimated all at once. 
+
+-   Every arrow encodes a theoretical commitment, and this is an example of the explanatory culture taken to a limit.
+
+
+
+
+
+::: {style="color: lightblue"}
+### Difficulties with Explanatory Approaches
+:::
+
+These are powerful tools, but the way psychology has used them has run into trouble:
+
+-   **Too many defensible choices.** Which outliers to drop, which covariates to include, when to stop collecting data. Each choice is defensible on its own; together they let one dataset produce many different results (Simmons, Nelson, & Simonsohn, 2011).
+
+-   **Findings that do not replicate.** The Open Science Collaboration (2015) repeated 100 studies from leading psychology journals. Ninety-seven percent of the originals reported significant effects. About 36% of the replications did, with effect sizes roughly half the original size.
+
+-   **Theories that forbid nothing.** A verbal theory flexible enough to accommodate any result has not really been tested (Meehl, 1978). "Consistent with the theory" is weak evidence when the opposite finding would have been just as consistent.
+
+-   **Nothing ever checks prediction.** Fit the model to your sample, interpret the coefficients, report the fit. At no point does the standard workflow ask how the model does on people it has never seen. The SEM above can have excellent fit indices and never predict a single new person's score.
+
+*Simmons, J. P., Nelson, L. D., & Simonsohn, U. (2011). False-positive psychology. Psychological Science, 22(11), 1359-1366.* [https://doi.org/10.1177/0956797611417632](https://doi.org/10.1177/0956797611417632)
+
+*Open Science Collaboration (2015). Estimating the reproducibility of psychological science. Science, 349(6251), aac4716.* [https://doi.org/10.1126/science.aac4716](https://doi.org/10.1126/science.aac4716)
+
+*Meehl, P. E. (1978). Theoretical risks and tabular asterisks. Journal of Consulting and Clinical Psychology, 46(4), 806-834.* [https://doi.org/10.1037/0022-006X.46.4.806](https://doi.org/10.1037/0022-006X.46.4.806)
+
 ::: {style="color: yellow"}
 ## A Prediction Focus
 :::
 
-More recently, a prediction focus (a la machine learning) has emerged in the social sciences. 
+More recently, a prediction focus (i.e. machine learning) has emerged in the social sciences. 
 
-The starting assumption is humbler: there is *some* process that led to the data, but we may never know its true form. 
+From this perspective, there is *some* process that led to the data, but we may never know its true form. 
 
-Rather than recovering nature's mechanism, we aim to find a model that maps the inputs to the outputs as accurately as possible, using whatever algorithm does the job.
+Rather than trying to uncover the true mechanism, we aim to find a model that maps the inputs to the outputs as accurately as possible, using whatever algorithm does the job.
 
 ::: {style="text-align: center; font-size: 1.1em; margin: 1em 0;"}
 **X** &nbsp;⟶&nbsp; [ nature: unknown ] &nbsp;⟶&nbsp; **Y**<br>
@@ -70,75 +216,62 @@ Yarkoni & Westfall do not just describe the two cultures; they take a side, and 
 ### Criticism of Status Quo
 :::
 
-Psychology has spent decades optimizing for explanation, yet the theories this produced often predict poorly, and sometimes barely better than chance. 
+-  Psychology has spent decades optimizing for explanation, yet the theories this produced often predict poorly, and sometimes barely better than chance. 
 
-Their uncomfortable suggestion is that an explanation that cannot predict may not be much of an explanation at all: the appearance of understanding without its substance.
+-  Their uncomfortable suggestion is that an explanation that cannot predict may not be much of an explanation at all.
 
 ::: {style="color: lightblue"}
 ### The Replication Crisis as Overfitting
 :::
 
-Think about what p-hacking and researcher degrees of freedom actually do: they tune an analysis until it fits the idiosyncrasies of one particular sample. 
+-  Think about how many psychologists analyze data, they often tune an analysis until it fits the idiosyncrasies of one particular sample. 
 
-In machine learning vocabulary, that is *overfitting*, and a finding that fails to replicate is a model that failed *out of sample*. 
+-  In machine learning vocabulary, this is called is *overfitting*, and this can limit generalizability. 
 
-The replication crisis, on this view, is not a moral failing unique to psychology; it is what happens to any field that evaluates its models on the same data used to build them.
 
 ::: {style="color: lightblue"}
 ### A Path Forward
 :::
 
-Their proposed remedies are the core machinery of machine learning: hold out test data, use cross-validation, think in terms of the bias-variance trade-off, and use regularization to keep models honest. 
+Their proposed remedies are the core machinery of machine learning: 
 
-Look at the course schedule and you will notice something: that list is, almost line for line, the next month of this class. Data splitting and cross-validation arrive next week, bias and variance right beside them, and regularized regression in mid-September.
+-  hold out test data
+-  use cross-validation
+-  the bias-variance trade-off
+-  regularization to keep models honest
 
-One important nuance, the paper does not argue that psychology should abandon explanation. The argument is that prediction *disciplines* explanation. If your theory is right, it should show up as predictive accuracy on people you have never seen; if it does not, that is evidence worth taking seriously.
+This list is essentially the next month of our class.
 
-::: {.callout-tip icon="false"}
-## Explanation Without Prediction?
+One important nuance, the paper does not argue psychology should abandon explanation. The argument is that prediction *disciplines* explanation. If your theory is right, it should show up as predictive accuracy on people you have never seen; if it does not, that is evidence worth taking seriously.
 
-In groups of 2-4 (about 5 minutes): Yarkoni & Westfall suggest that an explanation that cannot predict may not be much of an explanation at all. Do you buy that? Try to come up with a counterexample: something scientists genuinely understand but cannot predict well, from psychology or any other field. Then decide as a group whether your counterexample weakens their argument or is a case they would happily concede. Share your counterexample and your verdict.
-:::
 
-::: {style="color: yellow"}
-## The Bigger Picture of Data Science
-:::
-
-Where does machine learning sit within data analysis as a whole? 
-
-Donoho (2017), inspired by earlier work from Cleveland and Chambers, divides data science into six areas:
-
-1.  Data gathering, preparation, and exploration
-2.  Data representation and transformation (images, sound, text, ...)
-3.  Computing with data (software)
-4.  Data modeling (statistics training)
-5.  Data visualization and presentation (communication)
-6.  Science about data science (studying current practices)
-
-Notice that data modeling, which includes machine learning, is just one item on the list, and arguably the *easiest* part of data analysis. Most of the work is getting data into a workable shape, making sense of predictors and outcomes, and dealing with anomalies. Here is the good news: as behavioral scientists, trained to think hard about measurement, sampling, and people, we are very well equipped to do exactly that.
-
-*Donoho, D. (2017). 50 years of data science. Journal of Computational and Graphical Statistics, 26(4), 745-766.*
 
 ::: {style="color: yellow"}
 ## What Is Machine Learning?
 :::
 
-Here is a safe bet: you already used machine learning today. If you asked a chatbot a question, unlocked your phone with your face, or opened any app with a feed, a learned model was involved. So what makes all of these "machine learning"?
+In general, machine learning is a set of tools for building models that predict outcomes from inputs.
 
-The definition that has aged best comes from Mitchell (1997). A system is said to **learn** from experience **E**, with respect to some class of tasks **T** and performance measure **P**, if its performance at tasks in **T**, as measured by **P**, improves with experience **E**.
+**In practice this means using examples (training data) to build a model that makes accurate predictions about new cases it has never seen (test data).**
+
+::: {style="color: lightblue"}
+### Task, Experience, and Performance
+:::
+
+Another definition that has aged well comes from Mitchell (1997). 
+
+A system is said to **learn** from experience **E**, with respect to some class of tasks **T** and performance measure **P**, if its performance at tasks in **T**, as measured by **P**, improves with experience **E**.
 
 Watch that definition at work on the most talked-about AI systems of the moment, large language models:
 
--   **Task T**: predict the next word (technically a *token*, a fragment of a word), given everything written so far
+-   **Task T**: predict the next word (technically a *token*), given everything written so far
 -   **Experience E**: an enormous corpus of text
 -   **Performance P**: how much probability the model gave to the token that actually came next (the less surprised it was, the better)
-
-A definition written in 1997 describes the flagship AI of the 2020s without modification. That is worth pausing on: underneath the remarkable behavior sits a system getting better at a precisely specified prediction task by processing experience.
 
 ::: {.callout-note icon="false"}
 ## Further Information
 
-Next-token prediction is the engine, but the chatbots you actually use get two further rounds of training. First the model is tuned on curated example responses, so its Experience becomes demonstrations written by people. Then it is trained against human preferences: people compare pairs of candidate responses, a second model learns to predict which one a person would prefer, and that predicted approval becomes the Performance measure. The final polish on modern AI is optimized against a model of human judgment, which is behavioral science sitting inside the machine learning pipeline.
+Next-token prediction is the engine, but the LLMs undergo additional training. For example, the model is also tuned on curated example responses, and against human preferences. People compare pairs of candidate responses, a second model learns to predict which one a person would prefer, and that predicted approval becomes another Performance measure. 
 :::
 
 Now a second example, closer to home for a psychology course. Consider the recommendation feed on TikTok, YouTube, or Spotify:
@@ -152,13 +285,15 @@ Notice whose behavior is being learned here: *yours*. A recommender system is a 
 Three lessons from these examples will return all semester:
 
 -   **Clearly specify the aims.** Every learning problem needs a defined task, performance metric, and source of experience.
+
 -   **The training experience matters.** A model knows only the world its data shows it. Commercial facial analysis systems have performed worst for the people least represented in their training data (Buolamwini & Gebru, 2018), and models are routinely confidently wrong in situations unlike their experience.
+
 -   **Focus on generalizability.** The goal is never performance on the data you learned from; it is performance on the data that comes next.
 
 ::: {.callout-tip icon="false"}
 ## Activity
 
-With a partner (about 3 minutes): pick an app one of you used today. Specify its Task, Experience, and Performance measure. Then ask: what could go wrong with its training experience, and who would be affected?
+With a partner (about 3 minutes): pick an app one of you used today. Specify its Task, Experience, and Performance measure. What could go wrong with its training experience, and who would be affected?
 :::
 
 *Mitchell, T. M. (1997). Machine Learning. McGraw-Hill.*
@@ -166,16 +301,67 @@ With a partner (about 3 minutes): pick an app one of you used today. Specify its
 *Buolamwini, J., & Gebru, T. (2018). Gender shades: Intersectional accuracy disparities in commercial gender classification. Proceedings of Machine Learning Research, 81, 77-91.*
 
 ::: {style="color: yellow"}
+## Machine Learning and Its Neighbors
+:::
+
+Machine learning travels with a crowd of similar-sounding terms. Here is the map, from the outside in:
+
+:::::: {style="border: 2px solid #d62728; border-radius: 10px; padding: 0.5em 1em; margin: 1em 0;"}
+**Artificial intelligence (AI)**: machines doing things that look intelligent, *by any means*, including rules written by hand (expert systems, early chess engines)
+
+::::: {style="border: 2px solid #ff7f0e; border-radius: 10px; padding: 0.5em 1em; margin: 0.75em 0;"}
+**Machine learning (ML)**: the subset where the behavior is *learned from data* rather than programmed (most of this course)
+
+:::: {style="border: 2px solid #2ca02c; border-radius: 10px; padding: 0.5em 1em; margin: 0.75em 0;"}
+**Deep learning**: machine learning with many-layered neural networks 
+
+::: {style="border: 2px solid #9467bd; border-radius: 10px; padding: 0.5em 1em; margin: 0.75em 0;"}
+**Generative AI**: deep learning models that produce text, images, and audio 
+:::
+::::
+:::::
+::::::
+
+::: {style="color: lightblue"}
+### Machine Learning and Statistics
+:::
+
+The honest answer is that machine learning and statistics have a tremendous amount of overlap. In reality, many of the perceived differences are superficial, and tied to different vocabulary.
+
+| Statistics says | Machine learning says |
+|----|----|
+| Predictor, independent variable | Feature, input |
+| Outcome, dependent variable | Target, label |
+| Coefficients, parameters | Weights |
+| Estimation, model fitting | Learning, training |
+| Observation, case, participant | Example, instance |
+| Fitted values | Predictions |
+| Regression and classification models | Supervised learning |
+
+::: {style="color: lightblue"}
+### Machine Learning and Psychometrics
+:::
+
+Closer to home even, factor analysis, invented by Spearman in 1904 to study intelligence, is dimension reduction: learning hidden structure from data without labeled outcomes, which is unsupervised learning by an older name. We will discuss this at length later in the course.
+
+
+::: {style="color: yellow"}
 ## Prediction Is Already in Psychology
 :::
 
-These examples may sound like Silicon Valley's concerns, but the same framework is reshaping our field:
+Despite the popularity of explanatory modeling in the social, behavioral and health sciences, prediciton is already being applied in many critical areas:
 
--   **Suicide risk.** Machine learning models applied to electronic health records predict risk of suicide attempts substantially better than traditional approaches, in a domain where unaided clinical prediction has hovered near chance for decades (Walsh, Ribeiro, & Franklin, 2017).
+-   **Suicide risk.** Machine learning models applied to electronic health records predict risk of suicide attempts better than traditional approaches, in a domain where unaided clinical prediction has struggled (Walsh, Ribeiro, & Franklin, 2017).
+
 -   **Digital phenotyping.** Smartphone signals (movement, sleep, typing, sociability) are being used to detect changes in mood and mental health as they unfold in daily life (Onnela & Rauch, 2016).
+
 -   **Treatment selection.** Models trained on clinical trial data can predict which patients are likely to respond to which depression treatment, a step toward genuinely personalized care (Chekroud et al., 2016).
 
-In each case the question is not "what is the true coefficient?" but "how accurately can we predict, for a person we have not seen yet?" That is exactly the shift Yarkoni & Westfall argue for in today's reading.
+In each case the question is not what is the true coefficient? but how accurately can we predict, for a person we have not seen yet? 
+
+::: {style="color: white"}
+### References
+:::
 
 *Walsh, C. G., Ribeiro, J. D., & Franklin, J. C. (2017). Predicting risk of suicide attempts over time through machine learning. Clinical Psychological Science, 5(3), 457-469.*
 
@@ -183,14 +369,10 @@ In each case the question is not "what is the true coefficient?" but "how accura
 
 *Chekroud, A. M., Zotti, R. J., Shehzad, Z., Gueorguieva, R., Johnson, M. K., Trivedi, M. H., Cannon, T. D., Krystal, J. H., & Corlett, P. R. (2016). Cross-trial prediction of treatment outcome in depression: A machine learning approach. The Lancet Psychiatry, 3(3), 243-250.*
 
-::: {.callout-tip icon="false"}
-## Breakout 3: Design a Prediction System
 
-In groups of 3-4 (about 10 minutes): choose one of the three applications above (suicide risk, digital phenotyping, or treatment selection) and design the system on paper. Specify its Task, Experience, and Performance measure. Then stress-test it: Whose data would it be trained on, and who might be missing? What kind of prediction errors would it make, and which errors are costly? How accurate would it need to be before you would let it inform real clinical decisions, and who is accountable when it is wrong? Each group shares its T/E/P and its single biggest concern.
-:::
 
 ::: {style="color: yellow"}
-## Were You Already Doing Machine Learning?
+## Regression is Machine Learning?
 :::
 
 Now apply Mitchell's framework to something familiar: ordinary data analysis. Suppose we want to estimate a respondent's depression score (the CES-D) from respondent characteristics.
@@ -205,11 +387,33 @@ $$
 \widehat{CESD} = b_0 + b_1 X_1 + b_2 X_2 + \dots + b_{20} X_{20} + e_i
 $$
 
-To evaluate performance, we use the fitted equation to obtain a predicted score for each person and compare it to the score we observed. Did we overestimate? Underestimate? Get it just right?
 
-**So, is regression a machine learning model?** In our statistics training, we've typically been interested in the *significance* of regression coefficients: standard errors, p-values, confidence intervals, and theories about why X is related to Y. If we instead treat regression as a machine learning algorithm, the emphasis shifts. We *learn* patterns in one dataset and *evaluate* the model in another, and we care about generalizability: keeping the model from becoming too complex, and preventing it from learning idiosyncrasies of our sample that will not hold up in new data. A model that predicts perfectly in the learning phase might generalize terribly. Notice this is precisely Yarkoni & Westfall's diagnosis from earlier: a p-hacked regression is a model that learned its sample's noise, evaluated on the data that produced it.
+::: {style="color: lightblue"}
+## Regression as an Explanatory Model
+:::
 
-Here is the punchline. Our regression model is just one choice of the function connecting predictors to outcome:
+In our statistics training, we've typically been interested in:
+
+- the *significance* of regression coefficients
+- theories about why X is related to Y
+
+::: {style="color: lightblue"}
+## Regression as Machine Learning
+:::
+
+
+If we instead treat regression as a machine learning algorithm, the emphasis shifts. 
+
+-  Instead, we *learn* patterns in one dataset and 
+-  We then *evaluate* the model in another
+
+In this way we care primarily about generalizability: keeping the model from becoming too complex, and preventing it from learning idiosyncrasies of our sample that will not hold up in new data. 
+
+::: {style="color: lightblue"}
+## Extending Regression 
+:::
+
+From an ML perspective, our regression model is just one choice of the function connecting predictors to outcome:
 
 $$
 \widehat{CESD} = f(X) + e_i
@@ -223,9 +427,61 @@ Machine learning models are, at heart, different choices of $f(X)$. The function
 -   sparse, where only some predictors matter
 -   black-box-ish and difficult to interpret
 
-And here is one more way to see the continuum. Our CES-D regression has 21 learned parameters: an intercept and 20 slopes. A frontier language model has on the order of a *trillion*. Both are instances of the same template: an outcome, a function of the inputs learned from experience, and error. What differs is how flexible $f$ is allowed to be and how much experience it learns from. In a real sense, that one equation is the entire course.
+And here is one more way to see the continuum. Our CES-D regression has 21 learned parameters: an intercept and 20 slopes. A frontier language model has on the order of a *trillion*. 
 
-If you have ever fit a regression, congratulations: you were doing machine learning. This course is about expanding your collection of $f(X)$'s, and, just as importantly, learning the machinery for choosing among them honestly. That machinery is exactly what today's reading prescribes for the field.
+**If you have ever fit a regression, you were already doing machine learning. In this course we will extend your collection of $f(X)$'s, and learn the machinery for choosing among them honestly.**
+
+::: {style="color: yellow"}
+## Underfitting and Overfitting
+:::
+
+In machine learning there are really two big ways things can go wrong from a technical perspective: underfitting and overfitting.
+
+You already know both these failure types from your own experiences:
+
+-   **Underfitting (model is too rigid).** A stereotype is a one-rule model applied to everyone. It ignores the details of the person in front of you, so it misses real patterns. Fast, stable, and systematically wrong.
+
+-   **Overfitting (model is too flexible).** A superstition built from one bad experience is a model trained on a single data point. It treats an accident as a law. Responsive, sensitive, and fooled by noise.
+
+Here is the same idea in data. The points below come from a simple curved pattern plus noise. Three models try to learn it (don't worry about the code yet; focus on the picture):
+
+```{r}
+#| fig-align: center
+library(ggplot2)
+
+set.seed(559) # makes the random draw repeatable
+x <- runif(60, 0, 10)
+y <- sin(x) + rnorm(60, sd = 0.4)
+d <- data.frame(x, y)
+
+ggplot(d, aes(x, y)) +
+  geom_point(color = "grey50") +
+  geom_smooth(method = "lm", se = FALSE,
+              aes(color = "Too rigid: straight line"), linewidth = 1) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 15), se = FALSE,
+              aes(color = "Too flexible: 15th-degree polynomial"), linewidth = 1) +
+  geom_smooth(method = "loess", se = FALSE,
+              aes(color = "About right: smooth curve"), linewidth = 1) +
+  scale_color_manual(name = NULL,
+                     values = c("Too rigid: straight line" = "#d62728",
+                                "Too flexible: 15th-degree polynomial" = "#ff7f0e",
+                                "About right: smooth curve" = "#2ca02c")) +
+  theme(legend.position = "bottom")
+```
+
+The straight line is underfitting: too rigid to see the real pattern. 
+
+The wiggly polynomial is overfitting: it chases every individual point, including the noise. 
+
+The middle curve captures the pattern and lets the noise go. 
+
+On these 60 points, the wiggly model fits best. On the *next* 60 points, it loses badly, and that is the only comparison that counts.
+
+::: {.callout-tip icon="false"}
+## Activity
+
+With a partner (about 3 minutes): When fitting a model how do we know if it is underfitting or overfitting? Can we tell from our own data? 
+:::
 
 ::: {style="color: yellow"}
 ## Two Flavors of Machine Learning
@@ -236,4 +492,4 @@ Machine learning methods come in two primary flavors, and they organize the enti
 -   **Supervised learning**, where an outcome supervises the learning: regression problems (numeric outcomes) and classification problems (categorical outcomes)
 -   **Unsupervised learning**, where there is no outcome to supervise: clustering and dimension reduction
 
-But what exactly are these, and how do they differ? That is the subject of this week's pages in the Introduction to Machine Learning section, *Important Terms and Distinctions* and *Problem Classes in ML*, which pick up exactly here.
+But what exactly are these, and how do they differ? 

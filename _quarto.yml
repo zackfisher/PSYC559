@@ -151,6 +151,7 @@ format:
   html:
     theme: darkly
     css: styles.css
+    include-after-body: _controls.html
     toc: true
 execute:
   warning: false

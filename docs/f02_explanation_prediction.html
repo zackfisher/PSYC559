@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -275,15 +310,26 @@ window.Quarto = {
    
   <ul>
   <li><a href="#the-explanatory-culture-of-the-social-sciences" id="toc-the-explanatory-culture-of-the-social-sciences" class="nav-link active" data-scroll-target="#the-explanatory-culture-of-the-social-sciences">The Explanatory Culture of the Social Sciences</a></li>
+  <li><a href="#moderation-and-mediation-as-explanatory-tools" id="toc-moderation-and-mediation-as-explanatory-tools" class="nav-link" data-scroll-target="#moderation-and-mediation-as-explanatory-tools">Moderation and Mediation as Explanatory Tools</a></li>
+  <li><a href="#structural-equation-models-as-explanatory-tools" id="toc-structural-equation-models-as-explanatory-tools" class="nav-link" data-scroll-target="#structural-equation-models-as-explanatory-tools">Structural Equation Models as Explanatory Tools</a></li>
+  <li><a href="#difficulties-with-explanatory-approaches" id="toc-difficulties-with-explanatory-approaches" class="nav-link" data-scroll-target="#difficulties-with-explanatory-approaches">Difficulties with Explanatory Approaches</a></li>
   <li><a href="#a-prediction-focus" id="toc-a-prediction-focus" class="nav-link" data-scroll-target="#a-prediction-focus">A Prediction Focus</a></li>
   <li><a href="#what-todays-reading-argues" id="toc-what-todays-reading-argues" class="nav-link" data-scroll-target="#what-todays-reading-argues">What Today’s Reading Argues</a></li>
   <li><a href="#criticism-of-status-quo" id="toc-criticism-of-status-quo" class="nav-link" data-scroll-target="#criticism-of-status-quo">Criticism of Status Quo</a></li>
   <li><a href="#the-replication-crisis-as-overfitting" id="toc-the-replication-crisis-as-overfitting" class="nav-link" data-scroll-target="#the-replication-crisis-as-overfitting">The Replication Crisis as Overfitting</a></li>
   <li><a href="#a-path-forward" id="toc-a-path-forward" class="nav-link" data-scroll-target="#a-path-forward">A Path Forward</a></li>
-  <li><a href="#the-bigger-picture-of-data-science" id="toc-the-bigger-picture-of-data-science" class="nav-link" data-scroll-target="#the-bigger-picture-of-data-science">The Bigger Picture of Data Science</a></li>
   <li><a href="#what-is-machine-learning" id="toc-what-is-machine-learning" class="nav-link" data-scroll-target="#what-is-machine-learning">What Is Machine Learning?</a></li>
+  <li><a href="#task-experience-and-performance" id="toc-task-experience-and-performance" class="nav-link" data-scroll-target="#task-experience-and-performance">Task, Experience, and Performance</a></li>
+  <li><a href="#machine-learning-and-its-neighbors" id="toc-machine-learning-and-its-neighbors" class="nav-link" data-scroll-target="#machine-learning-and-its-neighbors">Machine Learning and Its Neighbors</a></li>
+  <li><a href="#machine-learning-and-statistics" id="toc-machine-learning-and-statistics" class="nav-link" data-scroll-target="#machine-learning-and-statistics">Machine Learning and Statistics</a></li>
+  <li><a href="#machine-learning-and-psychometrics" id="toc-machine-learning-and-psychometrics" class="nav-link" data-scroll-target="#machine-learning-and-psychometrics">Machine Learning and Psychometrics</a></li>
   <li><a href="#prediction-is-already-in-psychology" id="toc-prediction-is-already-in-psychology" class="nav-link" data-scroll-target="#prediction-is-already-in-psychology">Prediction Is Already in Psychology</a></li>
-  <li><a href="#were-you-already-doing-machine-learning" id="toc-were-you-already-doing-machine-learning" class="nav-link" data-scroll-target="#were-you-already-doing-machine-learning">Were You Already Doing Machine Learning?</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#regression-is-machine-learning" id="toc-regression-is-machine-learning" class="nav-link" data-scroll-target="#regression-is-machine-learning">Regression is Machine Learning?</a></li>
+  <li><a href="#regression-as-an-explanatory-model" id="toc-regression-as-an-explanatory-model" class="nav-link" data-scroll-target="#regression-as-an-explanatory-model">Regression as an Explanatory Model</a></li>
+  <li><a href="#regression-as-machine-learning" id="toc-regression-as-machine-learning" class="nav-link" data-scroll-target="#regression-as-machine-learning">Regression as Machine Learning</a></li>
+  <li><a href="#extending-regression" id="toc-extending-regression" class="nav-link" data-scroll-target="#extending-regression">Extending Regression</a></li>
+  <li><a href="#underfitting-and-overfitting" id="toc-underfitting-and-overfitting" class="nav-link" data-scroll-target="#underfitting-and-overfitting">Underfitting and Overfitting</a></li>
   <li><a href="#two-flavors-of-machine-learning" id="toc-two-flavors-of-machine-learning" class="nav-link" data-scroll-target="#two-flavors-of-machine-learning">Two Flavors of Machine Learning</a></li>
   </ul>
 </nav>
@@ -320,12 +366,134 @@ window.Quarto = {
 <div style="text-align: center; font-size: 1.1em; margin: 1em 0;">
 <p><strong>X</strong> &nbsp;⟶&nbsp; [ regression, logistic regression ] &nbsp;⟶&nbsp; <strong>Y</strong></p>
 </div>
+<section id="moderation-and-mediation-as-explanatory-tools" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="moderation-and-mediation-as-explanatory-tools">Moderation and Mediation as Explanatory Tools</h3>
+</section>
+<svg viewbox="0 0 880 440" role="img" aria-label="Diagram of mediator and moderator variables" style="max-width: 100%; height: auto; display: block; margin: 1em auto;">
+  <defs>
+    <marker id="arrow" viewbox="0 0 10 10" refx="9" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#aaaaaa"></path>
+    </marker>
+  </defs>
+  <line x1="235" y1="185" x2="330" y2="95" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#arrow)"></line>
+  <line x1="550" y1="95" x2="645" y2="185" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#arrow)"></line>
+  <line x1="265" y1="220" x2="608" y2="220" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#arrow)"></line>
+  <line x1="440" y1="335" x2="440" y2="232" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#arrow)"></line>
+  <rect x="30" y="190" width="235" height="60" rx="10" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"></rect>
+  <text x="147" y="227" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Independent variable (X)</text>
+  <rect x="322" y="35" width="235" height="60" rx="10" fill="#d5f2ea" stroke="#2bb59a" stroke-width="2"></rect>
+  <text x="440" y="72" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Mediator (M)</text>
+  <rect x="615" y="190" width="235" height="60" rx="10" fill="#f3e0f0" stroke="#c06ab5" stroke-width="2"></rect>
+  <text x="732" y="227" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Dependent variable (Y)</text>
+  <rect x="322" y="345" width="235" height="60" rx="10" fill="#fdf3d0" stroke="#e0b62c" stroke-width="2"></rect>
+  <text x="440" y="382" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Moderator (W)</text>
+</svg>
+<p>Moderation and mediation are two examples of explanatory tools that decompose the overall effect of X on Y into interpretable parameters:</p>
+<ul>
+<li><p><strong>Moderation asks <em>when</em> or <em>for whom</em>.</strong> A moderator W changes the strength (or even the direction) of the X to Y effect.</p></li>
+<li><p><strong>Mediation asks <em>how</em> or <em>why</em>.</strong> The effect of X on Y flows <em>through</em> a mediator M.</p></li>
+<li><p><strong>Both are explanation machines.</strong> Each decomposes an overall effect into interpretable parameters (paths, interactions) that are then tested for significance. The parameters <em>are</em> the scientific story.</p></li>
+<li><p><strong>A preview of the contrast to come.</strong> A flexible predictive model can capture these same patterns, interactions and indirect pathways alike, without ever naming them.</p></li>
+</ul>
+<section id="structural-equation-models-as-explanatory-tools" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="structural-equation-models-as-explanatory-tools">Structural Equation Models as Explanatory Tools</h3>
+</section>
+<p>Further still, structural equation models (SEMs) are a generalization of regression that can handle multiple outcomes, latent variables, and complex causal structures. SEMs are often used to test theoretical models that specify how variables relate to each other.</p>
+<svg viewbox="0 0 900 500" role="img" aria-label="Two factor confirmatory factor analysis with a latent regression" style="max-width: 100%; height: auto; display: block; margin: 1em auto;">
+  <defs>
+    <marker id="semarrow" viewbox="0 0 10 10" refx="9" refy="5" markerwidth="7" markerheight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#aaaaaa"></path>
+    </marker>
+  </defs>
+
+  <line x1="200" y1="150" x2="90" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"></line>
+  <line x1="225" y1="156" x2="225" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"></line>
+  <line x1="250" y1="150" x2="360" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"></line>
+
+  <line x1="650" y1="150" x2="540" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"></line>
+  <line x1="675" y1="156" x2="675" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"></line>
+  <line x1="700" y1="150" x2="810" y2="233" stroke="#aaaaaa" stroke-width="2.5" marker-end="url(#semarrow)"></line>
+
+  <line x1="317" y1="110" x2="583" y2="110" stroke="#aaaaaa" stroke-width="3" marker-end="url(#semarrow)"></line>
+  <text x="450" y="96" text-anchor="middle" font-size="24" fill="#cccccc" font-style="italic">β</text>
+
+  <ellipse cx="225" cy="110" rx="92" ry="45" fill="#d5f2ea" stroke="#2bb59a" stroke-width="2"></ellipse>
+  <text x="225" y="105" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Stress</text>
+  <text x="225" y="129" text-anchor="middle" font-size="16" fill="#1a1a2e">(latent)</text>
+
+  <ellipse cx="675" cy="110" rx="92" ry="45" fill="#f3e0f0" stroke="#c06ab5" stroke-width="2"></ellipse>
+  <text x="675" y="105" text-anchor="middle" font-size="21" fill="#1a1a2e" font-weight="600">Depression</text>
+  <text x="675" y="129" text-anchor="middle" font-size="16" fill="#1a1a2e">(latent)</text>
+
+  <rect x="25" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"></rect>
+  <text x="90" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">x1</text>
+  <rect x="160" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"></rect>
+  <text x="225" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">x2</text>
+  <rect x="295" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"></rect>
+  <text x="360" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">x3</text>
+
+  <rect x="475" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"></rect>
+  <text x="540" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">y1</text>
+  <rect x="610" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"></rect>
+  <text x="675" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">y2</text>
+  <rect x="745" y="238" width="130" height="55" rx="6" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"></rect>
+  <text x="810" y="272" text-anchor="middle" font-size="20" fill="#1a1a2e">y3</text>
+
+  <line x1="90" y1="338" x2="90" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"></line>
+  <line x1="225" y1="338" x2="225" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"></line>
+  <line x1="360" y1="338" x2="360" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"></line>
+  <line x1="540" y1="338" x2="540" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"></line>
+  <line x1="675" y1="338" x2="675" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"></line>
+  <line x1="810" y1="338" x2="810" y2="300" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"></line>
+
+  <circle cx="90" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"></circle>
+  <text x="90" y="366" text-anchor="middle" font-size="17" fill="#cccccc">ε1</text>
+  <circle cx="225" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"></circle>
+  <text x="225" y="366" text-anchor="middle" font-size="17" fill="#cccccc">ε2</text>
+  <circle cx="360" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"></circle>
+  <text x="360" y="366" text-anchor="middle" font-size="17" fill="#cccccc">ε3</text>
+  <circle cx="540" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"></circle>
+  <text x="540" y="366" text-anchor="middle" font-size="17" fill="#cccccc">ε4</text>
+  <circle cx="675" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"></circle>
+  <text x="675" y="366" text-anchor="middle" font-size="17" fill="#cccccc">ε5</text>
+  <circle cx="810" cy="358" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"></circle>
+  <text x="810" y="366" text-anchor="middle" font-size="17" fill="#cccccc">ε6</text>
+
+  <line x1="798" y1="72" x2="770" y2="92" stroke="#aaaaaa" stroke-width="2" marker-end="url(#semarrow)"></line>
+  <circle cx="818" cy="58" r="20" fill="none" stroke="#aaaaaa" stroke-width="2"></circle>
+  <text x="818" y="66" text-anchor="middle" font-size="17" fill="#cccccc">ζ</text>
+
+  <ellipse cx="58" cy="440" rx="34" ry="18" fill="#d5f2ea" stroke="#2bb59a" stroke-width="2"></ellipse>
+  <text x="105" y="446" font-size="17" fill="#cccccc">latent (unobserved)</text>
+  <rect x="345" y="422" width="58" height="36" rx="5" fill="#d6e9f8" stroke="#4a90d9" stroke-width="2"></rect>
+  <text x="415" y="446" font-size="17" fill="#cccccc">measured item</text>
+  <circle cx="650" cy="440" r="18" fill="none" stroke="#aaaaaa" stroke-width="2"></circle>
+  <text x="680" y="446" font-size="17" fill="#cccccc">error / disturbance</text>
+</svg>
+<ul>
+<li><p>Typically, every quantity in an SEM is interpretable and testable.</p></li>
+<li><p>An SEM is often a formal statement of how the world works, drawn as a picture and estimated all at once.</p></li>
+<li><p>Every arrow encodes a theoretical commitment, and this is an example of the explanatory culture taken to a limit.</p></li>
+</ul>
+<section id="difficulties-with-explanatory-approaches" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="difficulties-with-explanatory-approaches">Difficulties with Explanatory Approaches</h3>
+</section>
+<p>These are powerful tools, but the way psychology has used them has run into trouble:</p>
+<ul>
+<li><p><strong>Too many defensible choices.</strong> Which outliers to drop, which covariates to include, when to stop collecting data. Each choice is defensible on its own; together they let one dataset produce many different results (Simmons, Nelson, &amp; Simonsohn, 2011).</p></li>
+<li><p><strong>Findings that do not replicate.</strong> The Open Science Collaboration (2015) repeated 100 studies from leading psychology journals. Ninety-seven percent of the originals reported significant effects. About 36% of the replications did, with effect sizes roughly half the original size.</p></li>
+<li><p><strong>Theories that forbid nothing.</strong> A verbal theory flexible enough to accommodate any result has not really been tested (Meehl, 1978). “Consistent with the theory” is weak evidence when the opposite finding would have been just as consistent.</p></li>
+<li><p><strong>Nothing ever checks prediction.</strong> Fit the model to your sample, interpret the coefficients, report the fit. At no point does the standard workflow ask how the model does on people it has never seen. The SEM above can have excellent fit indices and never predict a single new person’s score.</p></li>
+</ul>
+<p><em>Simmons, J. P., Nelson, L. D., &amp; Simonsohn, U. (2011). False-positive psychology. Psychological Science, 22(11), 1359-1366.</em> <a href="https://doi.org/10.1177/0956797611417632">https://doi.org/10.1177/0956797611417632</a></p>
+<p><em>Open Science Collaboration (2015). Estimating the reproducibility of psychological science. Science, 349(6251), aac4716.</em> <a href="https://doi.org/10.1126/science.aac4716">https://doi.org/10.1126/science.aac4716</a></p>
+<p><em>Meehl, P. E. (1978). Theoretical risks and tabular asterisks. Journal of Consulting and Clinical Psychology, 46(4), 806-834.</em> <a href="https://doi.org/10.1037/0022-006X.46.4.806">https://doi.org/10.1037/0022-006X.46.4.806</a></p>
 <section id="a-prediction-focus" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="a-prediction-focus">A Prediction Focus</h2>
 </section>
-<p>More recently, a prediction focus (a la machine learning) has emerged in the social sciences.</p>
-<p>The starting assumption is humbler: there is <em>some</em> process that led to the data, but we may never know its true form.</p>
-<p>Rather than recovering nature’s mechanism, we aim to find a model that maps the inputs to the outputs as accurately as possible, using whatever algorithm does the job.</p>
+<p>More recently, a prediction focus (i.e.&nbsp;machine learning) has emerged in the social sciences.</p>
+<p>From this perspective, there is <em>some</em> process that led to the data, but we may never know its true form.</p>
+<p>Rather than trying to uncover the true mechanism, we aim to find a model that maps the inputs to the outputs as accurately as possible, using whatever algorithm does the job.</p>
 <div style="text-align: center; font-size: 1.1em; margin: 1em 0;">
 <p><strong>X</strong> &nbsp;⟶&nbsp; [ nature: unknown ] &nbsp;⟶&nbsp; <strong>Y</strong><br> <strong>X</strong> &nbsp;⟶&nbsp; [ trees, random forests, neural networks, … ] &nbsp;⟶&nbsp; <strong>Y</strong></p>
 </div>
@@ -394,60 +562,45 @@ window.Quarto = {
 <section id="criticism-of-status-quo" class="level3" style="color: lightblue">
 <h3 class="anchored" data-anchor-id="criticism-of-status-quo">Criticism of Status Quo</h3>
 </section>
-<p>Psychology has spent decades optimizing for explanation, yet the theories this produced often predict poorly, and sometimes barely better than chance.</p>
-<p>Their uncomfortable suggestion is that an explanation that cannot predict may not be much of an explanation at all: the appearance of understanding without its substance.</p>
+<ul>
+<li><p>Psychology has spent decades optimizing for explanation, yet the theories this produced often predict poorly, and sometimes barely better than chance.</p></li>
+<li><p>Their uncomfortable suggestion is that an explanation that cannot predict may not be much of an explanation at all.</p></li>
+</ul>
 <section id="the-replication-crisis-as-overfitting" class="level3" style="color: lightblue">
 <h3 class="anchored" data-anchor-id="the-replication-crisis-as-overfitting">The Replication Crisis as Overfitting</h3>
 </section>
-<p>Think about what p-hacking and researcher degrees of freedom actually do: they tune an analysis until it fits the idiosyncrasies of one particular sample.</p>
-<p>In machine learning vocabulary, that is <em>overfitting</em>, and a finding that fails to replicate is a model that failed <em>out of sample</em>.</p>
-<p>The replication crisis, on this view, is not a moral failing unique to psychology; it is what happens to any field that evaluates its models on the same data used to build them.</p>
+<ul>
+<li><p>Think about how many psychologists analyze data, they often tune an analysis until it fits the idiosyncrasies of one particular sample.</p></li>
+<li><p>In machine learning vocabulary, this is called is <em>overfitting</em>, and this can limit generalizability.</p></li>
+</ul>
 <section id="a-path-forward" class="level3" style="color: lightblue">
 <h3 class="anchored" data-anchor-id="a-path-forward">A Path Forward</h3>
 </section>
-<p>Their proposed remedies are the core machinery of machine learning: hold out test data, use cross-validation, think in terms of the bias-variance trade-off, and use regularization to keep models honest.</p>
-<p>Look at the course schedule and you will notice something: that list is, almost line for line, the next month of this class. Data splitting and cross-validation arrive next week, bias and variance right beside them, and regularized regression in mid-September.</p>
-<p>One important nuance, the paper does not argue that psychology should abandon explanation. The argument is that prediction <em>disciplines</em> explanation. If your theory is right, it should show up as predictive accuracy on people you have never seen; if it does not, that is evidence worth taking seriously.</p>
-<div class="callout callout-style-default callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Explanation Without Prediction?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In groups of 2-4 (about 5 minutes): Yarkoni &amp; Westfall suggest that an explanation that cannot predict may not be much of an explanation at all. Do you buy that? Try to come up with a counterexample: something scientists genuinely understand but cannot predict well, from psychology or any other field. Then decide as a group whether your counterexample weakens their argument or is a case they would happily concede. Share your counterexample and your verdict.</p>
-</div>
-</div>
-<section id="the-bigger-picture-of-data-science" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="the-bigger-picture-of-data-science">The Bigger Picture of Data Science</h2>
-</section>
-<p>Where does machine learning sit within data analysis as a whole?</p>
-<p>Donoho (2017), inspired by earlier work from Cleveland and Chambers, divides data science into six areas:</p>
-<ol type="1">
-<li>Data gathering, preparation, and exploration</li>
-<li>Data representation and transformation (images, sound, text, …)</li>
-<li>Computing with data (software)</li>
-<li>Data modeling (statistics training)</li>
-<li>Data visualization and presentation (communication)</li>
-<li>Science about data science (studying current practices)</li>
-</ol>
-<p>Notice that data modeling, which includes machine learning, is just one item on the list, and arguably the <em>easiest</em> part of data analysis. Most of the work is getting data into a workable shape, making sense of predictors and outcomes, and dealing with anomalies. Here is the good news: as behavioral scientists, trained to think hard about measurement, sampling, and people, we are very well equipped to do exactly that.</p>
-<p><em>Donoho, D. (2017). 50 years of data science. Journal of Computational and Graphical Statistics, 26(4), 745-766.</em></p>
+<p>Their proposed remedies are the core machinery of machine learning:</p>
+<ul>
+<li>hold out test data</li>
+<li>use cross-validation</li>
+<li>the bias-variance trade-off</li>
+<li>regularization to keep models honest</li>
+</ul>
+<p>This list is essentially the next month of our class.</p>
+<p>One important nuance, the paper does not argue psychology should abandon explanation. The argument is that prediction <em>disciplines</em> explanation. If your theory is right, it should show up as predictive accuracy on people you have never seen; if it does not, that is evidence worth taking seriously.</p>
 <section id="what-is-machine-learning" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="what-is-machine-learning">What Is Machine Learning?</h2>
 </section>
-<p>Here is a safe bet: you already used machine learning today. If you asked a chatbot a question, unlocked your phone with your face, or opened any app with a feed, a learned model was involved. So what makes all of these “machine learning”?</p>
-<p>The definition that has aged best comes from Mitchell (1997). A system is said to <strong>learn</strong> from experience <strong>E</strong>, with respect to some class of tasks <strong>T</strong> and performance measure <strong>P</strong>, if its performance at tasks in <strong>T</strong>, as measured by <strong>P</strong>, improves with experience <strong>E</strong>.</p>
+<p>In general, machine learning is a set of tools for building models that predict outcomes from inputs.</p>
+<p><strong>In practice this means using examples (training data) to build a model that makes accurate predictions about new cases it has never seen (test data).</strong></p>
+<section id="task-experience-and-performance" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="task-experience-and-performance">Task, Experience, and Performance</h3>
+</section>
+<p>Another definition that has aged well comes from Mitchell (1997).</p>
+<p>A system is said to <strong>learn</strong> from experience <strong>E</strong>, with respect to some class of tasks <strong>T</strong> and performance measure <strong>P</strong>, if its performance at tasks in <strong>T</strong>, as measured by <strong>P</strong>, improves with experience <strong>E</strong>.</p>
 <p>Watch that definition at work on the most talked-about AI systems of the moment, large language models:</p>
 <ul>
-<li><strong>Task T</strong>: predict the next word (technically a <em>token</em>, a fragment of a word), given everything written so far</li>
+<li><strong>Task T</strong>: predict the next word (technically a <em>token</em>), given everything written so far</li>
 <li><strong>Experience E</strong>: an enormous corpus of text</li>
 <li><strong>Performance P</strong>: how much probability the model gave to the token that actually came next (the less surprised it was, the better)</li>
 </ul>
-<p>A definition written in 1997 describes the flagship AI of the 2020s without modification. That is worth pausing on: underneath the remarkable behavior sits a system getting better at a precisely specified prediction task by processing experience.</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -458,7 +611,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Next-token prediction is the engine, but the chatbots you actually use get two further rounds of training. First the model is tuned on curated example responses, so its Experience becomes demonstrations written by people. Then it is trained against human preferences: people compare pairs of candidate responses, a second model learns to predict which one a person would prefer, and that predicted approval becomes the Performance measure. The final polish on modern AI is optimized against a model of human judgment, which is behavioral science sitting inside the machine learning pipeline.</p>
+<p>Next-token prediction is the engine, but the LLMs undergo additional training. For example, the model is also tuned on curated example responses, and against human preferences. People compare pairs of candidate responses, a second model learns to predict which one a person would prefer, and that predicted approval becomes another Performance measure.</p>
 </div>
 </div>
 <p>Now a second example, closer to home for a psychology course. Consider the recommendation feed on TikTok, YouTube, or Spotify:</p>
@@ -470,9 +623,9 @@ window.Quarto = {
 <p>Notice whose behavior is being learned here: <em>yours</em>. A recommender system is a machine running a continuous learning loop on human behavior, which makes it one of the most psychologically interesting objects in modern technology. (Recall the Screenome participants from Tuesday: the feed is on the other side of many of those sessions.)</p>
 <p>Three lessons from these examples will return all semester:</p>
 <ul>
-<li><strong>Clearly specify the aims.</strong> Every learning problem needs a defined task, performance metric, and source of experience.</li>
-<li><strong>The training experience matters.</strong> A model knows only the world its data shows it. Commercial facial analysis systems have performed worst for the people least represented in their training data (Buolamwini &amp; Gebru, 2018), and models are routinely confidently wrong in situations unlike their experience.</li>
-<li><strong>Focus on generalizability.</strong> The goal is never performance on the data you learned from; it is performance on the data that comes next.</li>
+<li><p><strong>Clearly specify the aims.</strong> Every learning problem needs a defined task, performance metric, and source of experience.</p></li>
+<li><p><strong>The training experience matters.</strong> A model knows only the world its data shows it. Commercial facial analysis systems have performed worst for the people least represented in their training data (Buolamwini &amp; Gebru, 2018), and models are routinely confidently wrong in situations unlike their experience.</p></li>
+<li><p><strong>Focus on generalizability.</strong> The goal is never performance on the data you learned from; it is performance on the data that comes next.</p></li>
 </ul>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -484,39 +637,91 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>With a partner (about 3 minutes): pick an app one of you used today. Specify its Task, Experience, and Performance measure. Then ask: what could go wrong with its training experience, and who would be affected?</p>
+<p>With a partner (about 3 minutes): pick an app one of you used today. Specify its Task, Experience, and Performance measure. What could go wrong with its training experience, and who would be affected?</p>
 </div>
 </div>
 <p><em>Mitchell, T. M. (1997). Machine Learning. McGraw-Hill.</em></p>
 <p><em>Buolamwini, J., &amp; Gebru, T. (2018). Gender shades: Intersectional accuracy disparities in commercial gender classification. Proceedings of Machine Learning Research, 81, 77-91.</em></p>
+<section id="machine-learning-and-its-neighbors" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="machine-learning-and-its-neighbors">Machine Learning and Its Neighbors</h2>
+</section>
+<p>Machine learning travels with a crowd of similar-sounding terms. Here is the map, from the outside in:</p>
+<div style="border: 2px solid #d62728; border-radius: 10px; padding: 0.5em 1em; margin: 1em 0;">
+<p><strong>Artificial intelligence (AI)</strong>: machines doing things that look intelligent, <em>by any means</em>, including rules written by hand (expert systems, early chess engines)</p>
+<div style="border: 2px solid #ff7f0e; border-radius: 10px; padding: 0.5em 1em; margin: 0.75em 0;">
+<p><strong>Machine learning (ML)</strong>: the subset where the behavior is <em>learned from data</em> rather than programmed (most of this course)</p>
+<div style="border: 2px solid #2ca02c; border-radius: 10px; padding: 0.5em 1em; margin: 0.75em 0;">
+<p><strong>Deep learning</strong>: machine learning with many-layered neural networks</p>
+<div style="border: 2px solid #9467bd; border-radius: 10px; padding: 0.5em 1em; margin: 0.75em 0;">
+<p><strong>Generative AI</strong>: deep learning models that produce text, images, and audio</p>
+</div>
+</div>
+</div>
+</div>
+<section id="machine-learning-and-statistics" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="machine-learning-and-statistics">Machine Learning and Statistics</h3>
+</section>
+<p>The honest answer is that machine learning and statistics have a tremendous amount of overlap. In reality, many of the perceived differences are superficial, and tied to different vocabulary.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Statistics says</th>
+<th>Machine learning says</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Predictor, independent variable</td>
+<td>Feature, input</td>
+</tr>
+<tr class="even">
+<td>Outcome, dependent variable</td>
+<td>Target, label</td>
+</tr>
+<tr class="odd">
+<td>Coefficients, parameters</td>
+<td>Weights</td>
+</tr>
+<tr class="even">
+<td>Estimation, model fitting</td>
+<td>Learning, training</td>
+</tr>
+<tr class="odd">
+<td>Observation, case, participant</td>
+<td>Example, instance</td>
+</tr>
+<tr class="even">
+<td>Fitted values</td>
+<td>Predictions</td>
+</tr>
+<tr class="odd">
+<td>Regression and classification models</td>
+<td>Supervised learning</td>
+</tr>
+</tbody>
+</table>
+<section id="machine-learning-and-psychometrics" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="machine-learning-and-psychometrics">Machine Learning and Psychometrics</h3>
+</section>
+<p>Closer to home even, factor analysis, invented by Spearman in 1904 to study intelligence, is dimension reduction: learning hidden structure from data without labeled outcomes, which is unsupervised learning by an older name. We will discuss this at length later in the course.</p>
 <section id="prediction-is-already-in-psychology" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="prediction-is-already-in-psychology">Prediction Is Already in Psychology</h2>
 </section>
-<p>These examples may sound like Silicon Valley’s concerns, but the same framework is reshaping our field:</p>
+<p>Despite the popularity of explanatory modeling in the social, behavioral and health sciences, prediciton is already being applied in many critical areas:</p>
 <ul>
-<li><strong>Suicide risk.</strong> Machine learning models applied to electronic health records predict risk of suicide attempts substantially better than traditional approaches, in a domain where unaided clinical prediction has hovered near chance for decades (Walsh, Ribeiro, &amp; Franklin, 2017).</li>
-<li><strong>Digital phenotyping.</strong> Smartphone signals (movement, sleep, typing, sociability) are being used to detect changes in mood and mental health as they unfold in daily life (Onnela &amp; Rauch, 2016).</li>
-<li><strong>Treatment selection.</strong> Models trained on clinical trial data can predict which patients are likely to respond to which depression treatment, a step toward genuinely personalized care (Chekroud et al., 2016).</li>
+<li><p><strong>Suicide risk.</strong> Machine learning models applied to electronic health records predict risk of suicide attempts better than traditional approaches, in a domain where unaided clinical prediction has struggled (Walsh, Ribeiro, &amp; Franklin, 2017).</p></li>
+<li><p><strong>Digital phenotyping.</strong> Smartphone signals (movement, sleep, typing, sociability) are being used to detect changes in mood and mental health as they unfold in daily life (Onnela &amp; Rauch, 2016).</p></li>
+<li><p><strong>Treatment selection.</strong> Models trained on clinical trial data can predict which patients are likely to respond to which depression treatment, a step toward genuinely personalized care (Chekroud et al., 2016).</p></li>
 </ul>
-<p>In each case the question is not “what is the true coefficient?” but “how accurately can we predict, for a person we have not seen yet?” That is exactly the shift Yarkoni &amp; Westfall argue for in today’s reading.</p>
+<p>In each case the question is not what is the true coefficient? but how accurately can we predict, for a person we have not seen yet?</p>
+<section id="references" class="level3" style="color: white">
+<h3 class="anchored" data-anchor-id="references">References</h3>
+</section>
 <p><em>Walsh, C. G., Ribeiro, J. D., &amp; Franklin, J. C. (2017). Predicting risk of suicide attempts over time through machine learning. Clinical Psychological Science, 5(3), 457-469.</em></p>
 <p><em>Onnela, J. P., &amp; Rauch, S. L. (2016). Harnessing smartphone-based digital phenotyping to enhance behavioral and mental health. Neuropsychopharmacology, 41(7), 1691-1696.</em></p>
 <p><em>Chekroud, A. M., Zotti, R. J., Shehzad, Z., Gueorguieva, R., Johnson, M. K., Trivedi, M. H., Cannon, T. D., Krystal, J. H., &amp; Corlett, P. R. (2016). Cross-trial prediction of treatment outcome in depression: A machine learning approach. The Lancet Psychiatry, 3(3), 243-250.</em></p>
-<div class="callout callout-style-default callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Breakout 3: Design a Prediction System
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In groups of 3-4 (about 10 minutes): choose one of the three applications above (suicide risk, digital phenotyping, or treatment selection) and design the system on paper. Specify its Task, Experience, and Performance measure. Then stress-test it: Whose data would it be trained on, and who might be missing? What kind of prediction errors would it make, and which errors are costly? How accurate would it need to be before you would let it inform real clinical decisions, and who is accountable when it is wrong? Each group shares its T/E/P and its single biggest concern.</p>
-</div>
-</div>
-<section id="were-you-already-doing-machine-learning" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="were-you-already-doing-machine-learning">Were You Already Doing Machine Learning?</h2>
+<section id="regression-is-machine-learning" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="regression-is-machine-learning">Regression is Machine Learning?</h2>
 </section>
 <p>Now apply Mitchell’s framework to something familiar: ordinary data analysis. Suppose we want to estimate a respondent’s depression score (the CES-D) from respondent characteristics.</p>
 <ul>
@@ -528,9 +733,27 @@ window.Quarto = {
 <p><span class="math display">\[
 \widehat{CESD} = b_0 + b_1 X_1 + b_2 X_2 + \dots + b_{20} X_{20} + e_i
 \]</span></p>
-<p>To evaluate performance, we use the fitted equation to obtain a predicted score for each person and compare it to the score we observed. Did we overestimate? Underestimate? Get it just right?</p>
-<p><strong>So, is regression a machine learning model?</strong> In our statistics training, we’ve typically been interested in the <em>significance</em> of regression coefficients: standard errors, p-values, confidence intervals, and theories about why X is related to Y. If we instead treat regression as a machine learning algorithm, the emphasis shifts. We <em>learn</em> patterns in one dataset and <em>evaluate</em> the model in another, and we care about generalizability: keeping the model from becoming too complex, and preventing it from learning idiosyncrasies of our sample that will not hold up in new data. A model that predicts perfectly in the learning phase might generalize terribly. Notice this is precisely Yarkoni &amp; Westfall’s diagnosis from earlier: a p-hacked regression is a model that learned its sample’s noise, evaluated on the data that produced it.</p>
-<p>Here is the punchline. Our regression model is just one choice of the function connecting predictors to outcome:</p>
+<section id="regression-as-an-explanatory-model" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="regression-as-an-explanatory-model">Regression as an Explanatory Model</h2>
+</section>
+<p>In our statistics training, we’ve typically been interested in:</p>
+<ul>
+<li>the <em>significance</em> of regression coefficients</li>
+<li>theories about why X is related to Y</li>
+</ul>
+<section id="regression-as-machine-learning" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="regression-as-machine-learning">Regression as Machine Learning</h2>
+</section>
+<p>If we instead treat regression as a machine learning algorithm, the emphasis shifts.</p>
+<ul>
+<li>Instead, we <em>learn</em> patterns in one dataset and</li>
+<li>We then <em>evaluate</em> the model in another</li>
+</ul>
+<p>In this way we care primarily about generalizability: keeping the model from becoming too complex, and preventing it from learning idiosyncrasies of our sample that will not hold up in new data.</p>
+<section id="extending-regression" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="extending-regression">Extending Regression</h2>
+</section>
+<p>From an ML perspective, our regression model is just one choice of the function connecting predictors to outcome:</p>
 <p><span class="math display">\[
 \widehat{CESD} = f(X) + e_i
 \]</span></p>
@@ -542,8 +765,64 @@ window.Quarto = {
 <li>sparse, where only some predictors matter</li>
 <li>black-box-ish and difficult to interpret</li>
 </ul>
-<p>And here is one more way to see the continuum. Our CES-D regression has 21 learned parameters: an intercept and 20 slopes. A frontier language model has on the order of a <em>trillion</em>. Both are instances of the same template: an outcome, a function of the inputs learned from experience, and error. What differs is how flexible <span class="math inline">\(f\)</span> is allowed to be and how much experience it learns from. In a real sense, that one equation is the entire course.</p>
-<p>If you have ever fit a regression, congratulations: you were doing machine learning. This course is about expanding your collection of <span class="math inline">\(f(X)\)</span>’s, and, just as importantly, learning the machinery for choosing among them honestly. That machinery is exactly what today’s reading prescribes for the field.</p>
+<p>And here is one more way to see the continuum. Our CES-D regression has 21 learned parameters: an intercept and 20 slopes. A frontier language model has on the order of a <em>trillion</em>.</p>
+<p><strong>If you have ever fit a regression, you were already doing machine learning. In this course we will extend your collection of <span class="math inline">\(f(X)\)</span>’s, and learn the machinery for choosing among them honestly.</strong></p>
+<section id="underfitting-and-overfitting" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="underfitting-and-overfitting">Underfitting and Overfitting</h2>
+</section>
+<p>In machine learning there are really two big ways things can go wrong from a technical perspective: underfitting and overfitting.</p>
+<p>You already know both these failure types from your own experiences:</p>
+<ul>
+<li><p><strong>Underfitting (model is too rigid).</strong> A stereotype is a one-rule model applied to everyone. It ignores the details of the person in front of you, so it misses real patterns. Fast, stable, and systematically wrong.</p></li>
+<li><p><strong>Overfitting (model is too flexible).</strong> A superstition built from one bad experience is a model trained on a single data point. It treats an accident as a law. Responsive, sensitive, and fooled by noise.</p></li>
+</ul>
+<p>Here is the same idea in data. The points below come from a simple curved pattern plus noise. Three models try to learn it (don’t worry about the code yet; focus on the picture):</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>) <span class="co"># makes the random draw repeatable</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x) <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">60</span>, <span class="at">sd =</span> <span class="fl">0.4</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x, y)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(d, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Too rigid: straight line"</span>), <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> <span class="fu">poly</span>(x, <span class="dv">15</span>), <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"Too flexible: 15th-degree polynomial"</span>), <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"About right: smooth curve"</span>), <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">name =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                     <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Too rigid: straight line"</span> <span class="ot">=</span> <span class="st">"#d62728"</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Too flexible: 15th-degree polynomial"</span> <span class="ot">=</span> <span class="st">"#ff7f0e"</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"About right: smooth curve"</span> <span class="ot">=</span> <span class="st">"#2ca02c"</span>)) <span class="sc">+</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="f02_explanation_prediction_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The straight line is underfitting: too rigid to see the real pattern.</p>
+<p>The wiggly polynomial is overfitting: it chases every individual point, including the noise.</p>
+<p>The middle curve captures the pattern and lets the noise go.</p>
+<p>On these 60 points, the wiggly model fits best. On the <em>next</em> 60 points, it loses badly, and that is the only comparison that counts.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Activity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>With a partner (about 3 minutes): When fitting a model how do we know if it is underfitting or overfitting? Can we tell from our own data?</p>
+</div>
+</div>
 <section id="two-flavors-of-machine-learning" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="two-flavors-of-machine-learning">Two Flavors of Machine Learning</h2>
 </section>
@@ -552,11 +831,62 @@ window.Quarto = {
 <li><strong>Supervised learning</strong>, where an outcome supervises the learning: regression problems (numeric outcomes) and classification problems (categorical outcomes)</li>
 <li><strong>Unsupervised learning</strong>, where there is no outcome to supervise: clustering and dimension reduction</li>
 </ul>
-<p>But what exactly are these, and how do they differ? That is the subject of this week’s pages in the Introduction to Machine Learning section, <em>Important Terms and Distinctions</em> and <em>Problem Classes in ML</em>, which pick up exactly here.</p>
+<p>But what exactly are these, and how do they differ?</p>
 
 
 
 </main> <!-- /main -->
+<script>
+// Floating page controls: text size and sidebar visibility.
+// Choices persist across pages via localStorage.
+(function () {
+  var KEY_SCALE = "psyc559-scale";
+  var KEY_SIDEBAR = "psyc559-sidebar-hidden";
+
+  function applyScale(s) {
+    var m = document.querySelector("main.content");
+    if (m) m.style.fontSize = s + "em";
+    localStorage.setItem(KEY_SCALE, s);
+  }
+
+  function applySidebar(hidden) {
+    document.body.classList.toggle("sidebar-hidden", hidden);
+    localStorage.setItem(KEY_SIDEBAR, hidden ? "1" : "0");
+    var btn = document.getElementById("psyc-sidebar-btn");
+    if (btn) btn.textContent = hidden ? "Show menu" : "Hide menu";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var scale = parseFloat(localStorage.getItem(KEY_SCALE));
+    if (!scale || isNaN(scale)) scale = 1;
+    var hidden = localStorage.getItem(KEY_SIDEBAR) === "1";
+
+    var bar = document.createElement("div");
+    bar.id = "psyc-controls";
+    bar.innerHTML =
+      '<button id="psyc-smaller" title="Smaller text">A-</button>' +
+      '<button id="psyc-larger" title="Larger text">A+</button>' +
+      '<button id="psyc-sidebar-btn" title="Show or hide the sidebar">Hide menu</button>';
+    document.body.appendChild(bar);
+
+    document.getElementById("psyc-smaller").addEventListener("click", function () {
+      scale = Math.max(0.7, Math.round((scale - 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-larger").addEventListener("click", function () {
+      scale = Math.min(2.0, Math.round((scale + 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-sidebar-btn").addEventListener("click", function () {
+      hidden = !hidden;
+      applySidebar(hidden);
+    });
+
+    applyScale(scale);
+    applySidebar(hidden);
+  });
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

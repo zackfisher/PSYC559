@@ -432,6 +432,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 
 </main> <!-- /main -->
+<script>
+// Floating page controls: text size and sidebar visibility.
+// Choices persist across pages via localStorage.
+(function () {
+  var KEY_SCALE = "psyc559-scale";
+  var KEY_SIDEBAR = "psyc559-sidebar-hidden";
+
+  function applyScale(s) {
+    var m = document.querySelector("main.content");
+    if (m) m.style.fontSize = s + "em";
+    localStorage.setItem(KEY_SCALE, s);
+  }
+
+  function applySidebar(hidden) {
+    document.body.classList.toggle("sidebar-hidden", hidden);
+    localStorage.setItem(KEY_SIDEBAR, hidden ? "1" : "0");
+    var btn = document.getElementById("psyc-sidebar-btn");
+    if (btn) btn.textContent = hidden ? "Show menu" : "Hide menu";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var scale = parseFloat(localStorage.getItem(KEY_SCALE));
+    if (!scale || isNaN(scale)) scale = 1;
+    var hidden = localStorage.getItem(KEY_SIDEBAR) === "1";
+
+    var bar = document.createElement("div");
+    bar.id = "psyc-controls";
+    bar.innerHTML =
+      '<button id="psyc-smaller" title="Smaller text">A-</button>' +
+      '<button id="psyc-larger" title="Larger text">A+</button>' +
+      '<button id="psyc-sidebar-btn" title="Show or hide the sidebar">Hide menu</button>';
+    document.body.appendChild(bar);
+
+    document.getElementById("psyc-smaller").addEventListener("click", function () {
+      scale = Math.max(0.7, Math.round((scale - 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-larger").addEventListener("click", function () {
+      scale = Math.min(2.0, Math.round((scale + 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-sidebar-btn").addEventListener("click", function () {
+      hidden = !hidden;
+      applySidebar(hidden);
+    });
+
+    applyScale(scale);
+    applySidebar(hidden);
+  });
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
