@@ -69,8 +69,23 @@ body.sidebar-hidden #quarto-sidebar {
   display: none !important;
 }
 
-body.sidebar-hidden main.content {
-  grid-column: body-start-outset / body-end-outset !important;
+/* Quarto's grid reserves fixed columns for the docked sidebar, so hiding it
+   is not enough: the leading columns must collapse for the content to move
+   left. This mirrors Quarto's own docked template with the sidebar columns
+   replaced by flexible space, keeping every named grid line intact so the
+   right-hand table of contents still lands in its column. */
+body.sidebar-hidden #quarto-content.page-columns {
+  grid-template-columns:
+    [screen-start] 1.5em
+    [screen-start-inset page-start page-start-inset body-start-outset body-start] 1fr
+    [body-content-start] minmax(500px, calc(1100px - 3em))
+    [body-content-end] 1.5em
+    [body-end] 50px
+    [body-end-outset] minmax(50px, 200px)
+    [page-end-inset] 50px
+    [page-end] 1fr
+    [screen-end-inset] 1.5em
+    [screen-end] !important;
 }
 
 @media print {
