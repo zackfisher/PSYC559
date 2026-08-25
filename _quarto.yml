@@ -8,13 +8,7 @@ project:
     - introduction.qmd
     - f01_welcome.qmd
     - f02_explanation_prediction.qmd
-    - r01_basics.qmd
-    - r02_packages.qmd
-    - r03_reading_data.qmd
-    - r04_dataframes.qmd
-    - r05_describing_data.qmd
-    - r06_visualizing_data.qmd
-    - r07_rmarkdown.qmd
+    - r_intro.qmd
     - week2_1.qmd
     - week2_2.qmd
     - week2_3.qmd
@@ -105,15 +99,7 @@ website:
         contents:
           - f01_welcome.qmd
           - f02_explanation_prediction.qmd
-      - section: "Introduction to R"
-        contents:
-          - r01_basics.qmd
-          - r02_packages.qmd
-          - r03_reading_data.qmd
-          - r04_dataframes.qmd
-          - r05_describing_data.qmd
-          - r06_visualizing_data.qmd
-          - r07_rmarkdown.qmd
+      - r_intro.qmd
       - section: "Introduction to Machine Learning"
         contents:
           - week2_1.qmd

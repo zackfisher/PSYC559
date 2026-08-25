@@ -22,6 +22,28 @@ hr {
    text-align: center;
 }
 
+/* Lower-level subsection headings (h4-h6): lightblue and a little larger.
+   The h2 and h3 levels already get their color from inline styles. */
+main.content h4,
+main.content h5,
+main.content h6 {
+  color: lightblue;
+}
+
+main.content h4 { font-size: 1.5rem; }
+main.content h5 { font-size: 1.32rem; }
+main.content h6 { font-size: 1.2rem; }
+
+/* Callout titles keep the callout's own styling */
+main.content .callout h2,
+main.content .callout h3,
+main.content .callout h4,
+main.content .callout h5,
+main.content .callout h6 {
+  color: inherit;
+  font-size: inherit;
+}
+
 /* Inline code inside headings: drop the light background chip and
    match the heading's color (fixes yellow-on-white section titles) */
 h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {

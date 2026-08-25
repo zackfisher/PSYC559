@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to R – PSYC559: Applied Machine Learning in Psychology</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-932b3046337f5c054d0c428ad2bce24f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r_intro.html">Introduction to R</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Table of Contents</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Course Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./f01_welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome to PSYC559</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./f02_explanation_prediction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">From Explanation to Prediction</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r_intro.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Introduction to R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction to Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Feature Engineering</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Regression Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Tree Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Dimension Reduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#basic-r-programming" id="toc-basic-r-programming" class="nav-link active" data-scroll-target="#basic-r-programming">Basic R Programming</a></li>
+  <li><a href="#setting-up-your-environment" id="toc-setting-up-your-environment" class="nav-link" data-scroll-target="#setting-up-your-environment">Setting Up Your Environment</a></li>
+  <li><a href="#r-packages" id="toc-r-packages" class="nav-link" data-scroll-target="#r-packages">R Packages</a></li>
+  <li><a href="#installing-r-packages" id="toc-installing-r-packages" class="nav-link" data-scroll-target="#installing-r-packages">Installing R Packages</a></li>
+  <li><a href="#using-r-packages" id="toc-using-r-packages" class="nav-link" data-scroll-target="#using-r-packages">Using R Packages</a></li>
+  <li><a href="#finding-useful-r-packages" id="toc-finding-useful-r-packages" class="nav-link" data-scroll-target="#finding-useful-r-packages">Finding Useful R Packages</a></li>
+  <li><a href="#reading-in-data" id="toc-reading-in-data" class="nav-link" data-scroll-target="#reading-in-data">Reading in Data</a></li>
+  <li><a href="#loading-data" id="toc-loading-data" class="nav-link" data-scroll-target="#loading-data">Loading Data</a></li>
+  <li><a href="#working-with-data-frames" id="toc-working-with-data-frames" class="nav-link" data-scroll-target="#working-with-data-frames">Working with Data Frames</a></li>
+  <li><a href="#data-frames" id="toc-data-frames" class="nav-link" data-scroll-target="#data-frames">Data Frames</a></li>
+  <li><a href="#selecting-a-variable-with" id="toc-selecting-a-variable-with" class="nav-link" data-scroll-target="#selecting-a-variable-with">Selecting a Variable with <code>$</code></a></li>
+  <li><a href="#subsetting-with-rows-columns" id="toc-subsetting-with-rows-columns" class="nav-link" data-scroll-target="#subsetting-with-rows-columns">Subsetting with <code>[rows, columns]</code></a></li>
+  <li><a href="#missing-values-na" id="toc-missing-values-na" class="nav-link" data-scroll-target="#missing-values-na">Missing Values: <code>NA</code></a></li>
+  <li><a href="#the-pipe-operator" id="toc-the-pipe-operator" class="nav-link" data-scroll-target="#the-pipe-operator">The Pipe Operator <code>%&gt;%</code></a></li>
+  <li><a href="#data-wrangling-with-dplyr" id="toc-data-wrangling-with-dplyr" class="nav-link" data-scroll-target="#data-wrangling-with-dplyr">Data Wrangling with <code>dplyr</code></a></li>
+  <li><a href="#two-dialects-one-language" id="toc-two-dialects-one-language" class="nav-link" data-scroll-target="#two-dialects-one-language">Two Dialects, One Language</a></li>
+  <li><a href="#describing-data-numerically" id="toc-describing-data-numerically" class="nav-link" data-scroll-target="#describing-data-numerically">Describing Data Numerically</a></li>
+  <li><a href="#numerical-summaries-of-data-frames" id="toc-numerical-summaries-of-data-frames" class="nav-link" data-scroll-target="#numerical-summaries-of-data-frames">Numerical Summaries of Data Frames</a></li>
+  <li><a href="#describing-data-visually" id="toc-describing-data-visually" class="nav-link" data-scroll-target="#describing-data-visually">Describing Data Visually</a></li>
+  <li><a href="#data-visualization" id="toc-data-visualization" class="nav-link" data-scroll-target="#data-visualization">Data Visualization</a></li>
+  <li><a href="#r-markdown-and-course-setup" id="toc-r-markdown-and-course-setup" class="nav-link" data-scroll-target="#r-markdown-and-course-setup">R Markdown and Course Setup</a></li>
+  <li><a href="#r-markdown" id="toc-r-markdown" class="nav-link" data-scroll-target="#r-markdown">R Markdown</a></li>
+  <li><a href="#install-the-course-packages" id="toc-install-the-course-packages" class="nav-link" data-scroll-target="#install-the-course-packages">Install the Course Packages</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction to R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="basic-r-programming" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="basic-r-programming">Basic R Programming</h2>
+</section>
+<section id="setting-up-your-environment" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="setting-up-your-environment">Setting Up Your Environment</h3>
+</section>
+<p>Before getting started we will need to install R and RStudio.</p>
+<section id="installing-r" class="level4">
+<h4 class="anchored" data-anchor-id="installing-r">Installing R</h4>
+<p>We can download R from CRAN, the <strong>c</strong>omprehensive <strong>R</strong> <strong>a</strong>rchive <strong>n</strong>etwork. CRAN is a server used to distribute R and R packages. If you don’t have R installed already you can do so <a href="https://cloud.r-project.org">here</a>.</p>
+</section>
+<section id="installing-rstudio" class="level4">
+<h4 class="anchored" data-anchor-id="installing-rstudio">Installing RStudio</h4>
+<p>With R installed, let’s go ahead and install RStudio. RStudio is a convenient IDE (integrated development environment) for R programming. <a href="https://posit.co/downloads/">Download</a> and install the RStudio Desktop client.</p>
+</section>
+<section id="helpful-links" class="level4">
+<h4 class="anchored" data-anchor-id="helpful-links">Helpful Links</h4>
+<p><em>From the <a href="https://education.rstudio.com/learn/beginner/">RStudio Education</a> page</em>:</p>
+<blockquote class="blockquote">
+<p>For beginner-friendly installation instructions, we recommend the free online ModernDive chapter <a href="https://moderndive.netlify.com/1-getting-started.html"><em>Getting Started with R and RStudio</em></a>. You may also enjoy the <a href="https://rladiessydney.org/courses/ryouwithme/basicbasics"><em>Basic Basics</em></a> lesson unit from <a href="https://rladiessydney.org">R-Ladies Sydney</a>, which provides an <a href="https://rladiessydney.org/courses/ryouwithme/01-basicbasics-1/">opinionated tour of RStudio</a> for new users and a <a href="https://rladiessydney.org/courses/ryouwithme/01-basicbasics-2/">step-by-step guide to installing and using R packages</a>.</p>
+</blockquote>
+</section>
+<section id="difference-between-r-and-rstudio" class="level4">
+<h4 class="anchored" data-anchor-id="difference-between-r-and-rstudio">Difference between R and RStudio</h4>
+<p>For those of you who may be unfamiliar with using an IDE, RStudio is simply a convenient way for us to interact with R. You can think of R as the engine, powering the car, and RStudio as the controls and dashboard for driving. For 559, we won’t interact directly with R very often, instead we will work with R directly from RStudio.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/R_vs_RStudio.png" class="img-fluid figure-img"></p>
+<figcaption>Image from https://moderndive.com/1-getting-started.html</figcaption>
+</figure>
+</div>
+</section>
+<section id="interacting-with-rstudio" class="level4">
+<h4 class="anchored" data-anchor-id="interacting-with-rstudio">Interacting with RStudio</h4>
+<p>After opening RStudio you will see something similar to the image below, where the application is divided into different <em>panes</em>. Each pane serves a different purpose:</p>
+<ul>
+<li><p><strong>Q1</strong>: contains scripts you are working from and sometimes data views</p></li>
+<li><p><strong>Q2</strong>: the console where you run the code</p></li>
+<li><p><strong>Q3</strong>: the environment page, code history, and build tools</p></li>
+<li><p><strong>Q4</strong>: files, plots, packages, help documentation</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/panes.jpg" class="img-fluid figure-img"></p>
+<figcaption>Image from https://rladiessydney.org/courses/01-basicbasics-1</figcaption>
+</figure>
+</div>
+</section>
+<section id="coding-in-rstudio" class="level4">
+<h4 class="anchored" data-anchor-id="coding-in-rstudio">Coding in RStudio</h4>
+<p>Let’s begin by using the Console to interact with R.</p>
+<section id="using-r-as-a-calculator" class="level5">
+<h5 class="anchored" data-anchor-id="using-r-as-a-calculator">Using R as a Calculator</h5>
+<p>We can use R as a basic calculator.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">/</span> <span class="dv">200</span> <span class="sc">*</span> <span class="dv">30</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.15</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>(<span class="dv">59</span> <span class="sc">+</span> <span class="dv">73</span> <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">/</span> <span class="dv">3</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 44.66667</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sin</span>(pi <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="creating-new-objects" class="level5">
+<h5 class="anchored" data-anchor-id="creating-new-objects">Creating New Objects</h5>
+<p>We can create new object using the assignment operator <code>&lt;-</code> as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> <span class="dv">4</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>secret_password <span class="ot">&lt;-</span> <span class="st">"password1234"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In R, object names are case sensitive, must start with a letter and can contain numbers, letters, underscores and periods.</p>
+<p>You can look at objects by typing their name into the console:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>secret_password</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "password1234"</code></pre>
+</div>
+</div>
+<p>If you type an object that hasn’t been defined yet you will get an error. For example,</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Secret_Password</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: object 'Secret_Password' not found</code></pre>
+</div>
+</div>
+</section>
+<section id="calling-functions-in-r" class="level5">
+<h5 class="anchored" data-anchor-id="calling-functions-in-r">Calling Functions in R</h5>
+<p>R has many built-in functions and you can also create your own. Functions can be used to perform tasks in R. They take <em>arguments</em> as inputs, and return <em>outputs</em>. Often you will supply arguments to a function, and it is also possible to use a function’s default values.</p>
+<p>For example, there is a function in R called <code>seq(from, to)</code> that creates a sequence of numbers starting at <code>from</code> and ending at <code>to</code>. For example, if we want a sequences of numbers <code>from = 10</code> all the way <code>to = 20</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can add comments to your code using the # key</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># anything after the # will not be run as code</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># note the code below is equivalent to seq(10, 20)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">10</span>, <span class="at">to =</span> <span class="dv">20</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 10 11 12 13 14 15 16 17 18 19 20</code></pre>
+</div>
+</div>
+<p>If you want to better understand what a specific function in R does you can always look to the documentation by typing a question mark before the function name in the R console, for example <code>?seq</code> or <code>?rep</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>?seq</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="adding-comments-to-your-code" class="level5">
+<h5 class="anchored" data-anchor-id="adding-comments-to-your-code">Adding Comments to Your Code</h5>
+<p>It is good practice to add comments to your code. These comments can help others understand what you are doing, and more importantly, they will help you remember what you did. How to effectively use comments is part of a larger discussion on how to write effective and understandable code, and if you’re interested take a look at different <a href="http://adv-r.had.co.nz/Style.html">style guides for R</a>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can add comments to your code using the # key </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># anything after the # will not be run as code </span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># note: the code below is equivalent to seq(10, 20)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">10</span>, <span class="at">to =</span> <span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 10 11 12 13 14 15 16 17 18 19 20</code></pre>
+</div>
+</div>
+</section>
+<section id="common-data-types-in-r" class="level5">
+<h5 class="anchored" data-anchor-id="common-data-types-in-r">Common Data Types in R</h5>
+<p>Four of the most common data types used in R are discussed below:</p>
+<ul>
+<li><p><strong>Numeric</strong>: The most common data type in R is numeric. A variable or a series will be stored as numeric data if the values are numbers or if the values contains decimals. For example, the following two series are stored as numeric by default:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># numeric series without decimals</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>num_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">2</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>num_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3 7 2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(num_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># numeric series with decimals</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>num_data_dec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">3.4</span>, <span class="fl">7.1</span>, <span class="fl">2.9</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>num_data_dec</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.4 7.1 2.9</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(num_data_dec)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+</div></li>
+<li><p><strong>Character</strong>: The data type character is used when storing text, known as strings in R. The simplest ways to store data under the character format is by using <code>""</code> around the piece of text:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>char <span class="ot">&lt;-</span> <span class="st">"some text"</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>char</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "some text"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(char)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+</div></li>
+<li><p><strong>Factor</strong>: Factor variables are a special case of character variables in the sense that it also contains text. However, factor variables are used when there are a limited number of unique character strings. It often represents a categorical variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>text <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"test1"</span>, <span class="st">"test2"</span>, <span class="st">"test1"</span>, <span class="st">"test1"</span>) <span class="co"># create a character vector</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(text) <span class="co"># to know the class</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>text_factor <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(text) <span class="co"># transform to factor</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(text_factor) <span class="co"># recheck the class</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "factor"</code></pre>
+</div>
+</div></li>
+<li><p><strong>Logical</strong>: A logical variable is a variable with only two values; <code>TRUE</code> or <code>FALSE</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>value1 <span class="ot">&lt;-</span> <span class="dv">7</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>value2 <span class="ot">&lt;-</span> <span class="dv">9</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># is value1 greater than value2?</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>greater <span class="ot">&lt;-</span> value1 <span class="sc">&gt;</span> value2</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>greater</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(greater)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "logical"</code></pre>
+</div>
+</div></li>
+</ul>
+<p>These are four common R data types you’ll see in this class. There are others not listed here. For more detailed descriptions of data types in R there are a number of helpful resources available online, including this discussion of <a href="https://resbaz.github.io/2014-r-materials/lessons/01-intro_r/data-structures.html">data structures</a>.</p>
+</section>
+<section id="making-decisions-with-ifelse" class="level5">
+<h5 class="anchored" data-anchor-id="making-decisions-with-ifelse">Making Decisions with <code>ifelse()</code></h5>
+<p>Often we want R to choose between two values based on a condition, such as labeling cases as “high” or “low” on some variable. The <code>ifelse()</code> function does this for an <em>entire vector at once</em>, following the pattern <code>ifelse(condition, value_if_true, value_if_false)</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">31</span>, <span class="dv">25</span>, <span class="dv">8</span>, <span class="dv">19</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(scores <span class="sc">&gt;</span> <span class="dv">20</span>, <span class="st">"high"</span>, <span class="st">"low"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "low"  "high" "high" "low"  "low" </code></pre>
+</div>
+</div>
+<p>Each element is checked against the condition and replaced with the appropriate label. This vectorized style is how we’ll create binary features and recode variables all semester, so it’s worth internalizing now.</p>
+<p><code>ifelse()</code> also works with numbers. For example, converting scores to a 0/1 indicator:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(scores <span class="sc">&gt;</span> <span class="dv">20</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0 1 1 0 0</code></pre>
+</div>
+</div>
+<p><em>A related tool you may know from other languages:</em> R also has <code>if (condition) { ... } else { ... }</code> blocks, which choose between two <em>chunks of code</em> rather than two values, and operate on a single condition rather than a whole vector. We’ll see them occasionally, but in data analysis <code>ifelse()</code> is the one you’ll reach for constantly.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">&gt;</span> <span class="dv">6</span>) {</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"x is greater than 6"</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"x is less than or equal to 6"</span>)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "x is less than or equal to 6"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="r-packages" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="r-packages">R Packages</h2>
+</section>
+<section id="installing-r-packages" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="installing-r-packages">Installing R Packages</h3>
+</section>
+<p>One of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the <code>ggplot2</code> package for plotting and visualizing data and the <code>psych</code> package for describing data numerically.</p>
+<p>To install R packages you can use the <code>install.packages()</code> function directly in the console as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>or you can do so from the Packages tab of the Files pane in RStudio using the following steps:</p>
+<ol type="1">
+<li><p>Click on the “Packages” tab.</p></li>
+<li><p>Click on “Install” next to Update.</p></li>
+<li><p>Type the name of the package under “Packages (separate multiple with space or comma):” In this case, type <code>ggplot2</code>.</p></li>
+<li><p>Click “Install.”</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/install_packages_easy_way.png" class="img-fluid figure-img"></p>
+<figcaption>Install packages using RStudio</figcaption>
+</figure>
+</div>
+<section id="using-r-packages" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="using-r-packages">Using R Packages</h3>
+</section>
+<p>Once a package is installed you can load it into your environment using the <code>library()</code> function. Once loaded you have access to all the R functions supplied by that package.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="finding-useful-r-packages" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="finding-useful-r-packages">Finding Useful R Packages</h3>
+</section>
+<p>There are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the <a href="https://cran.r-project.org/web/views/">CRAN Task Views</a>. For example, there is an interesting <a href="https://cran.r-project.org/web/views/MachineLearning.html">Task View for Machine Learning</a> that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the S<a href="https://cran.r-project.org/web/views/SportsAnalytics.html">ports Analytics Task View</a> there is a <a href="https://cran.r-project.org/web/packages/f1dataR/index.html"><code>f1dataR</code></a> package that provides historical data from the beginning of Formula 1.</p>
+<section id="reading-in-data" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="reading-in-data">Reading in Data</h2>
+</section>
+<section id="loading-data" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="loading-data">Loading Data</h3>
+</section>
+<p>One of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.</p>
+<p>By reading in data we are generally referring to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabular object where columns represent variables and rows represent cases. This is not always the case but covers the most basic use case.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tabular.png" class="img-fluid figure-img"></p>
+<figcaption>Example of tabular data</figcaption>
+</figure>
+</div>
+<p>Many different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Download the Data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The examples in this section use a marketing dataset. Download it here: <a href="data/ifood_df.csv">ifood_df.csv</a> (right-click → “Save Link As…” if it opens in your browser). Save it in the same folder where you keep your R scripts for this class.</p>
+</div>
+</div>
+<section id="where-is-your-data-file-paths-in-r" class="level4">
+<h4 class="anchored" data-anchor-id="where-is-your-data-file-paths-in-r">Where Is Your Data File? Paths in R</h4>
+<p>To read a file into R, R needs to know where the file lives on your computer. The most explicit way to say so is a <strong>full path</strong>: the complete address of the file, starting from the root of your hard drive. For example, on my computer the path to the marketing data looks like this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/zacharyfisher/Dropbox/GitHub/proj_559/PSYC559-Site/data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Your path will look different, since it depends on your username, operating system, and where you saved the file. A convenient way to find a file’s full path is with <code>file.choose()</code>, which opens a file picker and prints the path of whatever you select:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.choose</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="a-better-habit-keep-data-next-to-your-script" class="level4">
+<h4 class="anchored" data-anchor-id="a-better-habit-keep-data-next-to-your-script">A Better Habit: Keep Data Next to Your Script</h4>
+<p>Full paths work, but they are fragile: the code breaks the moment a folder gets moved or renamed, and it can never run on anyone else’s computer (including mine, when I am trying to help you debug or grade your work).</p>
+<p>The habit we will use in this class: <strong>keep your data file in the same folder as the script (or R Markdown document) that uses it</strong>, and refer to the file by name:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is called a <strong>relative path</strong>: R looks for the file relative to where it is currently working. When you knit an R Markdown document, R automatically works from the folder where the <code>.Rmd</code> file lives, so if the data sits next to your document (or in a <code>data/</code> subfolder, as above), everything just works on your machine, on your groupmate’s, and on mine.</p>
+<p>If you are working in a plain R script and R can’t find your file, check where R is currently looking with:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>and make sure your data is in that folder (or open your script through RStudio’s <strong>File</strong> menu, which usually sets things up correctly).</p>
+</section>
+<section id="looking-at-the-data" class="level4">
+<h4 class="anchored" data-anchor-id="looking-at-the-data">Looking at the Data</h4>
+<p>Once the .csv file is loaded you can look at it using the <code>View()</code> function</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>or simply examine the first few cases using <code>head()</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts
+1  58138       0        0      58      635        88             546
+2  46344       1        1      38       11         1               6
+3  71613       0        0      26      426        49             127
+4  26646       1        0      26       11         4              20
+5  58293       1        0      94      173        43             118
+6  62513       0        1      16      520        42              98
+  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases
+1             172               88           88                 3
+2               2                1            6                 2
+3             111               21           42                 1
+4              10                3            5                 2
+5              46               27           15                 5
+6               0               42           14                 2
+  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth
+1               8                  10                 4                 7
+2               1                   1                 2                 5
+3               8                   2                10                 4
+4               2                   0                 4                 6
+5               5                   3                 6                 5
+6               6                   4                10                 6
+  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain
+1            0            0            0            0            0        0
+2            0            0            0            0            0        0
+3            0            0            0            0            0        0
+4            0            0            0            0            0        0
+5            0            0            0            0            0        0
+6            0            0            0            0            0        0
+  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced
+1             3        11        1  63          2822                0
+2             3        11        0  66          2272                0
+3             3        11        0  55          2471                0
+4             3        11        0  36          2298                0
+5             3        11        0  39          2320                0
+6             3        11        0  53          2452                0
+  marital_Married marital_Single marital_Together marital_Widow
+1               0              1                0             0
+2               0              1                0             0
+3               0              0                1             0
+4               0              0                1             0
+5               1              0                0             0
+6               0              0                1             0
+  education_2n.Cycle education_Basic education_Graduation education_Master
+1                  0               0                    1                0
+2                  0               0                    1                0
+3                  0               0                    1                0
+4                  0               0                    1                0
+5                  0               0                    0                0
+6                  0               0                    0                1
+  education_PhD MntTotal MntRegularProds AcceptedCmpOverall
+1             0     1529            1441                  0
+2             0       21              15                  0
+3             0      734             692                  0
+4             0       48              43                  0
+5             1      407             392                  0
+6             0      702             688                  0</code></pre>
+</div>
+</div>
+</section>
+<section id="working-with-data-frames" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="working-with-data-frames">Working with Data Frames</h2>
+</section>
+<section id="data-frames" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="data-frames">Data Frames</h3>
+</section>
+<p>Nearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we’ll practice pulling pieces out of a data frame, creating new variables, and chaining operations together. These are the skills you’ll use in every single lab and assignment.</p>
+<p>Let’s read in the marketing data we saw previously (download: <a href="data/ifood_df.csv">ifood_df.csv</a>).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A few functions are useful for getting oriented whenever you load a new dataset:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)      <span class="co"># number of rows and columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2205   39</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(df)     <span class="co"># number of rows (cases)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2205</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df)    <span class="co"># variable names</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Income"               "Kidhome"              "Teenhome"            
+ [4] "Recency"              "MntWines"             "MntFruits"           
+ [7] "MntMeatProducts"      "MntFishProducts"      "MntSweetProducts"    
+[10] "MntGoldProds"         "NumDealsPurchases"    "NumWebPurchases"     
+[13] "NumCatalogPurchases"  "NumStorePurchases"    "NumWebVisitsMonth"   
+[16] "AcceptedCmp3"         "AcceptedCmp4"         "AcceptedCmp5"        
+[19] "AcceptedCmp1"         "AcceptedCmp2"         "Complain"            
+[22] "Z_CostContact"        "Z_Revenue"            "Response"            
+[25] "Age"                  "Customer_Days"        "marital_Divorced"    
+[28] "marital_Married"      "marital_Single"       "marital_Together"    
+[31] "marital_Widow"        "education_2n.Cycle"   "education_Basic"     
+[34] "education_Graduation" "education_Master"     "education_PhD"       
+[37] "MntTotal"             "MntRegularProds"      "AcceptedCmpOverall"  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df[, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>])  <span class="co"># first few rows of the first 6 columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Kidhome Teenhome Recency MntWines MntFruits
+1  58138       0        0      58      635        88
+2  46344       1        1      38       11         1
+3  71613       0        0      26      426        49
+4  26646       1        0      26       11         4
+5  58293       1        0      94      173        43
+6  62513       0        1      16      520        42</code></pre>
+</div>
+</div>
+<section id="selecting-a-variable-with" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="selecting-a-variable-with">Selecting a Variable with <code>$</code></h3>
+</section>
+<p>The <code>$</code> operator pulls a single variable out of a data frame as a vector. This is one of the most common operations in R, and you will see it constantly in this course.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(df<span class="sc">$</span>Income)    <span class="co"># average household income</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 51622.09</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>Complain) <span class="co"># how many customers lodged a complaint?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   0    1 
+2185   20 </code></pre>
+</div>
+</div>
+<p>We can also use <code>$</code> to create a new variable in the data frame. For example, the number of children at home is split across two variables, <code>Kidhome</code> and <code>Teenhome</code>. Let’s combine them:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>TotalKids <span class="ot">&lt;-</span> df<span class="sc">$</span>Kidhome <span class="sc">+</span> df<span class="sc">$</span>Teenhome</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(df<span class="sc">$</span>TotalKids)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   0    1    2    3 
+ 628 1112  415   50 </code></pre>
+</div>
+</div>
+<section id="subsetting-with-rows-columns" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="subsetting-with-rows-columns">Subsetting with <code>[rows, columns]</code></h3>
+</section>
+<p>Square brackets let us take a subset of a data frame using the pattern <code>df[rows, columns]</code>. Leaving either slot empty means “keep everything.”</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]                        <span class="co"># first five rows, all columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts
+1  58138       0        0      58      635        88             546
+2  46344       1        1      38       11         1               6
+3  71613       0        0      26      426        49             127
+4  26646       1        0      26       11         4              20
+5  58293       1        0      94      173        43             118
+  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases
+1             172               88           88                 3
+2               2                1            6                 2
+3             111               21           42                 1
+4              10                3            5                 2
+5              46               27           15                 5
+  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth
+1               8                  10                 4                 7
+2               1                   1                 2                 5
+3               8                   2                10                 4
+4               2                   0                 4                 6
+5               5                   3                 6                 5
+  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain
+1            0            0            0            0            0        0
+2            0            0            0            0            0        0
+3            0            0            0            0            0        0
+4            0            0            0            0            0        0
+5            0            0            0            0            0        0
+  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced
+1             3        11        1  63          2822                0
+2             3        11        0  66          2272                0
+3             3        11        0  55          2471                0
+4             3        11        0  36          2298                0
+5             3        11        0  39          2320                0
+  marital_Married marital_Single marital_Together marital_Widow
+1               0              1                0             0
+2               0              1                0             0
+3               0              0                1             0
+4               0              0                1             0
+5               1              0                0             0
+  education_2n.Cycle education_Basic education_Graduation education_Master
+1                  0               0                    1                0
+2                  0               0                    1                0
+3                  0               0                    1                0
+4                  0               0                    1                0
+5                  0               0                    0                0
+  education_PhD MntTotal MntRegularProds AcceptedCmpOverall TotalKids
+1             0     1529            1441                  0         0
+2             0       21              15                  0         2
+3             0      734             692                  0         0
+4             0       48              43                  0         1
+5             1      407             392                  0         1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df[, <span class="fu">c</span>(<span class="st">"Income"</span>, <span class="st">"Age"</span>)])   <span class="co"># all rows, two named columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Age
+1  58138  63
+2  46344  66
+3  71613  55
+4  26646  36
+5  58293  39
+6  62513  53</code></pre>
+</div>
+</div>
+<p>We can also select rows using a logical condition. For example, customers with incomes above $75,000:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>high_income <span class="ot">&lt;-</span> df[df<span class="sc">$</span>Income <span class="sc">&gt;</span> <span class="dv">75000</span>, ]</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(high_income)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 350</code></pre>
+</div>
+</div>
+<p>Read that as: “keep the rows of <code>df</code> where <code>df$Income &gt; 75000</code> is <code>TRUE</code>, and all columns.”</p>
+<section id="missing-values-na" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="missing-values-na">Missing Values: <code>NA</code></h3>
+</section>
+<p>Real data is rarely complete. R represents a missing value with <code>NA</code> (“not available”), and <code>NA</code> behaves differently than you might expect: most computations involving a missing value return a missing value.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">7</span>, <span class="cn">NA</span>, <span class="dv">2</span>)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<p>That <code>NA</code> answer is R being honest: it can’t know the mean of numbers it doesn’t have. If you’ve decided that ignoring the missing values is appropriate, say so explicitly with <code>na.rm = TRUE</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.333333</code></pre>
+</div>
+</div>
+<p>To find missing values, use <code>is.na()</code>. Asking <code>x == NA</code> does <em>not</em> work, because comparing anything to an unknown is also unknown:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(x)        <span class="co"># which entries are missing?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE  TRUE FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(x))   <span class="co"># how many are missing?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p>For a whole data frame, <code>colSums(is.na(df))</code> shows the missing count per variable. Our marketing data happens to be a cleaned dataset:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(df))  <span class="co"># no missing values here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>Real psychological data will rarely be this kind; the General Social Survey data in your first assignment certainly won’t be. Handling missingness <em>well</em> is a modeling topic we’ll treat properly in the feature engineering unit; for now, the essential skills are noticing missing values and understanding why <code>NA</code>s propagate through your calculations.</p>
+<section id="the-pipe-operator" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="the-pipe-operator">The Pipe Operator <code>%&gt;%</code></h3>
+</section>
+<p>As our analyses grow, we often want to perform several operations in sequence. The <strong>pipe</strong> operator <code>%&gt;%</code> takes the object on its left and passes it to the function on its right. These two lines do exactly the same thing:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])      <span class="co"># without the pipe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Kidhome Teenhome Recency
+1  58138       0        0      58
+2  46344       1        1      38
+3  71613       0        0      26
+4  26646       1        0      26
+5  58293       1        0      94
+6  62513       0        1      16</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>df[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>] <span class="sc">%&gt;%</span> <span class="fu">head</span>() <span class="co"># with the pipe</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Kidhome Teenhome Recency
+1  58138       0        0      58
+2  46344       1        1      38
+3  71613       0        0      26
+4  26646       1        0      26
+5  58293       1        0      94
+6  62513       0        1      16</code></pre>
+</div>
+</div>
+<p>That looks like a small change, but pipes let us read a chain of steps top-to-bottom like a recipe, instead of inside-out. You will see <code>%&gt;%</code> throughout the course materials, especially once we start building preprocessing and modeling pipelines.</p>
+<p><em>Note:</em> newer versions of R also have a built-in pipe written <code>|&gt;</code>. It works the same way for our purposes, and you may see either form in the wild.</p>
+<section id="data-wrangling-with-dplyr" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="data-wrangling-with-dplyr">Data Wrangling with <code>dplyr</code></h3>
+</section>
+<p>The <code>dplyr</code> package (loaded above) provides a set of verbs for working with data frames that pair naturally with the pipe. The four you’ll see most often:</p>
+<ul>
+<li><p><code>select()</code>: choose columns</p></li>
+<li><p><code>filter()</code>: choose rows matching a condition</p></li>
+<li><p><code>mutate()</code>: create new variables</p></li>
+<li><p><code>summarise()</code>: collapse rows into summary values (often with <code>group_by()</code>)</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">select</span>(Income, Age, MntWines) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income Age MntWines
+1  58138  63      635
+2  46344  66       11
+3  71613  55      426
+4  26646  36       11
+5  58293  39      173
+6  62513  53      520</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Income <span class="sc">&gt;</span> <span class="dv">75000</span>) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 350</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TotalKids =</span> Kidhome <span class="sc">+</span> Teenhome) <span class="sc">%&gt;%</span></span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Income, TotalKids) <span class="sc">%&gt;%</span></span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Income TotalKids
+1  58138         0
+2  46344         2
+3  71613         0
+4  26646         1
+5  58293         1
+6  62513         1</code></pre>
+</div>
+</div>
+<p>Chaining verbs together is where this style shines. For example: among customers who did and did not complain, what is the average wine spending and group size?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Complain) <span class="sc">%&gt;%</span></span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_wine =</span> <span class="fu">mean</span>(MntWines),</span>
+<span id="cb90-5"><a href="#cb90-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>()</span>
+<span id="cb90-6"><a href="#cb90-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  Complain avg_wine     n
+     &lt;int&gt;    &lt;dbl&gt; &lt;int&gt;
+1        0     307.  2185
+2        1     177.    20</code></pre>
+</div>
+</div>
+<section id="two-dialects-one-language" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="two-dialects-one-language">Two Dialects, One Language</h3>
+</section>
+<p>Base R subsetting (<code>$</code>, <code>[ , ]</code>) and <code>dplyr</code> verbs are two ways of doing the same things, and this course uses both: base R for quick one-liners, <code>dplyr</code> chains for multi-step preprocessing. You should be comfortable <em>reading</em> both. When writing your own code, use whichever feels clearer to you.</p>
+<section id="describing-data-numerically" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="describing-data-numerically">Describing Data Numerically</h2>
+</section>
+<section id="numerical-summaries-of-data-frames" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="numerical-summaries-of-data-frames">Numerical Summaries of Data Frames</h3>
+</section>
+<p>Once you have read in a data frame it can be useful to know how the variables are understood by R. For example, let’s look at some <a href="https://www.kaggle.com/datasets/jackdaoud/marketing-data" class="uri">Kaggle Marketing Analytics Data</a>. You can download the raw data <a href="https://github.com/nailson/ifood-data-business-analyst-test">here</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/dictionary.png" class="img-fluid figure-img"></p>
+<figcaption>Data dictionary for marketing data</figcaption>
+</figure>
+</div>
+<section id="read-in-marketing-data" class="level4">
+<h4 class="anchored" data-anchor-id="read-in-marketing-data">Read in Marketing Data</h4>
+<p>Let’s read in the data using the <code>read.csv()</code> function. (If you don’t have the file yet, download it here: <a href="data/ifood_df.csv">ifood_df.csv</a>, and remember our habit: keep it next to your script.)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/ifood_df.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="install-and-load-psych-package" class="level4">
+<h4 class="anchored" data-anchor-id="install-and-load-psych-package">Install and Load <code>psych</code> Package</h4>
+<p>Once we know the data has been read into R we can look at how R understands the data file using the structure function <code>str()</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   2205 obs. of  39 variables:
+ $ Income              : num  58138 46344 71613 26646 58293 ...
+ $ Kidhome             : int  0 1 0 1 1 0 0 1 1 1 ...
+ $ Teenhome            : int  0 1 0 0 0 1 1 0 0 1 ...
+ $ Recency             : int  58 38 26 26 94 16 34 32 19 68 ...
+ $ MntWines            : int  635 11 426 11 173 520 235 76 14 28 ...
+ $ MntFruits           : int  88 1 49 4 43 42 65 10 0 0 ...
+ $ MntMeatProducts     : int  546 6 127 20 118 98 164 56 24 6 ...
+ $ MntFishProducts     : int  172 2 111 10 46 0 50 3 3 1 ...
+ $ MntSweetProducts    : int  88 1 21 3 27 42 49 1 3 1 ...
+ $ MntGoldProds        : int  88 6 42 5 15 14 27 23 2 13 ...
+ $ NumDealsPurchases   : int  3 2 1 2 5 2 4 2 1 1 ...
+ $ NumWebPurchases     : int  8 1 8 2 5 6 7 4 3 1 ...
+ $ NumCatalogPurchases : int  10 1 2 0 3 4 3 0 0 0 ...
+ $ NumStorePurchases   : int  4 2 10 4 6 10 7 4 2 0 ...
+ $ NumWebVisitsMonth   : int  7 5 4 6 5 6 6 8 9 20 ...
+ $ AcceptedCmp3        : int  0 0 0 0 0 0 0 0 0 1 ...
+ $ AcceptedCmp4        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ AcceptedCmp5        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ AcceptedCmp1        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ AcceptedCmp2        : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ Complain            : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ Z_CostContact       : int  3 3 3 3 3 3 3 3 3 3 ...
+ $ Z_Revenue           : int  11 11 11 11 11 11 11 11 11 11 ...
+ $ Response            : int  1 0 0 0 0 0 0 0 1 0 ...
+ $ Age                 : int  63 66 55 36 39 53 49 35 46 70 ...
+ $ Customer_Days       : int  2822 2272 2471 2298 2320 2452 2752 2576 2547 2267 ...
+ $ marital_Divorced    : int  0 0 0 0 0 0 1 0 0 0 ...
+ $ marital_Married     : int  0 0 0 0 1 0 0 1 0 0 ...
+ $ marital_Single      : int  1 1 0 0 0 0 0 0 0 0 ...
+ $ marital_Together    : int  0 0 1 1 0 1 0 0 1 1 ...
+ $ marital_Widow       : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ education_2n.Cycle  : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ education_Basic     : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ education_Graduation: int  1 1 1 1 0 0 1 0 0 0 ...
+ $ education_Master    : int  0 0 0 0 0 1 0 0 0 0 ...
+ $ education_PhD       : int  0 0 0 0 1 0 0 1 1 1 ...
+ $ MntTotal            : int  1529 21 734 48 407 702 563 146 44 36 ...
+ $ MntRegularProds     : int  1441 15 692 43 392 688 536 123 42 23 ...
+ $ AcceptedCmpOverall  : int  0 0 0 0 0 0 0 0 0 1 ...</code></pre>
+</div>
+</div>
+<p>The <code>psych</code> package in R provides some useful function for describing data. Let’s install <code>psyc</code>, load the package, and look at our data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"psych"</span>) <span class="co"># install the package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"psych"</span>) <span class="co"># load the library</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="describe-the-data" class="level4">
+<h4 class="anchored" data-anchor-id="describe-the-data">Describe the Data</h4>
+<p>Now let’s use the <code>describe()</code> function from <code>psych</code> to look at our marketing data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(df) <span class="co"># describe our marketing data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     vars    n     mean       sd median  trimmed      mad  min
+Income                  1 2205 51622.09 20713.06  51287 51625.17 24408.04 1730
+Kidhome                 2 2205     0.44     0.54      0     0.40     0.00    0
+Teenhome                3 2205     0.51     0.54      0     0.48     0.00    0
+Recency                 4 2205    49.01    28.93     49    49.00    37.06    0
+MntWines                5 2205   306.16   337.49    178   251.45   249.08    0
+MntFruits               6 2205    26.40    39.78      8    17.12    11.86    0
+MntMeatProducts         7 2205   165.31   217.78     68   119.54    88.96    0
+MntFishProducts         8 2205    37.76    54.82     12    25.31    17.79    0
+MntSweetProducts        9 2205    27.13    41.13      8    17.48    11.86    0
+MntGoldProds           10 2205    44.06    51.74     25    33.57    28.17    0
+NumDealsPurchases      11 2205     2.32     1.89      2     1.97     1.48    0
+NumWebPurchases        12 2205     4.10     2.74      4     3.83     2.97    0
+NumCatalogPurchases    13 2205     2.65     2.80      2     2.22     2.97    0
+NumStorePurchases      14 2205     5.82     3.24      5     5.52     2.97    0
+NumWebVisitsMonth      15 2205     5.34     2.41      6     5.41     2.97    0
+AcceptedCmp3           16 2205     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp4           17 2205     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp5           18 2205     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp1           19 2205     0.06     0.25      0     0.00     0.00    0
+AcceptedCmp2           20 2205     0.01     0.12      0     0.00     0.00    0
+Complain               21 2205     0.01     0.09      0     0.00     0.00    0
+Z_CostContact          22 2205     3.00     0.00      3     3.00     0.00    3
+Z_Revenue              23 2205    11.00     0.00     11    11.00     0.00   11
+Response               24 2205     0.15     0.36      0     0.06     0.00    0
+Age                    25 2205    51.10    11.71     50    51.04    13.34   24
+Customer_Days          26 2205  2512.72   202.56   2515  2513.15   259.46 2159
+marital_Divorced       27 2205     0.10     0.31      0     0.01     0.00    0
+marital_Married        28 2205     0.39     0.49      0     0.36     0.00    0
+marital_Single         29 2205     0.22     0.41      0     0.15     0.00    0
+marital_Together       30 2205     0.26     0.44      0     0.20     0.00    0
+marital_Widow          31 2205     0.03     0.18      0     0.00     0.00    0
+education_2n.Cycle     32 2205     0.09     0.29      0     0.00     0.00    0
+education_Basic        33 2205     0.02     0.15      0     0.00     0.00    0
+education_Graduation   34 2205     0.50     0.50      1     0.51     0.00    0
+education_Master       35 2205     0.17     0.37      0     0.08     0.00    0
+education_PhD          36 2205     0.22     0.41      0     0.15     0.00    0
+MntTotal               37 2205   562.76   575.94    343   482.34   459.61    4
+MntRegularProds        38 2205   518.71   553.85    288   436.84   400.30 -283
+AcceptedCmpOverall     39 2205     0.30     0.68      0     0.13     0.00    0
+                        max  range  skew kurtosis     se
+Income               113734 112004  0.01    -0.85 441.10
+Kidhome                   2      2  0.63    -0.79   0.01
+Teenhome                  2      2  0.40    -0.99   0.01
+Recency                  99     99  0.00    -1.20   0.62
+MntWines               1493   1493  1.17     0.57   7.19
+MntFruits               199    199  2.10     4.03   0.85
+MntMeatProducts        1725   1725  1.82     3.23   4.64
+MntFishProducts         259    259  1.91     3.04   1.17
+MntSweetProducts        262    262  2.10     4.06   0.88
+MntGoldProds            321    321  1.83     3.13   1.10
+NumDealsPurchases        15     15  2.31     8.16   0.04
+NumWebPurchases          27     27  1.20     4.08   0.06
+NumCatalogPurchases      28     28  1.37     3.19   0.06
+NumStorePurchases        13     13  0.71    -0.64   0.07
+NumWebVisitsMonth        20     20  0.23     1.89   0.05
+AcceptedCmp3              1      1  3.25     8.60   0.01
+AcceptedCmp4              1      1  3.24     8.52   0.01
+AcceptedCmp5              1      1  3.28     8.76   0.01
+AcceptedCmp1              1      1  3.55    10.58   0.01
+AcceptedCmp2              1      1  8.39    68.45   0.00
+Complain                  1      1 10.35   105.16   0.00
+Z_CostContact             3      0   NaN      NaN   0.00
+Z_Revenue                11      0   NaN      NaN   0.00
+Response                  1      1  1.95     1.80   0.01
+Age                      80     56  0.09    -0.80   0.25
+Customer_Days          2858    699 -0.02    -1.20   4.31
+marital_Divorced          1      1  2.59     4.70   0.01
+marital_Married           1      1  0.46    -1.79   0.01
+marital_Single            1      1  1.38    -0.10   0.01
+marital_Together          1      1  1.11    -0.77   0.01
+marital_Widow             1      1  5.10    24.02   0.00
+education_2n.Cycle        1      1  2.87     6.23   0.01
+education_Basic           1      1  6.15    35.82   0.00
+education_Graduation      1      1 -0.02    -2.00   0.01
+education_Master          1      1  1.80     1.25   0.01
+education_PhD             1      1  1.38    -0.09   0.01
+MntTotal               2491   2487  0.91    -0.22  12.27
+MntRegularProds        2458   2741  0.98    -0.06  11.79
+AcceptedCmpOverall        4      4  2.72     7.94   0.01</code></pre>
+</div>
+</div>
+</section>
+<section id="describe-the-data-by-group" class="level4">
+<h4 class="anchored" data-anchor-id="describe-the-data-by-group">Describe the Data by Group</h4>
+<p>We may also be interested in describing the data based on a specific grouping factor. For example, let’s look at our summaries based on whether or not a customer has lodged a formal complaint.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describeBy</span>(df, <span class="at">group =</span> <span class="st">"Complain"</span>) <span class="co"># describe our marketing data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Descriptive statistics by group 
+Complain: 0
+                     vars    n     mean       sd median  trimmed      mad  min
+Income                  1 2185 51676.55 20719.18  51369 51687.17 24529.62 1730
+Kidhome                 2 2185     0.44     0.54      0     0.40     0.00    0
+Teenhome                3 2185     0.51     0.54      0     0.48     0.00    0
+Recency                 4 2185    48.99    28.95     49    48.98    37.06    0
+MntWines                5 2185   307.35   338.23    179   252.68   250.56    0
+MntFruits               6 2185    26.42    39.80      8    17.13    11.86    0
+MntMeatProducts         7 2185   165.75   218.21     68   119.91    88.96    0
+MntFishProducts         8 2185    37.86    54.95     12    25.37    17.79    0
+MntSweetProducts        9 2185    27.21    41.21      8    17.55    11.86    0
+MntGoldProds           10 2185    44.21    51.81     25    33.74    28.17    0
+NumDealsPurchases      11 2185     2.32     1.89      2     1.96     1.48    0
+NumWebPurchases        12 2185     4.10     2.74      4     3.83     2.97    0
+NumCatalogPurchases    13 2185     2.65     2.80      2     2.22     2.97    0
+NumStorePurchases      14 2185     5.83     3.24      5     5.52     2.97    0
+NumWebVisitsMonth      15 2185     5.33     2.41      6     5.41     2.97    0
+AcceptedCmp3           16 2185     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp4           17 2185     0.08     0.26      0     0.00     0.00    0
+AcceptedCmp5           18 2185     0.07     0.26      0     0.00     0.00    0
+AcceptedCmp1           19 2185     0.06     0.25      0     0.00     0.00    0
+AcceptedCmp2           20 2185     0.01     0.12      0     0.00     0.00    0
+Complain               21 2185     0.00     0.00      0     0.00     0.00    0
+Z_CostContact          22 2185     3.00     0.00      3     3.00     0.00    3
+Z_Revenue              23 2185    11.00     0.00     11    11.00     0.00   11
+Response               24 2185     0.15     0.36      0     0.06     0.00    0
+Age                    25 2185    51.09    11.68     50    51.03    13.34   24
+Customer_Days          26 2185  2512.02   202.56   2514  2512.30   257.97 2159
+marital_Divorced       27 2185     0.10     0.31      0     0.01     0.00    0
+marital_Married        28 2185     0.39     0.49      0     0.36     0.00    0
+marital_Single         29 2185     0.22     0.41      0     0.14     0.00    0
+marital_Together       30 2185     0.26     0.44      0     0.20     0.00    0
+marital_Widow          31 2185     0.03     0.18      0     0.00     0.00    0
+education_2n.Cycle     32 2185     0.09     0.29      0     0.00     0.00    0
+education_Basic        33 2185     0.02     0.16      0     0.00     0.00    0
+education_Graduation   34 2185     0.50     0.50      1     0.50     0.00    0
+education_Master       35 2185     0.17     0.37      0     0.08     0.00    0
+education_PhD          36 2185     0.22     0.41      0     0.15     0.00    0
+MntTotal               37 2185   564.58   576.90    344   484.26   461.09    4
+MntRegularProds        38 2185   520.37   554.76    288   438.58   400.30 -283
+AcceptedCmpOverall     39 2185     0.30     0.68      0     0.14     0.00    0
+                        max  range  skew kurtosis     se
+Income               113734 112004  0.01    -0.85 443.25
+Kidhome                   2      2  0.64    -0.79   0.01
+Teenhome                  2      2  0.40    -1.00   0.01
+Recency                  99     99  0.00    -1.20   0.62
+MntWines               1493   1493  1.16     0.55   7.24
+MntFruits               199    199  2.10     4.05   0.85
+MntMeatProducts        1725   1725  1.81     3.22   4.67
+MntFishProducts         259    259  1.91     3.03   1.18
+MntSweetProducts        262    262  2.09     4.05   0.88
+MntGoldProds            321    321  1.83     3.11   1.11
+NumDealsPurchases        15     15  2.31     8.15   0.04
+NumWebPurchases          27     27  1.20     4.13   0.06
+NumCatalogPurchases      28     28  1.37     3.22   0.06
+NumStorePurchases        13     13  0.70    -0.64   0.07
+NumWebVisitsMonth        20     20  0.24     1.92   0.05
+AcceptedCmp3              1      1  3.26     8.64   0.01
+AcceptedCmp4              1      1  3.22     8.39   0.01
+AcceptedCmp5              1      1  3.27     8.72   0.01
+AcceptedCmp1              1      1  3.53    10.44   0.01
+AcceptedCmp2              1      1  8.35    67.78   0.00
+Complain                  0      0   NaN      NaN   0.00
+Z_CostContact             3      0   NaN      NaN   0.00
+Z_Revenue                11      0   NaN      NaN   0.00
+Response                  1      1  1.95     1.79   0.01
+Age                      80     56  0.09    -0.80   0.25
+Customer_Days          2858    699 -0.01    -1.20   4.33
+marital_Divorced          1      1  2.58     4.65   0.01
+marital_Married           1      1  0.46    -1.79   0.01
+marital_Single            1      1  1.38    -0.09   0.01
+marital_Together          1      1  1.11    -0.77   0.01
+marital_Widow             1      1  5.07    23.76   0.00
+education_2n.Cycle        1      1  2.88     6.29   0.01
+education_Basic           1      1  6.12    35.45   0.00
+education_Graduation      1      1 -0.01    -2.00   0.01
+education_Master          1      1  1.80     1.23   0.01
+education_PhD             1      1  1.37    -0.12   0.01
+MntTotal               2491   2487  0.91    -0.23  12.34
+MntRegularProds        2458   2741  0.98    -0.07  11.87
+AcceptedCmpOverall        4      4  2.71     7.91   0.01
+------------------------------------------------------------ 
+Complain: 1
+                     vars  n     mean       sd  median  trimmed      mad   min
+Income                  1 20 45672.40 19618.60 39341.0 44737.81 22307.94 15716
+Kidhome                 2 20     0.65     0.59     1.0     0.62     0.00     0
+Teenhome                3 20     0.55     0.60     0.5     0.50     0.74     0
+Recency                 4 20    50.75    27.20    48.5    50.62    28.17     8
+MntWines                5 20   176.70   211.11    34.0   147.88    48.18     1
+MntFruits               6 20    25.10    39.13     6.0    16.31     8.90     0
+MntMeatProducts         7 20   117.70   162.23    32.5    85.00    45.96     1
+MntFishProducts         8 20    26.70    38.73     6.5    20.50     9.64     0
+MntSweetProducts        9 20    18.20    31.36     4.5    11.19     5.93     0
+MntGoldProds           10 20    27.60    40.93    13.5    18.00    12.60     2
+NumDealsPurchases      11 20     2.40     1.43     2.0     2.19     1.48     1
+NumWebPurchases        12 20     3.70     2.96     3.0     3.31     2.22     0
+NumCatalogPurchases    13 20     2.10     2.90     0.5     1.56     0.74     0
+NumStorePurchases      14 20     5.40     3.60     3.5     4.94     2.22     2
+NumWebVisitsMonth      15 20     5.85     2.41     7.0     6.06     1.48     1
+AcceptedCmp3           16 20     0.10     0.31     0.0     0.00     0.00     0
+AcceptedCmp4           17 20     0.00     0.00     0.0     0.00     0.00     0
+AcceptedCmp5           18 20     0.05     0.22     0.0     0.00     0.00     0
+AcceptedCmp1           19 20     0.00     0.00     0.0     0.00     0.00     0
+AcceptedCmp2           20 20     0.00     0.00     0.0     0.00     0.00     0
+Complain               21 20     1.00     0.00     1.0     1.00     0.00     1
+Z_CostContact          22 20     3.00     0.00     3.0     3.00     0.00     3
+Z_Revenue              23 20    11.00     0.00    11.0    11.00     0.00    11
+Response               24 20     0.15     0.37     0.0     0.06     0.00     0
+Age                    25 20    51.65    15.04    50.0    51.81    17.79    25
+Customer_Days          26 20  2588.70   193.28  2685.0  2602.06   164.57  2250
+marital_Divorced       27 20     0.05     0.22     0.0     0.00     0.00     0
+marital_Married        28 20     0.40     0.50     0.0     0.38     0.00     0
+marital_Single         29 20     0.30     0.47     0.0     0.25     0.00     0
+marital_Together       30 20     0.25     0.44     0.0     0.19     0.00     0
+marital_Widow          31 20     0.00     0.00     0.0     0.00     0.00     0
+education_2n.Cycle     32 20     0.15     0.37     0.0     0.06     0.00     0
+education_Basic        33 20     0.00     0.00     0.0     0.00     0.00     0
+education_Graduation   34 20     0.70     0.47     1.0     0.75     0.00     0
+education_Master       35 20     0.10     0.31     0.0     0.00     0.00     0
+education_PhD          36 20     0.05     0.22     0.0     0.00     0.00     0
+MntTotal               37 20   364.40   424.05    77.5   300.19   101.56     9
+MntRegularProds        38 20   336.80   414.50    63.5   271.94    84.51     0
+AcceptedCmpOverall     39 20     0.15     0.49     0.0     0.00     0.00     0
+                       max range  skew kurtosis      se
+Income               83257 67541  0.35    -0.97 4386.85
+Kidhome                  2     2  0.18    -0.93    0.13
+Teenhome                 2     2  0.50    -0.87    0.14
+Recency                 93    85  0.11    -1.28    6.08
+MntWines               629   628  0.84    -0.88   47.21
+MntFruits              137   137  1.58     1.39    8.75
+MntMeatProducts        590   589  1.58     1.50   36.28
+MntFishProducts        104   104  1.05    -0.69    8.66
+MntSweetProducts       107   107  1.74     1.58    7.01
+MntGoldProds           176   174  2.48     5.90    9.15
+NumDealsPurchases        7     6  1.48     2.74    0.32
+NumWebPurchases         11    11  1.01    -0.07    0.66
+NumCatalogPurchases     10    10  1.25     0.52    0.65
+NumStorePurchases       13    11  0.87    -0.81    0.81
+NumWebVisitsMonth        9     8 -0.67    -1.02    0.54
+AcceptedCmp3             1     1  2.47     4.32    0.07
+AcceptedCmp4             0     0   NaN      NaN    0.00
+AcceptedCmp5             1     1  3.82    13.29    0.05
+AcceptedCmp1             0     0   NaN      NaN    0.00
+AcceptedCmp2             0     0   NaN      NaN    0.00
+Complain                 1     0   NaN      NaN    0.00
+Z_CostContact            3     0   NaN      NaN    0.00
+Z_Revenue               11     0   NaN      NaN    0.00
+Response                 1     1  1.82     1.37    0.08
+Age                     77    52 -0.02    -1.46    3.36
+Customer_Days         2823   573 -0.49    -1.30   43.22
+marital_Divorced         1     1  3.82    13.29    0.05
+marital_Married          1     1  0.38    -1.95    0.11
+marital_Single           1     1  0.81    -1.41    0.11
+marital_Together         1     1  1.07    -0.89    0.10
+marital_Widow            0     0   NaN      NaN    0.00
+education_2n.Cycle       1     1  1.82     1.37    0.08
+education_Basic          0     0   NaN      NaN    0.00
+education_Graduation     1     1 -0.81    -1.41    0.11
+education_Master         1     1  2.47     4.32    0.07
+education_PhD            1     1  3.82    13.29    0.05
+MntTotal              1298  1289  0.85    -0.73   94.82
+MntRegularProds       1231  1231  0.90    -0.72   92.68
+AcceptedCmpOverall       2     2  2.94     7.68    0.11</code></pre>
+</div>
+</div>
+</section>
+<section id="describing-data-visually" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="describing-data-visually">Describing Data Visually</h2>
+</section>
+<section id="data-visualization" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="data-visualization">Data Visualization</h3>
+</section>
+<p>This section will briefly introduce you to visualizing data using the <code>ggplot2</code> package. R has a number of systems for making graphs but ggplot2 is by far the most developed option. ggplot2 implements the <strong>grammar of graphics</strong>, and if you’d like to learn more about the motivation for this work take a look at <a href="http://vita.had.co.nz/papers/layered-grammar.pdf">The Layered Grammar of Graphics</a>.</p>
+<section id="install-and-load-ggplot2-package" class="level4">
+<h4 class="anchored" data-anchor-id="install-and-load-ggplot2-package">Install and Load <code>ggplot2</code> Package</h4>
+<p>Once we know the data has been read into R we can look at how R understands the data file using the structure function <code>str()</code></p>
+<p>Let’s install <code>ggplot2</code>, and then load the package.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>) <span class="co"># install the package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggplot2"</span>) <span class="co"># load the library</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="the-mpg-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="the-mpg-dataset">The <code>mpg</code> Dataset</h4>
+<p><code>ggplot2</code> contains a dataset titled <code>mpg</code> that contains observations collected by the US Environmental Protection Agency on 38 models of car. Let’s look at the dataset using the <code>describe()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"psych"</span>) <span class="co"># load the library</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(mpg)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              vars   n    mean    sd median trimmed   mad    min  max range
+manufacturer*    1 234    7.76  5.13    6.0    7.68  5.93    1.0   15  14.0
+model*           2 234   19.09 11.15   18.5   18.98 14.08    1.0   38  37.0
+displ            3 234    3.47  1.29    3.3    3.39  1.33    1.6    7   5.4
+year             4 234 2003.50  4.51 2003.5 2003.50  6.67 1999.0 2008   9.0
+cyl              5 234    5.89  1.61    6.0    5.86  2.97    4.0    8   4.0
+trans*           6 234    5.65  2.88    4.0    5.53  1.48    1.0   10   9.0
+drv*             7 234    1.67  0.66    2.0    1.59  1.48    1.0    3   2.0
+cty              8 234   16.86  4.26   17.0   16.61  4.45    9.0   35  26.0
+hwy              9 234   23.44  5.95   24.0   23.23  7.41   12.0   44  32.0
+fl*             10 234    4.63  0.70    5.0    4.77  0.00    1.0    5   4.0
+class*          11 234    4.59  1.99    5.0    4.64  2.97    1.0    7   6.0
+               skew kurtosis   se
+manufacturer*  0.21    -1.63 0.34
+model*         0.11    -1.23 0.73
+displ          0.44    -0.91 0.08
+year           0.00    -2.01 0.29
+cyl            0.11    -1.46 0.11
+trans*         0.29    -1.65 0.19
+drv*           0.48    -0.76 0.04
+cty            0.79     1.43 0.28
+hwy            0.36     0.14 0.39
+fl*           -2.25     5.76 0.05
+class*        -0.14    -1.52 0.13</code></pre>
+</div>
+</div>
+</section>
+<section id="creating-a-basic-ggplot" class="level4">
+<h4 class="anchored" data-anchor-id="creating-a-basic-ggplot">Creating a Basic ggplot</h4>
+<p>Let’s take a look at two variables in the <code>mpg</code> dataset.</p>
+<ul>
+<li><p><code>displ</code>, a car’s engine size, in litres.</p></li>
+<li><p><code>hwy</code>, a car’s fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.</p></li>
+</ul>
+<p>To plot <code>mpg</code>, run this code to put <code>displ</code> on the x-axis and <code>hwy</code> on the y-axis:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="r_intro_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also convey information about our data by mapping the aesthetics in our plots to the variables in our dataset. For example, we can map the colors of the data points to the <code>class</code> variable to reveal the class of each car.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy, <span class="at">color =</span> class))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="r_intro_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Lastly, we can use facets to split a larger plot into subplots. This can be helpful when we want to break apart our data based on a categorical variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg) <span class="sc">+</span> </span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> displ, <span class="at">y =</span> hwy)) <span class="sc">+</span> </span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> class, <span class="at">nrow =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="r_intro_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="r-markdown-and-course-setup" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="r-markdown-and-course-setup">R Markdown and Course Setup</h2>
+</section>
+<section id="r-markdown" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="r-markdown">R Markdown</h3>
+</section>
+<p>In-class exercises and assignments in this course are distributed as <strong>R Markdown</strong> (<code>.Rmd</code>) files. An R Markdown file mixes written text with runnable R code. You will complete the code, <strong>knit</strong> the document into a polished HTML or PDF report, and submit it on Canvas. Learning this workflow now means the first graded exercise will hold no surprises.</p>
+<section id="creating-an-r-markdown-document" class="level4">
+<h4 class="anchored" data-anchor-id="creating-an-r-markdown-document">Creating an R Markdown Document</h4>
+<p>In RStudio, choose <strong>File &gt; New File &gt; R Markdown…</strong>, give it a title, and click OK. RStudio opens a template document you can knit immediately. Try it before changing anything.</p>
+</section>
+<section id="the-anatomy-of-an-r-markdown-file" class="level4">
+<h4 class="anchored" data-anchor-id="the-anatomy-of-an-r-markdown-file">The Anatomy of an R Markdown File</h4>
+<p>An <code>.Rmd</code> file has three ingredients:</p>
+<ol type="1">
+<li><p><strong>The YAML header</strong>: the block between <code>---</code> lines at the very top. It stores the title, author, date, and output format.</p></li>
+<li><p><strong>Prose</strong>: ordinary text, with light formatting: <code>**bold**</code>, <code>*italics*</code>, <code># headings</code>.</p></li>
+<li><p><strong>Code chunks</strong>: R code between <code>```{r}</code> and <code>```</code> fences. Insert a new chunk with the toolbar button or the shortcut <strong>Cmd+Option+I</strong> (Mac) / <strong>Ctrl+Alt+I</strong> (Windows).</p></li>
+</ol>
+<p>You can run a single chunk with the green “play” button on its right edge, which is useful for checking your work as you go.</p>
+</section>
+<section id="knitting" class="level4">
+<h4 class="anchored" data-anchor-id="knitting">Knitting</h4>
+<p>The <strong>Knit</strong> button at the top of the editor runs the entire document <em>top to bottom in a fresh R session</em> and produces the output file. That “fresh session” detail explains the most common student pitfalls:</p>
+<ul>
+<li><p><strong>“It works in my console but won’t knit.”</strong> Objects you created in the console don’t exist when knitting. Every object your document uses must be created <em>by code chunks in the document</em>, in order.</p></li>
+<li><p><strong>Never put <code>install.packages()</code> in a code chunk.</strong> Install packages once, from the console. A document should <em>load</em> packages with <code>library()</code>, not install them.</p></li>
+<li><p><strong>Keep the <code>.Rmd</code> and any data files in the same folder</strong>, and refer to data by filename (<code>read.csv("mydata.csv")</code>). Knitting looks for files relative to where the <code>.Rmd</code> lives.</p></li>
+</ul>
+</section>
+<section id="one-rstudio-setting-worth-changing" class="level4">
+<h4 class="anchored" data-anchor-id="one-rstudio-setting-worth-changing">One RStudio Setting Worth Changing</h4>
+<p>By default, RStudio offers to save everything in your environment when you quit and restore it next time. This sounds convenient but causes deeply confusing bugs: objects from last Tuesday silently lurk in your session, your code “works” only because of leftovers, and then it fails to knit. Turn it off now:</p>
+<p><strong>Tools &gt; Global Options &gt; General</strong>: set <em>“Save workspace to .RData on exit”</em> to <strong>Never</strong>, and uncheck <em>“Restore .RData into workspace at startup.”</em></p>
+<p>Every session starts clean, which matches how knitting works: if your code runs in a fresh session, it will knit, and it will run for me too. Your scripts and documents are the permanent record of your work, not the workspace.</p>
+</section>
+<section id="reading-error-messages" class="level4">
+<h4 class="anchored" data-anchor-id="reading-error-messages">Reading Error Messages</h4>
+<p>You will see many error messages this semester; that’s what learning a language looks like. When one appears: read the <strong>first line only</strong> (the rest is usually internal detail), note <strong>which function</strong> the error came from, and look for a mention of what R was looking for and couldn’t find (a file, an object, a package). Most errors in this course are one of three things: a typo in a name, a file that isn’t where R is looking, or a package that isn’t loaded. If you’re stuck after checking those, copy the full error message and bring it to class or office hours. “It didn’t work” is unsolvable, but an exact error message usually takes one minute.</p>
+</section>
+<section id="install-the-course-packages" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="install-the-course-packages">Install the Course Packages</h3>
+</section>
+<p>Throughout the semester we will lean on a set of R packages for wrangling, visualization, and machine learning. Install them all now by pasting this into your <strong>console</strong> (not an R Markdown chunk!):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidyverse"</span>,    <span class="co"># data wrangling and ggplot2 graphics</span></span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"psych"</span>,        <span class="co"># describing data</span></span>
+<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidymodels"</span>,   <span class="co"># modeling framework (includes rsample, recipes)</span></span>
+<span id="cb108-5"><a href="#cb108-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"caret"</span>,        <span class="co"># classic ML toolkit</span></span>
+<span id="cb108-6"><a href="#cb108-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"rpart"</span>,        <span class="co"># decision trees</span></span>
+<span id="cb108-7"><a href="#cb108-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ipred"</span>,        <span class="co"># bagging</span></span>
+<span id="cb108-8"><a href="#cb108-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ranger"</span>,       <span class="co"># random forests</span></span>
+<span id="cb108-9"><a href="#cb108-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"gbm"</span>,          <span class="co"># gradient boosting</span></span>
+<span id="cb108-10"><a href="#cb108-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"glmnet"</span>,       <span class="co"># regularized regression</span></span>
+<span id="cb108-11"><a href="#cb108-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"vip"</span>,          <span class="co"># variable importance plots</span></span>
+<span id="cb108-12"><a href="#cb108-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AmesHousing"</span>,  <span class="co"># housing data used in the regression unit</span></span>
+<span id="cb108-13"><a href="#cb108-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"cluster"</span>,      <span class="co"># clustering methods</span></span>
+<span id="cb108-14"><a href="#cb108-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"factoextra"</span>    <span class="co"># clustering and PCA visualizations</span></span>
+<span id="cb108-15"><a href="#cb108-15" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This can take a while, since <code>tidyverse</code>, <code>tidymodels</code>, and <code>caret</code> are large. Start it, get a coffee, and let it finish. Do this <strong>before the first lab</strong> so class time isn’t spent watching progress bars.</p>
+<p>A few assignment-specific packages (for example, <code>gssr</code> for working with the General Social Survey) will be installed later with instructions provided in the assignment itself.</p>
+<section id="check-your-setup" class="level4">
+<h4 class="anchored" data-anchor-id="check-your-setup">Check Your Setup</h4>
+<p>If this runs without errors, you are ready for the semester:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If something fails to load, re-run <code>install.packages()</code> for that package and read the error message. If you’re still stuck, bring the error to class or office hours. Getting your machine working is a course goal in week one, not an obstacle.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+// Floating page controls: text size and sidebar visibility.
+// Choices persist across pages via localStorage.
+(function () {
+  var KEY_SCALE = "psyc559-scale";
+  var KEY_SIDEBAR = "psyc559-sidebar-hidden";
+
+  function applyScale(s) {
+    var m = document.querySelector("main.content");
+    if (m) m.style.fontSize = s + "em";
+    localStorage.setItem(KEY_SCALE, s);
+  }
+
+  function applySidebar(hidden) {
+    document.body.classList.toggle("sidebar-hidden", hidden);
+    localStorage.setItem(KEY_SIDEBAR, hidden ? "1" : "0");
+    var btn = document.getElementById("psyc-sidebar-btn");
+    if (btn) btn.textContent = hidden ? "Show menu" : "Hide menu";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var scale = parseFloat(localStorage.getItem(KEY_SCALE));
+    if (!scale || isNaN(scale)) scale = 1;
+    var hidden = localStorage.getItem(KEY_SIDEBAR) === "1";
+
+    var bar = document.createElement("div");
+    bar.id = "psyc-controls";
+    bar.innerHTML =
+      '<button id="psyc-smaller" title="Smaller text">A-</button>' +
+      '<button id="psyc-larger" title="Larger text">A+</button>' +
+      '<button id="psyc-sidebar-btn" title="Show or hide the sidebar">Hide menu</button>';
+    document.body.appendChild(bar);
+
+    document.getElementById("psyc-smaller").addEventListener("click", function () {
+      scale = Math.max(0.7, Math.round((scale - 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-larger").addEventListener("click", function () {
+      scale = Math.min(2.0, Math.round((scale + 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-sidebar-btn").addEventListener("click", function () {
+      hidden = !hidden;
+      applySidebar(hidden);
+    });
+
+    applyScale(scale);
+    applySidebar(hidden);
+  });
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
