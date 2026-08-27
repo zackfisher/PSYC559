@@ -1,0 +1,165 @@
+---
+title: "Working with Data Frames"
+format:
+  html:
+    fontsize: 25px
+editor_options:
+  chunk_output_type: console
+---
+
+::: {style="color: yellow"}
+## Data Frames
+:::
+
+Nearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we'll practice pulling pieces out of a data frame, creating new variables, and chaining operations together. These are the skills you'll use in every single lab and assignment.
+
+Let's read in the marketing data we saw previously (download: [ifood_df.csv](data/ifood_df.csv)).
+
+```{r}
+df <- read.csv("data/ifood_df.csv")
+```
+
+A few functions are useful for getting oriented whenever you load a new dataset:
+
+```{r}
+dim(df)      # number of rows and columns
+nrow(df)     # number of rows (cases)
+names(df)    # variable names
+```
+
+```{r}
+head(df[, 1:6])  # first few rows of the first 6 columns
+```
+
+::: {style="color: yellow"}
+## Selecting a Variable with `$`
+:::
+
+The `$` operator pulls a single variable out of a data frame as a vector. This is one of the most common operations in R, and you will see it constantly in this course.
+
+```{r}
+mean(df$Income)    # average household income
+table(df$Complain) # how many customers lodged a complaint?
+```
+
+We can also use `$` to create a new variable in the data frame. For example, the number of children at home is split across two variables, `Kidhome` and `Teenhome`. Let's combine them:
+
+```{r}
+df$TotalKids <- df$Kidhome + df$Teenhome
+table(df$TotalKids)
+```
+
+::: {style="color: yellow"}
+## Subsetting with `[rows, columns]`
+:::
+
+Square brackets let us take a subset of a data frame using the pattern `df[rows, columns]`. Leaving either slot empty means "keep everything."
+
+```{r}
+df[1:5, ]                        # first five rows, all columns
+head(df[, c("Income", "Age")])   # all rows, two named columns
+```
+
+We can also select rows using a logical condition. For example, customers with incomes above \$75,000:
+
+```{r}
+high_income <- df[df$Income > 75000, ]
+nrow(high_income)
+```
+
+Read that as: "keep the rows of `df` where `df$Income > 75000` is `TRUE`, and all columns."
+
+::: {style="color: yellow"}
+## Missing Values: `NA`
+:::
+
+Real data is rarely complete. R represents a missing value with `NA` ("not available"), and `NA` behaves differently than you might expect: most computations involving a missing value return a missing value.
+
+```{r}
+x <- c(4, 7, NA, 2)
+mean(x)
+```
+
+That `NA` answer is R being honest: it can't know the mean of numbers it doesn't have. If you've decided that ignoring the missing values is appropriate, say so explicitly with `na.rm = TRUE`:
+
+```{r}
+mean(x, na.rm = TRUE)
+```
+
+To find missing values, use `is.na()`. Asking `x == NA` does *not* work, because comparing anything to an unknown is also unknown:
+
+```{r}
+is.na(x)        # which entries are missing?
+sum(is.na(x))   # how many are missing?
+```
+
+For a whole data frame, `colSums(is.na(df))` shows the missing count per variable. Our marketing data happens to be a cleaned dataset:
+
+```{r}
+sum(is.na(df))  # no missing values here
+```
+
+Real psychological data will rarely be this kind; the General Social Survey data in your first assignment certainly won't be. Handling missingness *well* is a modeling topic we'll treat properly in the feature engineering unit; for now, the essential skills are noticing missing values and understanding why `NA`s propagate through your calculations.
+
+::: {style="color: yellow"}
+## The Pipe Operator `%>%`
+:::
+
+As our analyses grow, we often want to perform several operations in sequence. The **pipe** operator `%>%` takes the object on its left and passes it to the function on its right. These two lines do exactly the same thing:
+
+```{r, message=FALSE}
+library(dplyr)
+
+head(df[, 1:4])      # without the pipe
+df[, 1:4] %>% head() # with the pipe
+```
+
+That looks like a small change, but pipes let us read a chain of steps top-to-bottom like a recipe, instead of inside-out. You will see `%>%` throughout the course materials, especially once we start building preprocessing and modeling pipelines.
+
+*Note:* newer versions of R also have a built-in pipe written `|>`. It works the same way for our purposes, and you may see either form in the wild.
+
+::: {style="color: yellow"}
+## Data Wrangling with `dplyr`
+:::
+
+The `dplyr` package (loaded above) provides a set of verbs for working with data frames that pair naturally with the pipe. The four you'll see most often:
+
+-   `select()`: choose columns
+
+-   `filter()`: choose rows matching a condition
+
+-   `mutate()`: create new variables
+
+-   `summarise()`: collapse rows into summary values (often with `group_by()`)
+
+```{r}
+df %>% select(Income, Age, MntWines) %>% head()
+```
+
+```{r}
+df %>% filter(Income > 75000) %>% nrow()
+```
+
+```{r}
+df %>%
+  mutate(TotalKids = Kidhome + Teenhome) %>%
+  select(Income, TotalKids) %>%
+  head()
+```
+
+Chaining verbs together is where this style shines. For example: among customers who did and did not complain, what is the average wine spending and group size?
+
+```{r}
+df %>%
+  group_by(Complain) %>%
+  summarise(
+    avg_wine = mean(MntWines),
+    n = n()
+  )
+```
+
+::: {style="color: yellow"}
+## Two Dialects, One Language
+:::
+
+Base R subsetting (`$`, `[ , ]`) and `dplyr` verbs are two ways of doing the same things, and this course uses both: base R for quick one-liners, `dplyr` chains for multi-step preprocessing. You should be comfortable *reading* both. When writing your own code, use whichever feels clearer to you.

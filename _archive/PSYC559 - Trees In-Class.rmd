@@ -1,0 +1,114 @@
+---
+title: "In-Class Assignment: Trees"
+output: pdf_document
+date: "2025-10-14"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tree-Based Machine Learning
+
+So far we have discussed classic decision trees, bagging and random forests. Your goal for today's class it to fit all three of these decision-tree based models to a dataset of your choice and compare their predictive performance.
+
+## Data
+
+Please select a dataset from the `fivethiryeight` package. After installing the requisite packages the script below will show you datasets that are suitable for this exercise. You can view more details about a given dataset using the `?` operator, for example, `?flights`
+
+```{r}
+library(fivethirtyeight)
+library(dplyr)
+library(purrr)
+library(tibble)
+
+# Get all dataset names
+datasets <- data(package = "fivethirtyeight")$results[, "Item"]
+
+# Function to safely get dataset dimensions
+get_dims <- function(name) {
+  df <- tryCatch(get(name, asNamespace("fivethirtyeight")),
+                 error = function(e) return(NULL))
+  if (is.null(df)) return(NULL)
+  tibble(dataset = name,
+         rows = nrow(df),
+         cols = ncol(df))
+}
+
+# Apply across datasets
+dims <- map_dfr(datasets, get_dims)
+
+# Filter for datasets with >1000 rows and >10 variables
+large_datasets <- dims %>%
+  filter(rows > 1000, cols > 10)
+
+large_datasets
+```
+
+## Data Preparation
+
+```{r}
+library(tidymodels)
+library(rsample)
+library(recipes)
+library(fivethirtyeight)
+
+data <- flying
+
+data$recline_rude <- as.factor(ifelse(data$recline_rude == "Very", 1, 0))
+
+target <- "recline_rude"
+
+categorical_variables <-c(
+  "gender",
+  "location",
+  "two_arm_rests",
+  "middle_arm_rest",
+  "shade"
+)
+
+data <- data |>
+mutate(
+  across(everything(), haven::zap_missing), 
+  #across(all_of(continuous_variables), as.numeric),
+  mutate(across(all_of(categorical_variables), as.factor))
+)
+
+split <- initial_split(data, prop = 0.7, strata = target)
+
+data_train  <- training(split)
+data_test   <- testing(split)
+
+formula_string <- as.formula(paste(target, "~ ."))
+
+blueprint <- recipe(formula_string, data = data_train) %>%
+  step_impute_bag(all_predictors()) %>%
+  step_dummy(all_factor_predictors(), one_hot = FALSE) 
+
+```
+
+
+## Fit a Classic Decision Tree
+
+Fit a classic decsion tree to the training data. Examine the tree structure and variable importance. Evaluate the model on the test data.
+
+```{r}
+
+```
+
+## Fit a Bagged Decision Tree
+
+Fit a bagged decsion tree to the training data. Examine the variable importance. Evaluate the model on the test data.
+
+
+```{r}
+
+```
+
+## Fit a Random Forest
+
+Fit a random forest to the training data. Examine the variable importance. Evaluate the model on the test data.
+
+```{r}
+
+```

@@ -6,3 +6,11 @@
 /.quarto/
 
 **/*.quarto_ipynb
+
+# Quarto and knitr build artifacts. These are regenerated on every render
+# and should never be committed. Committing the caches is what pushed this
+# repository past 400 MB.
+/_site/
+*_cache/
+/*_files/
+.DS_Store

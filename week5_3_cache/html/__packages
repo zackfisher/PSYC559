@@ -19,7 +19,7 @@ yardstick
 lattice
 caret
 rpart
+ipred
 ranger
 vip
 e1071
-ipred
