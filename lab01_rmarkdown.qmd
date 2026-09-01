@@ -1,0 +1,234 @@
+---
+title: "Lab: R Markdown"
+format:
+  html:
+    fontsize: 25px
+editor_options:
+  chunk_output_type: console
+---
+
+Today you will build a small analysis report in R Markdown, from a template, one stage at a time. By the end you will have knitted a document that mixes your writing, your code, your results, and a figure, and you will upload it before you leave.
+
+Work through the stages below in order. Each one corresponds to a section of the template file.
+
+::: {.callout-note icon="false"}
+## Before You Start
+
+**Check that you can knit at all.** Knitting from RStudio needs the `rmarkdown` package. You do not need to install Pandoc, which comes with RStudio, and you do not need LaTeX, which is only required for PDF output. Today's document also uses `dplyr`, `ggplot2`, `psych`, `naniar`, and `titanic`. If you ran the install block from the *R Markdown and Course Setup* section, you already have all of these. If you are unsure, run this once in the **console**, not in a document:
+
+``` r
+install.packages(c("rmarkdown", "tidyverse", "psych", "naniar", "titanic"))
+```
+
+Then:
+
+1.  Download `Intro_to_Rmd_Template.Rmd` from Canvas and save it somewhere you can find again.
+2.  Open it in RStudio (**File \> Open File**).
+3.  Click **Knit** right now, before changing anything.
+
+A finished document should appear. That is your starting point, and it confirms your setup works before you have written a single thing. If it does not knit, flag me now rather than debugging alone.
+:::
+
+::: {style="color: yellow"}
+## Stage 1: The Header
+:::
+
+Look at the very top of the file, at the block fenced by `---` on either side. This is the **YAML header**, and it controls the document as a whole: its title, its author, and what kind of file knitting produces.
+
+Replace the placeholder title and author with your own. Leave the date line alone and look at what it contains:
+
+```
+date: "`r Sys.Date()`"
+```
+
+That is R code living in the header. Every time you knit, the document stamps itself with today's date. Nothing to remember, nothing to update by hand.
+
+**Knit again.** Your name and title should now appear at the top of the output.
+
+::: {style="color: yellow"}
+## Stage 2: Writing
+:::
+
+Most of an R Markdown file is ordinary prose. A handful of characters do the formatting:
+
+| To get this | Write this |
+|----|----|
+| **bold** | `**bold**` |
+| *italic* | `*italic*` |
+| a bullet | `- item` at the start of a line |
+| a heading | `## Heading` at the start of a line |
+
+Write two or three sentences describing the data in your own words, using bold at least once, italics at least once, and a short bulleted list.
+
+::: {style="color: lightblue"}
+### Why not just use Word?
+:::
+
+You could write this paragraph anywhere. The reason it lives here is that the numbers in the next stages come out of the same file, so your writing and your analysis can never drift apart.
+
+::: {style="color: yellow"}
+## Stage 3: Code Chunks
+:::
+
+The gray blocks are **code chunks**. Everything inside one runs as R code when you knit, and the output appears in your document underneath it.
+
+Insert a new chunk with the **+C** button in the toolbar, or press **Cmd+Option+I** on a Mac, **Ctrl+Alt+I** on Windows. You can also run a single chunk without knitting by clicking the small green triangle at its right edge, which is useful while you work.
+
+This stage has four things to write, each one a skill from the Introduction to R material.
+
+First, pick **two spending variables** that interest you from `MntWines`, `MntFruits`, `MntMeatProducts`, `MntFishProducts`, `MntSweetProducts`, and `MntGoldProds`. You will use the same two for the rest of the lab, so pick ones you are curious about. Calculate the mean of each.
+
+Then three more, in order:
+
+-   **Count something** with `table()`, using a variable that takes only a few values, such as `Complain`, `Kidhome`, `Teenhome`, or `Response`.
+-   **Subset**, by picking an income cutoff and counting how many customers sit above it. Watch the comma: `df[df$Income > 50000, ]` means "these rows, all columns," and leaving it out is the single most common mistake here.
+-   **Create a variable** with `ifelse()`, labelling each customer `"high"` or `"low"` on one of your spending variables split at its mean, then counting the two groups with `table()`.
+
+Knit after each one. If something breaks, you will know exactly which line caused it.
+
+::: {style="color: yellow"}
+## Stage 4: Inline Code
+:::
+
+This is the stage worth paying attention to.
+
+So far your code has lived in chunks, set apart from your writing. But R code can also go *inside a sentence*. Write a backtick, then the letter `r`, then your code, then a closing backtick, and when you knit, the result appears as ordinary text.
+
+The template has an example already: a sentence that reports how many customers are in the dataset without anyone ever typing the number.
+
+Complete the sentence in this stage the same way, using one of the variables you chose.
+
+::: {.callout-tip icon="false"}
+## The point
+
+Suppose these data were updated tomorrow. In a Word document, every number you had typed would silently become wrong, and you would have to hunt them all down. Here, you knit again and the whole report corrects itself.
+
+This is why analysis reports get written this way, and why your lab reports for this course will be written this way.
+:::
+
+::: {style="color: yellow"}
+## Stage 5: A Table
+:::
+
+Printing a data frame in a knitted document is ugly by default. The `kable()` function formats it properly.
+
+The template already builds a small table comparing customers who did and did not complain. Add your own two variables to it, so the table describes what *you* chose. Watch the commas: every line inside `summarise()` except the last one needs one at the end.
+
+::: {style="color: yellow"}
+## Stage 6: A Figure
+:::
+
+Figures work like any other output: you write the plotting code in a chunk, and the picture appears when you knit.
+
+What is new here is the material inside the curly braces at the top of the chunk. Those are **chunk options**, and they change how the chunk behaves rather than what it computes:
+
+``` r
+{r, fig.cap = "...", fig.width = 6, fig.height = 4}
+```
+
+Change the plot so it uses one of your variables, give it a caption that actually describes what it shows, and then write one sentence underneath interpreting it. If you have time, try changing `fig.width` and knitting again to see the figure resize.
+
+::: {style="color: yellow"}
+## Stage 7: Controlling What the Reader Sees
+:::
+
+Three chunk options come up constantly:
+
+| Option | Code shown? | Output shown? | Code runs? |
+|----|----|----|----|
+| default | yes | yes | yes |
+| `echo = FALSE` | no | yes | yes |
+| `include = FALSE` | no | no | yes |
+| `eval = FALSE` | yes | no | no |
+
+`echo = FALSE` is how you produce a report for a reader who wants the results but not the code. `include = FALSE` is how the setup chunk at the top of your file loads packages without cluttering the document. `eval = FALSE` is how you show code you do not want to run.
+
+Find the chunk in this stage, knit and look at it, then add `echo = FALSE`, knit again, and write down what changed.
+
+::: {style="color: yellow"}
+## Stage 8: Putting It Together
+:::
+
+One last section, using `describe()` from the `psych` package, which you met in the Introduction to R material. Describe both of the variables you chose, then write a sentence or two about what you notice. Comparing the mean against the median is a good place to look, because a mean far above a median tells you the distribution has a long right tail.
+
+::: {style="color: yellow"}
+## Stage 9: What Kind of Variable Is This?
+:::
+
+The last two stages switch to a second dataset, the Titanic passenger list, because the marketing data is all numbers and these ideas need something messier.
+
+Run `str()` on it and look at `Pclass`. R reports it as an integer, because passenger class was recorded as 1, 2, or 3. But those numbers are **labels for categories, not amounts**, and R has no way to know that. Ask it for the mean and it will cheerfully tell you the average passenger class is 2.31, which is as meaningful as an average zip code.
+
+Converting it with `factor()` fixes this, and the template shows you why it matters: two plots of fare against class, identical except for the type of one variable. As a number, class gets spread along a continuum. As a factor, it becomes three groups with three distributions.
+
+**Then label the categories.** A bare factor still displays as 1, 2, and 3, which tells your reader nothing. Since you know what those codes mean, attach the names:
+
+``` r
+factor(titanic$Pclass, levels = c(1, 2, 3), labels = c("First", "Second", "Third"))
+```
+
+`levels` lists the codes as they appear in the data and `labels` gives the name each should display, in the same order. Every table and plot axis now labels itself.
+
+::: {.callout-tip icon="false"}
+## The moment worth watching for
+
+Earlier, R told you the average passenger class was 2.31 without complaint. Ask for the mean of the *factor* version and R returns `NA` with a warning that the argument is not numeric.
+
+That is the real payoff. Storing a variable correctly does not just make your plots nicer, it makes R **refuse to do the meaningless thing**. The nonsense calculation that slipped through silently when class was an integer gets caught the moment the variable is typed honestly.
+:::
+
+Then do the same for `Survived`, which is stored as 0 and 1 but is really a category, and is the outcome we will be predicting later in this course. Label it `"Died"` and `"Survived"`, and cross-tabulate it against class. With both variables labelled, the table reads like a sentence instead of a puzzle.
+
+::: {.callout-tip icon="false"}
+## Why this matters beyond today
+
+Every model you fit this semester asks what type your variables are. A 0/1 outcome left as a number gets treated as a quantity to predict; the same outcome as a factor gets treated as two classes to sort people into. Same data, different question, different model.
+:::
+
+::: {style="color: yellow"}
+## Stage 10: Missing Data
+:::
+
+Ask for the average age of the passengers and R returns `NA`. That is R refusing to guess. The alternative would be quietly averaging *some* passengers and letting you believe it was all of them, so `NA` is a feature. When you have decided that skipping the missing values is reasonable, say so out loud with `na.rm = TRUE`.
+
+The `naniar` package summarizes an entire dataset at once with `miss_var_summary()`. Run it and read the table carefully, because it contains a trap: it reports that `Cabin` is never missing.
+
+That is false. The blanks in `Cabin` were recorded as empty text, `""`, and R cannot know an empty string means "we do not know." Once you tell it so with `replace_with_na_all()`, `Cabin` turns out to be missing for 687 of 891 passengers, about 77%.
+
+::: {.callout-tip icon="false"}
+## The habit worth forming
+
+Missing data disguised as something else is everywhere in real datasets: blanks, `-99`, `999`, `"unknown"`, `"N/A"`. None of them are missing as far as R is concerned until you say so. Before trusting any summary of missingness, look at the actual values a variable takes.
+
+This matters for more than tidiness. Whether a cabin was recorded on the Titanic is probably related to a passenger's class, and class is related to survival. Missingness that carries information is a modelling problem, not a data-cleaning chore.
+:::
+
+Finish by looking at `gg_miss_var()`, then write a sentence on whether you would be willing to use `Cabin` as a predictor.
+
+::: {style="color: yellow"}
+## When Something Breaks
+:::
+
+It will, eventually. Knitting runs your document in a **fresh R session**, which is stricter than working in the console, and that strictness is what catches problems before your reader does. Three errors account for most of what you will hit:
+
+| The message | What it means | The fix |
+|----|----|----|
+| `could not find function "..."` | A package was not loaded | Add `library(...)` to the setup chunk |
+| `there is no package called "..."` | A package was never installed | Run `install.packages("...")` in the console |
+| `object '...' not found` | You made it in the console, not in the document | Put the code that creates it in a chunk |
+
+That third one is the classic. Objects you created by hand in the console do not exist when knitting, because knitting starts clean. If a document works when you run chunks by hand but fails when you knit, this is almost always why.
+
+::: {style="color: yellow"}
+## Submitting
+:::
+
+Knitting produces an `.html` file next to your `.Rmd`, with the same name. Upload **the `.html` file** to Canvas before you leave. If you did not finish every stage, upload what you have.
+
+::: {.callout-note icon="false"}
+## Three habits worth keeping
+
+-   **Knit early and often.** A document that knitted five minutes ago and does not knit now has a problem in something you just changed. That is a much smaller haystack.
+-   **Packages go in the setup chunk.** Never `install.packages()` inside a document; install once from the console, then load with `library()` at the top.
+-   **Keep the data next to the file.** Knitting starts from the folder your `.Rmd` lives in, which is why today's template reads the data straight from the course website instead.
+:::

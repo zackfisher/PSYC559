@@ -32,6 +32,7 @@ project:
     - week6_1.qmd
     - week6_2.qmd
     - week6_3.qmd
+    - lab01_rmarkdown.qmd
 website:
   title: "PSYC559: Applied Machine Learning in Psychology"
 
@@ -52,12 +53,8 @@ website:
   draft-mode: gone
   drafts:
     # (released 8/12 — Introduction to R section: 1_1, 1_1b, 1_2, week1_3, week1_4)
-    # 8/20 — Fundamentals of machine learning
-    - week2_1.qmd
-    - week2_2.qmd
-    # 8/27 — General modeling pipelines
-    - week2_3.qmd
-    - week2_4.qmd
+    # (released 8/28 — Fundamentals of ML: week2_1, week2_2)
+    # (released 8/29 — General modeling pipelines: week2_3, week2_4)
     # 9/1 — Data preprocessing and feature engineering
     - week2_5a.qmd
     - week2_5b.qmd
@@ -133,6 +130,10 @@ website:
           - week6_1.qmd
           - week6_2.qmd
           - week6_3.qmd
+      # Labs stay last in the sidebar.
+      - section: "Labs"
+        contents:
+          - lab01_rmarkdown.qmd
 format:
   html:
     theme: darkly

@@ -31,7 +31,9 @@ A biased model fails to accurately reflect the true relationship in the data, le
 
 ![https://www.tutorialspoint.com/machine_learning/machine_learning_bias_and_variance.htm](images/bias_graphical_representation.jpg){width="800"}
 
+:::  {style="color: lightblue"}
 ### Common Source of Bias in Machine Learning
+:::
 
 -   **Data-related bias**: This occurs when the training data itself is not representative of the real-world scenario or contains skewed or prejudiced information. Data-related bias often result from incomplete datasets.
 
@@ -41,7 +43,9 @@ A biased model fails to accurately reflect the true relationship in the data, le
 
     -   Example: loan approval
 
+:::  {style="color: lightblue"}
 ### Some Consequences of Bias in Machine Learning
+:::
 
 -   **Inaccurate Predictions**: Biased models do not properly capture the true data generating pattern.
 
@@ -59,7 +63,9 @@ In machine learning, variance typically refers to the sensitivity of a model's p
 
 So, error due to *variance* is defined as the variability of a model prediction for a given data point.
 
+:::  {style="color: lightblue"}
 ### Common Causes of High Variance
+:::
 
 -   **Model complexity**: Overly complex models, with many features or high-degree terms, are more prone to high variance compared to simpler models.
 
@@ -77,7 +83,9 @@ When a model *underfits the data*, it means the model is too simple to capture t
 
 ![https://docs.aws.amazon.com/machine-learning/latest/dg/model-fit-underfitting-vs-overfitting.html](images/mlconcepts_image5.png){width="800"}
 
+:::  {style="color: lightblue"}
 ### Why a Bias-Variance Tradeoff?
+:::
 
 The bias-variance tradeoff can be understood as the tension between model simplicity and model flexibility: improving one can often worsen the other.
 
@@ -86,10 +94,12 @@ The bias-variance tradeoff can be understood as the tension between model simpli
     -   Both training and test errors are high.
     -   Variance is low because predictions do not change much when trained on different datasets.
 -   **High Variance (Overfitting):**
-    -   Model is too flexible and fits the training data—including noise—very closely.
+    -   Model is too flexible and fits the training data, including its noise, very closely.
     -   Training error is low, but test error is high.
 
+:::  {style="color: lightblue"}
 ### Why the Tradeoff Occurs
+:::
 
 -   Making the model more complex reduces bias but increases variance, since the model becomes sensitive to small fluctuations in the training data.\
 -   Making the model simpler reduces variance but increases bias, because it cannot capture all the patterns.
@@ -98,7 +108,9 @@ There is a sweet spot in between that balances bias and variance, resulting in t
 
 ![https://www.endtoend.ai/blog/bias-variance-tradeoff-in-reinforcement-learning/](images/underfit_right_overfit.png){width="800"}
 
+:::  {style="color: lightblue"}
 ### High Bias and High Variance?
+:::
 
 This can happen if the model is poorly specified and trained on very noisy or limited data:
 

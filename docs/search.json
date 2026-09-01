@@ -1,5 +1,420 @@
 [
   {
+    "objectID": "lab01_rmarkdown.html",
+    "href": "lab01_rmarkdown.html",
+    "title": "Lab: R Markdown",
+    "section": "",
+    "text": "Today you will build a small analysis report in R Markdown, from a template, one stage at a time. By the end you will have knitted a document that mixes your writing, your code, your results, and a figure, and you will upload it before you leave.\nWork through the stages below in order. Each one corresponds to a section of the template file.\nLook at the very top of the file, at the block fenced by --- on either side. This is the YAML header, and it controls the document as a whole: its title, its author, and what kind of file knitting produces.\nReplace the placeholder title and author with your own. Leave the date line alone and look at what it contains:\nThat is R code living in the header. Every time you knit, the document stamps itself with today’s date. Nothing to remember, nothing to update by hand.\nKnit again. Your name and title should now appear at the top of the output.\nMost of an R Markdown file is ordinary prose. A handful of characters do the formatting:\nWrite two or three sentences describing the data in your own words, using bold at least once, italics at least once, and a short bulleted list.\nYou could write this paragraph anywhere. The reason it lives here is that the numbers in the next stages come out of the same file, so your writing and your analysis can never drift apart.\nThe gray blocks are code chunks. Everything inside one runs as R code when you knit, and the output appears in your document underneath it.\nInsert a new chunk with the +C button in the toolbar, or press Cmd+Option+I on a Mac, Ctrl+Alt+I on Windows. You can also run a single chunk without knitting by clicking the small green triangle at its right edge, which is useful while you work.\nThis stage has four things to write, each one a skill from the Introduction to R material.\nFirst, pick two spending variables that interest you from MntWines, MntFruits, MntMeatProducts, MntFishProducts, MntSweetProducts, and MntGoldProds. You will use the same two for the rest of the lab, so pick ones you are curious about. Calculate the mean of each.\nThen three more, in order:\nKnit after each one. If something breaks, you will know exactly which line caused it.\nThis is the stage worth paying attention to.\nSo far your code has lived in chunks, set apart from your writing. But R code can also go inside a sentence. Write a backtick, then the letter r, then your code, then a closing backtick, and when you knit, the result appears as ordinary text.\nThe template has an example already: a sentence that reports how many customers are in the dataset without anyone ever typing the number.\nComplete the sentence in this stage the same way, using one of the variables you chose.\nPrinting a data frame in a knitted document is ugly by default. The kable() function formats it properly.\nThe template already builds a small table comparing customers who did and did not complain. Add your own two variables to it, so the table describes what you chose. Watch the commas: every line inside summarise() except the last one needs one at the end.\nFigures work like any other output: you write the plotting code in a chunk, and the picture appears when you knit.\nWhat is new here is the material inside the curly braces at the top of the chunk. Those are chunk options, and they change how the chunk behaves rather than what it computes:\nChange the plot so it uses one of your variables, give it a caption that actually describes what it shows, and then write one sentence underneath interpreting it. If you have time, try changing fig.width and knitting again to see the figure resize.\nThree chunk options come up constantly:\necho = FALSE is how you produce a report for a reader who wants the results but not the code. include = FALSE is how the setup chunk at the top of your file loads packages without cluttering the document. eval = FALSE is how you show code you do not want to run.\nFind the chunk in this stage, knit and look at it, then add echo = FALSE, knit again, and write down what changed.\nOne last section, using describe() from the psych package, which you met in the Introduction to R material. Describe both of the variables you chose, then write a sentence or two about what you notice. Comparing the mean against the median is a good place to look, because a mean far above a median tells you the distribution has a long right tail.\nThe last two stages switch to a second dataset, the Titanic passenger list, because the marketing data is all numbers and these ideas need something messier.\nRun str() on it and look at Pclass. R reports it as an integer, because passenger class was recorded as 1, 2, or 3. But those numbers are labels for categories, not amounts, and R has no way to know that. Ask it for the mean and it will cheerfully tell you the average passenger class is 2.31, which is as meaningful as an average zip code.\nConverting it with factor() fixes this, and the template shows you why it matters: two plots of fare against class, identical except for the type of one variable. As a number, class gets spread along a continuum. As a factor, it becomes three groups with three distributions.\nThen label the categories. A bare factor still displays as 1, 2, and 3, which tells your reader nothing. Since you know what those codes mean, attach the names:\nlevels lists the codes as they appear in the data and labels gives the name each should display, in the same order. Every table and plot axis now labels itself.\nThen do the same for Survived, which is stored as 0 and 1 but is really a category, and is the outcome we will be predicting later in this course. Label it \"Died\" and \"Survived\", and cross-tabulate it against class. With both variables labelled, the table reads like a sentence instead of a puzzle.\nAsk for the average age of the passengers and R returns NA. That is R refusing to guess. The alternative would be quietly averaging some passengers and letting you believe it was all of them, so NA is a feature. When you have decided that skipping the missing values is reasonable, say so out loud with na.rm = TRUE.\nThe naniar package summarizes an entire dataset at once with miss_var_summary(). Run it and read the table carefully, because it contains a trap: it reports that Cabin is never missing.\nThat is false. The blanks in Cabin were recorded as empty text, \"\", and R cannot know an empty string means “we do not know.” Once you tell it so with replace_with_na_all(), Cabin turns out to be missing for 687 of 891 passengers, about 77%.\nFinish by looking at gg_miss_var(), then write a sentence on whether you would be willing to use Cabin as a predictor.\nIt will, eventually. Knitting runs your document in a fresh R session, which is stricter than working in the console, and that strictness is what catches problems before your reader does. Three errors account for most of what you will hit:\nThat third one is the classic. Objects you created by hand in the console do not exist when knitting, because knitting starts clean. If a document works when you run chunks by hand but fails when you knit, this is almost always why.\nKnitting produces an .html file next to your .Rmd, with the same name. Upload the .html file to Canvas before you leave. If you did not finish every stage, upload what you have.",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-1-the-header",
+    "href": "lab01_rmarkdown.html#stage-1-the-header",
+    "title": "Lab: R Markdown",
+    "section": "Stage 1: The Header",
+    "text": "Stage 1: The Header",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-2-writing",
+    "href": "lab01_rmarkdown.html#stage-2-writing",
+    "title": "Lab: R Markdown",
+    "section": "Stage 2: Writing",
+    "text": "Stage 2: Writing",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-3-code-chunks",
+    "href": "lab01_rmarkdown.html#stage-3-code-chunks",
+    "title": "Lab: R Markdown",
+    "section": "Stage 3: Code Chunks",
+    "text": "Stage 3: Code Chunks",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-4-inline-code",
+    "href": "lab01_rmarkdown.html#stage-4-inline-code",
+    "title": "Lab: R Markdown",
+    "section": "Stage 4: Inline Code",
+    "text": "Stage 4: Inline Code",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-5-a-table",
+    "href": "lab01_rmarkdown.html#stage-5-a-table",
+    "title": "Lab: R Markdown",
+    "section": "Stage 5: A Table",
+    "text": "Stage 5: A Table",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-6-a-figure",
+    "href": "lab01_rmarkdown.html#stage-6-a-figure",
+    "title": "Lab: R Markdown",
+    "section": "Stage 6: A Figure",
+    "text": "Stage 6: A Figure",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-7-controlling-what-the-reader-sees",
+    "href": "lab01_rmarkdown.html#stage-7-controlling-what-the-reader-sees",
+    "title": "Lab: R Markdown",
+    "section": "Stage 7: Controlling What the Reader Sees",
+    "text": "Stage 7: Controlling What the Reader Sees",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-8-putting-it-together",
+    "href": "lab01_rmarkdown.html#stage-8-putting-it-together",
+    "title": "Lab: R Markdown",
+    "section": "Stage 8: Putting It Together",
+    "text": "Stage 8: Putting It Together",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-9-what-kind-of-variable-is-this",
+    "href": "lab01_rmarkdown.html#stage-9-what-kind-of-variable-is-this",
+    "title": "Lab: R Markdown",
+    "section": "Stage 9: What Kind of Variable Is This?",
+    "text": "Stage 9: What Kind of Variable Is This?",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#stage-10-missing-data",
+    "href": "lab01_rmarkdown.html#stage-10-missing-data",
+    "title": "Lab: R Markdown",
+    "section": "Stage 10: Missing Data",
+    "text": "Stage 10: Missing Data",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#when-something-breaks",
+    "href": "lab01_rmarkdown.html#when-something-breaks",
+    "title": "Lab: R Markdown",
+    "section": "When Something Breaks",
+    "text": "When Something Breaks",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "lab01_rmarkdown.html#submitting",
+    "href": "lab01_rmarkdown.html#submitting",
+    "title": "Lab: R Markdown",
+    "section": "Submitting",
+    "text": "Submitting",
+    "crumbs": [
+      "Labs",
+      "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "week2_4.html",
+    "href": "week2_4.html",
+    "title": "Bias and Variance",
+    "section": "",
+    "text": "Prediction errors can be broken down into two main parts: bias and variance.\nThese represent different sources of mistakes a model can make.\nUsually, there’s a tradeoff between keeping bias low and keeping variance low. It can be exceptionally hard to minimize both at the same time.\nBy understanding where bias and variance come from, we can make better choices when building models and end up with more accurate predictions.\nLet’s approach each concept in turn.\nBias is the difference between the average prediction from our model and the true value which we are trying to predict.\nIn machine learning, bias often refers to the systematic error in a model.\nBias in ML can lead to incorrect or unfair outcomes, possibly from flawed or incomplete training data, or perhaps from poor assumptions made by the algorithm.\nA biased model fails to accurately reflect the true relationship in the data, leading to poor generalization and skewed predictions.\nIn statistics, variance is a measure of dispersion, meaning it is a measure of how far a set of numbers is spread out from their average value.\nIn machine learning, variance typically refers to the sensitivity of a model’s predictions to small changes in the training data.\nSo, error due to variance is defined as the variability of a model prediction for a given data point.\nBias and variance are often introduced together in the context of the bias-variance tradeoff that occurs when models overfit, or underfit the data.\nWhen a model overfits the data, it means the model has learned too much from the training data, including random noise or minor fluctuations, rather than just the true underlying patterns.\nWhen a model underfits the data, it means the model is too simple to capture the underlying patterns in the data.\nThe bias-variance tradeoff can be understood as the tension between model simplicity and model flexibility: improving one can often worsen the other.\nThere is a sweet spot in between that balances bias and variance, resulting in the lowest total prediction error.\nThis can happen if the model is poorly specified and trained on very noisy or limited data:",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Bias and Variance"
+    ]
+  },
+  {
+    "objectID": "week2_4.html#variance-in-machine-learning",
+    "href": "week2_4.html#variance-in-machine-learning",
+    "title": "Bias and Variance",
+    "section": "Variance in Machine Learning",
+    "text": "Variance in Machine Learning",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Bias and Variance"
+    ]
+  },
+  {
+    "objectID": "week2_4.html#the-bias-variance-tradeoff",
+    "href": "week2_4.html#the-bias-variance-tradeoff",
+    "title": "Bias and Variance",
+    "section": "The Bias Variance Tradeoff",
+    "text": "The Bias Variance Tradeoff",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Bias and Variance"
+    ]
+  },
+  {
+    "objectID": "week2_2.html",
+    "href": "week2_2.html",
+    "title": "Problem Classes in ML",
+    "section": "",
+    "text": "Before listing specific problems, it helps to know that they divide into two families. The dividing question is simple: is there an outcome the model is trying to get right?\nThe data include a target, and the target supervises the learning.\nThere is no target.\nThe five problem classes below sort into those two families:\nMachine learning applications correspond to a wide variety of learning problems. Some major classes include:\nThe rest of the course works through these five problem classes:\nTwo things have to come first, and both arrive next week:",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_2.html#classification",
+    "href": "week2_2.html#classification",
+    "title": "Problem Classes in ML",
+    "section": "Classification",
+    "text": "Classification\n\nThe goal of classification is often to assign a category or label to each observation.\nThe music genre problem is a good example of a classification problem\nNote: The number of categories can be small, large, or even unbounded (e.g., optical character recognition, text classification, speech recognition).\n\n\n\n\nhttps://datahacker.rs/008-machine-learning-multiclass-classification-and-softmax-function/\n\n\n\n\n\n\n\n\nTipQuick Question\n\n\n\nWhere have you run into a classifier today? Think about your email, your phone, and anything that sorted something into a category for you.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_2.html#regression",
+    "href": "week2_2.html#regression",
+    "title": "Problem Classes in ML",
+    "section": "Regression",
+    "text": "Regression\n\nIn regression problems we are typically concerned with predicting a real-valued number for each item.\nFor example, we might be interested in predicting stock prices, or how stressed out someone is.\nNotes: The penalty for prediction errors depends on the magnitude of the difference between true and predicted values, unlike classification where categories are discrete and there is often no notion of distance between various categories.\n\n\n\nhttps://builtin.com/data-science/regression-machine-learning\n\n\n\n\n\n\n\n\n\nTipQuick Question\n\n\n\nWhere have you seen a number predicted rather than a category? Delivery time estimates and price forecasts are a good place to start.",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_2.html#ranking",
+    "href": "week2_2.html#ranking",
+    "title": "Problem Classes in ML",
+    "section": "Ranking",
+    "text": "Ranking\n\nWith ranking problems we are often tasked with ordering items according to a specific criterion.\nA well-known example of a ranking algorithm is Google’s PageRank algorithm.\nNotes: Ranking problems focus on relative order rather than exact category or numeric value.\n\n\n\n\nhttps://towardsdatascience.com/wp-content/uploads/2023/08/1ZFmd2Q-G95ArY93od20Adw.png\n\n\n\n\n\n\n\n\nTipQuick Question\n\n\n\nWhat gets ranked for you on a typical day, and what do you think the ranking is optimizing for?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_2.html#clustering",
+    "href": "week2_2.html#clustering",
+    "title": "Problem Classes in ML",
+    "section": "Clustering",
+    "text": "Clustering\n\nIn clustering problems we are typically looking to partition items into similar groups or regions.\nFor example, in social network analysis we are interested in identifying communities within large groups of people\nNotes: Clustering is often applied to very large datasets to reveal underlying structure.\n\n\n\n\nhttps://scikit-learn.org/stable/_images/sphx_glr_plot_cluster_comparison_001.png\n\n\n\n\n\n\n\n\nTipQuick Question\n\n\n\nTwo questions here:\n\nHow does clustering differ from classification?\nWhere might clustering be running on data about you?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "week2_2.html#dimensionality-reduction",
+    "href": "week2_2.html#dimensionality-reduction",
+    "title": "Problem Classes in ML",
+    "section": "Dimensionality Reduction",
+    "text": "Dimensionality Reduction\n\nWhen looking to solve dimension reduction problems we are typically interested in transforming high-dimensional data into a lower-dimensional representation while preserving important properties.\nCommon examples in psychology include identifying constructs in survey data or scales.\nNotes: Dimension reduction is also useful for feature extraction, noise reduction, and speeding up downstream learning tasks.\n\n\n\n\nhttps://www.sthda.com/english/sthda-upload/figures/principal-component-methods/006-principal-component-analysis-pca-variable-cos2-corrplot-1.png\n\n\n\n\n\n\n\n\nTipQuick Question\n\n\n\nPsychology does dimension reduction constantly. If you have ever taken a personality inventory and received five scores from fifty questions, you have seen it. Where else?",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
+    ]
+  },
+  {
+    "objectID": "r_intro.html",
+    "href": "r_intro.html",
+    "title": "Introduction to R",
+    "section": "",
+    "text": "Before getting started we will need to install R and RStudio.\nOne of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the ggplot2 package for plotting and visualizing data and the psych package for describing data numerically.\nTo install R packages you can use the install.packages() function directly in the console as follows:\ninstall.packages(\"ggplot2\")\nor you can do so from the Packages tab of the Files pane in RStudio using the following steps:\nOnce a package is installed you can load it into your environment using the library() function. Once loaded you have access to all the R functions supplied by that package.\nlibrary(\"ggplot2\")\nThere are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the CRAN Task Views. For example, there is an interesting Task View for Machine Learning that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the Sports Analytics Task View there is a f1dataR package that provides historical data from the beginning of Formula 1.\nOne of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.\nBy reading in data we are generally referring to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabular object where columns represent variables and rows represent cases. This is not always the case but covers the most basic use case.\nMany different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.\nNearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we’ll practice pulling pieces out of a data frame, creating new variables, and chaining operations together. These are the skills you’ll use in every single lab and assignment.\nLet’s read in the marketing data we saw previously (download: ifood_df.csv).\ndf &lt;- read.csv(\"data/ifood_df.csv\")\nA few functions are useful for getting oriented whenever you load a new dataset:\ndim(df)      # number of rows and columns\n\n[1] 2205   39\n\nnrow(df)     # number of rows (cases)\n\n[1] 2205\n\nnames(df)    # variable names\n\n [1] \"Income\"               \"Kidhome\"              \"Teenhome\"            \n [4] \"Recency\"              \"MntWines\"             \"MntFruits\"           \n [7] \"MntMeatProducts\"      \"MntFishProducts\"      \"MntSweetProducts\"    \n[10] \"MntGoldProds\"         \"NumDealsPurchases\"    \"NumWebPurchases\"     \n[13] \"NumCatalogPurchases\"  \"NumStorePurchases\"    \"NumWebVisitsMonth\"   \n[16] \"AcceptedCmp3\"         \"AcceptedCmp4\"         \"AcceptedCmp5\"        \n[19] \"AcceptedCmp1\"         \"AcceptedCmp2\"         \"Complain\"            \n[22] \"Z_CostContact\"        \"Z_Revenue\"            \"Response\"            \n[25] \"Age\"                  \"Customer_Days\"        \"marital_Divorced\"    \n[28] \"marital_Married\"      \"marital_Single\"       \"marital_Together\"    \n[31] \"marital_Widow\"        \"education_2n.Cycle\"   \"education_Basic\"     \n[34] \"education_Graduation\" \"education_Master\"     \"education_PhD\"       \n[37] \"MntTotal\"             \"MntRegularProds\"      \"AcceptedCmpOverall\"\nhead(df[, 1:6])  # first few rows of the first 6 columns\n\n  Income Kidhome Teenhome Recency MntWines MntFruits\n1  58138       0        0      58      635        88\n2  46344       1        1      38       11         1\n3  71613       0        0      26      426        49\n4  26646       1        0      26       11         4\n5  58293       1        0      94      173        43\n6  62513       0        1      16      520        42\nThe $ operator pulls a single variable out of a data frame as a vector. This is one of the most common operations in R, and you will see it constantly in this course.\nmean(df$Income)    # average household income\n\n[1] 51622.09\n\ntable(df$Complain) # how many customers lodged a complaint?\n\n\n   0    1 \n2185   20\nWe can also use $ to create a new variable in the data frame. For example, the number of children at home is split across two variables, Kidhome and Teenhome. Let’s combine them:\ndf$TotalKids &lt;- df$Kidhome + df$Teenhome\ntable(df$TotalKids)\n\n\n   0    1    2    3 \n 628 1112  415   50\nSquare brackets let us take a subset of a data frame using the pattern df[rows, columns]. Leaving either slot empty means “keep everything.”\ndf[1:5, ]                        # first five rows, all columns\n\n  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts\n1  58138       0        0      58      635        88             546\n2  46344       1        1      38       11         1               6\n3  71613       0        0      26      426        49             127\n4  26646       1        0      26       11         4              20\n5  58293       1        0      94      173        43             118\n  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases\n1             172               88           88                 3\n2               2                1            6                 2\n3             111               21           42                 1\n4              10                3            5                 2\n5              46               27           15                 5\n  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth\n1               8                  10                 4                 7\n2               1                   1                 2                 5\n3               8                   2                10                 4\n4               2                   0                 4                 6\n5               5                   3                 6                 5\n  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain\n1            0            0            0            0            0        0\n2            0            0            0            0            0        0\n3            0            0            0            0            0        0\n4            0            0            0            0            0        0\n5            0            0            0            0            0        0\n  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced\n1             3        11        1  63          2822                0\n2             3        11        0  66          2272                0\n3             3        11        0  55          2471                0\n4             3        11        0  36          2298                0\n5             3        11        0  39          2320                0\n  marital_Married marital_Single marital_Together marital_Widow\n1               0              1                0             0\n2               0              1                0             0\n3               0              0                1             0\n4               0              0                1             0\n5               1              0                0             0\n  education_2n.Cycle education_Basic education_Graduation education_Master\n1                  0               0                    1                0\n2                  0               0                    1                0\n3                  0               0                    1                0\n4                  0               0                    1                0\n5                  0               0                    0                0\n  education_PhD MntTotal MntRegularProds AcceptedCmpOverall TotalKids\n1             0     1529            1441                  0         0\n2             0       21              15                  0         2\n3             0      734             692                  0         0\n4             0       48              43                  0         1\n5             1      407             392                  0         1\n\nhead(df[, c(\"Income\", \"Age\")])   # all rows, two named columns\n\n  Income Age\n1  58138  63\n2  46344  66\n3  71613  55\n4  26646  36\n5  58293  39\n6  62513  53\nWe can also select rows using a logical condition. For example, customers with incomes above $75,000:\nhigh_income &lt;- df[df$Income &gt; 75000, ]\nnrow(high_income)\n\n[1] 350\nRead that as: “keep the rows of df where df$Income &gt; 75000 is TRUE, and all columns.”\nReal data is rarely complete. R represents a missing value with NA (“not available”), and NA behaves differently than you might expect: most computations involving a missing value return a missing value.\nx &lt;- c(4, 7, NA, 2)\nmean(x)\n\n[1] NA\nThat NA answer is R being honest: it can’t know the mean of numbers it doesn’t have. If you’ve decided that ignoring the missing values is appropriate, say so explicitly with na.rm = TRUE:\nmean(x, na.rm = TRUE)\n\n[1] 4.333333\nTo find missing values, use is.na(). Asking x == NA does not work, because comparing anything to an unknown is also unknown:\nis.na(x)        # which entries are missing?\n\n[1] FALSE FALSE  TRUE FALSE\n\nsum(is.na(x))   # how many are missing?\n\n[1] 1\nFor a whole data frame, colSums(is.na(df)) shows the missing count per variable. Our marketing data happens to be a cleaned dataset:\nsum(is.na(df))  # no missing values here\n\n[1] 0\nReal psychological data will rarely be this kind; the General Social Survey data in your first assignment certainly won’t be. Handling missingness well is a modeling topic we’ll treat properly in the feature engineering unit; for now, the essential skills are noticing missing values and understanding why NAs propagate through your calculations.\nAs our analyses grow, we often want to perform several operations in sequence. The pipe operator %&gt;% takes the object on its left and passes it to the function on its right. These two lines do exactly the same thing:\nlibrary(dplyr)\n\nhead(df[, 1:4])      # without the pipe\n\n  Income Kidhome Teenhome Recency\n1  58138       0        0      58\n2  46344       1        1      38\n3  71613       0        0      26\n4  26646       1        0      26\n5  58293       1        0      94\n6  62513       0        1      16\n\ndf[, 1:4] %&gt;% head() # with the pipe\n\n  Income Kidhome Teenhome Recency\n1  58138       0        0      58\n2  46344       1        1      38\n3  71613       0        0      26\n4  26646       1        0      26\n5  58293       1        0      94\n6  62513       0        1      16\nThat looks like a small change, but pipes let us read a chain of steps top-to-bottom like a recipe, instead of inside-out. You will see %&gt;% throughout the course materials, especially once we start building preprocessing and modeling pipelines.\nNote: newer versions of R also have a built-in pipe written |&gt;. It works the same way for our purposes, and you may see either form in the wild.\nThe dplyr package (loaded above) provides a set of verbs for working with data frames that pair naturally with the pipe. The four you’ll see most often:\ndf %&gt;% select(Income, Age, MntWines) %&gt;% head()\n\n  Income Age MntWines\n1  58138  63      635\n2  46344  66       11\n3  71613  55      426\n4  26646  36       11\n5  58293  39      173\n6  62513  53      520\ndf %&gt;% filter(Income &gt; 75000) %&gt;% nrow()\n\n[1] 350\ndf %&gt;%\n  mutate(TotalKids = Kidhome + Teenhome) %&gt;%\n  select(Income, TotalKids) %&gt;%\n  head()\n\n  Income TotalKids\n1  58138         0\n2  46344         2\n3  71613         0\n4  26646         1\n5  58293         1\n6  62513         1\nChaining verbs together is where this style shines. For example: among customers who did and did not complain, what is the average wine spending and group size?\ndf %&gt;%\n  group_by(Complain) %&gt;%\n  summarise(\n    avg_wine = mean(MntWines),\n    n = n()\n  )\n\n# A tibble: 2 × 3\n  Complain avg_wine     n\n     &lt;int&gt;    &lt;dbl&gt; &lt;int&gt;\n1        0     307.  2185\n2        1     177.    20\nBase R subsetting ($, [ , ]) and dplyr verbs are two ways of doing the same things, and this course uses both: base R for quick one-liners, dplyr chains for multi-step preprocessing. You should be comfortable reading both. When writing your own code, use whichever feels clearer to you.\nOnce you have read in a data frame it can be useful to know how the variables are understood by R. For example, let’s look at some Kaggle Marketing Analytics Data. You can download the raw data here.\nThis section will briefly introduce you to visualizing data using the ggplot2 package. R has a number of systems for making graphs but ggplot2 is by far the most developed option. ggplot2 implements the grammar of graphics, and if you’d like to learn more about the motivation for this work take a look at The Layered Grammar of Graphics.\nIn-class exercises and assignments in this course are distributed as R Markdown (.Rmd) files. An R Markdown file mixes written text with runnable R code. You will complete the code, knit the document into a polished HTML or PDF report, and submit it on Canvas. Learning this workflow now means the first graded exercise will hold no surprises.\nThroughout the semester we will lean on a set of R packages for wrangling, visualization, and machine learning. Install them all now by pasting this into your console (not an R Markdown chunk!):\ninstall.packages(c(\n  \"rmarkdown\",    # writing and knitting R Markdown documents\n  \"knitr\",        # runs the code inside those documents\n  \"tidyverse\",    # data wrangling and ggplot2 graphics\n  \"psych\",        # describing data\n  \"naniar\",       # exploring missing data\n  \"titanic\",      # passenger data used in the R Markdown lab\n  \"tidymodels\",   # modeling framework (includes rsample, recipes)\n  \"caret\",        # classic ML toolkit\n  \"rpart\",        # decision trees\n  \"ipred\",        # bagging\n  \"ranger\",       # random forests\n  \"gbm\",          # gradient boosting\n  \"glmnet\",       # regularized regression\n  \"vip\",          # variable importance plots\n  \"AmesHousing\",  # housing data used in the regression unit\n  \"cluster\",      # clustering methods\n  \"factoextra\"    # clustering and PCA visualizations\n))\nThis can take a while, since tidyverse, tidymodels, and caret are large. Start it, get a coffee, and let it finish. Do this before the first lab so class time isn’t spent watching progress bars.\nA few assignment-specific packages (for example, gssr for working with the General Social Survey) will be installed later with instructions provided in the assignment itself.",
+    "crumbs": [
+      "Introduction to R"
+    ]
+  },
+  {
+    "objectID": "r_intro.html#r-packages",
+    "href": "r_intro.html#r-packages",
+    "title": "Introduction to R",
+    "section": "R Packages",
+    "text": "R Packages",
+    "crumbs": [
+      "Introduction to R"
+    ]
+  },
+  {
+    "objectID": "r_intro.html#reading-in-data",
+    "href": "r_intro.html#reading-in-data",
+    "title": "Introduction to R",
+    "section": "Reading in Data",
+    "text": "Reading in Data",
+    "crumbs": [
+      "Introduction to R"
+    ]
+  },
+  {
+    "objectID": "r_intro.html#working-with-data-frames",
+    "href": "r_intro.html#working-with-data-frames",
+    "title": "Introduction to R",
+    "section": "Working with Data Frames",
+    "text": "Working with Data Frames",
+    "crumbs": [
+      "Introduction to R"
+    ]
+  },
+  {
+    "objectID": "r_intro.html#describing-data-numerically",
+    "href": "r_intro.html#describing-data-numerically",
+    "title": "Introduction to R",
+    "section": "Describing Data Numerically",
+    "text": "Describing Data Numerically",
+    "crumbs": [
+      "Introduction to R"
+    ]
+  },
+  {
+    "objectID": "r_intro.html#describing-data-visually",
+    "href": "r_intro.html#describing-data-visually",
+    "title": "Introduction to R",
+    "section": "Describing Data Visually",
+    "text": "Describing Data Visually",
+    "crumbs": [
+      "Introduction to R"
+    ]
+  },
+  {
+    "objectID": "r_intro.html#r-markdown-and-course-setup",
+    "href": "r_intro.html#r-markdown-and-course-setup",
+    "title": "Introduction to R",
+    "section": "R Markdown and Course Setup",
+    "text": "R Markdown and Course Setup",
+    "crumbs": [
+      "Introduction to R"
+    ]
+  },
+  {
+    "objectID": "f01_welcome.html",
+    "href": "f01_welcome.html",
+    "title": "Welcome to PSYC559",
+    "section": "",
+    "text": "Welcome to Applied Machine Learning in Psychology. This page covers our first meeting: why psychology and machine learning belong in the same sentence, what “big data” actually means for behavioral scientists, and how this course will run.\nG. Stanley Hall began questionnaire research in 1882 hoping to understand “the contents of children’s minds.”\nThe use of questionnaires and surveys only grew during the First World War, when psychologists faced data collection at military scale. As Young (2018) recounts:\nIn other words, one of the most familiar tools in all of psychology, the Likert scale, was itself born from a big data problem.\nThe shift came at a cost, though. Young (2018) describes it as a move from thick description to thin: flattening a person’s experience to a number on a scale made mass data easy to refine, combine, and plot, but the individual all but disappeared into the aggregate. Psychology has been navigating that trade-off between rich, messy description and manageable, aggregable numbers ever since.\nActually, the big data story runs through the very building you are sitting in…\nL. L. Thurstone spent his final years at UNC, moving here from Chicago in 1952, and the university’s Psychometric Laboratory still bears his name.\nIn 1959 the lab acquired the first computer at UNC, a Royal McBee LGP-30. It was the first of a series of installations that made the Lab “one of the few places in the world where computers were used for psychological data collection and statistical analysis in the 1960s” (Thissen, 2016).\nBelow is Davie Hall around 1967, shortly after it opened, along with a floor plan of the Lab’s computer-based facilities on its third floor, the same floor as our classroom: an IBM 1130 for data processing, a PDP-8 minicomputer running banks of teletype and display stations, and dedicated rooms for waiting, testing, and debriefing participants.\nPsychologists were building big data pipelines in this very building for half a century before data science as a field existed.\nJones, L. V., Johnson, E. S., & Young, F. W. (1973). Computer control of experiments in problem solving, psychophysics, and decision making. In B. Weiss (Ed.), Digital computers in the behavior laboratory (pp. 309-340). New York: Appleton-Century-Crofts.\nThissen, D. (2016). Remembering Lyle V. Jones (1924-2016). Psychometrika, 81(3), 904-905. https://doi.org/10.1007/s11336-016-9510-4\nToday, large and complex datasets appear across nearly every corner of the field, including research on:\nYoung, J. L. (2018). The long history of big data in psychology. The American Journal of Psychology, 131(4), 477-482. https://doi.org/10.5406/amerjpsyc.131.4.0477\n“Big Data” is a buzzword in academia and industry, but its meaning is shrouded in conceptual vagueness.\nThe term gets used to describe everything from the technological ability to store, aggregate, and process data to the sheer excess of information available in daily life.\nDe Mauro et al. (2015) reviewed the many competing definitions and identified four key themes:\nTwo of these themes matter most for this course.\nA few useful terms for thinking about where all this data comes from:\nAnalyzing data at this scale pushes us beyond traditional statistical techniques in several ways: a shift away from explanation towards prediction, machine learning techniques (both supervised and unsupervised, terms we will define on Thursday), and methods that protect against false discovery, that is, seeing patterns where none exist simply because we have enormous quantities of data.\nDe Mauro, A., Greco, M., & Grimaldi, M. (2015). What is big data? A consensual definition and a review of key research topics. AIP Conference Proceedings, 1644(1), 97-104.\nTo make this concrete, consider the Human Screenome Project (Reeves, Robinson, & Ram, 2020).\nInstead of asking people to estimate their “screen time,” researchers record moment-by-moment changes on a person’s screens: a screenshot every 5 seconds, compressed and encrypted on the device, for many months at a time.\nThe result is what they call a screenome, by analogy to the genome: a high-resolution record of a person’s digital life. The project has collected over 30 million screenshots from more than 600 people. To get a feel for what a screenome actually looks like, watch this sample video from the project: a real stretch of one person’s screen life, played back frame by frame.\nEach captured frame is an ordinary moment of phone use, like this one:\nWhy does this level of detail matter? Consider two 14-year-olds living in the same northern California community. By a conventional “screen time” measure they are nearly identical, but the screenome tells a different story:\nA single summary number (e.g. “about 4 hours per week”) would treat these two adolescents as the same.\nThe patterns that plausibly matter for their well-being live in the structure that the summary throws away.\nThis is the century-old tension from Young’s history returning with the polarity reversed.\nData like this is why this course exists: it is rich, complex, far beyond what a t-test was built for, and the question of what to do with it is exactly where machine learning enters.\nReeves, B., Robinson, T., & Ram, N. (2020). Time for the human screenome project. Nature, 577(7790), 314-317.",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
+  },
+  {
+    "objectID": "f01_welcome.html#the-long-history-of-big-data-in-psychology",
+    "href": "f01_welcome.html#the-long-history-of-big-data-in-psychology",
+    "title": "Welcome to PSYC559",
+    "section": "The Long History of Big Data in Psychology",
+    "text": "The Long History of Big Data in Psychology",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
+  },
+  {
+    "objectID": "f01_welcome.html#but-what-is-big-data",
+    "href": "f01_welcome.html#but-what-is-big-data",
+    "title": "Welcome to PSYC559",
+    "section": "But What Is “Big Data”?",
+    "text": "But What Is “Big Data”?",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
+  },
+  {
+    "objectID": "f01_welcome.html#an-example-the-human-screenome-project",
+    "href": "f01_welcome.html#an-example-the-human-screenome-project",
+    "title": "Welcome to PSYC559",
+    "section": "An Example: The Human Screenome Project",
+    "text": "An Example: The Human Screenome Project",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
+  },
+  {
+    "objectID": "f01_welcome.html#about-this-course",
+    "href": "f01_welcome.html#about-this-course",
+    "title": "Welcome to PSYC559",
+    "section": "About This Course",
+    "text": "About This Course",
+    "crumbs": [
+      "Course Foundations",
+      "Welcome to PSYC559"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PSYC559: Applied Machine Learning in Psychology",
+    "section": "",
+    "text": "Zachary Fisher · fisherz@unc.edu · 337A Davie Hall · Office hours by appointment"
+  },
+  {
+    "objectID": "index.html#announcements",
+    "href": "index.html#announcements",
+    "title": "PSYC559: Applied Machine Learning in Psychology",
+    "section": "📣 Announcements",
+    "text": "📣 Announcements\n\n\n8/12: The Introduction to R pages are now available in the sidebar. If you’ve never used R, start there.\nWelcome to PSYC559! This page is updated throughout the semester, so check back for announcements and newly released materials."
+  },
+  {
+    "objectID": "index.html#this-week",
+    "href": "index.html#this-week",
+    "title": "PSYC559: Applied Machine Learning in Psychology",
+    "section": "🗓️ This Week",
+    "text": "🗓️ This Week\n\n\n\n\n\n\n\nWeek of August 18: Getting Started\n\nTue 8/18: Introduction to the course\nThu 8/20: Fundamentals of machine learning · Read: Yarkoni & Westfall (2017)\nBefore the first R lab (8/25), install R and RStudio using the links below."
+  },
+  {
+    "objectID": "index.html#quick-links",
+    "href": "index.html#quick-links",
+    "title": "PSYC559: Applied Machine Learning in Psychology",
+    "section": "Quick Links",
+    "text": "Quick Links\n\n\n\n📚 Course Materials\nLecture pages and labs, released as the semester progresses.\nBrowse materials\n\n\n\n\n📄 Syllabus & Canvas\nThe syllabus, readings, and assignment submissions live on Canvas.\nOpen Canvas\n\n\n\n\n⬇️ Install R & RStudio\nBoth are free. Install them before the first lab.\nR RStudio\n\n\n\n\nIf you find errors or typos in any of the course materials, please let me know."
+  },
+  {
+    "objectID": "introduction.html",
+    "href": "introduction.html",
+    "title": "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY",
+    "section": "",
+    "text": "Welcome to Applied Machine Learning in Psychology.",
+    "crumbs": [
+      "Table of Contents"
+    ]
+  },
+  {
+    "objectID": "introduction.html#the-syllabus",
+    "href": "introduction.html#the-syllabus",
+    "title": "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY",
+    "section": "The Syllabus",
+    "text": "The Syllabus\nStudents may review the syllabus on Canvas.",
+    "crumbs": [
+      "Table of Contents"
+    ]
+  },
+  {
     "objectID": "f02_explanation_prediction.html",
     "href": "f02_explanation_prediction.html",
     "title": "From Explanation to Prediction",
@@ -143,176 +558,201 @@
     ]
   },
   {
-    "objectID": "introduction.html",
-    "href": "introduction.html",
-    "title": "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY",
+    "objectID": "week2_1.html",
+    "href": "week2_1.html",
+    "title": "Important Terms and Distinctions",
     "section": "",
-    "text": "Welcome to Applied Machine Learning in Psychology.",
+    "text": "The amount of jargon one finds when digging into the machine learning (ML) literature is a common source of confusion. Many ML terms are borrowed from statistics, computer science, or everyday language, but they can carry subtly or even radically different meanings in the context of ML.\nIn the following overview I will provide a high-level summary of some common terms used in machine learning, and try to highlight the differences between concepts that may seem familiar to you, but can represent distinct ideas.\nWe mapped these terms in From Explanation to Prediction. The short version:\nOne test sorts most cases: was the behavior programmed by a person, or learned from data? A thermostat follows a written rule. A spam filter learned its rules from millions of emails.\nThe rest of this page is about a different distinction, one that causes more confusion than the first:\nPeople use the two words interchangeably in casual conversation. Keeping them separate will make the next ten weeks much easier to follow.\nML approaches rely heavily on accurate and efficient prediction algorithms.\nSo, what exactly are algorithms?\nAn algorithm is a step-by-step, well-defined procedure for solving a problem or completing a task.\nIn computing and machine learning, algorithms are generally a finite sequence of instructions that takes some input, follows a set of rules, and produces an output.\nOne can think of an algorithm as the recipe one follows when cooking a meal. The ingredients of the dish are analogous to the input data, and the finished dish is equivalent to the model.\nSo, how does an algorithm differ from a model? What is a model in the context of ML?\nA model in machine learning is the learned representation of patterns in data, produced by applying a learning algorithm to a dataset.\nA model in ML is the vehicle to make predictions, classify new examples, or infer relationships.\nA model is the outcome of training a machine learning algorithm on data. It encapsulates the patterns, relationships, or structure discovered in the training data.\nThe model is the end product of learning. It is the part that actually knows something about the data and can be used to make predictions.\nIn machine learning: Data + Algorithm → Model → Predictions.\nChoosing an algorithm for a new problem is genuinely hard, and we will spend much of this course on how to make and defend that choice.\nThe difficulty is not a gap in your training. It is a real result, known as the no free lunch theorem:\nThree consequences follow, and they shape the whole semester:\nThis is also why the course is organized as a tour of many methods rather than a defense of one favorite.\nAn algorithm is a set of ordered instructions for solving a problem. Machine learning algorithms are no different. They are systematic ways of finding patterns in data.",
     "crumbs": [
-      "Table of Contents"
+      "Introduction to Machine Learning",
+      "Important Terms and Distinctions"
     ]
   },
   {
-    "objectID": "introduction.html#the-syllabus",
-    "href": "introduction.html#the-syllabus",
-    "title": "PSYC559: APPLIED MACHINE LEARNING IN PSYCHOLOGY",
-    "section": "The Syllabus",
-    "text": "The Syllabus\nStudents may review the syllabus on Canvas.",
+    "objectID": "week2_1.html#characteristics-of-an-algorithm",
+    "href": "week2_1.html#characteristics-of-an-algorithm",
+    "title": "Important Terms and Distinctions",
+    "section": "Characteristics of an Algorithm",
+    "text": "Characteristics of an Algorithm",
     "crumbs": [
-      "Table of Contents"
+      "Introduction to Machine Learning",
+      "Important Terms and Distinctions"
     ]
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "PSYC559: Applied Machine Learning in Psychology",
+    "objectID": "week2_1.html#algorithms-in-machine-learning",
+    "href": "week2_1.html#algorithms-in-machine-learning",
+    "title": "Important Terms and Distinctions",
+    "section": "Algorithms in Machine Learning",
+    "text": "Algorithms in Machine Learning",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Terms and Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#definition",
+    "href": "week2_1.html#definition",
+    "title": "Important Terms and Distinctions",
+    "section": "Definition",
+    "text": "Definition",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Terms and Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#examples",
+    "href": "week2_1.html#examples",
+    "title": "Important Terms and Distinctions",
+    "section": "Examples",
+    "text": "Examples",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Terms and Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_1.html#things-to-remember",
+    "href": "week2_1.html#things-to-remember",
+    "title": "Important Terms and Distinctions",
+    "section": "Things to Remember",
+    "text": "Things to Remember",
+    "crumbs": [
+      "Introduction to Machine Learning",
+      "Important Terms and Distinctions"
+    ]
+  },
+  {
+    "objectID": "week2_3.html",
+    "href": "week2_3.html",
+    "title": "Data Splitting",
     "section": "",
-    "text": "Zachary Fisher · fisherz@unc.edu · 337A Davie Hall · Office hours by appointment"
-  },
-  {
-    "objectID": "index.html#announcements",
-    "href": "index.html#announcements",
-    "title": "PSYC559: Applied Machine Learning in Psychology",
-    "section": "📣 Announcements",
-    "text": "📣 Announcements\n\n\n8/12: The Introduction to R pages are now available in the sidebar. If you’ve never used R, start there.\nWelcome to PSYC559! This page is updated throughout the semester, so check back for announcements and newly released materials."
-  },
-  {
-    "objectID": "index.html#this-week",
-    "href": "index.html#this-week",
-    "title": "PSYC559: Applied Machine Learning in Psychology",
-    "section": "🗓️ This Week",
-    "text": "🗓️ This Week\n\n\n\n\n\n\n\nWeek of August 18: Getting Started\n\nTue 8/18: Introduction to the course\nThu 8/20: Fundamentals of machine learning · Read: Yarkoni & Westfall (2017)\nBefore the first R lab (8/25), install R and RStudio using the links below."
-  },
-  {
-    "objectID": "index.html#quick-links",
-    "href": "index.html#quick-links",
-    "title": "PSYC559: Applied Machine Learning in Psychology",
-    "section": "Quick Links",
-    "text": "Quick Links\n\n\n\n📚 Course Materials\nLecture pages and labs, released as the semester progresses.\nBrowse materials\n\n\n\n\n📄 Syllabus & Canvas\nThe syllabus, readings, and assignment submissions live on Canvas.\nOpen Canvas\n\n\n\n\n⬇️ Install R & RStudio\nBoth are free. Install them before the first lab.\nR RStudio\n\n\n\n\nIf you find errors or typos in any of the course materials, please let me know."
-  },
-  {
-    "objectID": "f01_welcome.html",
-    "href": "f01_welcome.html",
-    "title": "Welcome to PSYC559",
-    "section": "",
-    "text": "Welcome to Applied Machine Learning in Psychology. This page covers our first meeting: why psychology and machine learning belong in the same sentence, what “big data” actually means for behavioral scientists, and how this course will run.\nG. Stanley Hall began questionnaire research in 1882 hoping to understand “the contents of children’s minds.”\nThe use of questionnaires and surveys only grew during the First World War, when psychologists faced data collection at military scale. As Young (2018) recounts:\nIn other words, one of the most familiar tools in all of psychology, the Likert scale, was itself born from a big data problem.\nThe shift came at a cost, though. Young (2018) describes it as a move from thick description to thin: flattening a person’s experience to a number on a scale made mass data easy to refine, combine, and plot, but the individual all but disappeared into the aggregate. Psychology has been navigating that trade-off between rich, messy description and manageable, aggregable numbers ever since.\nActually, the big data story runs through the very building you are sitting in…\nL. L. Thurstone spent his final years at UNC, moving here from Chicago in 1952, and the university’s Psychometric Laboratory still bears his name.\nIn 1959 the lab acquired the first computer at UNC, a Royal McBee LGP-30. It was the first of a series of installations that made the Lab “one of the few places in the world where computers were used for psychological data collection and statistical analysis in the 1960s” (Thissen, 2016).\nBelow is Davie Hall around 1967, shortly after it opened, along with a floor plan of the Lab’s computer-based facilities on its third floor, the same floor as our classroom: an IBM 1130 for data processing, a PDP-8 minicomputer running banks of teletype and display stations, and dedicated rooms for waiting, testing, and debriefing participants.\nPsychologists were building big data pipelines in this very building for half a century before data science as a field existed.\nJones, L. V., Johnson, E. S., & Young, F. W. (1973). Computer control of experiments in problem solving, psychophysics, and decision making. In B. Weiss (Ed.), Digital computers in the behavior laboratory (pp. 309-340). New York: Appleton-Century-Crofts.\nThissen, D. (2016). Remembering Lyle V. Jones (1924-2016). Psychometrika, 81(3), 904-905. https://doi.org/10.1007/s11336-016-9510-4\nToday, large and complex datasets appear across nearly every corner of the field, including research on:\nYoung, J. L. (2018). The long history of big data in psychology. The American Journal of Psychology, 131(4), 477-482. https://doi.org/10.5406/amerjpsyc.131.4.0477\n“Big Data” is a buzzword in academia and industry, but its meaning is shrouded in conceptual vagueness.\nThe term gets used to describe everything from the technological ability to store, aggregate, and process data to the sheer excess of information available in daily life.\nDe Mauro et al. (2015) reviewed the many competing definitions and identified four key themes:\nTwo of these themes matter most for this course.\nA few useful terms for thinking about where all this data comes from:\nAnalyzing data at this scale pushes us beyond traditional statistical techniques in several ways: a shift away from explanation towards prediction, machine learning techniques (both supervised and unsupervised, terms we will define on Thursday), and methods that protect against false discovery, that is, seeing patterns where none exist simply because we have enormous quantities of data.\nDe Mauro, A., Greco, M., & Grimaldi, M. (2015). What is big data? A consensual definition and a review of key research topics. AIP Conference Proceedings, 1644(1), 97-104.\nTo make this concrete, consider the Human Screenome Project (Reeves, Robinson, & Ram, 2020).\nInstead of asking people to estimate their “screen time,” researchers record moment-by-moment changes on a person’s screens: a screenshot every 5 seconds, compressed and encrypted on the device, for many months at a time.\nThe result is what they call a screenome, by analogy to the genome: a high-resolution record of a person’s digital life. The project has collected over 30 million screenshots from more than 600 people. To get a feel for what a screenome actually looks like, watch this sample video from the project: a real stretch of one person’s screen life, played back frame by frame.\nEach captured frame is an ordinary moment of phone use, like this one:\nWhy does this level of detail matter? Consider two 14-year-olds living in the same northern California community. By a conventional “screen time” measure they are nearly identical, but the screenome tells a different story:\nA single summary number (e.g. “about 4 hours per week”) would treat these two adolescents as the same.\nThe patterns that plausibly matter for their well-being live in the structure that the summary throws away.\nThis is the century-old tension from Young’s history returning with the polarity reversed.\nData like this is why this course exists: it is rich, complex, far beyond what a t-test was built for, and the question of what to do with it is exactly where machine learning enters.\nReeves, B., Robinson, T., & Ram, N. (2020). Time for the human screenome project. Nature, 577(7790), 314-317.",
+    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1]  9 10  6\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 2 6 1\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
     "crumbs": [
-      "Course Foundations",
-      "Welcome to PSYC559"
+      "Introduction to Machine Learning",
+      "Data Splitting"
     ]
   },
   {
-    "objectID": "f01_welcome.html#the-long-history-of-big-data-in-psychology",
-    "href": "f01_welcome.html#the-long-history-of-big-data-in-psychology",
-    "title": "Welcome to PSYC559",
-    "section": "The Long History of Big Data in Psychology",
-    "text": "The Long History of Big Data in Psychology",
+    "objectID": "week2_3.html#parameters-vs.-hyperparameters",
+    "href": "week2_3.html#parameters-vs.-hyperparameters",
+    "title": "Data Splitting",
+    "section": "Parameters vs. Hyperparameters",
+    "text": "Parameters vs. Hyperparameters",
     "crumbs": [
-      "Course Foundations",
-      "Welcome to PSYC559"
+      "Introduction to Machine Learning",
+      "Data Splitting"
     ]
   },
   {
-    "objectID": "f01_welcome.html#but-what-is-big-data",
-    "href": "f01_welcome.html#but-what-is-big-data",
-    "title": "Welcome to PSYC559",
-    "section": "But What Is “Big Data”?",
-    "text": "But What Is “Big Data”?",
+    "objectID": "week2_3.html#role-of-parameters-in-data-splitting",
+    "href": "week2_3.html#role-of-parameters-in-data-splitting",
+    "title": "Data Splitting",
+    "section": "Role of Parameters in Data Splitting",
+    "text": "Role of Parameters in Data Splitting",
     "crumbs": [
-      "Course Foundations",
-      "Welcome to PSYC559"
+      "Introduction to Machine Learning",
+      "Data Splitting"
     ]
   },
   {
-    "objectID": "f01_welcome.html#an-example-the-human-screenome-project",
-    "href": "f01_welcome.html#an-example-the-human-screenome-project",
-    "title": "Welcome to PSYC559",
-    "section": "An Example: The Human Screenome Project",
-    "text": "An Example: The Human Screenome Project",
+    "objectID": "week2_3.html#example-k-means-clustering",
+    "href": "week2_3.html#example-k-means-clustering",
+    "title": "Data Splitting",
+    "section": "Example: k-Means Clustering",
+    "text": "Example: k-Means Clustering",
     "crumbs": [
-      "Course Foundations",
-      "Welcome to PSYC559"
+      "Introduction to Machine Learning",
+      "Data Splitting"
     ]
   },
   {
-    "objectID": "f01_welcome.html#about-this-course",
-    "href": "f01_welcome.html#about-this-course",
-    "title": "Welcome to PSYC559",
-    "section": "About This Course",
-    "text": "About This Course",
+    "objectID": "week2_3.html#prevents-overfitting-to-the-training-data",
+    "href": "week2_3.html#prevents-overfitting-to-the-training-data",
+    "title": "Data Splitting",
+    "section": "Prevents Overfitting to the Training Data",
+    "text": "Prevents Overfitting to the Training Data",
     "crumbs": [
-      "Course Foundations",
-      "Welcome to PSYC559"
+      "Introduction to Machine Learning",
+      "Data Splitting"
     ]
   },
   {
-    "objectID": "r_intro.html",
-    "href": "r_intro.html",
-    "title": "Introduction to R",
-    "section": "",
-    "text": "Before getting started we will need to install R and RStudio.\nOne of the main reasons to be excited about R is the package library system. In R, packages are like apps. R packages extend the functionality of base R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded freely without much hassle (compared to many other package libraries). For example, we will often use the ggplot2 package for plotting and visualizing data and the psych package for describing data numerically.\nTo install R packages you can use the install.packages() function directly in the console as follows:\ninstall.packages(\"ggplot2\")\nor you can do so from the Packages tab of the Files pane in RStudio using the following steps:\nOnce a package is installed you can load it into your environment using the library() function. Once loaded you have access to all the R functions supplied by that package.\nlibrary(\"ggplot2\")\nThere are many ways to find useful R packages on the internet simply by googling the type of data or analysis you are interested in. Another way is to look at the CRAN Task Views. For example, there is an interesting Task View for Machine Learning that contains many relevant packages you might be interested in using. Some class members expressed interest in F1 racing. In the Sports Analytics Task View there is a f1dataR package that provides historical data from the beginning of Formula 1.\nOne of the most important initial tasks you’ll face in R is reading in data. Let’s walk through some basics.\nBy reading in data we are generally referring to the process of importing data from a local directory on your computer, or from the web, into R. When we read a data file into R, we often read it in as a tabular object where columns represent variables and rows represent cases. This is not always the case but covers the most basic use case.\nMany different data file formats can be read into R as data frames, such as .csv (comma separated values), .xlsx (Excel workbook), .txt (text), .sas7bdat (SAS), and .sav (SPSS) can be read into R. We will mostly focus on the .csv case in this class.\nNearly everything we do this semester will start with a data frame: a rectangular table where each row is a case (a person, a customer, a house) and each column is a variable. In this section we’ll practice pulling pieces out of a data frame, creating new variables, and chaining operations together. These are the skills you’ll use in every single lab and assignment.\nLet’s read in the marketing data we saw previously (download: ifood_df.csv).\ndf &lt;- read.csv(\"data/ifood_df.csv\")\nA few functions are useful for getting oriented whenever you load a new dataset:\ndim(df)      # number of rows and columns\n\n[1] 2205   39\n\nnrow(df)     # number of rows (cases)\n\n[1] 2205\n\nnames(df)    # variable names\n\n [1] \"Income\"               \"Kidhome\"              \"Teenhome\"            \n [4] \"Recency\"              \"MntWines\"             \"MntFruits\"           \n [7] \"MntMeatProducts\"      \"MntFishProducts\"      \"MntSweetProducts\"    \n[10] \"MntGoldProds\"         \"NumDealsPurchases\"    \"NumWebPurchases\"     \n[13] \"NumCatalogPurchases\"  \"NumStorePurchases\"    \"NumWebVisitsMonth\"   \n[16] \"AcceptedCmp3\"         \"AcceptedCmp4\"         \"AcceptedCmp5\"        \n[19] \"AcceptedCmp1\"         \"AcceptedCmp2\"         \"Complain\"            \n[22] \"Z_CostContact\"        \"Z_Revenue\"            \"Response\"            \n[25] \"Age\"                  \"Customer_Days\"        \"marital_Divorced\"    \n[28] \"marital_Married\"      \"marital_Single\"       \"marital_Together\"    \n[31] \"marital_Widow\"        \"education_2n.Cycle\"   \"education_Basic\"     \n[34] \"education_Graduation\" \"education_Master\"     \"education_PhD\"       \n[37] \"MntTotal\"             \"MntRegularProds\"      \"AcceptedCmpOverall\"\nhead(df[, 1:6])  # first few rows of the first 6 columns\n\n  Income Kidhome Teenhome Recency MntWines MntFruits\n1  58138       0        0      58      635        88\n2  46344       1        1      38       11         1\n3  71613       0        0      26      426        49\n4  26646       1        0      26       11         4\n5  58293       1        0      94      173        43\n6  62513       0        1      16      520        42\nThe $ operator pulls a single variable out of a data frame as a vector. This is one of the most common operations in R, and you will see it constantly in this course.\nmean(df$Income)    # average household income\n\n[1] 51622.09\n\ntable(df$Complain) # how many customers lodged a complaint?\n\n\n   0    1 \n2185   20\nWe can also use $ to create a new variable in the data frame. For example, the number of children at home is split across two variables, Kidhome and Teenhome. Let’s combine them:\ndf$TotalKids &lt;- df$Kidhome + df$Teenhome\ntable(df$TotalKids)\n\n\n   0    1    2    3 \n 628 1112  415   50\nSquare brackets let us take a subset of a data frame using the pattern df[rows, columns]. Leaving either slot empty means “keep everything.”\ndf[1:5, ]                        # first five rows, all columns\n\n  Income Kidhome Teenhome Recency MntWines MntFruits MntMeatProducts\n1  58138       0        0      58      635        88             546\n2  46344       1        1      38       11         1               6\n3  71613       0        0      26      426        49             127\n4  26646       1        0      26       11         4              20\n5  58293       1        0      94      173        43             118\n  MntFishProducts MntSweetProducts MntGoldProds NumDealsPurchases\n1             172               88           88                 3\n2               2                1            6                 2\n3             111               21           42                 1\n4              10                3            5                 2\n5              46               27           15                 5\n  NumWebPurchases NumCatalogPurchases NumStorePurchases NumWebVisitsMonth\n1               8                  10                 4                 7\n2               1                   1                 2                 5\n3               8                   2                10                 4\n4               2                   0                 4                 6\n5               5                   3                 6                 5\n  AcceptedCmp3 AcceptedCmp4 AcceptedCmp5 AcceptedCmp1 AcceptedCmp2 Complain\n1            0            0            0            0            0        0\n2            0            0            0            0            0        0\n3            0            0            0            0            0        0\n4            0            0            0            0            0        0\n5            0            0            0            0            0        0\n  Z_CostContact Z_Revenue Response Age Customer_Days marital_Divorced\n1             3        11        1  63          2822                0\n2             3        11        0  66          2272                0\n3             3        11        0  55          2471                0\n4             3        11        0  36          2298                0\n5             3        11        0  39          2320                0\n  marital_Married marital_Single marital_Together marital_Widow\n1               0              1                0             0\n2               0              1                0             0\n3               0              0                1             0\n4               0              0                1             0\n5               1              0                0             0\n  education_2n.Cycle education_Basic education_Graduation education_Master\n1                  0               0                    1                0\n2                  0               0                    1                0\n3                  0               0                    1                0\n4                  0               0                    1                0\n5                  0               0                    0                0\n  education_PhD MntTotal MntRegularProds AcceptedCmpOverall TotalKids\n1             0     1529            1441                  0         0\n2             0       21              15                  0         2\n3             0      734             692                  0         0\n4             0       48              43                  0         1\n5             1      407             392                  0         1\n\nhead(df[, c(\"Income\", \"Age\")])   # all rows, two named columns\n\n  Income Age\n1  58138  63\n2  46344  66\n3  71613  55\n4  26646  36\n5  58293  39\n6  62513  53\nWe can also select rows using a logical condition. For example, customers with incomes above $75,000:\nhigh_income &lt;- df[df$Income &gt; 75000, ]\nnrow(high_income)\n\n[1] 350\nRead that as: “keep the rows of df where df$Income &gt; 75000 is TRUE, and all columns.”\nReal data is rarely complete. R represents a missing value with NA (“not available”), and NA behaves differently than you might expect: most computations involving a missing value return a missing value.\nx &lt;- c(4, 7, NA, 2)\nmean(x)\n\n[1] NA\nThat NA answer is R being honest: it can’t know the mean of numbers it doesn’t have. If you’ve decided that ignoring the missing values is appropriate, say so explicitly with na.rm = TRUE:\nmean(x, na.rm = TRUE)\n\n[1] 4.333333\nTo find missing values, use is.na(). Asking x == NA does not work, because comparing anything to an unknown is also unknown:\nis.na(x)        # which entries are missing?\n\n[1] FALSE FALSE  TRUE FALSE\n\nsum(is.na(x))   # how many are missing?\n\n[1] 1\nFor a whole data frame, colSums(is.na(df)) shows the missing count per variable. Our marketing data happens to be a cleaned dataset:\nsum(is.na(df))  # no missing values here\n\n[1] 0\nReal psychological data will rarely be this kind; the General Social Survey data in your first assignment certainly won’t be. Handling missingness well is a modeling topic we’ll treat properly in the feature engineering unit; for now, the essential skills are noticing missing values and understanding why NAs propagate through your calculations.\nAs our analyses grow, we often want to perform several operations in sequence. The pipe operator %&gt;% takes the object on its left and passes it to the function on its right. These two lines do exactly the same thing:\nlibrary(dplyr)\n\nhead(df[, 1:4])      # without the pipe\n\n  Income Kidhome Teenhome Recency\n1  58138       0        0      58\n2  46344       1        1      38\n3  71613       0        0      26\n4  26646       1        0      26\n5  58293       1        0      94\n6  62513       0        1      16\n\ndf[, 1:4] %&gt;% head() # with the pipe\n\n  Income Kidhome Teenhome Recency\n1  58138       0        0      58\n2  46344       1        1      38\n3  71613       0        0      26\n4  26646       1        0      26\n5  58293       1        0      94\n6  62513       0        1      16\nThat looks like a small change, but pipes let us read a chain of steps top-to-bottom like a recipe, instead of inside-out. You will see %&gt;% throughout the course materials, especially once we start building preprocessing and modeling pipelines.\nNote: newer versions of R also have a built-in pipe written |&gt;. It works the same way for our purposes, and you may see either form in the wild.\nThe dplyr package (loaded above) provides a set of verbs for working with data frames that pair naturally with the pipe. The four you’ll see most often:\ndf %&gt;% select(Income, Age, MntWines) %&gt;% head()\n\n  Income Age MntWines\n1  58138  63      635\n2  46344  66       11\n3  71613  55      426\n4  26646  36       11\n5  58293  39      173\n6  62513  53      520\ndf %&gt;% filter(Income &gt; 75000) %&gt;% nrow()\n\n[1] 350\ndf %&gt;%\n  mutate(TotalKids = Kidhome + Teenhome) %&gt;%\n  select(Income, TotalKids) %&gt;%\n  head()\n\n  Income TotalKids\n1  58138         0\n2  46344         2\n3  71613         0\n4  26646         1\n5  58293         1\n6  62513         1\nChaining verbs together is where this style shines. For example: among customers who did and did not complain, what is the average wine spending and group size?\ndf %&gt;%\n  group_by(Complain) %&gt;%\n  summarise(\n    avg_wine = mean(MntWines),\n    n = n()\n  )\n\n# A tibble: 2 × 3\n  Complain avg_wine     n\n     &lt;int&gt;    &lt;dbl&gt; &lt;int&gt;\n1        0     307.  2185\n2        1     177.    20\nBase R subsetting ($, [ , ]) and dplyr verbs are two ways of doing the same things, and this course uses both: base R for quick one-liners, dplyr chains for multi-step preprocessing. You should be comfortable reading both. When writing your own code, use whichever feels clearer to you.\nOnce you have read in a data frame it can be useful to know how the variables are understood by R. For example, let’s look at some Kaggle Marketing Analytics Data. You can download the raw data here.\nThis section will briefly introduce you to visualizing data using the ggplot2 package. R has a number of systems for making graphs but ggplot2 is by far the most developed option. ggplot2 implements the grammar of graphics, and if you’d like to learn more about the motivation for this work take a look at The Layered Grammar of Graphics.\nIn-class exercises and assignments in this course are distributed as R Markdown (.Rmd) files. An R Markdown file mixes written text with runnable R code. You will complete the code, knit the document into a polished HTML or PDF report, and submit it on Canvas. Learning this workflow now means the first graded exercise will hold no surprises.\nThroughout the semester we will lean on a set of R packages for wrangling, visualization, and machine learning. Install them all now by pasting this into your console (not an R Markdown chunk!):\ninstall.packages(c(\n  \"tidyverse\",    # data wrangling and ggplot2 graphics\n  \"psych\",        # describing data\n  \"tidymodels\",   # modeling framework (includes rsample, recipes)\n  \"caret\",        # classic ML toolkit\n  \"rpart\",        # decision trees\n  \"ipred\",        # bagging\n  \"ranger\",       # random forests\n  \"gbm\",          # gradient boosting\n  \"glmnet\",       # regularized regression\n  \"vip\",          # variable importance plots\n  \"AmesHousing\",  # housing data used in the regression unit\n  \"cluster\",      # clustering methods\n  \"factoextra\"    # clustering and PCA visualizations\n))\nThis can take a while, since tidyverse, tidymodels, and caret are large. Start it, get a coffee, and let it finish. Do this before the first lab so class time isn’t spent watching progress bars.\nA few assignment-specific packages (for example, gssr for working with the General Social Survey) will be installed later with instructions provided in the assignment itself.",
+    "objectID": "week2_3.html#simulates-real-world-performance",
+    "href": "week2_3.html#simulates-real-world-performance",
+    "title": "Data Splitting",
+    "section": "Simulates Real-World Performance",
+    "text": "Simulates Real-World Performance",
     "crumbs": [
-      "Introduction to R"
+      "Introduction to Machine Learning",
+      "Data Splitting"
     ]
   },
   {
-    "objectID": "r_intro.html#r-packages",
-    "href": "r_intro.html#r-packages",
-    "title": "Introduction to R",
-    "section": "R Packages",
-    "text": "R Packages",
+    "objectID": "week2_3.html#helps-with-model-selection-tuning",
+    "href": "week2_3.html#helps-with-model-selection-tuning",
+    "title": "Data Splitting",
+    "section": "Helps with Model Selection & Tuning",
+    "text": "Helps with Model Selection & Tuning",
     "crumbs": [
-      "Introduction to R"
+      "Introduction to Machine Learning",
+      "Data Splitting"
     ]
   },
   {
-    "objectID": "r_intro.html#reading-in-data",
-    "href": "r_intro.html#reading-in-data",
-    "title": "Introduction to R",
-    "section": "Reading in Data",
-    "text": "Reading in Data",
+    "objectID": "week2_3.html#detects-data-leakage",
+    "href": "week2_3.html#detects-data-leakage",
+    "title": "Data Splitting",
+    "section": "Detects Data Leakage",
+    "text": "Detects Data Leakage",
     "crumbs": [
-      "Introduction to R"
+      "Introduction to Machine Learning",
+      "Data Splitting"
     ]
   },
   {
-    "objectID": "r_intro.html#working-with-data-frames",
-    "href": "r_intro.html#working-with-data-frames",
-    "title": "Introduction to R",
-    "section": "Working with Data Frames",
-    "text": "Working with Data Frames",
+    "objectID": "week2_3.html#provides-a-fair-benchmark",
+    "href": "week2_3.html#provides-a-fair-benchmark",
+    "title": "Data Splitting",
+    "section": "Provides a Fair Benchmark",
+    "text": "Provides a Fair Benchmark",
     "crumbs": [
-      "Introduction to R"
+      "Introduction to Machine Learning",
+      "Data Splitting"
     ]
   },
   {
-    "objectID": "r_intro.html#describing-data-numerically",
-    "href": "r_intro.html#describing-data-numerically",
-    "title": "Introduction to R",
-    "section": "Describing Data Numerically",
-    "text": "Describing Data Numerically",
+    "objectID": "week2_2.html#supervised-learning",
+    "href": "week2_2.html#supervised-learning",
+    "title": "Problem Classes in ML",
+    "section": "Supervised Learning",
+    "text": "Supervised Learning",
     "crumbs": [
-      "Introduction to R"
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
     ]
   },
   {
-    "objectID": "r_intro.html#describing-data-visually",
-    "href": "r_intro.html#describing-data-visually",
-    "title": "Introduction to R",
-    "section": "Describing Data Visually",
-    "text": "Describing Data Visually",
+    "objectID": "week2_2.html#unsupervised-learning",
+    "href": "week2_2.html#unsupervised-learning",
+    "title": "Problem Classes in ML",
+    "section": "Unsupervised Learning",
+    "text": "Unsupervised Learning",
     "crumbs": [
-      "Introduction to R"
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
     ]
   },
   {
-    "objectID": "r_intro.html#r-markdown-and-course-setup",
-    "href": "r_intro.html#r-markdown-and-course-setup",
-    "title": "Introduction to R",
-    "section": "R Markdown and Course Setup",
-    "text": "R Markdown and Course Setup",
+    "objectID": "week2_2.html#select-examples",
+    "href": "week2_2.html#select-examples",
+    "title": "Problem Classes in ML",
+    "section": "Select Examples",
+    "text": "Select Examples",
     "crumbs": [
-      "Introduction to R"
+      "Introduction to Machine Learning",
+      "Problem Classes in ML"
     ]
   }
 ]

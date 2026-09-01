@@ -13,7 +13,9 @@ editor_options:
 
 Data splitting (e.g., dividing data into **training, validation, and test samples**) is crucial because it protects us from fooling ourselves about how well a model actually performs.
 
+:::  {style="color: lightblue"}
 ### Training Sample
+:::
 
 -   The subset of examples used to train the learning algorithm. Here we typically estimate the model's **parameters** in the training sample.
 
@@ -21,13 +23,17 @@ Data splitting (e.g., dividing data into **training, validation, and test sample
 
 -   **Notes**: Spending too much in training won’t allow us to get a good assessment of predictive performance. We may find a model that fits the training data very well, but is not generalizable (*overfitting*).
 
+:::  {style="color: lightblue"}
 ### Validation Sample
+:::
 
 -   Samples used to tune algorithm **hyperparameters** (e.g., regularization strength, number of neurons in a network).
 
 -   For example, from our 100 individuals in the training sample, we may split the training data into 4 groups of 25 participants. Each of these will be a validation sample, and allow us to select the optimal model settings or tuning parameters before our final evaluation.
 
+:::  {style="color: lightblue"}
 ### Test Sample
+:::
 
 -   The test Sample used to evaluate model performance, separate from training and validation. The test sample is not made available in the learning stage. Sometimes too much spent in testing won’t allow us to get a good assessment of model parameters.
 
@@ -35,13 +41,27 @@ Data splitting (e.g., dividing data into **training, validation, and test sample
 
 ![https://www.statology.org/validation-set-vs-test-set/](images/data_split.png)
 
-::: {style="color: yellow"}
-# (Hyper)parameters in the Context of Data Splitting
+::: {.callout-tip icon="false"}
+## Example
+
+Courses often have a similar three way split:
+
+-   **Homework** is your training data. You learn from it and you get the answers back.
+-   **The practice exam** is your validation data. You use it to figure out what to study next.
+-   **The final** is your test data. You see it once, and it decides your grade.
+
+Now discuss two things that could go wrong:
+
+1.  Why wouldn’t we want the final exam to be the thing that tells us what to study?
+2.  What would be the problem with taking the same practice exam over and over until you could get every question right?
+
 :::
 
 In our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it's worth explaining the difference.
 
+:::  {style="color: lightblue"}
 ## Parameters vs. Hyperparameters
+:::
 
 -   **Parameters** are values learned automatically (or estimated) from the training data. The model parameters are often the thing we are interested in estimating in a given algorithm.
 
@@ -51,7 +71,9 @@ In our discussion of the training and validation samples we introduce the idea o
 
 -   For example, the the number of clusters used to partition the data
 
+:::  {style="color: lightblue"}
 ## Role of Parameters in Data Splitting
+:::
 
 When we split data, each portion plays a distinct role:
 
@@ -66,20 +88,39 @@ When we split data, each portion plays a distinct role:
 
 ------------------------------------------------------------------------
 
+:::  {style="color: lightblue"}
 ## Example: *k*-Means Clustering
+:::
 
+:::  {style="color: lightblue"}
 ### Parameters (learned from the data)
+:::
 
 -   **Cluster centroids**: the coordinates of the cluster centers.\
 -   These are *calculated by the algorithm* during training and adjusted iteratively until convergence.\
--   You do not set them manually — the algorithm figures them out.
+-   You do not set them manually. The algorithm figures them out.
 
+:::  {style="color: lightblue"}
 ### Hyperparameters (set before training)
+:::
 
 -   **Number of clusters (*k*)**: chosen by the user before running the algorithm.\
 -   **Initialization method** (e.g., random, k-means++).\
 -   **Maximum number of iterations** allowed.\
 -   These control *how* the algorithm runs, but are not learned from the data itself.
+
+::: {.callout-note icon="false"}
+## See It Run
+
+Naftali Harris built an interactive visualization of *k*-means where you place your own points, choose *k*, and then step through the algorithm one iteration at a time.
+
+[Visualizing K-Means Clustering](https://www.naftaliharris.com/blog/visualizing-k-means-clustering/)
+
+Two things to try, both of which are hyperparameter choices you just read about:
+
+-   Run the same data with a different number of clusters.
+-   Choose the starting points badly on purpose and watch where the algorithm ends up.
+:::
 
 ------------------------------------------------------------------------
 
@@ -89,22 +130,28 @@ When we split data, each portion plays a distinct role:
 
 ------------------------------------------------------------------------
 
+:::  {style="color: lightblue"}
 ## Prevents Overfitting to the Training Data
+:::
 
 -   When a model is trained, it adapts to patterns in the training set.\
--   If we only check performance on that same data, we might think the model is excellent — but it may just be memorizing instead of generalizing.\
+-   If we only check performance on that same data, we might think the model is excellent, but it may just be memorizing instead of generalizing.\
 -   A separate test set lets us see how the model behaves on *new, unseen* data.
 
 ------------------------------------------------------------------------
 
+:::  {style="color: lightblue"}
 ## Simulates Real-World Performance
+:::
 
 -   In real life, the model will be applied to data it hasn’t seen before.\
 -   By holding out a test set, we simulate that scenario, giving us a better sense of expected performance in practice.
 
 ------------------------------------------------------------------------
 
+:::  {style="color: lightblue"}
 ## Helps with Model Selection & Tuning
+:::
 
 -   A validation set (or cross-validation) is used to choose hyperparameters (like tree depth, learning rate, regularization strength).\
 -   If we tuned on the test set, we’d essentially be “leaking” information, and performance estimates would be biased upward.\
@@ -112,7 +159,9 @@ When we split data, each portion plays a distinct role:
 
 ------------------------------------------------------------------------
 
+:::  {style="color: lightblue"}
 ## Detects Data Leakage
+:::
 
 -   Sometimes information from the future or from labels sneaks into the features.\
 -   If this happens, the model might look perfect on the training set but fail on a clean split.\
@@ -120,7 +169,9 @@ When we split data, each portion plays a distinct role:
 
 ------------------------------------------------------------------------
 
+:::  {style="color: lightblue"}
 ## Provides a Fair Benchmark
+:::
 
 -   In research and industry, different models need to be compared on a *common, untouched test set*.\
 -   Without splitting, comparisons aren’t meaningful, since each model might overfit differently.
@@ -131,9 +182,19 @@ When we split data, each portion plays a distinct role:
 # Data Splitting in Real Life
 :::
 
-In groups of 3–4, discuss:
+::: {.callout-tip icon="false"}
+## Data Splitting in Real Life
 
-> ***Imagine a real-world scenario that involves learning and evaluation. This can be interpreted loosely, if necessary. Describe the different aspects of the learning and assessment process and how they might corresponds to training, validation, and test sets in the context of machine learning? Why?”***
+In groups of 3 or 4 (about 6 minutes). Think of a situation outside statistics that involves learning something and then being evaluated on it. Interpret this loosely.
+
+Then map it onto the three samples:
+
+-   What plays the role of the **training** data?
+-   What plays the role of the **validation** data?
+-   What plays the role of the **test** data?
+
+Each group shares its scenario and says which of the three was hardest to identify.
+:::
 
 ::: {style="color: yellow"}
 # K-Folds Cross-Validation
@@ -141,7 +202,9 @@ In groups of 3–4, discuss:
 
 So, what does all this data splitting mean for us in practice? Let's take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation
 
+:::  {style="color: lightblue"}
 ### Motivation for Cross-Validation
+:::
 
 When talking about data-splitting we discussed training, validation and test sets. For a moment, let's take a closer look at the training and validation sets to get a clear idea of what is happening.
 
@@ -154,13 +217,17 @@ This method is simple and useful. It gives us an early warning if our model is o
 
 This idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.
 
+:::  {style="color: lightblue"}
 ### K-Folds
+:::
 
 One idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.
 
 ![https://bradleyboehmke.github.io/HOML/process.html#splitting](images/cv.png){width="800"}
 
+:::  {style="color: lightblue"}
 ### K-Folds Cross-Validation in Steps
+:::
 
 Sometimes it is helpful to write out the steps of a procedure like this explicitly.
 
@@ -174,7 +241,7 @@ Sometimes it is helpful to write out the steps of a procedure like this explicit
 
 For each fold *i* from 1 to *k*:\
 1. Use fold *i* as the validation set.\
-2. Use the remaining *k – 1* folds as the training set.\
+2. Use the remaining *k* minus 1 folds as the training set.\
 3. Train the model on the training set.\
 4. Evaluate its performance on the validation set.
 

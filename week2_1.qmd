@@ -7,58 +7,38 @@ editor_options:
   chunk_output_type: console
 ---
 
-The amount of jargon one finds when digging into the machine learning (ML) literature is a common source of confusion for new learners. Many ML terms are borrowed from statistics, computer science, or everyday language, but they can carry subtly or even radically different meanings in the context of ML.
+The amount of jargon one finds when digging into the machine learning (ML) literature is a common source of confusion. Many ML terms are borrowed from statistics, computer science, or everyday language, but they can carry subtly or even radically different meanings in the context of ML.
 
 In the following overview I will provide a high-level summary of some common terms used in machine learning, and try to highlight the differences between concepts that may seem familiar to you, but can represent distinct ideas.
 
-**Two important distinction I will try to highlight are the differences between:**
-
-1.  Artificial Intelligence (AI) and Machine Learning (ML)
-
-2.  Algorithms and Models
-
 ::: {style="color: yellow"}
-# AI vs. Machine Learning
+# A Quick Review: AI, ML, and Deep Learning
 :::
 
-Artificial Intelligence (AI) and Machine Learning (ML) are related but distinct concepts in computer science and data analysis.
+We mapped these terms in [From Explanation to Prediction](f02_explanation_prediction.qmd). The short version:
 
-## Artificial Intelligence (AI)
+-   **Artificial intelligence** is the broad field of building systems that do things normally requiring human intelligence, by any means, including rules written out by hand.
+-   **Machine learning** is the subset where the behavior is learned from data instead of programmed.
+-   **Deep learning** is machine learning built on neural networks with many layers.
 
--   AI is the broad field of creating systems that can perform tasks that normally require human intelligence.
--   Typically, the goal of AI is to create programs that can simulate intelligent behavior, whether or not they learn from data.
--   Common Examples of AI include**:**
-    -   Digital assistants, LLMs
+One test sorts most cases: was the behavior programmed by a person, or learned from data? A thermostat follows a written rule. A spam filter learned its rules from millions of emails.
 
-*Can you think of any examples of AI you encounter in your everyday life?*
-
-## Machine Learning (ML)
-
--   ML is a branch of AI focused on systems that learn patterns from data and improve automatically from experience.
--   When doing ML we are generally interested in creating models that generalize well enough to make accurate predictions on unseen inputs.
--   Common use cases for ML in everyday life include**:**
-    -   Recommendation systems, image recognition
-
-*Can you think of any examples of ML you encounter in your everyday life?*
-
-## Differences Between AI and ML
-
-| Aspect | Artificial Intelligence (AI) | Machine Learning (ML) |
-|-------------------|---------------------------|---------------------------|
-| Focus | Simulating intelligent behavior | Learning patterns from data |
-| Goal | Broader human-like intelligence | Specific predictive or decision-making tasks |
-| Examples | Chess engines, self-driving cars, expert systems | Regression, neural networks, clustering |
-
-: \
 ![https://www.edureka.co/blog/ai-vs-machine-learning-vs-deep-learning/](images/AI-vs-ML-vs-Deep-Learning.png)
 
-Broadly speaking, ML is a branch of AI focused on training models to recognize patterns and make predictions using algorithms. AI encompasses a broader set of techniques, some of which do not involve learning from data at all.
+::: {style="color: yellow"}
+# Algorithms and Models
+:::
 
-<div>
+The rest of this page is about a different distinction, one that causes more confusion than the first:
 
-# What is an Algorithm in ML? {style="color: yellow"}
+-   An **algorithm** is the procedure that does the learning.
+-   A **model** is what that procedure produces.
 
-</div>
+People use the two words interchangeably in casual conversation. Keeping them separate will make the next ten weeks much easier to follow.
+
+:::  {style="color: yellow"}
+# What is an Algorithm in ML?
+:::
 
 ML approaches rely heavily on accurate and efficient prediction algorithms.
 
@@ -68,15 +48,19 @@ An algorithm is a step-by-step, well-defined procedure for solving a problem or 
 
 In computing and machine learning, algorithms are generally a finite sequence of instructions that takes some input, follows a set of rules, and produces an output.
 
+::: {style="color: lightblue"}
 ## Characteristics of an Algorithm
+:::
 
-1.  Input – Data the algorithm operates on
-2.  Output – The result produced after execution
-3.  Finiteness – Must finish in a finite number of steps
-4.  Definiteness – Each step is clear and unambiguous
-5.  Effectiveness – Each operation can actually be carried out
+1.  **Input**: the data the algorithm operates on
+2.  **Output**: the result produced after execution
+3.  **Finiteness**: it must finish in a finite number of steps
+4.  **Definiteness**: each step is clear and unambiguous
+5.  **Effectiveness**: each operation can actually be carried out
 
+::: {style="color: lightblue"}
 ## Algorithms in Machine Learning
+:::
 
 -   In ML, an algorithm is the procedure used to train a model from data.
 
@@ -100,15 +84,19 @@ A model in ML is the vehicle to make predictions, classify new examples, or infe
 
 ![https://www.geeksforgeeks.org/machine-learning/types-of-machine-learning/](images/model_ml.png)
 
+::: {style="color: lightblue"}
 ## Definition
+:::
 
-A model is the outcome of training a machine learning algorithm on data.It encapsulates the patterns, relationships, or structure discovered in the training data.
+A model is the outcome of training a machine learning algorithm on data. It encapsulates the patterns, relationships, or structure discovered in the training data.
 
 -   **Input:** Features from the training data\
 -   **Process:** Algorithm (e.g., linear regression, decision tree, neural network)\
 -   **Output:** Parameters, structure, or rules that allow prediction
 
+::: {style="color: lightblue"}
 ## Examples
+:::
 
 | Algorithm | Resulting Model | What It Represents |
 |-------------------|--------------------|---------------------------------|
@@ -119,7 +107,9 @@ A model is the outcome of training a machine learning algorithm on data.It encap
 
 ------------------------------------------------------------------------
 
+::: {style="color: lightblue"}
 ## Things to Remember
+:::
 
 -   The algorithm is the procedure for learning\
 -   The model is the trained artifact used for prediction or inference
@@ -128,34 +118,49 @@ A model is the outcome of training a machine learning algorithm on data.It encap
 -   Algorithm = recipe (instructions for learning)
 -   Model = finished dish (learned representation ready to use)
 
-The model is the end product of learning — the part that actually “knows” something about the data and can be used to make predictions. In ML: Data + Algorithm → Model → Predictions.
+The model is the end product of learning. It is the part that actually knows something about the data and can be used to make predictions.
+
+In machine learning: Data + Algorithm → Model → Predictions.
 
 ::: {style="color: yellow"}
 # Choosing the Right Algorithm
 :::
 
-Understanding what algorithm to choose for a specific problem or application is often difficult. In this class we will devote a lot of time on how to make these decisions, and communicate the results of an analysis. That said, we often have minimal knowledge of the problem or data at hand when we first approach an applied problem, and it is difficult to know which ML method will perform best. This idea is generally known as the no free lunch theorem
+Choosing an algorithm for a new problem is genuinely hard, and we will spend much of this course on how to make and defend that choice.
 
--   An algorithm is just the *procedure* — its effectiveness depends entirely on the kind of data/problem it’s applied to
+The difficulty is not a gap in your training. It is a real result, known as the **no free lunch theorem**:
 
--   In addition, no single model type will always generalize best
+-   No single algorithm performs best across all possible problems.
+-   An algorithm that wins on one kind of data will lose on another.
+-   Averaged over every possible problem, all algorithms perform the same.
 
--   The “right” choice depends on the problem domain and data distribution
+Three consequences follow, and they shape the whole semester:
+
+-   You cannot know in advance which method will win on your data.
+-   You therefore have to try several and compare them honestly.
+-   Comparing them honestly requires held out data, which is why data splitting comes next.
+
+This is also why the course is organized as a tour of many methods rather than a defense of one favorite.
 
 ::: {style="color: yellow"}
 # Design Your Own Algorithm
 :::
 
-An algorithm is just a set of step-by-step instructions to solve a problem. Machine learning algorithms are no different—they’re just systematic ways of finding patterns in data. Let’s explore what that means.
+An algorithm is a set of ordered instructions for solving a problem. Machine learning algorithms are no different. They are systematic ways of finding patterns in data.
 
-In groups of 3–4, imagine you are writing an algorithm for a simple real-world problem:
+::: {.callout-tip icon="false"}
+## Design Your Own Algorithm
 
-> **“How could you design an algorithm that helps a computer decide, in real time, whether a song is best classified as hip-hop or indie rock?”**
+In groups of 3 or 4 (about 10 minutes). Suppose you have access to a person's **screenome** in real time, the moment by moment record of everything on their screen that we looked at in the first lecture.
 
-Each group should discuss (and prepare to share):
+How would you design an algorithm that decides whether that person is stressed?
 
-1.  **What features would you use?**
+Work through these questions in order:
 
-2.  **What rules or steps would you design?**
+1.  **What features would you use?** Think about what a screenome actually records: which apps are open, how often the person switches between them, how long each session lasts, what time of day it is, and what they are typing.
+2.  **What rules or steps would you design?** Be specific enough that someone could follow them without asking you questions.
+3.  **How would you know whether your algorithm was right?** Where would the correct answers come from?
+4.  **How would the algorithm improve if you had this data from many people?**
 
-3.  **How would the algorithm improve if you had many examples of songs?**
+Each group shares one feature they would use and the hardest problem they ran into.
+:::

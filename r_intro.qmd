@@ -672,8 +672,12 @@ Throughout the semester we will lean on a set of R packages for wrangling, visua
 
 ```{r, eval=FALSE}
 install.packages(c(
+  "rmarkdown",    # writing and knitting R Markdown documents
+  "knitr",        # runs the code inside those documents
   "tidyverse",    # data wrangling and ggplot2 graphics
   "psych",        # describing data
+  "naniar",       # exploring missing data
+  "titanic",      # passenger data used in the R Markdown lab
   "tidymodels",   # modeling framework (includes rsample, recipes)
   "caret",        # classic ML toolkit
   "rpart",        # decision trees
@@ -701,7 +705,13 @@ library(tidyverse)
 library(tidymodels)
 library(caret)
 library(psych)
+library(rmarkdown)
 ```
+
+A second check, since every assignment in this course is submitted as a knitted
+document: in RStudio choose **File \> New File \> R Markdown...**, accept the
+default template, and click **Knit**. If a formatted document appears, your
+setup is complete. If RStudio offers to install anything at that point, let it.
 
 If something fails to load, re-run `install.packages()` for that package and read the error message. If you're still stuck, bring the error to class or office hours. Getting your machine working is a course goal in week one, not an obstacle.
 

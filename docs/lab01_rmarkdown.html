@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Problem Classes in ML – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Lab: R Markdown – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -82,7 +117,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_2.html">Problem Classes in ML</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lab01_rmarkdown.html">Labs</a></li><li class="breadcrumb-item"><a href="./lab01_rmarkdown.html">Lab: R Markdown</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -150,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_2.html" class="sidebar-item-text sidebar-link active">
+  <a href="./week2_2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Problem Classes in ML</span></a>
   </div>
 </li>
@@ -223,7 +258,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./lab01_rmarkdown.html" class="sidebar-item-text sidebar-link">
+  <a href="./lab01_rmarkdown.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Lab: R Markdown</span></a>
   </div>
 </li>
@@ -239,26 +274,28 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#two-flavors-of-machine-learning" id="toc-two-flavors-of-machine-learning" class="nav-link active" data-scroll-target="#two-flavors-of-machine-learning">Two Flavors of Machine Learning</a></li>
-  <li><a href="#supervised-learning" id="toc-supervised-learning" class="nav-link" data-scroll-target="#supervised-learning">Supervised Learning</a></li>
-  <li><a href="#unsupervised-learning" id="toc-unsupervised-learning" class="nav-link" data-scroll-target="#unsupervised-learning">Unsupervised Learning</a></li>
-  <li><a href="#select-examples" id="toc-select-examples" class="nav-link" data-scroll-target="#select-examples">Select Examples</a></li>
-  <li><a href="#major-classes-of-machine-learning-problems" id="toc-major-classes-of-machine-learning-problems" class="nav-link" data-scroll-target="#major-classes-of-machine-learning-problems">Major Classes of Machine Learning Problems</a></li>
-  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification">Classification</a></li>
-  <li><a href="#regression" id="toc-regression" class="nav-link" data-scroll-target="#regression">Regression</a></li>
-  <li><a href="#ranking" id="toc-ranking" class="nav-link" data-scroll-target="#ranking">Ranking</a></li>
-  <li><a href="#clustering" id="toc-clustering" class="nav-link" data-scroll-target="#clustering">Clustering</a></li>
-  <li><a href="#dimensionality-reduction" id="toc-dimensionality-reduction" class="nav-link" data-scroll-target="#dimensionality-reduction">Dimensionality Reduction</a></li>
-  <li><a href="#looking-forward" id="toc-looking-forward" class="nav-link" data-scroll-target="#looking-forward">Looking Forward</a></li>
+  <li><a href="#stage-1-the-header" id="toc-stage-1-the-header" class="nav-link active" data-scroll-target="#stage-1-the-header">Stage 1: The Header</a></li>
+  <li><a href="#stage-2-writing" id="toc-stage-2-writing" class="nav-link" data-scroll-target="#stage-2-writing">Stage 2: Writing</a></li>
+  <li><a href="#why-not-just-use-word" id="toc-why-not-just-use-word" class="nav-link" data-scroll-target="#why-not-just-use-word">Why not just use Word?</a></li>
+  <li><a href="#stage-3-code-chunks" id="toc-stage-3-code-chunks" class="nav-link" data-scroll-target="#stage-3-code-chunks">Stage 3: Code Chunks</a></li>
+  <li><a href="#stage-4-inline-code" id="toc-stage-4-inline-code" class="nav-link" data-scroll-target="#stage-4-inline-code">Stage 4: Inline Code</a></li>
+  <li><a href="#stage-5-a-table" id="toc-stage-5-a-table" class="nav-link" data-scroll-target="#stage-5-a-table">Stage 5: A Table</a></li>
+  <li><a href="#stage-6-a-figure" id="toc-stage-6-a-figure" class="nav-link" data-scroll-target="#stage-6-a-figure">Stage 6: A Figure</a></li>
+  <li><a href="#stage-7-controlling-what-the-reader-sees" id="toc-stage-7-controlling-what-the-reader-sees" class="nav-link" data-scroll-target="#stage-7-controlling-what-the-reader-sees">Stage 7: Controlling What the Reader Sees</a></li>
+  <li><a href="#stage-8-putting-it-together" id="toc-stage-8-putting-it-together" class="nav-link" data-scroll-target="#stage-8-putting-it-together">Stage 8: Putting It Together</a></li>
+  <li><a href="#stage-9-what-kind-of-variable-is-this" id="toc-stage-9-what-kind-of-variable-is-this" class="nav-link" data-scroll-target="#stage-9-what-kind-of-variable-is-this">Stage 9: What Kind of Variable Is This?</a></li>
+  <li><a href="#stage-10-missing-data" id="toc-stage-10-missing-data" class="nav-link" data-scroll-target="#stage-10-missing-data">Stage 10: Missing Data</a></li>
+  <li><a href="#when-something-breaks" id="toc-when-something-breaks" class="nav-link" data-scroll-target="#when-something-breaks">When Something Breaks</a></li>
+  <li><a href="#submitting" id="toc-submitting" class="nav-link" data-scroll-target="#submitting">Submitting</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_1.html">Introduction to Machine Learning</a></li><li class="breadcrumb-item"><a href="./week2_2.html">Problem Classes in ML</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./lab01_rmarkdown.html">Labs</a></li><li class="breadcrumb-item"><a href="./lab01_rmarkdown.html">Lab: R Markdown</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Problem Classes in ML</h1>
+<h1 class="title">Lab: R Markdown</h1>
 </div>
 
 
@@ -275,229 +312,280 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="two-flavors-of-machine-learning" class="level1" style="color: yellow">
-<h1>Two Flavors of Machine Learning</h1>
+<p>Today you will build a small analysis report in R Markdown, from a template, one stage at a time. By the end you will have knitted a document that mixes your writing, your code, your results, and a figure, and you will upload it before you leave.</p>
+<p>Work through the stages below in order. Each one corresponds to a section of the template file.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Before You Start
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Check that you can knit at all.</strong> Knitting from RStudio needs the <code>rmarkdown</code> package. You do not need to install Pandoc, which comes with RStudio, and you do not need LaTeX, which is only required for PDF output. Today’s document also uses <code>dplyr</code>, <code>ggplot2</code>, <code>psych</code>, <code>naniar</code>, and <code>titanic</code>. If you ran the install block from the <em>R Markdown and Course Setup</em> section, you already have all of these. If you are unsure, run this once in the <strong>console</strong>, not in a document:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"rmarkdown"</span>, <span class="st">"tidyverse"</span>, <span class="st">"psych"</span>, <span class="st">"naniar"</span>, <span class="st">"titanic"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then:</p>
+<ol type="1">
+<li>Download <code>Intro_to_Rmd_Template.Rmd</code> from Canvas and save it somewhere you can find again.</li>
+<li>Open it in RStudio (<strong>File &gt; Open File</strong>).</li>
+<li>Click <strong>Knit</strong> right now, before changing anything.</li>
+</ol>
+<p>A finished document should appear. That is your starting point, and it confirms your setup works before you have written a single thing. If it does not knit, flag me now rather than debugging alone.</p>
+</div>
+</div>
+<section id="stage-1-the-header" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-1-the-header">Stage 1: The Header</h2>
 </section>
-<p>Before listing specific problems, it helps to know that they divide into two families. The dividing question is simple: <strong>is there an outcome the model is trying to get right?</strong></p>
-<section id="supervised-learning" class="level2" style="color: lightblue">
-<h2 class="anchored" data-anchor-id="supervised-learning">Supervised Learning</h2>
+<p>Look at the very top of the file, at the block fenced by <code>---</code> on either side. This is the <strong>YAML header</strong>, and it controls the document as a whole: its title, its author, and what kind of file knitting produces.</p>
+<p>Replace the placeholder title and author with your own. Leave the date line alone and look at what it contains:</p>
+<pre><code>date: "`r Sys.Date()`"</code></pre>
+<p>That is R code living in the header. Every time you knit, the document stamps itself with today’s date. Nothing to remember, nothing to update by hand.</p>
+<p><strong>Knit again.</strong> Your name and title should now appear at the top of the output.</p>
+<section id="stage-2-writing" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-2-writing">Stage 2: Writing</h2>
 </section>
-<p><strong>The data include a target</strong>, and the target supervises the learning.</p>
-<ul>
-<li>You have the right answers for the cases you train on.</li>
-<li>Success is measurable: compare predictions against known values.</li>
-<li>Covered in Module 2 of this course.</li>
-</ul>
-<section id="unsupervised-learning" class="level2" style="color: lightblue">
-<h2 class="anchored" data-anchor-id="unsupervised-learning">Unsupervised Learning</h2>
-</section>
-<p><strong>There is no target.</strong></p>
-<ul>
-<li>You are describing structure rather than predicting an outcome.</li>
-<li>Success is harder to judge, because there is no answer key.</li>
-<li>Covered in Module 3 of this course.</li>
-</ul>
-<section id="select-examples" class="level2" style="color: lightblue">
-<h2 class="anchored" data-anchor-id="select-examples">Select Examples</h2>
-</section>
-<p>The five problem classes below sort into those two families:</p>
+<p>Most of an R Markdown file is ordinary prose. A handful of characters do the formatting:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Problem class</th>
-<th>Family</th>
-<th>Course module</th>
+<th>To get this</th>
+<th>Write this</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Classification</td>
-<td>Supervised</td>
-<td>Module 2</td>
+<td><strong>bold</strong></td>
+<td><code>**bold**</code></td>
 </tr>
 <tr class="even">
-<td>Regression</td>
-<td>Supervised</td>
-<td>Module 2</td>
+<td><em>italic</em></td>
+<td><code>*italic*</code></td>
 </tr>
 <tr class="odd">
-<td>Ranking</td>
-<td>Supervised</td>
-<td>Module 2</td>
+<td>a bullet</td>
+<td><code>- item</code> at the start of a line</td>
 </tr>
 <tr class="even">
-<td>Clustering</td>
-<td>Unsupervised</td>
-<td>Module 3</td>
-</tr>
-<tr class="odd">
-<td>Dimension reduction</td>
-<td>Unsupervised</td>
-<td>Module 3</td>
+<td>a heading</td>
+<td><code>## Heading</code> at the start of a line</td>
 </tr>
 </tbody>
 </table>
-<section id="major-classes-of-machine-learning-problems" class="level1" style="color: yellow">
-<h1>Major Classes of Machine Learning Problems</h1>
+<p>Write two or three sentences describing the data in your own words, using bold at least once, italics at least once, and a short bulleted list.</p>
+<section id="why-not-just-use-word" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="why-not-just-use-word">Why not just use Word?</h3>
 </section>
-<p>Machine learning applications correspond to a wide variety of learning problems. Some major classes include:</p>
-<section id="classification" class="level2">
-<h2 class="anchored" data-anchor-id="classification">Classification</h2>
+<p>You could write this paragraph anywhere. The reason it lives here is that the numbers in the next stages come out of the same file, so your writing and your analysis can never drift apart.</p>
+<section id="stage-3-code-chunks" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-3-code-chunks">Stage 3: Code Chunks</h2>
+</section>
+<p>The gray blocks are <strong>code chunks</strong>. Everything inside one runs as R code when you knit, and the output appears in your document underneath it.</p>
+<p>Insert a new chunk with the <strong>+C</strong> button in the toolbar, or press <strong>Cmd+Option+I</strong> on a Mac, <strong>Ctrl+Alt+I</strong> on Windows. You can also run a single chunk without knitting by clicking the small green triangle at its right edge, which is useful while you work.</p>
+<p>This stage has four things to write, each one a skill from the Introduction to R material.</p>
+<p>First, pick <strong>two spending variables</strong> that interest you from <code>MntWines</code>, <code>MntFruits</code>, <code>MntMeatProducts</code>, <code>MntFishProducts</code>, <code>MntSweetProducts</code>, and <code>MntGoldProds</code>. You will use the same two for the rest of the lab, so pick ones you are curious about. Calculate the mean of each.</p>
+<p>Then three more, in order:</p>
 <ul>
-<li>The <em>goal of classification</em> is often to assign a category or label to each observation.</li>
-<li>The music genre problem is a good example of a classification problem</li>
-<li><strong>Note:</strong> The number of categories can be small, large, or even unbounded (e.g., optical character recognition, text classification, speech recognition).</li>
+<li><strong>Count something</strong> with <code>table()</code>, using a variable that takes only a few values, such as <code>Complain</code>, <code>Kidhome</code>, <code>Teenhome</code>, or <code>Response</code>.</li>
+<li><strong>Subset</strong>, by picking an income cutoff and counting how many customers sit above it. Watch the comma: <code>df[df$Income &gt; 50000, ]</code> means “these rows, all columns,” and leaving it out is the single most common mistake here.</li>
+<li><strong>Create a variable</strong> with <code>ifelse()</code>, labelling each customer <code>"high"</code> or <code>"low"</code> on one of your spending variables split at its mean, then counting the two groups with <code>table()</code>.</li>
 </ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/classification.jpg" class="img-fluid figure-img" width="700"></p>
-<figcaption>https://datahacker.rs/008-machine-learning-multiclass-classification-and-softmax-function/</figcaption>
-</figure>
-</div>
+<p>Knit after each one. If something breaks, you will know exactly which line caused it.</p>
+<section id="stage-4-inline-code" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-4-inline-code">Stage 4: Inline Code</h2>
+</section>
+<p>This is the stage worth paying attention to.</p>
+<p>So far your code has lived in chunks, set apart from your writing. But R code can also go <em>inside a sentence</em>. Write a backtick, then the letter <code>r</code>, then your code, then a closing backtick, and when you knit, the result appears as ordinary text.</p>
+<p>The template has an example already: a sentence that reports how many customers are in the dataset without anyone ever typing the number.</p>
+<p>Complete the sentence in this stage the same way, using one of the variables you chose.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Quick Question
+<span class="screen-reader-only">Tip</span>The point
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Where have you run into a classifier today? Think about your email, your phone, and anything that sorted something into a category for you.</p>
+<p>Suppose these data were updated tomorrow. In a Word document, every number you had typed would silently become wrong, and you would have to hunt them all down. Here, you knit again and the whole report corrects itself.</p>
+<p>This is why analysis reports get written this way, and why your lab reports for this course will be written this way.</p>
 </div>
 </div>
-<hr>
+<section id="stage-5-a-table" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-5-a-table">Stage 5: A Table</h2>
 </section>
-<section id="regression" class="level2">
-<h2 class="anchored" data-anchor-id="regression">Regression</h2>
-<ul>
-<li><p>In regression problems we are typically concerned with predicting a real-valued number for each item.</p></li>
-<li><p>For example, we might be interested in predicting stock prices, or how stressed out someone is.</p></li>
-<li><p><strong>Notes:</strong> The penalty for prediction errors depends on the magnitude of the difference between true and predicted values, unlike classification where categories are discrete and there is often no notion of distance between various categories.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/regression.webp" class="img-fluid figure-img" width="700"></p>
-<figcaption>https://builtin.com/data-science/regression-machine-learning</figcaption>
-</figure>
-</div></li>
-</ul>
+<p>Printing a data frame in a knitted document is ugly by default. The <code>kable()</code> function formats it properly.</p>
+<p>The template already builds a small table comparing customers who did and did not complain. Add your own two variables to it, so the table describes what <em>you</em> chose. Watch the commas: every line inside <code>summarise()</code> except the last one needs one at the end.</p>
+<section id="stage-6-a-figure" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-6-a-figure">Stage 6: A Figure</h2>
+</section>
+<p>Figures work like any other output: you write the plotting code in a chunk, and the picture appears when you knit.</p>
+<p>What is new here is the material inside the curly braces at the top of the chunk. Those are <strong>chunk options</strong>, and they change how the chunk behaves rather than what it computes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>{r, fig.cap <span class="ot">=</span> <span class="st">"..."</span>, fig.width <span class="ot">=</span> <span class="dv">6</span>, fig.height <span class="ot">=</span> <span class="dv">4</span>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Change the plot so it uses one of your variables, give it a caption that actually describes what it shows, and then write one sentence underneath interpreting it. If you have time, try changing <code>fig.width</code> and knitting again to see the figure resize.</p>
+<section id="stage-7-controlling-what-the-reader-sees" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-7-controlling-what-the-reader-sees">Stage 7: Controlling What the Reader Sees</h2>
+</section>
+<p>Three chunk options come up constantly:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Code shown?</th>
+<th>Output shown?</th>
+<th>Code runs?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>default</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td><code>echo = FALSE</code></td>
+<td>no</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr class="odd">
+<td><code>include = FALSE</code></td>
+<td>no</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td><code>eval = FALSE</code></td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p><code>echo = FALSE</code> is how you produce a report for a reader who wants the results but not the code. <code>include = FALSE</code> is how the setup chunk at the top of your file loads packages without cluttering the document. <code>eval = FALSE</code> is how you show code you do not want to run.</p>
+<p>Find the chunk in this stage, knit and look at it, then add <code>echo = FALSE</code>, knit again, and write down what changed.</p>
+<section id="stage-8-putting-it-together" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-8-putting-it-together">Stage 8: Putting It Together</h2>
+</section>
+<p>One last section, using <code>describe()</code> from the <code>psych</code> package, which you met in the Introduction to R material. Describe both of the variables you chose, then write a sentence or two about what you notice. Comparing the mean against the median is a good place to look, because a mean far above a median tells you the distribution has a long right tail.</p>
+<section id="stage-9-what-kind-of-variable-is-this" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-9-what-kind-of-variable-is-this">Stage 9: What Kind of Variable Is This?</h2>
+</section>
+<p>The last two stages switch to a second dataset, the Titanic passenger list, because the marketing data is all numbers and these ideas need something messier.</p>
+<p>Run <code>str()</code> on it and look at <code>Pclass</code>. R reports it as an integer, because passenger class was recorded as 1, 2, or 3. But those numbers are <strong>labels for categories, not amounts</strong>, and R has no way to know that. Ask it for the mean and it will cheerfully tell you the average passenger class is 2.31, which is as meaningful as an average zip code.</p>
+<p>Converting it with <code>factor()</code> fixes this, and the template shows you why it matters: two plots of fare against class, identical except for the type of one variable. As a number, class gets spread along a continuum. As a factor, it becomes three groups with three distributions.</p>
+<p><strong>Then label the categories.</strong> A bare factor still displays as 1, 2, and 3, which tells your reader nothing. Since you know what those codes mean, attach the names:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(titanic<span class="sc">$</span>Pclass, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"First"</span>, <span class="st">"Second"</span>, <span class="st">"Third"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>levels</code> lists the codes as they appear in the data and <code>labels</code> gives the name each should display, in the same order. Every table and plot axis now labels itself.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Quick Question
+<span class="screen-reader-only">Tip</span>The moment worth watching for
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Where have you seen a number predicted rather than a category? Delivery time estimates and price forecasts are a good place to start.</p>
+<p>Earlier, R told you the average passenger class was 2.31 without complaint. Ask for the mean of the <em>factor</em> version and R returns <code>NA</code> with a warning that the argument is not numeric.</p>
+<p>That is the real payoff. Storing a variable correctly does not just make your plots nicer, it makes R <strong>refuse to do the meaningless thing</strong>. The nonsense calculation that slipped through silently when class was an integer gets caught the moment the variable is typed honestly.</p>
 </div>
 </div>
-<hr>
-</section>
-<section id="ranking" class="level2">
-<h2 class="anchored" data-anchor-id="ranking">Ranking</h2>
-<ul>
-<li>With ranking problems we are often tasked with ordering items according to a specific criterion.</li>
-<li>A well-known example of a ranking algorithm is Google’s <a href="https://web.stanford.edu/class/cs54n/handouts/24-GooglePageRankAlgorithm.pdf">PageRank</a> algorithm.</li>
-<li><strong>Notes:</strong> Ranking problems focus on relative order rather than exact category or numeric value.</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/ranking.webp" class="img-fluid figure-img" width="700"></p>
-<figcaption>https://towardsdatascience.com/wp-content/uploads/2023/08/1ZFmd2Q-G95ArY93od20Adw.png</figcaption>
-</figure>
-</div>
+<p>Then do the same for <code>Survived</code>, which is stored as 0 and 1 but is really a category, and is the outcome we will be predicting later in this course. Label it <code>"Died"</code> and <code>"Survived"</code>, and cross-tabulate it against class. With both variables labelled, the table reads like a sentence instead of a puzzle.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Quick Question
+<span class="screen-reader-only">Tip</span>Why this matters beyond today
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>What gets ranked for you on a typical day, and what do you think the ranking is optimizing for?</p>
+<p>Every model you fit this semester asks what type your variables are. A 0/1 outcome left as a number gets treated as a quantity to predict; the same outcome as a factor gets treated as two classes to sort people into. Same data, different question, different model.</p>
 </div>
 </div>
-<hr>
+<section id="stage-10-missing-data" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="stage-10-missing-data">Stage 10: Missing Data</h2>
 </section>
-<section id="clustering" class="level2">
-<h2 class="anchored" data-anchor-id="clustering">Clustering</h2>
-<ul>
-<li>In clustering problems we are typically looking to partition items into similar groups or regions.</li>
-<li>For example, in social network analysis we are interested in identifying communities within large groups of people</li>
-<li><strong>Notes:</strong> Clustering is often applied to very large datasets to reveal underlying structure.</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/clustering.png" class="img-fluid figure-img" width="700"></p>
-<figcaption>https://scikit-learn.org/stable/_images/sphx_glr_plot_cluster_comparison_001.png</figcaption>
-</figure>
-</div>
+<p>Ask for the average age of the passengers and R returns <code>NA</code>. That is R refusing to guess. The alternative would be quietly averaging <em>some</em> passengers and letting you believe it was all of them, so <code>NA</code> is a feature. When you have decided that skipping the missing values is reasonable, say so out loud with <code>na.rm = TRUE</code>.</p>
+<p>The <code>naniar</code> package summarizes an entire dataset at once with <code>miss_var_summary()</code>. Run it and read the table carefully, because it contains a trap: it reports that <code>Cabin</code> is never missing.</p>
+<p>That is false. The blanks in <code>Cabin</code> were recorded as empty text, <code>""</code>, and R cannot know an empty string means “we do not know.” Once you tell it so with <code>replace_with_na_all()</code>, <code>Cabin</code> turns out to be missing for 687 of 891 passengers, about 77%.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Quick Question
+<span class="screen-reader-only">Tip</span>The habit worth forming
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Two questions here:</p>
-<ul>
-<li>How does clustering differ from classification?</li>
-<li>Where might clustering be running on data about you?</li>
-</ul>
+<p>Missing data disguised as something else is everywhere in real datasets: blanks, <code>-99</code>, <code>999</code>, <code>"unknown"</code>, <code>"N/A"</code>. None of them are missing as far as R is concerned until you say so. Before trusting any summary of missingness, look at the actual values a variable takes.</p>
+<p>This matters for more than tidiness. Whether a cabin was recorded on the Titanic is probably related to a passenger’s class, and class is related to survival. Missingness that carries information is a modelling problem, not a data-cleaning chore.</p>
 </div>
 </div>
-<hr>
+<p>Finish by looking at <code>gg_miss_var()</code>, then write a sentence on whether you would be willing to use <code>Cabin</code> as a predictor.</p>
+<section id="when-something-breaks" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="when-something-breaks">When Something Breaks</h2>
 </section>
-<section id="dimensionality-reduction" class="level2">
-<h2 class="anchored" data-anchor-id="dimensionality-reduction">Dimensionality Reduction</h2>
-<ul>
-<li>When looking to solve dimension reduction problems we are typically interested in transforming high-dimensional data into a lower-dimensional representation while preserving important properties.</li>
-<li>Common examples in psychology include identifying constructs in survey data or scales.</li>
-<li><strong>Notes:</strong> Dimension reduction is also useful for feature extraction, noise reduction, and speeding up downstream learning tasks.</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/pca.png" class="img-fluid figure-img" width="700"></p>
-<figcaption>https://www.sthda.com/english/sthda-upload/figures/principal-component-methods/006-principal-component-analysis-pca-variable-cos2-corrplot-1.png</figcaption>
-</figure>
-</div>
-<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<p>It will, eventually. Knitting runs your document in a <strong>fresh R session</strong>, which is stricter than working in the console, and that strictness is what catches problems before your reader does. Three errors account for most of what you will hit:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>The message</th>
+<th>What it means</th>
+<th>The fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>could not find function "..."</code></td>
+<td>A package was not loaded</td>
+<td>Add <code>library(...)</code> to the setup chunk</td>
+</tr>
+<tr class="even">
+<td><code>there is no package called "..."</code></td>
+<td>A package was never installed</td>
+<td>Run <code>install.packages("...")</code> in the console</td>
+</tr>
+<tr class="odd">
+<td><code>object '...' not found</code></td>
+<td>You made it in the console, not in the document</td>
+<td>Put the code that creates it in a chunk</td>
+</tr>
+</tbody>
+</table>
+<p>That third one is the classic. Objects you created by hand in the console do not exist when knitting, because knitting starts clean. If a document works when you run chunks by hand but fails when you knit, this is almost always why.</p>
+<section id="submitting" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="submitting">Submitting</h2>
+</section>
+<p>Knitting produces an <code>.html</code> file next to your <code>.Rmd</code>, with the same name. Upload <strong>the <code>.html</code> file</strong> to Canvas before you leave. If you did not finish every stage, upload what you have.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Quick Question
+<span class="screen-reader-only">Note</span>Three habits worth keeping
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Psychology does dimension reduction constantly. If you have ever taken a personality inventory and received five scores from fifty questions, you have seen it. Where else?</p>
+<ul>
+<li><strong>Knit early and often.</strong> A document that knitted five minutes ago and does not knit now has a problem in something you just changed. That is a much smaller haystack.</li>
+<li><strong>Packages go in the setup chunk.</strong> Never <code>install.packages()</code> inside a document; install once from the console, then load with <code>library()</code> at the top.</li>
+<li><strong>Keep the data next to the file.</strong> Knitting starts from the folder your <code>.Rmd</code> lives in, which is why today’s template reads the data straight from the course website instead.</li>
+</ul>
 </div>
 </div>
-</section>
-<section id="looking-forward" class="level1" style="color: yellow">
-<h1>Looking Forward</h1>
-</section>
-<p>The rest of the course works through these five problem classes:</p>
-<ul>
-<li><strong>Classification and regression</strong> take up Module 2, starting with linear and logistic regression and building toward trees, ensembles, and deep learning.</li>
-<li><strong>Clustering and dimension reduction</strong> take up Module 3.</li>
-<li><strong>Ranking</strong> we will mention rather than cover, since it appears less often in psychological research.</li>
-</ul>
-<p>Two things have to come first, and both arrive next week:</p>
-<ul>
-<li><strong>Data splitting</strong>, because comparing methods honestly requires data the model has not seen.</li>
-<li><strong>Bias and variance</strong>, because they explain why the comparison usually has a sweet spot rather than a winner.</li>
-</ul>
 
 
 
