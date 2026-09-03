@@ -11,7 +11,9 @@ Prediction errors can be broken down into two main parts: bias and variance.
 
 These represent different sources of mistakes a model can make.
 
-Usually, there’s a tradeoff between keeping bias low and keeping variance low. It can be exceptionally hard to minimize both at the same time.
+Usually, there is a tradeoff between keeping bias low and keeping variance low. 
+
+It can be exceptionally hard to minimize both at the same time.
 
 By understanding where bias and variance come from, we can make better choices when building models and end up with more accurate predictions.
 
@@ -69,13 +71,13 @@ So, error due to *variance* is defined as the variability of a model prediction 
 
 -   **Model complexity**: Overly complex models, with many features or high-degree terms, are more prone to high variance compared to simpler models.
 
--   **Insufficient data**: With smaller datasets, observation specifiv fluctuations matter more, so predictions on new data become less stable with higher variance.
+-   **Insufficient data**: With smaller datasets, observation specific fluctuations matter more, so predictions on new data become less stable with higher variance.
 
 ::: {style="color: yellow"}
 ## The Bias Variance Tradeoff
 :::
 
-Bias and variance are often introduced together in the context of the bias-variance tradeoff that occurs when models overfit, or underfit the data.
+Bias and variance are often introduced together in the context of the bias-variance tradeoff that occurs when models overfit, or underfit, the data.
 
 When a model *overfits the data*, it means the model has learned too much from the training data, including random noise or minor fluctuations, rather than just the true underlying patterns.
 
@@ -101,7 +103,7 @@ The bias-variance tradeoff can be understood as the tension between model simpli
 ### Why the Tradeoff Occurs
 :::
 
--   Making the model more complex reduces bias but increases variance, since the model becomes sensitive to small fluctuations in the training data.\
+-   Making the model more complex reduces bias but increases variance, since the model becomes sensitive to small fluctuations in the training data.
 -   Making the model simpler reduces variance but increases bias, because it cannot capture all the patterns.
 
 There is a sweet spot in between that balances bias and variance, resulting in the lowest total prediction error.

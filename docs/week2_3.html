@@ -328,23 +328,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="training-sample">Training Sample</h3>
 </section>
 <ul>
-<li><p>The subset of examples used to train the learning algorithm. Here we typically estimate the model’s <strong>parameters</strong> in the training sample.</p></li>
-<li><p>For example, if we have data from 150 participants, we might keep data from 100 participants (with known depression scores) to train a predictive model.</p></li>
-<li><p><strong>Notes</strong>: Spending too much in training won’t allow us to get a good assessment of predictive performance. We may find a model that fits the training data very well, but is not generalizable (<em>overfitting</em>).</p></li>
+<li><p>The subset of examples used to train the learning algorithm.</p></li>
+<li><p>We estimate the model’s <strong>parameters</strong> in the training sample.</p></li>
+<li><p>If we have data from 150 participants:</p>
+<ul>
+<li>keep data from 100 to train the model.</li>
+</ul></li>
+<li><p>Using <strong>too much of our data</strong> for training is not good.</p></li>
+<li><p>Using <strong>too little of our data</strong> for training is not good.</p></li>
 </ul>
 <section id="validation-sample" class="level3" style="color: lightblue">
 <h3 class="anchored" data-anchor-id="validation-sample">Validation Sample</h3>
 </section>
 <ul>
 <li><p>Samples used to tune algorithm <strong>hyperparameters</strong> (e.g., regularization strength, number of neurons in a network).</p></li>
-<li><p>For example, from our 100 individuals in the training sample, we may split the training data into 4 groups of 25 participants. Each of these will be a validation sample, and allow us to select the optimal model settings or tuning parameters before our final evaluation.</p></li>
+<li><p>For example, from our 100 individuals in the training sample:</p>
+<ul>
+<li>Split the training data into 4 groups of 25</li>
+<li>Each of the 4 groups will be used as a validation sample, after training on the others</li>
+</ul></li>
 </ul>
 <section id="test-sample" class="level3" style="color: lightblue">
 <h3 class="anchored" data-anchor-id="test-sample">Test Sample</h3>
 </section>
 <ul>
-<li><p>The test Sample used to evaluate model performance, separate from training and validation. The test sample is not made available in the learning stage. Sometimes too much spent in testing won’t allow us to get a good assessment of model parameters.</p></li>
-<li><p>For example, for those 50 participants we never looked out may be our test data. The model can now be used to predict depression scores ; predicted scores for the individuals in the test sample. Here we can now compare actual scores to assess accuracy.</p></li>
+<li><p>The test sample used to evaluate model performance</p></li>
+<li><p>The remaining 50 individuals kept out of training: separate from training and validation.</p></li>
+<li><p>The test sample is kept completely seperate from the training and validation data.</p></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -610,11 +620,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">3</span>) <span class="co"># randomly draw 3 numbers</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1]  9 10  6</code></pre>
+<pre><code>[1] 5 4 8</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">3</span>) <span class="co"># run it again... different draw</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2 6 1</code></pre>
+<pre><code>[1] 3 7 6</code></pre>
 </div>
 </div>
 <p>R’s random numbers are actually <em>pseudo</em>-random: they come from a sequence determined by a starting point called the <strong>seed</strong>. If we set the seed ourselves, the “random” results become exactly reproducible:</p>
