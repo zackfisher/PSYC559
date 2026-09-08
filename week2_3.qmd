@@ -147,6 +147,14 @@ Two things to try, both of which are hyperparameter choices you just read about:
 -   If we only check performance on that same data, we might think the model is excellent, but it may just be memorizing instead of generalizing.\
 -   A separate test set lets us see how the model behaves on *new, unseen* data.
 
+::: {.callout-tip icon="false"}
+## Quick Check
+
+1.  You have data from 10,000 participants. Do you still need a test set?
+2.  You split your data, fit a model, and test accuracy comes out *higher* than training accuracy. What could explain that?
+:::
+
+
 ------------------------------------------------------------------------
 
 :::  {style="color: lightblue"}

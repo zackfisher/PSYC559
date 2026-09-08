@@ -1,0 +1,215 @@
+---
+title: "A Complete Pipeline"
+format:
+  html:
+    fontsize: 25px
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+We now have all the pieces. This page runs them end to end, once, on the Ames housing data.
+
+To follow along, load these five packages.
+
+```{r}
+library(rsample)      # splitting
+library(recipes)      # preprocessing
+library(caret)        # fitting and cross validation
+library(AmesHousing)  # the example data
+library(dplyr)        # the pipe used in the recipe below
+```
+
+The pipeline is six steps:
+
+1.  Split the data
+2.  Write a preprocessing recipe
+3.  Choose a resampling scheme
+4.  Fit and tune
+5.  Compare candidate models
+6.  Evaluate on the test set, exactly once
+
+::: {style="color: yellow"}
+## Step 1: Split
+:::
+
+```{r}
+ames <- make_ames()
+
+set.seed(559)
+split <- initial_split(ames, prop = 0.7, strata = "Sale_Price")
+
+ames_train <- training(split)
+ames_test  <- testing(split)
+```
+
+From this point until step 6, `ames_test` does not appear anywhere.
+
+::: {style="color: yellow"}
+## Step 2: A Preprocessing Recipe
+:::
+
+Most data need work before modelling. A **recipe** is a written list of those steps that is *learned from the training data and then applied elsewhere*.
+
+```{r}
+rec <- recipe(Sale_Price ~ Gr_Liv_Area + Year_Built + Neighborhood,
+              data = ames_train) %>%
+  step_other(all_nominal_predictors(), threshold = 0.05) %>%
+  step_normalize(all_numeric_predictors()) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_zv(all_predictors())
+
+rec
+```
+
+Reading it in order:
+
+-   `step_other` lumps rare neighborhoods into a single "other" category, since a neighborhood appearing four times cannot support its own estimate.
+-   `step_normalize` centers and scales the numeric predictors.
+-   `step_dummy` converts categories into 0 and 1 indicator columns.
+-   `step_zv` drops any predictor with zero variance.
+
+::: {.callout-important icon="false"}
+## Why a Recipe Rather Than Just Doing It
+
+Suppose you center and scale `Gr_Liv_Area` before splitting. The mean you subtract is computed from **all** the data, including the rows destined for the test set. Information from the test set has now leaked into training, and your test estimate is optimistic.
+
+A recipe prevents this by construction. It records that a mean must be subtracted, learns that mean from the training data only, and applies that same stored value to any new data later. The rule travels with the model.
+
+This is data leakage, which the [Data Splitting](week2_3.qmd) page listed as a hazard. Preprocessing before splitting is by far the most common way it happens, and it is invisible: nothing errors, your numbers just quietly become too good.
+:::
+
+::: {style="color: yellow"}
+## Step 3: Resampling Scheme
+:::
+
+```{r}
+cv <- trainControl(method = "cv", number = 10)
+```
+
+::: {style="color: yellow"}
+## Step 4: Fit
+:::
+
+Passing the recipe to `train()` rather than a formula means the recipe is re-learned inside every fold, on that fold's training portion only. That is what keeps the leakage protection honest during cross validation.
+
+```{r}
+set.seed(559)
+
+fit_lm <- train(
+  rec,
+  data      = ames_train,
+  method    = "lm",
+  trControl = cv,
+  metric    = "RMSE"
+)
+
+fit_lm$results
+```
+
+::: {style="color: yellow"}
+## Step 5: Compare Candidates
+:::
+
+The no free lunch theorem from [Important Terms and Distinctions](week2_1.qmd) said we cannot know in advance which method wins. So we try more than one and compare them on the same folds.
+
+Here is a k nearest neighbors model with a hyperparameter to tune. `tuneGrid` lists the values to try, and cross validation picks among them.
+
+```{r}
+set.seed(559)
+
+fit_knn <- train(
+  rec,
+  data      = ames_train,
+  method    = "knn",
+  trControl = cv,
+  metric    = "RMSE",
+  tuneGrid  = data.frame(k = c(5, 10, 15, 20, 25))
+)
+
+fit_knn$results[, c("k", "RMSE", "Rsquared", "MAE")]
+```
+
+Each row is one value of `k`, scored by cross validation. `train()` keeps the best:
+
+```{r}
+fit_knn$bestTune
+```
+
+Now compare the two models. Because both used the same seed and the same folds, this is a fair comparison.
+
+```{r}
+results <- resamples(list(linear = fit_lm, knn = fit_knn))
+summary(results)$statistics$RMSE
+```
+
+::: {.callout-tip icon="false"}
+## Quick Check
+
+1.  Why is the recipe handed to `train()` rather than applied to `ames_train` beforehand?
+2.  Both models were compared on the same folds. Why does using the *same* folds matter?
+:::
+
+
+::: {.callout-tip icon="false"}
+## Notice What Chose the Winner
+
+The validation folds picked the value of `k`, and the validation folds picked between the two models. Both are decisions made *with data*, which is precisely why they cannot be made using the test set. Every choice you make by looking at a number is a way of fitting to that data.
+:::
+
+::: {style="color: yellow"}
+## Step 6: The Test Set, Once
+:::
+
+Pick the winner, then look at the test data for the first and only time.
+
+```{r}
+final_model <- fit_lm
+
+test_predictions <- predict(final_model, ames_test)
+
+postResample(pred = test_predictions, obs = ames_test$Sale_Price)
+```
+
+That is the number you report. It is an estimate of how the model will perform on houses nobody has seen.
+
+::: {.callout-important icon="false"}
+## The Rule
+
+If you now go back, change the model, and re-run this, the number stops meaning what it meant. The test set has become part of model selection, and your estimate is optimistic again.
+
+You get one look. This is why steps 1 through 5 exist.
+:::
+
+::: {style="color: yellow"}
+## The Whole Thing
+:::
+
+Every pipeline in this course has this shape, whatever the model:
+
+```{r, eval=FALSE}
+# 1. split
+split <- initial_split(data, prop = 0.7, strata = "outcome")
+train <- training(split)
+test  <- testing(split)
+
+# 2. recipe
+rec <- recipe(outcome ~ ., data = train) %>%
+  step_normalize(all_numeric_predictors()) %>%
+  step_dummy(all_nominal_predictors())
+
+# 3. resampling
+cv <- trainControl(method = "cv", number = 10)
+
+# 4 and 5. fit, tune, compare
+fit <- train(rec, data = train, method = "lm",
+             trControl = cv, metric = "RMSE")
+
+# 6. once
+postResample(predict(fit, test), test$outcome)
+```
+
+From here the course mostly changes one thing at a time. The regression unit changes what goes in `method`. The feature engineering unit changes what goes in the recipe. The tree unit changes both. The pipeline stays the same.

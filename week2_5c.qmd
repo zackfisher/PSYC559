@@ -272,6 +272,6 @@ Tree-based methods are especially nice for imputation as they handle non-lineari
 
 Think of tree-based imputation like asking:
 
-> *“Given your age, job, and education, people like you usually make about X — so we’ll use that as your missing value.”*
+> *“Given your age, job, and education, people like you usually make about X, so we’ll use that as your missing value.”*
 
 This is smarter than saying *“everyone makes the same average income”* (mean imputation) or even *“let’s just look at your 3 closest neighbors”* (KNN).

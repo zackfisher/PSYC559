@@ -85,7 +85,7 @@ data_test   <- testing(split)
 
 Now, we will formally introduce the `recipes` package.
 
-The **`recipes`** package is part of the `tidymodels` framework and is designed for feature engineering. In machine learning, raw data usually isn’t ready to be used directly in a model—you might need to do all the things we discussed in these notes.
+The **`recipes`** package is part of the `tidymodels` framework and is designed for feature engineering. In machine learning, raw data usually isn’t ready to be used directly in a model. You might need to do all the things we discussed in these notes.
 
 Instead of doing all these steps manually, `recipes` lets us define a sequence of preprocessing steps (called a recipe) that can be applied consistently to training and test data.
 

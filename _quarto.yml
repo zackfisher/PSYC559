@@ -13,6 +13,9 @@ project:
     - week2_2.qmd
     - week2_3.qmd
     - week2_4.qmd
+    - p01_splitting_resampling.qmd
+    - p02_evaluating_performance.qmd
+    - p03_complete_pipeline.qmd
     - week2_5a.qmd
     - week2_5b.qmd
     - week2_5c.qmd
@@ -55,17 +58,8 @@ website:
     # (released 8/12 — Introduction to R section: 1_1, 1_1b, 1_2, week1_3, week1_4)
     # (released 8/28 — Fundamentals of ML: week2_1, week2_2)
     # (released 8/29 — General modeling pipelines: week2_3, week2_4)
-    # 9/1 — Data preprocessing and feature engineering
-    - week2_5a.qmd
-    - week2_5b.qmd
-    - week2_5c.qmd
-    - week2_5d.qmd
-    - week2_5e.qmd
-    - week2_5f.qmd
-    - week2_5g.qmd
-    # 9/3 — Linear regression
-    - week3_1.qmd
-    - week3_2.qmd
+    # (released 9/6 — Feature engineering: week2_5a through week2_5g)
+    # (released 9/6 — Linear regression: week3_1, week3_2)
     # 9/8 — Logistic regression
     - week3_3.qmd
     - week3_4.qmd
@@ -101,8 +95,13 @@ website:
         contents:
           - week2_1.qmd
           - week2_2.qmd
+      - section: "The Modeling Pipeline"
+        contents:
           - week2_3.qmd
           - week2_4.qmd
+          - p01_splitting_resampling.qmd
+          - p02_evaluating_performance.qmd
+          - p03_complete_pipeline.qmd
       - section: "Feature Engineering"
         contents:
           - week2_5a.qmd

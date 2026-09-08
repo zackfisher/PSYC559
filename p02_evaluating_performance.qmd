@@ -1,0 +1,209 @@
+---
+title: "Evaluating Model Performance"
+format:
+  html:
+    fontsize: 25px
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+Evaluation is the last stage of the pipeline and the reason the held out data exists. Everything before this point was about building a model. This page is about deciding whether it is any good.
+
+A **metric** is a single number summarizing how wrong the predictions are. Which number you pick is a real choice, not a formality, and different metrics reward different things.
+
+To follow along, load the packages and rebuild the split from the previous page.
+
+```{r}
+library(rsample)
+library(caret)
+library(AmesHousing)
+
+ames <- make_ames()
+
+set.seed(559)
+split      <- initial_split(ames, prop = 0.7, strata = "Sale_Price")
+ames_train <- training(split)
+ames_test  <- testing(split)
+```
+
+::: {style="color: yellow"}
+## Where the Numbers Come From
+:::
+
+Every regression metric starts in the same place: the difference between what actually happened and what the model said would happen.
+
+$$
+e_i = y_i - \hat{y}_i
+$$
+
+That is the **residual** for case $i$: the actual value minus the predicted value. A metric is just a rule for summarizing a whole column of residuals into one number.
+
+Let us fit a simple model and look at its residuals on the test set.
+
+```{r}
+fit <- lm(Sale_Price ~ Gr_Liv_Area, data = ames_train)
+
+predicted <- predict(fit, ames_test)
+actual    <- ames_test$Sale_Price
+residuals <- actual - predicted
+
+head(round(residuals))
+```
+
+A positive residual means the house sold for more than we predicted. A negative one means we predicted too high.
+
+::: {style="color: yellow"}
+## Three Regression Metrics
+:::
+
+::: {style="color: lightblue"}
+### RMSE, Root Mean Squared Error
+:::
+
+$$
+RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}
+$$
+
+Read it from the inside out: square each residual, average them, then take the square root.
+
+```{r}
+rmse <- sqrt(mean(residuals^2))
+rmse
+```
+
+Two properties make RMSE the usual default.
+
+-   **It reads in the units of the outcome.** The square root undoes the squaring, so an RMSE of about `r format(round(rmse), big.mark = ",")` means our predictions are off by roughly that many dollars in a typical case. That is a sentence you can say to a non statistician.
+-   **It punishes large misses harder than small ones.** Squaring means an error of 100,000 counts one hundred times as much as an error of 10,000, not ten times. If being badly wrong occasionally is worse than being slightly wrong often, this is the behavior you want.
+
+::: {style="color: lightblue"}
+### MAE, Mean Absolute Error
+:::
+
+$$
+MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|
+$$
+
+Take the size of each residual, ignore its sign, and average.
+
+```{r}
+mae <- mean(abs(residuals))
+mae
+```
+
+MAE is also in dollars, but it treats all errors proportionally. An error twice as large counts exactly twice as much.
+
+Compare the two:
+
+```{r}
+c(RMSE = rmse, MAE = mae)
+```
+
+RMSE is the larger of the two, and it always will be unless every residual is identical. The gap between them tells you something: it is driven by a handful of houses the model got badly wrong.
+
+```{r}
+sort(abs(residuals), decreasing = TRUE)[1:5]
+```
+
+Those five houses are pulling RMSE up. MAE barely notices them.
+
+::: {.callout-tip icon="false"}
+## Which Would You Report?
+
+If you are predicting house prices for a bank deciding how much to lend, a few catastrophic misses matter far more than many small ones, so RMSE is the honest summary. If you are describing typical accuracy to a homeowner, MAE answers the question they actually asked. Neither is more correct. They answer different questions.
+:::
+
+::: {style="color: lightblue"}
+### R Squared
+:::
+
+$$
+R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}
+$$
+
+The bottom is how wrong you would be if you ignored the predictors entirely and guessed the mean every time. The top is how wrong your model is. So R squared is the proportion of the outcome's variation your model accounts for.
+
+```{r}
+r2 <- 1 - sum(residuals^2) / sum((actual - mean(actual))^2)
+r2
+```
+
+It is popular because it is unitless and bounded, which makes it easy to compare across problems. It is also easy to over read.
+
+-   R squared says nothing about whether predictions are useful in absolute terms. Our model explains about half the variation in price and is still off by tens of thousands of dollars.
+-   It always goes up when you add predictors to a training fit, even useless ones, which is exactly why we compute it out of sample.
+
+::: {style="color: lightblue"}
+### All Three at Once
+:::
+
+`caret` computes all three with `postResample()`, so you rarely do this by hand:
+
+```{r}
+postResample(pred = predicted, obs = actual)
+```
+
+::: {style="color: yellow"}
+## Metrics Inside Cross Validation
+:::
+
+The metrics above were computed on the test set, which is something you do once at the very end. During model building you want the same numbers from cross validation instead.
+
+`train()` reports them automatically, and `metric` chooses which one guides model selection.
+
+```{r}
+set.seed(559)
+
+fit_cv <- train(
+  Sale_Price ~ Gr_Liv_Area,
+  data      = ames_train,
+  method    = "lm",
+  trControl = trainControl(method = "cv", number = 10),
+  metric    = "RMSE"
+)
+
+fit_cv$results
+```
+
+That is where the cross validated RMSE values quoted in the regression unit come from.
+
+::: {.callout-tip icon="false"}
+## Quick Check
+
+1.  Your model has an R squared of 0.51. A colleague reports 0.78 on a different dataset with a different outcome. Whose model is better?
+2.  You report a test RMSE of \$42,000 and someone asks whether that is good. What would you need to know before you could answer?
+:::
+
+
+::: {style="color: yellow"}
+## Classification Needs Different Metrics
+:::
+
+Everything above assumes the outcome is a number, so that subtracting a prediction from an actual value means something. When the outcome is a category, it does not. A prediction is either the right class or the wrong one.
+
+Classification metrics are all built from one table, the **confusion matrix**, which counts the four possible outcomes:
+
+|  | Predicted Yes | Predicted No |
+|----|----|----|
+| **Actually Yes** | True positive | False negative |
+| **Actually No** | False positive | True negative |
+
+The obvious summary is **accuracy**, the proportion of predictions that were correct. It has a well known failure mode: if only 2 percent of patients relapse, a model that predicts "no relapse" for everybody is 98 percent accurate and completely useless.
+
+That is why classification uses a family of metrics rather than one, separating the kinds of mistake. We take these up properly in [Multiple Logistic Regression](week3_4.qmd), where you will have a fitted classifier to compute them on.
+
+::: {.callout-note icon="false"}
+## The Idea That Carries Across Both
+
+The choice of metric encodes what you think an error costs.
+
+Squaring residuals says large misses are disproportionately bad. Separating false positives from false negatives says the two mistakes are not interchangeable. In the suicide risk example from [Lecture 2](f02_explanation_prediction.qmd), missing someone at risk and falsely flagging someone are both errors, and they are obviously not equally serious.
+
+No metric decides that for you. You decide it, and then you pick the metric that reflects the decision.
+:::
+
+Next: [A Complete Pipeline](p03_complete_pipeline.qmd), which puts splitting, preprocessing, fitting, and evaluation together in one worked example.

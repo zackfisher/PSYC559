@@ -14,7 +14,7 @@ bibliography: references.bib
 
 To demonstrate feature engineering we will use some example data from the [The General Social Survey (GSS)](https://gss.norc.org/).
 
-GSS is a long-running, nationally representative survey of adults in the United States that has been conducted almost every two years since 1972 by the [National Opinion Research Center (NORC)](https://www.norc.org/) at the University of Chicago. The GSS data is often used to measure American's attitudes, behaviors, and beliefs on a wide range of topics—such as politics, religion, crime, race relations, family, work, and technology.
+GSS is a long-running, nationally representative survey of adults in the United States that has been conducted almost every two years since 1972 by the [National Opinion Research Center (NORC)](https://www.norc.org/) at the University of Chicago. The GSS data is often used to measure American's attitudes, behaviors, and beliefs on a wide range of topics, such as politics, religion, crime, race relations, family, work, and technology.
 
 There are two ways to access the GSS data. One is using the [GSS Data Explorer](#0). Another option is using the `gssr` [@gssr] R package. Here we will use the `gssr` [@gssr] package to download some example data.
 

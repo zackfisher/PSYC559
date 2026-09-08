@@ -72,7 +72,7 @@ The dataset includes a mix of **numerical, categorical, and ordinal variables** 
 5.  **Neighborhood Information**
     -   Neighborhood (`Neighborhood`) describing location and local characteristics
 6.  **Sale Information**
-    -   Sale price (``` Sale``_``Price ```) — the target variable
+    -   Sale price (``` Sale``_``Price ```), the target variable
     -   Sale condition (``` Sale``_``Condition ```)
 
 ```{r}
@@ -201,7 +201,7 @@ the error term $\varepsilon$ is at the heart of the model.
 ### Assumptions About the Error Term
 :::
 
-Classical linear regression (the Gauss–Markov framework) makes several key assumptions about $\varepsilon$:
+Classical linear regression (the Gauss and Markov framework) makes several key assumptions about $\varepsilon$:
 
 -   $E[\varepsilon] = 0$: on average, the errors cancel out (no systematic bias).\
 -   $\text{Var}(\varepsilon) = \sigma^2$: the variance of errors is constant across all values of $X$ (**homoscedasticity**).\
