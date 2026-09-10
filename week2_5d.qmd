@@ -8,7 +8,16 @@ editor_options:
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide'}
+::: {style="color: yellow"}
+## Setup
+:::
+
+To follow along, load these packages and the dataset we assembled on the [Example Data](week2_5b.qmd) page. If you did not build it yourself, you can [download `data.RDS`](data/data.RDS) and save it in a `data` folder next to your script.
+
+```{r}
+library(dplyr)  # data manipulation and the pipe
+library(caret)  # nearZeroVar(), used below to flag low variance features
+
 data <- readRDS("data/data.RDS")
 ```
 
@@ -51,8 +60,8 @@ Zero and near-zero variance variables typically offer little to no information f
 We can use the `caret` [@caret] package in R to look at these different metrics for our example data.
 
 ```{r}
-library(dplyr)
-library(caret)
-caret::nearZeroVar(data, saveMetrics = TRUE) %>% 
+# saveMetrics = TRUE returns the diagnostics for every variable rather than
+# just the column numbers of the ones flagged for removal
+caret::nearZeroVar(data, saveMetrics = TRUE) %>%
   tibble::rownames_to_column() 
 ```

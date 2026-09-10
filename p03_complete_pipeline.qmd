@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 We now have all the pieces. This page runs them end to end, once, on the Ames housing data.
 
-To follow along, load these five packages.
+To follow along, load these six packages.
 
 ```{r}
 library(rsample)      # splitting
@@ -21,6 +21,7 @@ library(recipes)      # preprocessing
 library(caret)        # fitting and cross validation
 library(AmesHousing)  # the example data
 library(dplyr)        # the pipe used in the recipe below
+library(glmnet)       # the second model we fit, in step 5
 ```
 
 The pipeline is six steps:
@@ -116,35 +117,39 @@ fit_lm$results
 
 The no free lunch theorem from [Important Terms and Distinctions](week2_1.qmd) said we cannot know in advance which method wins. So we try more than one and compare them on the same folds.
 
-Here is a k nearest neighbors model with a hyperparameter to tune. `tuneGrid` lists the values to try, and cross validation picks among them.
+Here is a **lasso** model, which has a hyperparameter to tune. Lasso is a linear regression that pays a penalty for large coefficients, and `lambda` sets how steep that penalty is. What it is really doing is the subject of the regression unit. The only thing that matters here is that it has a knob on it, and that cross validation is what turns the knob.
+
+`tuneGrid` lists the values to try. Setting `alpha = 1` is what makes this lasso rather than one of the other penalized models `glmnet` can fit.
 
 ```{r}
 set.seed(559)
 
-fit_knn <- train(
+fit_lasso <- train(
   rec,
   data      = ames_train,
-  method    = "knn",
+  method    = "glmnet",
   trControl = cv,
   metric    = "RMSE",
-  tuneGrid  = data.frame(k = c(5, 10, 15, 20, 25))
+  tuneGrid  = expand.grid(alpha = 1, lambda = c(1, 10, 100, 1000, 10000))
 )
 
-fit_knn$results[, c("k", "RMSE", "Rsquared", "MAE")]
+fit_lasso$results[, c("lambda", "RMSE", "Rsquared", "MAE")]
 ```
 
-Each row is one value of `k`, scored by cross validation. `train()` keeps the best:
+Each row is one value of `lambda`, scored by cross validation. Notice the shape of that column. Small penalties barely move the model, so those rows are nearly identical. Once the penalty gets large enough it starts squashing coefficients that were doing useful work, and the error climbs. `train()` keeps the best row:
 
 ```{r}
-fit_knn$bestTune
+fit_lasso$bestTune
 ```
 
 Now compare the two models. Because both used the same seed and the same folds, this is a fair comparison.
 
 ```{r}
-results <- resamples(list(linear = fit_lm, knn = fit_knn))
+results <- resamples(list(linear = fit_lm, lasso = fit_lasso))
 summary(results)$statistics$RMSE
 ```
+
+The two are essentially tied. That is a real result rather than a broken comparison. We gave the model three predictors and roughly two thousand training rows, so there is nothing here for a penalty to clean up, and lasso settles on very nearly the ordinary linear fit. Penalties start to matter when there are many predictors relative to rows, which is the situation the regression unit picks up.
 
 ::: {.callout-tip icon="false"}
 ## Quick Check
@@ -157,14 +162,14 @@ summary(results)$statistics$RMSE
 ::: {.callout-tip icon="false"}
 ## Notice What Chose the Winner
 
-The validation folds picked the value of `k`, and the validation folds picked between the two models. Both are decisions made *with data*, which is precisely why they cannot be made using the test set. Every choice you make by looking at a number is a way of fitting to that data.
+The validation folds picked the value of `lambda`, and the validation folds picked between the two models. Both are decisions made *with data*, which is precisely why they cannot be made using the test set. Every choice you make by looking at a number is a way of fitting to that data.
 :::
 
 ::: {style="color: yellow"}
 ## Step 6: The Test Set, Once
 :::
 
-Pick the winner, then look at the test data for the first and only time.
+Pick the winner, then look at the test data for the first and only time. The two candidates tied, so we keep the simpler one.
 
 ```{r}
 final_model <- fit_lm

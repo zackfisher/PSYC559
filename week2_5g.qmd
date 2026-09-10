@@ -8,10 +8,18 @@ editor_options:
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide'}
-data <- readRDS("data/data.RDS")
-library(dplyr)
-library(tidymodels)
+::: {style="color: yellow"}
+## Setup
+:::
+
+This page rebuilds the data from scratch, so there is no file to download. You only need these packages.
+
+```{r}
+library(gssr)        # downloading the GSS data
+library(dplyr)       # data manipulation and the pipe
+library(tidymodels)  # bundles rsample for splitting and recipes for preprocessing
+library(caret)       # train() for fitting and cross validation
+library(glmnet)      # the lasso model we fit at the end
 ```
 
 ::: {style="color: orange"}
@@ -23,8 +31,6 @@ To illustrate how this process works together in R code, let’s do a simple ana
 The steps below simply re-downloads our data, selects the variables we want to keep, cleans up the missing data codes and does some basic relabeling.
 
 ```{r}
-library(gssr)
-
 gss24 <- gss_get_yr(2024)
 
 target <- "happy"
@@ -74,9 +80,7 @@ data <- data[!is.na(data$happy),]
 We can now separate our data into a training and test set.
 
 ```{r}
-# install.packages("rsample")
-library(rsample)
-# Stratified sampling with the rsample package
+# Stratified sampling with the rsample package, which tidymodels loaded above
 set.seed(123)
 split <- initial_split(data, prop = 0.7, strata = "happy")
 data_train  <- training(split)
@@ -140,31 +144,38 @@ blueprint
 # baked_train
 ```
 
-Next, we can fit a model using the `caret` pacakge, using our blueprint as the first argument and then `caret` takes care of the rest.
+Next, we can fit a model using the `caret` package, using our blueprint as the first argument and then `caret` takes care of the rest.
+
+The model we fit here is the **lasso**, a linear regression that pays a penalty for large coefficients. The size of that penalty is set by `lambda`, and `lambda` is a hyperparameter, so we do not pick it ourselves. We hand `caret` a grid of candidate values and let cross validation choose. The regression unit covers what the lasso is actually doing.
 
 ```{r, cache=TRUE}
-library(caret)
-
 # Specify cross-validation plan
 cv <- trainControl(
-  method = "cv", # k-folds cross-validation", 
-  number = 10  # 10 folds
+  method = "cv", # k-folds cross-validation
+  number = 10    # 10 folds
 )
 
-# Create grid of hyperparameter values
-hyper_grid <- expand.grid(k = seq(2, 25, by = 1))
+# Create a grid of candidate penalty values. These are spaced evenly on a log
+# scale rather than a linear one, because what matters is the order of
+# magnitude of the penalty, not the gap between neighboring values.
+hyper_grid <- expand.grid(
+  alpha  = 1,  # alpha = 1 is lasso, alpha = 0 would be ridge
+  lambda = 10^seq(-4, -1.5, length.out = 10)
+)
 
-# Tune a knn model using grid search
-knn_fit <- train(
-  blueprint, 
-  data = data_train, 
-  method = "knn", 
-  trControl = cv, 
+# Tune a lasso model using grid search
+lasso_fit <- train(
+  blueprint,
+  data = data_train,
+  method = "glmnet",
+  trControl = cv,
   tuneGrid = hyper_grid,
   metric = "RMSE"
 )
 
-knn_fit
+lasso_fit
 
-ggplot(knn_fit)
+ggplot(lasso_fit)
 ```
+
+The plot shows cross validated error against the size of the penalty. It falls at first, because a little shrinkage removes noise the model was chasing, then turns and climbs once the penalty is strong enough to flatten coefficients that were carrying real signal. The bottom of that curve is the value `caret` keeps.

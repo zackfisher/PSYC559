@@ -1,0 +1,423 @@
+---
+title: "The Modeling Pipeline"
+subtitle: "PSYC 559: Applied Machine Learning in Psychology"
+author: "Your name here"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: false
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+This file is a standalone companion to the Modeling Pipeline unit on the course
+site. Everything it needs is downloaded or built inside the file, so you can
+open it in RStudio and knit it start to finish without any other files.
+
+Work through it in order. Run each chunk with the green arrow at its top right,
+or knit the whole document to see all of the output at once.
+
+# Setup
+
+Load these six packages. All of them came with the course setup, so you should
+not need to install anything. If a package is missing, install it once with
+`install.packages("name")` and then run this chunk again.
+
+```{r packages}
+library(rsample)      # splitting data into training and test sets
+library(recipes)      # writing preprocessing steps down as a recipe
+library(caret)        # fitting models and running cross validation
+library(AmesHousing)  # the example data
+library(dplyr)        # data manipulation and the pipe
+library(glmnet)       # the lasso model we fit near the end
+```
+
+# The Data
+
+We use the **Ames housing** data throughout this unit.
+
+- Every sale of a residential property in Ames, Iowa between 2006 and 2010.
+- 2,930 houses and 81 variables, so each row is one sale.
+- The target is `Sale_Price`, in dollars.
+- The predictors describe the house rather than the buyer, including size, age,
+  quality ratings, and which of 28 neighborhoods it sits in.
+- There are no missing values, which is unusual and makes it clean for teaching.
+
+```{r data}
+ames <- make_ames()
+
+dim(ames)
+summary(ames$Sale_Price)
+```
+
+The mean sits above the median because a handful of expensive houses pull the
+distribution to the right. That skew matters twice below, once for stratified
+splitting and once for the gap between RMSE and MAE.
+
+# Part 1: Splitting
+
+The `rsample` package handles splitting. Three functions do nearly all of it.
+
+- `initial_split()` decides which rows go where.
+- `training()` pulls out the training rows.
+- `testing()` pulls out the test rows.
+
+```{r split-plain}
+# set.seed() comes first because the split is random. Without a seed you get a
+# different split on every run and none of your numbers reproduce.
+set.seed(559)
+
+split <- initial_split(ames, prop = 0.7)
+
+ames_train <- training(split)
+ames_test  <- testing(split)
+
+c(train = nrow(ames_train), test = nrow(ames_test))
+```
+
+There is nothing magic about `prop = 0.7`. Common choices run from 0.6 to 0.8.
+More training data gives a better model, more test data gives a steadier
+estimate of how good it is.
+
+## Stratified Splitting
+
+A plain random split can get unlucky. If the expensive houses land mostly in one
+half, the two halves are not comparable. `strata` splits *within* groups of the
+outcome and then recombines, so both halves end up looking alike.
+
+```{r split-strata}
+set.seed(559)
+
+split <- initial_split(ames, prop = 0.7, strata = "Sale_Price")
+
+ames_train <- training(split)
+ames_test  <- testing(split)
+
+c(train_mean = mean(ames_train$Sale_Price),
+  test_mean  = mean(ames_test$Sale_Price))
+```
+
+The two means now sit close together by construction rather than by luck.
+
+> **Your turn.** Change the seed in the unstratified chunk a few times and watch
+> the two means move around. Then do the same with `strata`. How much does
+> stratifying reduce the wobble?
+
+```{r your-turn-1}
+# Your code here
+
+```
+
+## Cross Validation
+
+`trainControl()` describes *how* to resample. `train()` does the fitting.
+
+```{r cv-setup}
+cv <- trainControl(
+  method = "cv",  # k fold cross validation
+  number = 10     # 10 folds
+)
+```
+
+That says: split the training data into 10 folds, hold each fold out in turn,
+fit on the other 9, and score on the fold that was held out.
+
+```{r cv-fit}
+set.seed(559)
+
+fit_cv <- train(
+  Sale_Price ~ Gr_Liv_Area,
+  data      = ames_train,
+  method    = "lm",
+  trControl = cv
+)
+
+fit_cv
+```
+
+The reported RMSE is the **average across the 10 folds**, not one number from
+one split. A single holdout gives an unstable estimate. Averaging ten of them
+gives a steadier one.
+
+`train()` hides a lot, so it is worth being explicit about what just happened.
+
+1. The training data were divided into 10 folds.
+2. The model was fit 10 separate times, each time on 9 folds.
+3. Each fit was scored on the fold it had not seen.
+4. Those 10 scores were averaged.
+5. Finally a model was fit once on all of the training data. That is the model
+   you keep.
+
+Note what did **not** happen. The test set was never touched. It is still
+sitting untouched in `ames_test`, which is where it stays until the very end.
+
+# Part 2: Evaluating Performance
+
+Every regression metric starts in the same place, the difference between what
+actually happened and what the model said would happen.
+
+$$e_i = y_i - \hat{y}_i$$
+
+```{r residuals}
+fit <- lm(Sale_Price ~ Gr_Liv_Area, data = ames_train)
+
+predicted <- predict(fit, ames_test)
+actual    <- ames_test$Sale_Price
+residuals <- actual - predicted
+
+head(round(residuals))
+```
+
+A positive residual means the house sold for more than we predicted. A negative
+one means we predicted too high.
+
+## RMSE and MAE
+
+$$RMSE = \sqrt{\frac{1}{n}\sum(y_i - \hat{y}_i)^2}
+\qquad
+MAE = \frac{1}{n}\sum|y_i - \hat{y}_i|$$
+
+```{r rmse-mae}
+rmse <- sqrt(mean(residuals^2))  # square, average, then undo the squaring
+mae  <- mean(abs(residuals))     # drop the sign, then average
+
+c(RMSE = rmse, MAE = mae)
+```
+
+Both read in dollars, but they punish errors differently.
+
+- **RMSE** squares first, so one error of 100,000 counts a hundred times as much
+  as an error of 10,000, not ten times. Large misses dominate it.
+- **MAE** treats errors proportionally. An error twice as large counts twice.
+
+RMSE is the larger of the two and always will be unless every residual is
+identical. The gap between them is driven by a few houses the model got badly
+wrong.
+
+```{r worst-misses}
+sort(abs(residuals), decreasing = TRUE)[1:5]
+```
+
+Those five are pulling RMSE up. MAE barely notices them.
+
+Which one you report is a real decision. If a few catastrophic misses matter far
+more than many small ones, RMSE is the honest summary. If you are describing
+typical accuracy to somebody, MAE answers the question they actually asked.
+Neither is more correct. They answer different questions.
+
+## R Squared
+
+$$R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}$$
+
+The bottom is how wrong you would be if you ignored the predictors entirely and
+guessed the mean every time. The top is how wrong your model is.
+
+```{r r2}
+r2 <- 1 - sum(residuals^2) / sum((actual - mean(actual))^2)
+r2
+```
+
+It is popular because it is unitless, which makes it easy to compare across
+problems. It is also easy to over read. Our model explains about half the
+variation in price and is still off by tens of thousands of dollars.
+
+`caret` computes all three at once, so you rarely do this by hand.
+
+```{r postresample}
+postResample(pred = predicted, obs = actual)
+```
+
+> **Your turn.** Your model has an R squared of 0.51. A colleague reports 0.78 on
+> a different dataset with a different outcome. Whose model is better? Write two
+> sentences below.
+
+*Your answer here.*
+
+# Part 3: The Whole Pipeline
+
+Now all six steps in order, on one worked example.
+
+## Step 1: Split
+
+```{r pipe-split}
+set.seed(559)
+split <- initial_split(ames, prop = 0.7, strata = "Sale_Price")
+
+ames_train <- training(split)
+ames_test  <- testing(split)
+```
+
+From here until step 6, `ames_test` does not appear anywhere.
+
+## Step 2: A Preprocessing Recipe
+
+A recipe is a written list of preprocessing steps that is *learned from the
+training data and then applied elsewhere*.
+
+```{r pipe-recipe}
+rec <- recipe(Sale_Price ~ Gr_Liv_Area + Year_Built + Neighborhood,
+              data = ames_train) %>%
+  step_other(all_nominal_predictors(), threshold = 0.05) %>%
+  step_normalize(all_numeric_predictors()) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_zv(all_predictors())
+
+rec
+```
+
+Reading it in order:
+
+- `step_other` lumps rare neighborhoods into a single "other" category, since a
+  neighborhood appearing four times cannot support its own estimate.
+- `step_normalize` centers and scales the numeric predictors.
+- `step_dummy` converts categories into 0 and 1 indicator columns.
+- `step_zv` drops any predictor with zero variance.
+
+**Why a recipe rather than just doing it.** Suppose you center and scale
+`Gr_Liv_Area` before splitting. The mean you subtract is computed from *all* the
+data, including rows destined for the test set. Information from the test set
+has now leaked into training and your test estimate is optimistic. A recipe
+prevents this by construction. It records that a mean must be subtracted, learns
+that mean from training data only, and applies that stored value to new data
+later. Nothing errors when you get this wrong. Your numbers just quietly become
+too good.
+
+## Step 3: Resampling Scheme
+
+```{r pipe-cv}
+cv <- trainControl(method = "cv", number = 10)
+```
+
+## Step 4: Fit
+
+Passing the recipe to `train()` rather than a formula means the recipe is
+re-learned inside every fold, on that fold's training portion only. That is what
+keeps the leakage protection honest during cross validation.
+
+```{r pipe-lm}
+set.seed(559)
+
+fit_lm <- train(
+  rec,
+  data      = ames_train,
+  method    = "lm",
+  trControl = cv,
+  metric    = "RMSE"
+)
+
+fit_lm$results
+```
+
+## Step 5: Compare Candidates
+
+We cannot know in advance which method wins, so we try more than one and compare
+them on the same folds.
+
+Here is a **lasso** model, a linear regression that pays a penalty for large
+coefficients. `lambda` sets how steep that penalty is, and it is a
+hyperparameter, so we do not pick it ourselves. We hand `caret` a grid of
+candidates and cross validation chooses.
+
+```{r pipe-lasso}
+set.seed(559)
+
+fit_lasso <- train(
+  rec,
+  data      = ames_train,
+  method    = "glmnet",
+  trControl = cv,
+  metric    = "RMSE",
+  # alpha = 1 is what makes this lasso rather than one of the other
+  # penalized models glmnet can fit
+  tuneGrid  = expand.grid(alpha = 1, lambda = c(1, 10, 100, 1000, 10000))
+)
+
+fit_lasso$results[, c("lambda", "RMSE", "Rsquared", "MAE")]
+```
+
+Look at the shape of that RMSE column. Small penalties barely move the model, so
+those rows are nearly identical. Once the penalty gets large enough it starts
+squashing coefficients that were doing useful work, and the error climbs.
+
+```{r pipe-best}
+fit_lasso$bestTune
+```
+
+Because both models used the same seed and the same folds, comparing them is
+fair.
+
+```{r pipe-compare}
+results <- resamples(list(linear = fit_lm, lasso = fit_lasso))
+summary(results)$statistics$RMSE
+```
+
+The two are essentially tied, and that is a real result rather than a broken
+comparison. We gave the model three predictors and roughly two thousand training
+rows, so there is nothing for a penalty to clean up. Penalties start to matter
+when there are many predictors relative to rows.
+
+**Notice what chose the winner.** The validation folds picked the value of
+`lambda`, and the validation folds picked between the two models. Both are
+decisions made *with data*, which is exactly why they cannot be made using the
+test set.
+
+## Step 6: The Test Set, Once
+
+```{r pipe-test}
+final_model <- fit_lm  # the two tied, so keep the simpler one
+
+test_predictions <- predict(final_model, ames_test)
+
+postResample(pred = test_predictions, obs = ames_test$Sale_Price)
+```
+
+That is the number you report. It estimates how the model will perform on houses
+nobody has seen.
+
+If you now go back, change the model, and re-run this, the number stops meaning
+what it meant. The test set has become part of model selection and your estimate
+is optimistic again. You get one look. This is why steps 1 through 5 exist.
+
+# Exercises
+
+Use the chunks below. The pipeline shape stays the same, you are only changing
+one piece at a time.
+
+**1.** Refit the linear model with more predictors. Add `Total_Bsmt_SF` and
+`Garage_Cars` to the recipe. Does cross validated RMSE improve?
+
+```{r ex-1}
+# Your code here
+
+```
+
+**2.** Now that the model has more predictors, rerun the lasso comparison. Does
+the penalty do more work than it did with only three predictors?
+
+```{r ex-2}
+# Your code here
+
+```
+
+**3.** Change `metric = "RMSE"` to `metric = "MAE"` in one of the fits. Does
+`train()` select a different model? Explain why it might.
+
+```{r ex-3}
+# Your code here
+
+```
+
+**4.** Deliberately break the pipeline. Normalize `Gr_Liv_Area` across the full
+`ames` dataset *before* splitting, then fit and evaluate. Is the test RMSE
+better or worse than the honest version, and why is "better" the wrong thing to
+be pleased about here?
+
+```{r ex-4}
+# Your code here
+
+```

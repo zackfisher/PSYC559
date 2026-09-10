@@ -377,7 +377,8 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#removing-low-variance-features" id="toc-removing-low-variance-features" class="nav-link active" data-scroll-target="#removing-low-variance-features">Removing Low-Variance Features</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#removing-low-variance-features" id="toc-removing-low-variance-features" class="nav-link" data-scroll-target="#removing-low-variance-features">Removing Low-Variance Features</a></li>
   </ul>
 </nav>
     </div>
@@ -403,6 +404,16 @@ div.csl-indent {
 </header>
 
 
+<section id="setup" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+</section>
+<p>To follow along, load these packages and the dataset we assembled on the <a href="./week2_5b.html">Example Data</a> page. If you did not build it yourself, you can <a href="data/data.RDS">download <code>data.RDS</code></a> and save it in a <code>data</code> folder next to your script.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># data manipulation and the pipe</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)  <span class="co"># nearZeroVar(), used below to flag low variance features</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/data.RDS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <p>Feature filtering is a feature selection technique in machine learning where features are evaluated prior to the model fitting based on statistical or heuristic criteria. Features are then kept or discarded based on those criteria.</p>
 <p>It is called filtering because it is a preprocessing step, part of a feature engineering pipeline, done before we actually train the model.</p>
 <p>Typically, the goals of feature filtering are:</p>
@@ -430,10 +441,10 @@ div.csl-indent {
 </ul>
 <p>We can use the <code>caret</code> <span class="citation" data-cites="caret">(<a href="#ref-caret" role="doc-biblioref">Kuhn and Max 2008</a>)</span> package in R to look at these different metrics for our example data.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>caret<span class="sc">::</span><span class="fu">nearZeroVar</span>(data, <span class="at">saveMetrics =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># saveMetrics = TRUE returns the diagnostics for every variable rather than</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># just the column numbers of the ones flagged for removal</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>caret<span class="sc">::</span><span class="fu">nearZeroVar</span>(data, <span class="at">saveMetrics =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   rowname freqRatio percentUnique zeroVar   nzv
 1    happy  2.696721    0.07526342   FALSE FALSE

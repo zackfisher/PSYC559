@@ -13,6 +13,14 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 The [Data Splitting](week2_3.qmd) page explained why we hold data back. This page does it in R.
 
+::: {.callout-note icon="false"}
+## Companion R Markdown File
+
+All three pages of this unit are also available as one R Markdown file you can open in RStudio and run from start to finish. It builds its own data and includes exercises at the end.
+
+[Download `modeling_pipeline.Rmd`](rmd/modeling_pipeline.Rmd)
+:::
+
 To follow along, load these three packages first. All of them came with the course setup, so you should not need to install anything.
 
 ```{r}

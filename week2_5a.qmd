@@ -51,3 +51,11 @@ To minimize data leaking, we will often want to do our feature engineering durin
 5.  Categorical Feature Engineering
 
 6.  Workflow
+
+::: {.callout-note icon="false"}
+## Companion R Markdown File
+
+The whole unit is also available as one R Markdown file you can open in RStudio and run from start to finish. It downloads its own data and includes exercises at the end, so you do not need anything else.
+
+[Download `feature_engineering.Rmd`](rmd/feature_engineering.Rmd)
+:::

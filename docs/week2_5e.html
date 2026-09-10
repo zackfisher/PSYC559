@@ -357,7 +357,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#numeric-feature-engineering" id="toc-numeric-feature-engineering" class="nav-link active" data-scroll-target="#numeric-feature-engineering">Numeric Feature Engineering</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#numeric-feature-engineering" id="toc-numeric-feature-engineering" class="nav-link" data-scroll-target="#numeric-feature-engineering">Numeric Feature Engineering</a></li>
   <li><a href="#skewness" id="toc-skewness" class="nav-link" data-scroll-target="#skewness">Skewness</a></li>
   <li><a href="#standardization" id="toc-standardization" class="nav-link" data-scroll-target="#standardization">Standardization</a></li>
   </ul>
@@ -385,6 +386,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="setup" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+</section>
+<p>To follow along, load these packages and the dataset we assembled on the <a href="./week2_5b.html">Example Data</a> page. If you did not build it yourself, you can <a href="data/data.RDS">download <code>data.RDS</code></a> and save it in a <code>data</code> folder next to your script.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)       <span class="co"># data manipulation and the pipe</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)  <span class="co"># the recipes package, used for every step below</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/data.RDS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <section id="numeric-feature-engineering" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="numeric-feature-engineering">Numeric Feature Engineering</h2>
 </section>
@@ -396,8 +407,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Parametric models with distributional assumptions (e.g., GLMs, and some regularized models) can benefit from minimizing the skewness of numeric features. One popular transformation is the <a href="https://en.wikipedia.org/wiki/Power_transform#Yeo%E2%80%93Johnson_transformation">Yeo-Johnson transformation</a>.</p>
 <p>The Yeo-Johnsontransformation is a statistical technique used to stabilize variance and make data more normally distributed, similar to the Box-Cox transformation but more flexible. Unlike Box-Cox, it can handle both positive and negative values, making it useful for real-world data that span zero.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">recipe</span>(happy <span class="sc">~</span> ., <span class="at">data =</span> data) <span class="sc">%&gt;%</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_YeoJohnson</span>(<span class="fu">all_numeric</span>()) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all_numeric_predictors() applies the transformation to the numeric features</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and leaves the outcome alone. A recipe only records the plan at this stage,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># so nothing is actually transformed until the recipe is prepped.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">recipe</span>(happy <span class="sc">~</span> ., <span class="at">data =</span> data) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_YeoJohnson</span>(<span class="fu">all_numeric_predictors</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="standardization" class="level3" style="color: orange">
 <h3 class="anchored" data-anchor-id="standardization">Standardization</h3>
@@ -405,9 +419,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We will often want to standardize variables prior to our model fitting to put them on a common scale, typically with mean of zero and a standard deviation of one.</p>
 <p>This prevents features with larger numeric ranges (e.g., income in dollars vs.&nbsp;age in years) from dominating distance-based methods (like k-NN, SVMs, or clustering). It can also help with optimization problems, may improve convergence and can help ensure that regularization penalties (like in ridge or lasso regression) are applied fairly across predictors.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_center</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_scale</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># step_center subtracts the mean, step_scale divides by the standard</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># deviation. Run together they standardize each feature. Both learn those</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># numbers from the training data alone, which is what keeps information</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># from the test set out of the calculation.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">recipe</span>(happy <span class="sc">~</span> ., <span class="at">data =</span> data) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_center</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_scale</span>(<span class="fu">all_numeric_predictors</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 

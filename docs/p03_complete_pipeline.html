@@ -390,13 +390,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>We now have all the pieces. This page runs them end to end, once, on the Ames housing data.</p>
-<p>To follow along, load these five packages.</p>
+<p>To follow along, load these six packages.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)      <span class="co"># splitting</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(recipes)      <span class="co"># preprocessing</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)        <span class="co"># fitting and cross validation</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AmesHousing)  <span class="co"># the example data</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)        <span class="co"># the pipe used in the recipe below</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)        <span class="co"># the pipe used in the recipe below</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)       <span class="co"># the second model we fit, in step 5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The pipeline is six steps:</p>
 <ol type="1">
@@ -487,47 +488,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="step-5-compare-candidates">Step 5: Compare Candidates</h2>
 </section>
 <p>The no free lunch theorem from <a href="./week2_1.html">Important Terms and Distinctions</a> said we cannot know in advance which method wins. So we try more than one and compare them on the same folds.</p>
-<p>Here is a k nearest neighbors model with a hyperparameter to tune. <code>tuneGrid</code> lists the values to try, and cross validation picks among them.</p>
+<p>Here is a <strong>lasso</strong> model, which has a hyperparameter to tune. Lasso is a linear regression that pays a penalty for large coefficients, and <code>lambda</code> sets how steep that penalty is. What it is really doing is the subject of the regression unit. The only thing that matters here is that it has a knob on it, and that cross validation is what turns the knob.</p>
+<p><code>tuneGrid</code> lists the values to try. Setting <code>alpha = 1</code> is what makes this lasso rather than one of the other penalized models <code>glmnet</code> can fit.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fit_knn <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fit_lasso <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  rec,</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data      =</span> ames_train,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method    =</span> <span class="st">"knn"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method    =</span> <span class="st">"glmnet"</span>,</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> cv,</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric    =</span> <span class="st">"RMSE"</span>,</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneGrid  =</span> <span class="fu">data.frame</span>(<span class="at">k =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneGrid  =</span> <span class="fu">expand.grid</span>(<span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>))</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>fit_knn<span class="sc">$</span>results[, <span class="fu">c</span>(<span class="st">"k"</span>, <span class="st">"RMSE"</span>, <span class="st">"Rsquared"</span>, <span class="st">"MAE"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>fit_lasso<span class="sc">$</span>results[, <span class="fu">c</span>(<span class="st">"lambda"</span>, <span class="st">"RMSE"</span>, <span class="st">"Rsquared"</span>, <span class="st">"MAE"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   k     RMSE  Rsquared      MAE
-1  5 41528.55 0.7326817 27043.89
-2 10 40675.60 0.7417615 26480.78
-3 15 40228.96 0.7468877 26277.45
-4 20 40069.55 0.7498251 26361.37
-5 25 40381.49 0.7465767 26596.04</code></pre>
+<pre><code>  lambda     RMSE  Rsquared      MAE
+1      1 43469.88 0.7036503 29132.84
+2     10 43469.88 0.7036503 29132.84
+3    100 43469.88 0.7036503 29132.84
+4   1000 43516.87 0.7033676 29019.89
+5  10000 46375.63 0.6917134 30408.76</code></pre>
 </div>
 </div>
-<p>Each row is one value of <code>k</code>, scored by cross validation. <code>train()</code> keeps the best:</p>
+<p>Each row is one value of <code>lambda</code>, scored by cross validation. Notice the shape of that column. Small penalties barely move the model, so those rows are nearly identical. Once the penalty gets large enough it starts squashing coefficients that were doing useful work, and the error climbs. <code>train()</code> keeps the best row:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit_knn<span class="sc">$</span>bestTune</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit_lasso<span class="sc">$</span>bestTune</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   k
-4 20</code></pre>
+<pre><code>  alpha lambda
+3     1    100</code></pre>
 </div>
 </div>
 <p>Now compare the two models. Because both used the same seed and the same folds, this is a fair comparison.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">resamples</span>(<span class="fu">list</span>(<span class="at">linear =</span> fit_lm, <span class="at">knn =</span> fit_knn))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">resamples</span>(<span class="fu">list</span>(<span class="at">linear =</span> fit_lm, <span class="at">lasso =</span> fit_lasso))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)<span class="sc">$</span>statistics<span class="sc">$</span>RMSE</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           Min.  1st Qu.   Median     Mean  3rd Qu.     Max. NA's
 linear 36530.25 39682.47 41511.62 43472.56 46361.51 53040.55    0
-knn    35098.64 36051.69 37950.37 40069.55 41999.60 52737.77    0</code></pre>
+lasso  36524.43 39658.83 41508.00 43469.88 46366.21 53023.37    0</code></pre>
 </div>
 </div>
+<p>The two are essentially tied. That is a real result rather than a broken comparison. We gave the model three predictors and roughly two thousand training rows, so there is nothing here for a penalty to clean up, and lasso settles on very nearly the ordinary linear fit. Penalties start to matter when there are many predictors relative to rows, which is the situation the regression unit picks up.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -554,13 +557,13 @@ knn    35098.64 36051.69 37950.37 40069.55 41999.60 52737.77    0</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The validation folds picked the value of <code>k</code>, and the validation folds picked between the two models. Both are decisions made <em>with data</em>, which is precisely why they cannot be made using the test set. Every choice you make by looking at a number is a way of fitting to that data.</p>
+<p>The validation folds picked the value of <code>lambda</code>, and the validation folds picked between the two models. Both are decisions made <em>with data</em>, which is precisely why they cannot be made using the test set. Every choice you make by looking at a number is a way of fitting to that data.</p>
 </div>
 </div>
 <section id="step-6-the-test-set-once" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="step-6-the-test-set-once">Step 6: The Test Set, Once</h2>
 </section>
-<p>Pick the winner, then look at the test data for the first and only time.</p>
+<p>Pick the winner, then look at the test data for the first and only time. The two candidates tied, so we keep the simpler one.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>final_model <span class="ot">&lt;-</span> fit_lm</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>

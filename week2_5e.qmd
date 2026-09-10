@@ -8,9 +8,16 @@ editor_options:
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide'}
-library(dplyr)
-library(tidymodels)
+::: {style="color: yellow"}
+## Setup
+:::
+
+To follow along, load these packages and the dataset we assembled on the [Example Data](week2_5b.qmd) page. If you did not build it yourself, you can [download `data.RDS`](data/data.RDS) and save it in a `data` folder next to your script.
+
+```{r}
+library(dplyr)       # data manipulation and the pipe
+library(tidymodels)  # the recipes package, used for every step below
+
 data <- readRDS("data/data.RDS")
 ```
 
@@ -31,8 +38,11 @@ Parametric models with distributional assumptions (e.g., GLMs, and some regulari
 The Yeo-Johnsontransformation is a statistical technique used to stabilize variance and make data more normally distributed, similar to the Box-Cox transformation but more flexible. Unlike Box-Cox, it can handle both positive and negative values, making it useful for real-world data that span zero.
 
 ```{r}
+# all_numeric_predictors() applies the transformation to the numeric features
+# and leaves the outcome alone. A recipe only records the plan at this stage,
+# so nothing is actually transformed until the recipe is prepped.
 recipe(happy ~ ., data = data) %>%
-  step_YeoJohnson(all_numeric()) 
+  step_YeoJohnson(all_numeric_predictors())
 ```
 
 ::: {style="color: orange"}
@@ -43,8 +53,12 @@ We will often want to standardize variables prior to our model fitting to put th
 
 This prevents features with larger numeric ranges (e.g., income in dollars vs. age in years) from dominating distance-based methods (like k-NN, SVMs, or clustering). It can also help with optimization problems, may improve convergence and can help ensure that regularization penalties (like in ridge or lasso regression) are applied fairly across predictors.
 
-```{r,eval=FALSE}
-data %>%
-  step_center(all_numeric(), -all_outcomes()) %>%
-  step_scale(all_numeric(), -all_outcomes())
+```{r}
+# step_center subtracts the mean, step_scale divides by the standard
+# deviation. Run together they standardize each feature. Both learn those
+# numbers from the training data alone, which is what keeps information
+# from the test set out of the calculation.
+recipe(happy ~ ., data = data) %>%
+  step_center(all_numeric_predictors()) %>%
+  step_scale(all_numeric_predictors())
 ```

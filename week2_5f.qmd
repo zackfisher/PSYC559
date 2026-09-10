@@ -8,10 +8,17 @@ editor_options:
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide'}
+::: {style="color: yellow"}
+## Setup
+:::
+
+To follow along, load these packages and the dataset we assembled on the [Example Data](week2_5b.qmd) page. If you did not build it yourself, you can [download `data.RDS`](data/data.RDS) and save it in a `data` folder next to your script.
+
+```{r}
+library(dplyr)       # data manipulation and the pipe
+library(tidymodels)  # the recipes package, used for every step below
+
 data <- readRDS("data/data.RDS")
-library(dplyr)
-library(tidymodels)
 ```
 
 Many models require that the predictors take numeric form. There are exceptionssuch as tree-based models, however, even tree-based methods can benefit from preprocessing categorical features. The following sections will discuss a few of the more common approaches to engineer categorical features.

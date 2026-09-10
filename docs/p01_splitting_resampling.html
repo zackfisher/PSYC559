@@ -389,6 +389,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>The <a href="./week2_3.html">Data Splitting</a> page explained why we hold data back. This page does it in R.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Companion R Markdown File
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>All three pages of this unit are also available as one R Markdown file you can open in RStudio and run from start to finish. It builds its own data and includes exercises at the end.</p>
+<p><a href="rmd/modeling_pipeline.Rmd">Download <code>modeling_pipeline.Rmd</code></a></p>
+</div>
+</div>
 <p>To follow along, load these three packages first. All of them came with the course setup, so you should not need to install anything.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsample)      <span class="co"># splitting and resampling</span></span>
@@ -420,19 +434,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Prices run from about $13,000 to $755,000 with a median near $160,000, and the mean sits above the median because a handful of expensive houses pull the distribution to the right. That skew matters later, both for stratified splitting and for the difference between RMSE and MAE.</p>
-<div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Why houses in a psychology course
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Nothing about the pipeline depends on the subject matter, and Ames has two teaching advantages. The outcome is continuous and easy to reason about, since everyone has intuitions about what makes a house expensive, and there is no missing data to handle, so nothing distracts from the mechanics. Once the pipeline is clear here, swapping in behavioral data changes the variables and nothing else.</p>
-</div>
-</div>
 <section id="making-the-split" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="making-the-split">Making the Split</h2>
 </section>

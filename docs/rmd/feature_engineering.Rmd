@@ -1,0 +1,390 @@
+---
+title: "Feature Engineering"
+subtitle: "PSYC 559: Applied Machine Learning in Psychology"
+author: "Your name here"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: false
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+# cache = TRUE matters here. The GSS download in the next section takes a
+# minute or two, and caching means you only pay that cost on the first knit.
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                      cache = TRUE)
+```
+
+This file is a standalone companion to the Feature Engineering unit on the
+course site. It downloads its own data, so you can open it in RStudio and knit
+it start to finish without any other files.
+
+Feature engineering is everything you do to the predictors before a model ever
+sees them. It is usually where most of the work in an applied project goes.
+
+# Setup
+
+```{r packages, cache=FALSE}
+library(gssr)        # downloading the General Social Survey data
+library(dplyr)       # data manipulation and the pipe
+library(tidymodels)  # bundles recipes for preprocessing and rsample for splitting
+library(caret)       # train() for fitting and cross validation
+library(naniar)      # exploring and visualizing missing data
+library(glmnet)      # the lasso model we fit at the end
+```
+
+# Building the Example Data
+
+We use the [General Social Survey](https://gss.norc.org/), a long running,
+nationally representative survey of adults in the United States that has run
+almost every two years since 1972.
+
+The outcome is `happy`, self reported happiness. The features are a set of
+demographic and background variables we think might predict it.
+
+**The next chunk downloads a large file, so give it a minute.**
+
+```{r download}
+gss24 <- gss_get_yr(2024)
+
+target <- "happy"
+
+features <- c(
+  "age",     # age of participant
+  "sex",     # sex of participant
+  "race",    # race of participant
+  "educ",    # highest education completed
+  "income",  # income of participant
+  "childs",  # number of children
+  "wrkstat", # work force status
+  "marital", # marital status
+  "born",    # whether the participant was born in the USA
+  "partyid", # political party
+  "adults",  # number of family members 18 or older
+  "earnrs"   # number of earners in the family
+)
+
+data <- gss24[, c(target, features)]
+
+dim(data)
+```
+
+Now clean it up. Survey data arrives with its own missing value codes and with
+labels that are not pleasant to read, so we fix both.
+
+```{r clean}
+cat_vars <- c("sex", "race", "educ", "wrkstat", "marital", "born", "partyid")
+con_vars <- c("age", "income", "childs", "adults", "earnrs", "happy")
+
+# Turns "MARRIED" into "Married". Splits each label on spaces, capitalizes the
+# first letter of each word, lowercases the rest when strict = TRUE, then
+# pastes the words back together.
+capwords <- function(x, strict = FALSE) {
+  cap <- function(x) paste(toupper(substring(x, 1, 1)),
+                           {x <- substring(x, 2); if (strict) tolower(x) else x},
+                           sep = "", collapse = " ")
+  sapply(strsplit(x, split = " "), cap, USE.NAMES = !is.null(names(x)))
+}
+
+data <- data |>
+  mutate(
+    # The GSS codes missing values in several different ways. zap_missing turns
+    # all of them into a plain NA so R treats them consistently.
+    across(everything(), haven::zap_missing),
+    across(all_of(cat_vars), forcats::as_factor),
+    across(all_of(con_vars), as.numeric),
+    across(all_of(cat_vars), \(x) forcats::fct_relabel(x, capwords, strict = TRUE))
+  )
+
+# Drop rows with no outcome. We cannot learn from a case whose answer is unknown.
+data <- data[!is.na(data$happy), ]
+
+dim(data)
+```
+
+# Part 1: Missing Data
+
+Knowing how the missing data came about is critical for knowing how to handle
+it. The usual framework distinguishes three mechanisms.
+
+- **MCAR**, missing completely at random. Missingness is unrelated to anything,
+  observed or unobserved. Rare in practice.
+- **MAR**, missing at random. Missingness depends on variables you *did*
+  observe. This is the assumption most modern methods rely on.
+- **MNAR**, missing not at random. Missingness depends on the unobserved value
+  itself, for example high earners declining to report income. This is the hard
+  case and no imputation method fixes it on its own.
+
+Start by looking at the missingness rather than guessing about it.
+
+```{r vis-miss}
+# Black marks a missing value, gray an observed one
+vis_miss(data)
+```
+
+```{r miss-var}
+# The same information as a ranked table
+miss_var_summary(data)
+```
+
+## Mean Imputation
+
+The simplest approach fills each gap with the column mean, or the mode for
+categorical variables.
+
+```{r impute-mean}
+rec_mean <- recipe(happy ~ ., data = data) %>%
+  step_impute_mean(all_numeric_predictors()) %>%
+  step_impute_mode(all_factor_predictors())
+
+# prep() learns the means from the data, bake() applies them.
+# new_data = NULL is how you ask for the already prepped training data back.
+data_mean <- prep(rec_mean) %>% bake(new_data = NULL)
+
+vis_miss(data_mean)
+```
+
+It is fast and it always works, but it distorts the data. Every imputed value
+sits exactly at the mean, which shrinks the variance of that variable and
+weakens its relationship with everything else.
+
+## KNN Imputation
+
+A better approach uses the rest of the row. K nearest neighbor imputation finds
+the cases most similar to the one with the gap and borrows from them.
+
+Think of it this way. Somebody did not tell us whether they like pineapple.
+
+- **Mean imputation** says most people like pineapple, so assume they do.
+- **KNN imputation** says this person looks a lot like five other people who all
+  like pineapple, so assume they probably do too.
+
+The second uses information the first throws away.
+
+```{r impute-knn}
+rec_knn <- recipe(happy ~ ., data = data) %>%
+  step_impute_knn(all_predictors())
+
+data_knn <- prep(rec_knn) %>% bake(new_data = NULL)
+
+vis_miss(data_knn)
+```
+
+> **Your turn.** Compare the standard deviation of `income` before imputation,
+> after mean imputation, and after KNN imputation. Which one changes it least,
+> and why would you expect that?
+
+```{r your-turn-1}
+# Your code here
+
+```
+
+# Part 2: Feature Filtering
+
+Filtering evaluates features *before* fitting and drops the ones that cannot
+help. The goals are fewer dimensions, less redundancy, easier interpretation,
+and better generalization.
+
+The most common filter removes features with almost no variation. A variable
+that is the same value for nearly everybody carries almost no information, and
+it can break a model outright if a rare level lands entirely in one fold.
+
+```{r nzv}
+# saveMetrics = TRUE returns the diagnostics for every variable rather than
+# just the column numbers of the ones flagged for removal
+caret::nearZeroVar(data, saveMetrics = TRUE) %>%
+  tibble::rownames_to_column()
+```
+
+Two columns matter.
+
+- `freqRatio` is the frequency of the most common value divided by that of the
+  second most common. A large value means one level dominates.
+- `percentUnique` is the number of distinct values as a percentage of rows. A
+  small value means the variable is nearly constant.
+
+Inside a recipe this becomes one step.
+
+```{r step-nzv}
+recipe(happy ~ ., data = data) %>%
+  step_nzv(all_predictors())
+```
+
+# Part 3: Numeric Features
+
+## Skewness
+
+Models with distributional assumptions can benefit from reducing skew. The
+Yeo-Johnson transformation is a flexible option that, unlike Box-Cox, handles
+zero and negative values.
+
+```{r yeojohnson}
+# all_numeric_predictors() keeps the transformation off the outcome. A recipe
+# only records the plan here, nothing is computed until it is prepped.
+recipe(happy ~ ., data = data) %>%
+  step_YeoJohnson(all_numeric_predictors())
+```
+
+## Standardization
+
+Standardizing puts features on a common scale, mean zero and standard deviation
+one. This keeps variables with large numeric ranges, like income in dollars,
+from dominating variables with small ones, like number of children. It matters
+for any distance based method and for penalized regression, where the penalty
+would otherwise fall unevenly across predictors.
+
+```{r standardize}
+# step_center subtracts the mean, step_scale divides by the standard deviation.
+# Both learn those numbers from the training data alone, which is what keeps
+# information from the test set out of the calculation.
+recipe(happy ~ ., data = data) %>%
+  step_center(all_numeric_predictors()) %>%
+  step_scale(all_numeric_predictors())
+```
+
+# Part 4: Categorical Features
+
+## Lumping
+
+Some features have levels with very few observations. Look at work status.
+
+```{r wrkstat}
+count(data, wrkstat) %>% arrange(n)
+```
+
+Several levels are rare enough that a model cannot estimate anything stable for
+them. `step_other` collapses everything below a threshold into a single
+category.
+
+```{r lumping}
+lumping <- recipe(happy ~ ., data = data) %>%
+  step_other(wrkstat, threshold = 0.05, other = "Other")
+
+data_lumped <- prep(lumping, training = data) %>% bake(new_data = NULL)
+
+count(data_lumped, wrkstat) %>% arrange(n)
+```
+
+## Dummy Encoding
+
+Most models require numeric predictors, so categories have to become numbers.
+Dummy encoding turns a factor with k levels into indicator columns.
+
+```{r dummy}
+# one_hot = TRUE makes one column per level. FALSE drops one to serve as the
+# reference category, which is what regression models normally want.
+recipe(happy ~ ., data = data) %>%
+  step_dummy(all_factor_predictors(), one_hot = TRUE)
+```
+
+Tree based models are an exception and can handle factors directly, though they
+often still benefit from lumping.
+
+# Part 5: The Whole Workflow
+
+Now put it together. Split first, write one recipe, fit with cross validation.
+
+```{r workflow-split}
+set.seed(123)
+split <- initial_split(data, prop = 0.7, strata = "happy")
+
+data_train <- training(split)
+data_test  <- testing(split)
+```
+
+The recipe collects every step from the sections above into one blueprint.
+Order matters. Filtering comes before imputation so we do not spend effort
+imputing a feature we are about to drop, and dummy encoding comes before
+standardizing so the resulting indicator columns are on the same scale too.
+
+```{r workflow-recipe}
+blueprint <- recipe(happy ~ ., data = data_train) %>%
+  step_nzv(all_nominal()) %>%
+  step_impute_bag(all_predictors()) %>%
+  step_dummy(all_factor_predictors(), one_hot = FALSE) %>%
+  step_center(all_numeric(), -all_outcomes()) %>%
+  step_scale(all_numeric(), -all_outcomes())
+
+blueprint
+```
+
+Now fit. The model is the **lasso**, a linear regression that pays a penalty for
+large coefficients. `lambda` sets how steep that penalty is, and it is a
+hyperparameter, so cross validation picks it rather than us.
+
+```{r workflow-fit}
+cv <- trainControl(method = "cv", number = 10)
+
+# Candidate penalties, spaced evenly on a log scale rather than a linear one,
+# because what matters is the order of magnitude of the penalty.
+hyper_grid <- expand.grid(
+  alpha  = 1,  # alpha = 1 is lasso, alpha = 0 would be ridge
+  lambda = 10^seq(-4, -1.5, length.out = 10)
+)
+
+set.seed(123)
+lasso_fit <- train(
+  blueprint,
+  data = data_train,
+  method = "glmnet",
+  trControl = cv,
+  tuneGrid = hyper_grid,
+  metric = "RMSE"
+)
+
+lasso_fit
+```
+
+```{r workflow-plot}
+ggplot(lasso_fit)
+```
+
+Cross validated error falls at first, because a little shrinkage removes noise
+the model was chasing, then turns and climbs once the penalty is strong enough
+to flatten coefficients carrying real signal. The bottom of that curve is the
+value `caret` keeps.
+
+Notice that the recipe went into `train()` rather than being applied to
+`data_train` beforehand. That is deliberate. It means the recipe is re-learned
+inside every fold, using only that fold's training portion, so no information
+crosses from a held out fold into the fitting.
+
+# Exercises
+
+**1.** Swap `step_impute_bag()` for `step_impute_mean()` in the blueprint and
+refit. Does cross validated RMSE change much? What does that tell you about how
+much the imputation choice is doing here?
+
+```{r ex-1}
+# Your code here
+
+```
+
+**2.** Add `step_YeoJohnson(all_numeric_predictors())` to the blueprint before
+the centering steps and refit. Did reducing skew help?
+
+```{r ex-2}
+# Your code here
+
+```
+
+**3.** Add `step_other(all_nominal_predictors(), threshold = 0.05)` to lump rare
+levels across every categorical feature, not just `wrkstat`. Compare the number
+of columns the recipe produces before and after.
+
+```{r ex-3}
+# Your code here
+
+```
+
+**4.** Take the fitted model to the test set, once, using `postResample()`. How
+does the test RMSE compare to the cross validated RMSE, and which of the two
+would you report?
+
+```{r ex-4}
+# Your code here
+
+```

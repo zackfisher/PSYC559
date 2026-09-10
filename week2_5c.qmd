@@ -8,7 +8,16 @@ editor_options:
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide'}
+::: {style="color: yellow"}
+## Setup
+:::
+
+To follow along, load these packages and the dataset we assembled on the [Example Data](week2_5b.qmd) page. If you did not build it yourself, you can [download `data.RDS`](data/data.RDS) and save it in a `data` folder next to your script.
+
+```{r}
+library(naniar)      # exploring and recoding missing data
+library(tidymodels)  # the recipes package, used here for imputation
+
 data <- readRDS("data/data.RDS")
 ```
 
@@ -96,7 +105,7 @@ See the [`naniar` vignette on recoding NA values](https://cran.r-project.org/web
 ### Once we have recoded our data in a consistent manner we can use visualizations to explore the missing data. The `vis_miss()` function from `naniar` is a good starting point for visualizing the amount of missing data in our dataset. The plots shows the missing values in black and non-missing values in gray. In addition, percentages of missing data in both the dataset and individual variables are provided.
 
 ```{r}
-library(naniar)
+# Black marks a missing value, gray an observed one
 naniar::vis_miss(data)
 ```
 
@@ -185,11 +194,9 @@ Although computationally efficient, this approach does not consider any other at
 The `tidymodels` [@tidymodels] R package has a number of useful functions for machine learning. Here we use the package to perform mean imputation on our dataset.
 
 ```{r}
-library(tidymodels)
-
 # create a recipe
 rec <- recipe(happy ~ ., data = data) %>%
-  step_impute_mean(all_numeric_predictors())  %>% 
+  step_impute_mean(all_numeric_predictors())  %>%
   step_impute_mode(all_factor_predictors())
   # apply mean imputation to predictors
 
@@ -229,11 +236,9 @@ Think of guessing someone’s favorite pizza topping:
 -   **KNN imputation**: This person is very similar to Iris, Naomi, Owen, Naveen, and Stella who all like pineapply. Instead, I’ll assume they probably like pineapple.
 
 ```{r}
-library(tidymodels)
-
 # create a recipe
 rec <- recipe(happy ~ ., data = data) %>%
-  step_impute_knn(all_predictors())   
+  step_impute_knn(all_predictors())
   # apply mean imputation to predictors
 
 # prep the recipe (estimates imputation values)
