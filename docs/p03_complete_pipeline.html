@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>A Complete Pipeline – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -67,15 +73,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-932b3046337f5c054d0c428ad2bce24f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-223e1ba6472b6e8039235b59a4424451.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -128,8 +133,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">PSYC559: Applied Machine Learning in Psychology</a> 
+    </div>
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
@@ -347,6 +353,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Resources</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./open_datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open Datasets</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -358,11 +381,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#step-1-split" id="toc-step-1-split" class="nav-link active" data-scroll-target="#step-1-split">Step 1: Split</a></li>
+  <li><a href="#loading-the-data" id="toc-loading-the-data" class="nav-link" data-scroll-target="#loading-the-data">Loading the Data</a></li>
+  <li><a href="#making-the-split" id="toc-making-the-split" class="nav-link" data-scroll-target="#making-the-split">Making the Split</a></li>
   <li><a href="#step-2-a-preprocessing-recipe" id="toc-step-2-a-preprocessing-recipe" class="nav-link" data-scroll-target="#step-2-a-preprocessing-recipe">Step 2: A Preprocessing Recipe</a></li>
+  <li><a href="#writing-the-recipe" id="toc-writing-the-recipe" class="nav-link" data-scroll-target="#writing-the-recipe">Writing the Recipe</a></li>
+  <li><a href="#reading-the-steps-in-order" id="toc-reading-the-steps-in-order" class="nav-link" data-scroll-target="#reading-the-steps-in-order">Reading the Steps in Order</a></li>
+  <li><a href="#seeing-what-the-recipe-actually-does" id="toc-seeing-what-the-recipe-actually-does" class="nav-link" data-scroll-target="#seeing-what-the-recipe-actually-does">Seeing What the Recipe Actually Does</a></li>
   <li><a href="#step-3-resampling-scheme" id="toc-step-3-resampling-scheme" class="nav-link" data-scroll-target="#step-3-resampling-scheme">Step 3: Resampling Scheme</a></li>
   <li><a href="#step-4-fit" id="toc-step-4-fit" class="nav-link" data-scroll-target="#step-4-fit">Step 4: Fit</a></li>
+  <li><a href="#fitting-the-first-model" id="toc-fitting-the-first-model" class="nav-link" data-scroll-target="#fitting-the-first-model">Fitting the First Model</a></li>
+  <li><a href="#reading-the-output" id="toc-reading-the-output" class="nav-link" data-scroll-target="#reading-the-output">Reading the Output</a></li>
   <li><a href="#step-5-compare-candidates" id="toc-step-5-compare-candidates" class="nav-link" data-scroll-target="#step-5-compare-candidates">Step 5: Compare Candidates</a></li>
+  <li><a href="#adding-a-second-candidate" id="toc-adding-a-second-candidate" class="nav-link" data-scroll-target="#adding-a-second-candidate">Adding a Second Candidate</a></li>
+  <li><a href="#reading-the-tuning-table" id="toc-reading-the-tuning-table" class="nav-link" data-scroll-target="#reading-the-tuning-table">Reading the Tuning Table</a></li>
+  <li><a href="#comparing-them-on-the-same-folds" id="toc-comparing-them-on-the-same-folds" class="nav-link" data-scroll-target="#comparing-them-on-the-same-folds">Comparing Them on the Same Folds</a></li>
   <li><a href="#step-6-the-test-set-once" id="toc-step-6-the-test-set-once" class="nav-link" data-scroll-target="#step-6-the-test-set-once">Step 6: The Test Set, Once</a></li>
+  <li><a href="#making-the-final-prediction" id="toc-making-the-final-prediction" class="nav-link" data-scroll-target="#making-the-final-prediction">Making the Final Prediction</a></li>
+  <li><a href="#reading-the-final-numbers" id="toc-reading-the-final-numbers" class="nav-link" data-scroll-target="#reading-the-final-numbers">Reading the Final Numbers</a></li>
   <li><a href="#the-whole-thing" id="toc-the-whole-thing" class="nav-link" data-scroll-target="#the-whole-thing">The Whole Thing</a></li>
   </ul>
 </nav>
@@ -411,37 +446,118 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-1-split" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="step-1-split">Step 1: Split</h2>
 </section>
+<p>Before we do anything else, we set aside the data we are not allowed to look at.</p>
+<section id="loading-the-data" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="loading-the-data">Loading the Data</h3>
+</section>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> <span class="fu">make_ames</span>()</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(ames, <span class="at">prop =</span> <span class="fl">0.7</span>, <span class="at">strata =</span> <span class="st">"Sale_Price"</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>ames_train <span class="ot">&lt;-</span> <span class="fu">training</span>(split)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>ames_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(split)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make_ames() builds the Ames housing data frame for us. It comes from the</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># AmesHousing package we loaded above, so there is no file to download.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> <span class="fu">make_ames</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># dim() reports the number of rows and then the number of columns</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(ames)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2930   81</code></pre>
 </div>
-<p>From this point until step 6, <code>ames_test</code> does not appear anywhere.</p>
+</div>
+<section id="making-the-split" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="making-the-split">Making the Split</h3>
+</section>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The split is random, so we fix R's random number generator first. Without</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># this line you get a different split every time you run the file, and none</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># of your numbers reproduce. The number 559 is arbitrary. Any number works,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># as long as you use the same one each time.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># initial_split() does not hand back data. It hands back a set of</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># instructions recording which rows belong on which side.</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   prop   = 0.7           put 70 percent of the rows in the training set</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   strata = "Sale_Price"  split within price bands, so both sides end up</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#                          with a similar mix of cheap and expensive houses</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(ames, <span class="at">prop =</span> <span class="fl">0.7</span>, <span class="at">strata =</span> <span class="st">"Sale_Price"</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># training() and testing() are what actually give you the two data frames</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>ames_train <span class="ot">&lt;-</span> <span class="fu">training</span>(split)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>ames_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(split)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the sizes came out roughly where we expected</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">train =</span> <span class="fu">nrow</span>(ames_train), <span class="at">test =</span> <span class="fu">nrow</span>(ames_test))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>train  test 
+ 2049   881 </code></pre>
+</div>
+</div>
+<p>From this point until step 6, <code>ames_test</code> does not appear anywhere. That single sentence is the whole discipline of this page.</p>
 <section id="step-2-a-preprocessing-recipe" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="step-2-a-preprocessing-recipe">Step 2: A Preprocessing Recipe</h2>
 </section>
 <p>Most data need work before modelling. A <strong>recipe</strong> is a written list of those steps that is <em>learned from the training data and then applied elsewhere</em>.</p>
+<section id="writing-the-recipe" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="writing-the-recipe">Writing the Recipe</h3>
+</section>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Sale_Price <span class="sc">~</span> Gr_Liv_Area <span class="sc">+</span> Year_Built <span class="sc">+</span> Neighborhood,</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> ames_train) <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_other</span>(<span class="fu">all_nominal_predictors</span>(), <span class="at">threshold =</span> <span class="fl">0.05</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>())</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>rec</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># recipe() takes a formula and some data.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   Sale_Price ~ ...  the thing on the left of the ~ is what we predict,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                     everything on the right is what we predict it from</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   data = ames_train only the training data, never the full dataset</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># The %&gt;% is the pipe. It takes whatever is on its left and feeds it into</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the function on its right, so each step_ below is added to the growing</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># recipe one after another.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Sale_Price <span class="sc">~</span> Gr_Liv_Area <span class="sc">+</span> Year_Built <span class="sc">+</span> Neighborhood,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> ames_train) <span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_other</span>(<span class="fu">all_nominal_predictors</span>(), <span class="at">threshold =</span> <span class="fl">0.05</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>())</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Printing the recipe shows the plan. Notice it has not touched any data yet.</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>rec</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Reading it in order:</p>
+<section id="reading-the-steps-in-order" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="reading-the-steps-in-order">Reading the Steps in Order</h3>
+</section>
 <ul>
 <li><code>step_other</code> lumps rare neighborhoods into a single “other” category, since a neighborhood appearing four times cannot support its own estimate.</li>
 <li><code>step_normalize</code> centers and scales the numeric predictors.</li>
 <li><code>step_dummy</code> converts categories into 0 and 1 indicator columns.</li>
 <li><code>step_zv</code> drops any predictor with zero variance.</li>
 </ul>
+<p>The helpers inside the parentheses are how you say “all the columns of this kind” without typing their names. <code>all_nominal_predictors()</code> means every categorical predictor, <code>all_numeric_predictors()</code> means every numeric one. This matters because <code>step_dummy</code> creates new columns, so you cannot know all the column names in advance anyway.</p>
+<section id="seeing-what-the-recipe-actually-does" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="seeing-what-the-recipe-actually-does">Seeing What the Recipe Actually Does</h3>
+</section>
+<p>A recipe on its own is only a plan. Two more functions make it real, and you will meet both again throughout the course.</p>
+<ul>
+<li><code>prep()</code> <strong>learns</strong> from the training data. It works out which neighborhoods are rare, and what the means and standard deviations are.</li>
+<li><code>bake()</code> <strong>applies</strong> what was learned and hands you the transformed data.</li>
+</ul>
+<p>You do not normally call these yourself, because <code>train()</code> does it for you in step 4. We do it here once just so you can see the output.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Learn the numbers from the training data</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>rec_prepped <span class="ot">&lt;-</span> <span class="fu">prep</span>(rec)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply them. new_data = NULL is the way to say "give me back the training</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># data you already prepped" rather than handing it some new dataset.</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>baked <span class="ot">&lt;-</span> <span class="fu">bake</span>(rec_prepped, <span class="at">new_data =</span> <span class="cn">NULL</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># The original three predictors have become many more columns, because</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># step_dummy turned each neighborhood into its own 0/1 indicator</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(baked)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2049   10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">names</span>(baked), <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Gr_Liv_Area"                     "Year_Built"                     
+ [3] "Sale_Price"                      "Neighborhood_College_Creek"     
+ [5] "Neighborhood_Old_Town"           "Neighborhood_Edwards"           
+ [7] "Neighborhood_Somerset"           "Neighborhood_Northridge_Heights"
+ [9] "Neighborhood_Gilbert"            "Neighborhood_other"             </code></pre>
+</div>
+</div>
 <div class="callout callout-style-default callout-important no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -460,49 +576,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-3-resampling-scheme" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="step-3-resampling-scheme">Step 3: Resampling Scheme</h2>
 </section>
+<p>We still need a way to compare models without touching the test set. That is what cross validation is for, and <code>trainControl()</code> is where you describe it.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This object is just a set of instructions. It does not run anything yet.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   method = "cv"  use k fold cross validation</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   number = 10    use 10 folds</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># In words: chop the training data into 10 pieces, hold each piece out in</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># turn, fit on the other 9, and score on the piece that was held out.</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Notice we have now written down three things and fit nothing. A split, a recipe, and a resampling plan. Step 4 is where they all get used at once.</p>
 <section id="step-4-fit" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="step-4-fit">Step 4: Fit</h2>
 </section>
+<section id="fitting-the-first-model" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="fitting-the-first-model">Fitting the First Model</h3>
+</section>
 <p>Passing the recipe to <code>train()</code> rather than a formula means the recipe is re-learned inside every fold, on that fold’s training portion only. That is what keeps the leakage protection honest during cross validation.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  rec,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data      =</span> ames_train,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method    =</span> <span class="st">"lm"</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> cv,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric    =</span> <span class="st">"RMSE"</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>fit_lm<span class="sc">$</span>results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># train() refits inside every fold, and the folds are chosen randomly, so we</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed again to make the whole thing reproducible</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  rec,                    <span class="co"># the recipe from step 2, not a formula</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data      =</span> ames_train, <span class="co"># training data only</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">method    =</span> <span class="st">"lm"</span>,       <span class="co"># ordinary linear regression</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> cv,         <span class="co"># the resampling plan from step 3</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric    =</span> <span class="st">"RMSE"</span>      <span class="co"># the number used to judge the model</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>fit_lm<span class="sc">$</span>results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  intercept     RMSE  Rsquared      MAE   RMSESD RsquaredSD    MAESD
 1      TRUE 43472.56 0.7036137 29168.58 5757.255 0.05438564 1833.813</code></pre>
 </div>
 </div>
+<section id="reading-the-output" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="reading-the-output">Reading the Output</h3>
+</section>
+<p>That one row is the summary of ten separate model fits.</p>
+<ul>
+<li><code>RMSE</code>, <code>Rsquared</code>, and <code>MAE</code> are each <strong>averaged across the 10 folds</strong>, not computed once.</li>
+<li>The <code>SD</code> columns tell you how much each number bounced around from fold to fold. A large SD is a warning that your estimate is unstable, usually because the dataset is small.</li>
+<li>There is only one row here because linear regression has nothing to tune. In the next step there will be one row per candidate setting.</li>
+</ul>
 <section id="step-5-compare-candidates" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="step-5-compare-candidates">Step 5: Compare Candidates</h2>
 </section>
 <p>The no free lunch theorem from <a href="./week2_1.html">Important Terms and Distinctions</a> said we cannot know in advance which method wins. So we try more than one and compare them on the same folds.</p>
+<section id="adding-a-second-candidate" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="adding-a-second-candidate">Adding a Second Candidate</h3>
+</section>
 <p>Here is a <strong>lasso</strong> model, which has a hyperparameter to tune. Lasso is a linear regression that pays a penalty for large coefficients, and <code>lambda</code> sets how steep that penalty is. What it is really doing is the subject of the regression unit. The only thing that matters here is that it has a knob on it, and that cross validation is what turns the knob.</p>
 <p><code>tuneGrid</code> lists the values to try. Setting <code>alpha = 1</code> is what makes this lasso rather than one of the other penalized models <code>glmnet</code> can fit.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fit_lasso <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  rec,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data      =</span> ames_train,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method    =</span> <span class="st">"glmnet"</span>,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> cv,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric    =</span> <span class="st">"RMSE"</span>,</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneGrid  =</span> <span class="fu">expand.grid</span>(<span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>))</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>fit_lasso<span class="sc">$</span>results[, <span class="fu">c</span>(<span class="st">"lambda"</span>, <span class="st">"RMSE"</span>, <span class="st">"Rsquared"</span>, <span class="st">"MAE"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>fit_lasso <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  rec,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data      =</span> ames_train,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method    =</span> <span class="st">"glmnet"</span>,   <span class="co"># the package that fits penalized regressions</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> cv,         <span class="co"># the same resampling plan as before</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric    =</span> <span class="st">"RMSE"</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># expand.grid() builds a table of every combination of the values you give</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># it. Here alpha is fixed at 1 and lambda takes five values, so we get five</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># candidate settings, and caret scores each one by cross validation.</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneGrid  =</span> <span class="fu">expand.grid</span>(<span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>))</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Pull out just the columns worth looking at</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>fit_lasso<span class="sc">$</span>results[, <span class="fu">c</span>(<span class="st">"lambda"</span>, <span class="st">"RMSE"</span>, <span class="st">"Rsquared"</span>, <span class="st">"MAE"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  lambda     RMSE  Rsquared      MAE
 1      1 43469.88 0.7036503 29132.84
@@ -512,18 +658,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5  10000 46375.63 0.6917134 30408.76</code></pre>
 </div>
 </div>
-<p>Each row is one value of <code>lambda</code>, scored by cross validation. Notice the shape of that column. Small penalties barely move the model, so those rows are nearly identical. Once the penalty gets large enough it starts squashing coefficients that were doing useful work, and the error climbs. <code>train()</code> keeps the best row:</p>
+<section id="reading-the-tuning-table" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="reading-the-tuning-table">Reading the Tuning Table</h3>
+</section>
+<p>Each row is one value of <code>lambda</code>, scored by cross validation. Notice the shape of that column. Small penalties barely move the model, so those rows are nearly identical. Once the penalty gets large enough it starts squashing coefficients that were doing useful work, and the error climbs.</p>
+<p>This is the bias variance tradeoff showing up as a column of numbers. Too little penalty and the model chases noise. Too much and it cannot follow the signal.</p>
+<p><code>train()</code> keeps the best row for you:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit_lasso<span class="sc">$</span>bestTune</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bestTune reports the setting that won, and it is the one train() will use</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># when you later call predict()</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>fit_lasso<span class="sc">$</span>bestTune</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  alpha lambda
 3     1    100</code></pre>
 </div>
 </div>
-<p>Now compare the two models. Because both used the same seed and the same folds, this is a fair comparison.</p>
+<section id="comparing-them-on-the-same-folds" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="comparing-them-on-the-same-folds">Comparing Them on the Same Folds</h3>
+</section>
+<p>Because both models used the same seed and the same resampling plan, they were scored on exactly the same 10 folds. That is what makes the comparison fair. If the folds differed, you could not tell whether a difference came from the model or from an easier set of folds.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">resamples</span>(<span class="fu">list</span>(<span class="at">linear =</span> fit_lm, <span class="at">lasso =</span> fit_lasso))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)<span class="sc">$</span>statistics<span class="sc">$</span>RMSE</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># resamples() collects the fold by fold results of several fitted models so</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># they can be compared side by side</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">resamples</span>(<span class="fu">list</span>(<span class="at">linear =</span> fit_lm, <span class="at">lasso =</span> fit_lasso))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># The RMSE distribution across folds for each model</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)<span class="sc">$</span>statistics<span class="sc">$</span>RMSE</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           Min.  1st Qu.   Median     Mean  3rd Qu.     Max. NA's
 linear 36530.25 39682.47 41511.62 43472.56 46361.51 53040.55    0
@@ -564,18 +724,32 @@ lasso  36524.43 39658.83 41508.00 43469.88 46366.21 53023.37    0</code></pre>
 <h2 class="anchored" data-anchor-id="step-6-the-test-set-once">Step 6: The Test Set, Once</h2>
 </section>
 <p>Pick the winner, then look at the test data for the first and only time. The two candidates tied, so we keep the simpler one.</p>
+<section id="making-the-final-prediction" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="making-the-final-prediction">Making the Final Prediction</h3>
+</section>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>final_model <span class="ot">&lt;-</span> fit_lm</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>test_predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(final_model, ames_test)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">postResample</span>(<span class="at">pred =</span> test_predictions, <span class="at">obs =</span> ames_test<span class="sc">$</span>Sale_Price)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Choosing the model is a decision, and it was made using the cross</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># validated numbers above, not the test set</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>final_model <span class="ot">&lt;-</span> fit_lm</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># predict() applies the whole pipeline to new data. The recipe travels with</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># the model, so the test rows get lumped, normalized, and dummy coded using</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the values learned from the training data. You do not redo any of it.</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>test_predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(final_model, ames_test)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># postResample() compares predictions against the truth and returns all</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co"># three regression metrics at once</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="fu">postResample</span>(<span class="at">pred =</span> test_predictions, <span class="at">obs =</span> ames_test<span class="sc">$</span>Sale_Price)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        RMSE     Rsquared          MAE 
 4.196908e+04 7.232742e-01 2.792871e+04 </code></pre>
 </div>
 </div>
+<section id="reading-the-final-numbers" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="reading-the-final-numbers">Reading the Final Numbers</h3>
+</section>
 <p>That is the number you report. It is an estimate of how the model will perform on houses nobody has seen.</p>
+<p>It is worth comparing it to the cross validated RMSE from step 4. They will not match exactly, and neither one is wrong. The cross validated number was an estimate made from the training data. This one is measured on data the model has genuinely never seen. If the test number were dramatically worse, that would be a signal that something in the pipeline had been fit too closely to the training data.</p>
 <div class="callout callout-style-default callout-important no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -595,25 +769,25 @@ lasso  36524.43 39658.83 41508.00 43469.88 46366.21 53023.37    0</code></pre>
 </section>
 <p>Every pipeline in this course has this shape, whatever the model:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. split</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(data, <span class="at">prop =</span> <span class="fl">0.7</span>, <span class="at">strata =</span> <span class="st">"outcome"</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">training</span>(split)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(split)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. recipe</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(outcome <span class="sc">~</span> ., <span class="at">data =</span> train) <span class="sc">%&gt;%</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>())</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. resampling</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 4 and 5. fit, tune, compare</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(rec, <span class="at">data =</span> train, <span class="at">method =</span> <span class="st">"lm"</span>,</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">trControl =</span> cv, <span class="at">metric =</span> <span class="st">"RMSE"</span>)</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. once</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="fu">postResample</span>(<span class="fu">predict</span>(fit, test), test<span class="sc">$</span>outcome)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. split</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(data, <span class="at">prop =</span> <span class="fl">0.7</span>, <span class="at">strata =</span> <span class="st">"outcome"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">training</span>(split)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(split)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. recipe</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>rec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(outcome <span class="sc">~</span> ., <span class="at">data =</span> train) <span class="sc">%&gt;%</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>())</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. resampling</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">10</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 4 and 5. fit, tune, compare</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(rec, <span class="at">data =</span> train, <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">trControl =</span> cv, <span class="at">metric =</span> <span class="st">"RMSE"</span>)</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. once</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a><span class="fu">postResample</span>(<span class="fu">predict</span>(fit, test), test<span class="sc">$</span>outcome)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>From here the course mostly changes one thing at a time. The regression unit changes what goes in <code>method</code>. The feature engineering unit changes what goes in the recipe. The tree unit changes both. The pipeline stays the same.</p>
 

@@ -45,6 +45,8 @@ A common framework for understanding missing data mechanisms was described by Ru
 
 Imagine a cat opening up your dataset in Excel and walking across the keyboard, randomly deleting different cells.
 
+![The cat has no idea what any of the cells mean, which is exactly the point. The values it deletes have nothing to do with what those values were.](images/cat-keyboard-mcar.png){width="550" fig-align="center"}
+
 **Definition:** Missingness in self-reported happiness, for example, is unrelated to the respondent's true happiness level or any other variables.
 
 **Example:** Let's say there is a glitch in the online GSS survey and for some respondent's questions are randomly skipped. This means the probability of missingness is purely random, and it does not depend on other variables (e.g. income, age, or happiness levels).
@@ -73,6 +75,44 @@ Imagine a cat opening up your dataset in Excel and walking across the keyboard, 
 
 **Implication:** Standard imputation methods will be biased. Handling MNAR requires explicitly modeling the missingness mechanism (e.g., selection models, pattern-mixture models)
 
+::: {.callout-tip icon="false"}
+## Quick Discussion: Why Are Exam Scores Missing?
+
+A researcher is studying the relationship between hours studied and final exam score. Some students are missing a final exam score.
+
+For each scenario, decide whether the missingness is MCAR, MAR, or MNAR, and explain why.
+
+1.  The instructor accidentally loses a random stack of exams before entering the grades.
+
+2.  Students in the 8 a.m. section are more likely to have a missing score, because that instructor had a data entry problem. We know which section each student was in.
+
+3.  Students who did very poorly are more likely to skip the final or refuse to report their score.
+
+Then the harder one:
+
+-   What would you need to know to decide whether missingness is MAR or MNAR?
+
+Take a minute on your own, two minutes with a neighbor, then we will talk it through as a class.
+:::
+
+::: {.callout-note icon="false" collapse="true"}
+## Answers
+
+1.  **MCAR.** Missingness is unrelated to exam performance, whether observed or missing.
+
+2.  **MAR.** Missingness depends on something we observed, the class section. Once we account for section, it does not depend on the missing exam score itself.
+
+3.  **MNAR.** Whether a score is missing depends on the score that would have been observed.
+
+**The last question is the real point.** You often cannot tell MAR from MNAR using the observed data alone, because MNAR depends on information about the values you did not get to see.
+
+One rule worth carrying forward:
+
+-   **MCAR:** missingness depends on nothing relevant.
+-   **MAR:** missingness can depend on things we observed.
+-   **MNAR:** missingness still depends on the missing value itself, even after accounting for what we observed.
+:::
+
 ::: {style="color: yellow"}
 ## Handling Missing Data in R
 :::
@@ -89,8 +129,16 @@ Now that we have a dataset with missing values we can use `naniar` to recode the
 
 ```{r, eval = F}
 library(naniar)
+
+# Surveys often mark missing answers with placeholder numbers rather than
+# leaving the cell blank. List whichever ones your dataset uses here.
 gss_na_codes <- c(-99, -999, "NA")
-  
+
+# replace_with_na_all() walks every column and replaces any value matching
+# the condition with a real NA.
+#   ~.x         is shorthand for "the value being checked right now"
+#   %in%        asks "is this value one of the ones in that list?"
+# So the condition reads: if the current value is one of our codes, make it NA.
 data <- naniar::replace_with_na_all(
   data, condition = ~.x %in% gss_na_codes
 )
@@ -112,12 +160,22 @@ naniar::vis_miss(data)
 It is often useful to look at combinations of missingness among different variables.
 
 ```{r}
+# An upset plot. Each bar is a *combination* of variables that go missing
+# together, and the dots underneath the bar tell you which combination it is.
+# This answers a question vis_miss() cannot: do these variables tend to be
+# missing on the same people, or on different people?
 naniar::gg_miss_upset(data)
 ```
 
 We can also look at the percentage of missing data across a factor variable.
 
 ```{r}
+# Breaks the missingness down by the levels of a categorical variable.
+#   x   = the dataset
+#   fct = the factor to split by, here marital status
+# Darker cells mean more missing. This plot is the practical way to look for
+# MAR: if missingness on a variable differs across marital status, then
+# marital status carries information about why the data are missing.
 naniar::gg_miss_fct(x = data, fct = marital)
 ```
 
@@ -166,10 +224,16 @@ After deletion, only rows that are complete for all variables remain.
 For example, our example GSS data has `3,309` rows before we address the missing data. If we only kept rows that contained no missing data we would have `2,780` observations. You can perform listwise deletion on your data using the `complete.cases()` function as demonstrated below. Then you can visualize the missing data to ensure there is no missingness on the new dataset.
 
 ```{r}
-# nrow(data) # 3,3309 rows
+# complete.cases() returns TRUE for every row with no missing values anywhere
+# and FALSE for every row with at least one. Putting that in the rows slot of
+# the square brackets keeps only the TRUE rows.
+data_cc <- data[complete.cases(data), ]
 
-data_cc <- data[complete.cases(data),]
+# How many rows survived? Compare this to the 3,309 we started with.
 nrow(data_cc)
+
+# The plot is now entirely gray, because every remaining row is complete.
+# That looks tidy, but notice what it cost us.
 naniar::vis_miss(data_cc)
 ```
 
@@ -194,18 +258,27 @@ Although computationally efficient, this approach does not consider any other at
 The `tidymodels` [@tidymodels] R package has a number of useful functions for machine learning. Here we use the package to perform mean imputation on our dataset.
 
 ```{r}
-# create a recipe
+# STEP 1: write the recipe.
+# recipe() takes a formula. The dot on the right of the ~ means "use every
+# other column as a predictor", so we do not have to list all twelve.
 rec <- recipe(happy ~ ., data = data) %>%
-  step_impute_mean(all_numeric_predictors())  %>%
-  step_impute_mode(all_factor_predictors())
-  # apply mean imputation to predictors
 
-# prep the recipe (estimates imputation values)
+  # numeric columns get filled with that column's mean
+  step_impute_mean(all_numeric_predictors())  %>%
+
+  # categorical columns have no mean, so they get the most common value
+  step_impute_mode(all_factor_predictors())
+
+# STEP 2: prep the recipe. This is where R actually looks at the data and
+# works out what each mean and each mode is. Nothing was computed until now.
 rec_prep <- prep(rec)
 
-# check the imputed values
+# STEP 3: bake, which applies those stored values and returns the filled in
+# data. new_data = NULL means "give back the data the recipe was prepped on".
 data_mi <- bake(rec_prep, new_data = NULL)
 
+# All gray, so every gap is filled. Keep in mind the gaps were filled with
+# the same number over and over, which is the weakness of this approach.
 naniar::vis_miss(data_mi)
 ```
 
@@ -236,15 +309,18 @@ Think of guessing someone’s favorite pizza topping:
 -   **KNN imputation**: This person is very similar to Iris, Naomi, Owen, Naveen, and Stella who all like pineapply. Instead, I’ll assume they probably like pineapple.
 
 ```{r}
-# create a recipe
+# Same three stage pattern as above, with one step swapped out.
+# step_impute_knn() handles numeric and categorical columns together, so
+# all_predictors() covers everything in one line.
 rec <- recipe(happy ~ ., data = data) %>%
   step_impute_knn(all_predictors())
-  # apply mean imputation to predictors
 
-# prep the recipe (estimates imputation values)
+# prep() is doing much more work this time. Instead of storing one mean per
+# column, it has to be able to find each row's nearest neighbors.
 rec_prep <- prep(rec)
 
-# check the imputed values
+# bake() fills each gap using the neighbors of that particular row, so two
+# people with a missing value can receive two different imputed values.
 data_knn <- bake(rec_prep, new_data = NULL)
 
 naniar::vis_miss(data_knn)

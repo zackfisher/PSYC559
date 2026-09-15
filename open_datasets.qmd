@@ -1,0 +1,337 @@
+---
+title: "Open Datasets"
+format:
+  html:
+    fontsize: 25px
+editor_options:
+  chunk_output_type: console
+---
+
+This page lists real, openly available datasets that are large and rich enough to support a full machine learning project. These are not teaching datasets. They are the actual data that psychologists publish on, which means you get real codebooks, real missingness, and real decisions to make.
+
+::: {style="color: yellow"}
+## What Makes a Dataset a Good Fit
+:::
+
+A dataset worth building a project on usually has most of the following.
+
+-   Thousands of observations, or many repeated observations per participant.
+-   Enough predictors that feature selection, regularization, and model comparison actually mean something.
+-   Outcomes that are psychologically interesting and interpretable.
+-   A real codebook and real data cleaning decisions.
+-   Public access that you can reasonably navigate on your own.
+-   Something you can work with in R without special computing infrastructure.
+-   Enough complexity for a complete project: cleaning, exploration, prediction, validation, interpretation, and limitations.
+
+::: {style="color: yellow"}
+## Quick Shortlist
+:::
+
+| Dataset | Main psychology areas | Approximate scale | R access | Friction |
+|----|----|----|----|----|
+| **GSS** | Attitudes, well-being, religion, family, trust | 75,699 rows, 6,942 variables (1972 to 2024) | `gssr` package | Very low |
+| **openESM** | Emotion, stress, affect, daily life | Many repeated observations per person | `openesm` package | Very low |
+| **NHANES** | Depression, sleep, activity, cognition, health | Thousands per cycle | `nhanesA`, `nhanesdata` | Very low |
+| **NSDUH** | Mental health, substance use, treatment | Large annual national survey | Official R format files | Very low |
+| **YRBSS** | Adolescent behavior, mental health, sleep | 20,103 cases in 2023 | Public download | Low |
+| **BRFSS** | Mental health days, sleep, activity | 457,670 records, 345 variables (2024) | `haven::read_xpt()` | Low |
+| **NHIS** | Health, functioning, distress | Large annual samples | Public CSV | Low |
+| **MIDUS** | Well-being, personality, stress, aging | ~7,100 plus follow-ups | ICPSR / MIDUS Portal | Medium |
+| **Add Health** | Adolescence, peers, family, education | Multi-wave longitudinal | ICPSR public use | Medium |
+| **NLSY97 / NLSY79** | Development, education, work, life course | 8,984 and 12,686 | NLS Investigator | Medium |
+| **WVS / IVS** | Values, trust, cross-cultural psychology | >80,000 in Wave 7 | RDS / RData files | Low |
+| **ESS** | Well-being, trust, identity, attitudes | Tens of thousands per round | `essurvey` package | Low to medium |
+| **ANES** | Political psychology, identity, affect | 5,521 in 2024 | CSV / SPSS / Stata | Low |
+| **Project Implicit** | Implicit and explicit attitudes | Millions of sessions | OSF downloads | Low to medium |
+| **Open Psychometrics** | Personality, individual differences | ~7,000 to >70,000 | CSV downloads | Very low |
+| **IPUMS CPS** | Family, work, income, demographics | Very large monthly microdata | IPUMS extracts | Medium |
+| **HRS** | Aging, cognition, health, retirement | Large longitudinal panel | Registered download | Medium |
+
+::: {style="color: yellow"}
+## The Datasets
+:::
+
+::: {style="color: lightblue"}
+### 1. General Social Survey (GSS)
+:::
+
+[gss.norc.org](https://gss.norc.org/) | [`gssr` package](https://github.com/kjhealy/gssr)
+
+Decades of United States survey data on social attitudes, happiness, religion, family, work, trust, political attitudes, social relationships, and demographics. You already met this dataset in the [Feature Engineering](week2_5b.qmd) unit.
+
+The current `gssr` cumulative file packages the 1972 to 2024 GSS with **75,699 rows and 6,942 variables**, plus several panel datasets.
+
+**Why it works.** A very large set of candidate predictors, many possible continuous, ordinal, and categorical outcomes, real missingness and skip patterns, and an unusually good codebook. Different students can ask genuinely different questions from the same source.
+
+**Project questions.** Predict self-reported happiness from social, economic, and attitudinal variables. Predict confidence in institutions. Predict social trust. Predict attitudes toward a social issue from broader values. Compare accuracy across historical periods.
+
+```r
+install.packages(
+  "gssr",
+  repos = c(
+    "https://kjhealy.r-universe.dev",
+    "https://cloud.r-project.org"
+  )
+)
+
+library(gssr)
+data(gss_all)
+```
+
+The companion `gssrdoc` package integrates much of the codebook into R help.
+
+**Caution.** Do not throw all 7,000 variables blindly into a model. You need a substantively justified set of candidate features, and choosing it is part of the work.
+
+::: {style="color: lightblue"}
+### 2. openESM
+:::
+
+[openesmdata.org](https://openesmdata.org/) | [R package docs](https://openesmdata.org/docs/packages/)
+
+A curated collection of harmonized **experience sampling** datasets. Observations are collected repeatedly during daily life and typically include affect, stress, symptoms, context, and behavior. This is genuinely psychological data rather than generic tabular data.
+
+**Why it works.** You can predict affect, stress, symptoms, or behavior at the next measurement. The repeated measures structure is an opportunity to see why ordinary random splitting can mislead you. It supports both person level and observation level questions, and the harmonization removes a lot of idiosyncratic preprocessing.
+
+```r
+install.packages("openesm")
+library(openesm)
+
+datasets <- list_datasets()
+
+dat <- get_dataset("0001")
+
+cite(dat)
+notes(dat)
+```
+
+Run `list_datasets()` first so you can compare studies on sample size, number of time points, constructs, and design.
+
+**Project questions.** Predict next observation affect from recent affect and context. Predict high stress moments from time of day and preceding states. Predict person average well-being from within person patterns. Compare person specific against population level prediction.
+
+**Caution, and this one matters.** Do not randomly split individual rows into training and test sets when the same participants appear in both. Depending on your question, split by participant, by time, or both. This is one of the clearest real examples of leakage you will encounter.
+
+::: {style="color: lightblue"}
+### 3. NHANES
+:::
+
+[cdc.gov/nchs/nhanes](https://www.cdc.gov/nchs/nhanes/) | [`nhanesA`](https://cran.r-project.org/package=nhanesA)
+
+Interviews, questionnaires, physical examinations, and laboratory measurements combined. Attractive for psychology because you can pair psychological variables with sleep, activity, medication, nutrition, and biological measures. The 2021 to 2023 cycle includes the PHQ-9 depression screener, sleep, physical activity, smoking, health status, and more.
+
+**Why it works.** It mixes self report, behavioral, physical, and biological predictors, which makes feature engineering meaningful. It has realistic missing data and supports both classification and regression.
+
+```r
+install.packages("nhanesA")
+library(nhanesA)
+
+dpq <- nhanes("DPQ_L")
+```
+
+**Project questions.** Predict depression symptom severity from sleep, activity, and health variables. Predict self rated health. Predict sleep duration or sleep problems. Predict physical activity.
+
+**Caution.** Watch for outcome leakage. Do not predict a PHQ-9 total score using the nine items that the total is computed from.
+
+::: {style="color: lightblue"}
+### 4. NSDUH
+:::
+
+[samhsa.gov](https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health)
+
+A large national survey covering mental health, substance use, treatment, functioning, and demographics for ages 12 and up. The public use files download directly in **R format**.
+
+**Why it works.** Large sample, many binary and continuous outcomes, extensive codebook, and good material for logistic regression, regularization, trees, and calibration.
+
+**Project questions.** Predict treatment utilization from symptoms and demographics. Predict broad categories of substance use. Predict psychological distress or functional impairment. Compare models across age groups.
+
+**Caution.** These are sensitive outcomes. Frame your project as a statistical prediction exercise, never as a clinical or diagnostic tool. Also note that SAMHSA warns about trend comparability around the 2021 redesign, so pooling across years takes care.
+
+::: {style="color: lightblue"}
+### 5. YRBSS
+:::
+
+[cdc.gov/yrbs/data](https://www.cdc.gov/yrbs/data/)
+
+High school student data on health behavior, sleep, activity, substance use, school experiences, and mental health. The 2023 national file has **20,103 usable records**.
+
+**Why it works.** Large enough for genuine three way splitting, with variables that are immediately understandable and many binary outcomes that make evaluation intuitive. The codebook is manageable compared with other federal surveys, and there are strong openings to discuss class imbalance and fairness.
+
+**Project questions.** Predict insufficient sleep from school and behavioral variables. Predict physical activity level. Predict a school related behavioral outcome.
+
+**Caution.** Participants are minors and some outcomes are sensitive. Interpret responsibly and do not present a class model as a screening tool.
+
+::: {style="color: lightblue"}
+### 6. BRFSS
+:::
+
+[cdc.gov/brfss](https://www.cdc.gov/brfss/annual_data/annual_data.htm)
+
+An enormous health survey. The 2024 file has **457,670 records and 345 variables**, covering self rated health, mental health days, sleep, activity, disability, chronic conditions, and healthcare access.
+
+**Why it works.** The sample size means you can hold out a real test set and compare simple against flexible models without running out of data. Good for rare outcomes and class imbalance.
+
+```r
+library(haven)
+brfss <- read_xpt("LLCP2024.XPT")
+```
+
+**Project questions.** Predict number of poor mental health days. Predict self rated health. Predict insufficient sleep. Predict frequent mental distress.
+
+**Caution.** With a sample this large, tiny improvements in a test metric become statistically detectable while remaining substantively meaningless. Do not confuse the two.
+
+::: {style="color: lightblue"}
+### 7. NHIS
+:::
+
+[cdc.gov/nchs/nhis](https://www.cdc.gov/nchs/nhis/)
+
+A large annual health survey with separate adult and child public use files, released as CSV with extensive documentation. Depending on the year it covers psychological distress, functional limitations, sleep, pain, disability, healthcare access, and health behaviors.
+
+**Project questions.** Predict self rated health. Predict psychological distress. Predict functional limitation. Predict healthcare use. Compare prediction across subgroups.
+
+A good alternative to BRFSS when you want something a bit more focused.
+
+::: {style="color: lightblue"}
+### 8. MIDUS
+:::
+
+[midus.wisc.edu](https://midus.wisc.edu/) | [Data access](https://midus.wisc.edu/data-access/)
+
+One of the most psychologically rich large longitudinal datasets available. It was designed to study how psychological, social, and biological factors contribute to health and well-being across adulthood. The original sample was about **7,100 adults**, with follow up waves and refresher cohorts.
+
+Constructs include positive and negative affect, psychological well-being, personality, perceived control, stress, social support and strain, family, work, physical health, cognition, and biomarkers in some projects.
+
+**Why it works.** You can build a psychologically meaningful model without assembling measures from a dozen unrelated sources.
+
+**Project questions.** Predict later well-being from earlier psychosocial variables. Predict self rated health from personality, stress, and relationships. Predict change in an outcome. Compare demographic against psychological predictors.
+
+**Access.** Public use through ICPSR or the MIDUS Portal, with registration and terms of use. Genomics, neuroimaging, and geographic files are restricted. Use the standard public survey files.
+
+::: {style="color: lightblue"}
+### 9. Add Health
+:::
+
+[ICPSR public use archive](https://www.icpsr.umich.edu/web/DSDR/studies/21600)
+
+Follows participants from adolescence into adulthood. The public use archive spans **1994 to 2025** and does not require an ICPSR member affiliation. Strong on development, family, peers, school, mental health, health behavior, romantic relationships, education, and the transition to adulthood.
+
+**Project questions.** Predict an adult outcome from adolescent characteristics. Predict educational attainment. Predict later self rated health from adolescent variables. Predict change across waves.
+
+**Caution.** If you predict later outcomes from earlier waves, establish a clear temporal ordering first. Leakage here usually comes in through a variable measured *after* the thing you are predicting.
+
+::: {style="color: lightblue"}
+### 10. NLSY97 and NLSY79
+:::
+
+[nlsinfo.org](https://www.nlsinfo.org/) | [Data access](https://www.nlsinfo.org/content/access-data-investigator)
+
+Bureau of Labor Statistics longitudinal studies with extremely rich life course information, free through the NLS Investigator.
+
+-   **NLSY97:** 8,984 respondents, ages 12 to 17 at first interview in 1997, currently through Round 21.
+-   **NLSY79:** originally 12,686 respondents, followed from young adulthood onward.
+-   **NLSY79 Child and Young Adult:** more than 10,000 children across waves.
+
+The full datasets contain over **100,000 variables**, so build a custom extract rather than downloading everything.
+
+**Project questions.** Predict college completion from adolescent characteristics. Predict employment or income category. Predict later health behavior. Predict family or work transitions.
+
+Especially strong if you want a project about genuinely prospective prediction.
+
+::: {style="color: lightblue"}
+### 11. World Values Survey
+:::
+
+[worldvaluessurvey.org](https://www.worldvaluessurvey.org/)
+
+A major cross national survey of values and beliefs. Wave 7 contains more than **80,000 respondents across 64 societies**, and the integrated EVS/WVS files are larger still. Covers life satisfaction, trust, social values, religion, family and gender attitudes, and political trust. Distributed directly as `.rds` and `.RData`.
+
+**Project questions.** Predict life satisfaction. Predict generalized social trust. Train on one set of countries and test on another. Compare country specific against pooled models.
+
+**Caution.** A random row split mixes respondents from the same countries across training and test. If your question is about cross cultural generalization, hold out whole countries instead.
+
+::: {style="color: lightblue"}
+### 12. European Social Survey
+:::
+
+[ess.sikt.no](https://ess.sikt.no/) | [`essurvey`](https://cran.r-project.org/package=essurvey)
+
+A repeated cross national European survey with high quality measures of attitudes, well-being, trust, identity, inequality, and behavior.
+
+```r
+install.packages("essurvey")
+library(essurvey)
+```
+
+The data portal also provides an API. You may need a free ESS account depending on the route you use.
+
+**Project questions.** Predict life satisfaction. Predict generalized trust. Predict loneliness or social connectedness where available. Test generalization across countries.
+
+**Caution.** Same as WVS. Country structure matters, and a random split answers a different question from a country holdout.
+
+::: {style="color: lightblue"}
+### 13. ANES
+:::
+
+[electionstudies.org](https://electionstudies.org/data-center/)
+
+The core dataset for political psychology. The 2024 Time Series study has **5,521 respondents** with pre and post election waves, and the cumulative file spans 1948 to 2024. Covers political identity, affect toward groups and candidates, trust, issue attitudes, participation, values, and economic perceptions.
+
+**Project questions.** Predict turnout or participation. Predict political interest. Predict affect toward a candidate or group. Predict change between the pre and post election waves.
+
+Distributed as CSV, SPSS, and Stata, all easy to import.
+
+::: {style="color: lightblue"}
+### 14. Project Implicit
+:::
+
+[Project Implicit](https://implicit.harvard.edu/implicit/) | [Open data archive](https://osf.io/y9hiq/)
+
+Anonymized data from the Project Implicit demonstration website, including Implicit Association Test responses alongside explicit attitudes and demographics. Individual datasets can contain hundreds of thousands or millions of observations.
+
+**Why it works.** A direct line to social cognition, at enormous scale, with a natural comparison between predicting implicit and explicit attitudes.
+
+**Project questions.** Predict IAT D-score from demographics and explicit attitudes. Predict explicit attitudes from implicit measures. Compare performance across years, or train on one period and test on a later one.
+
+**Caution.** The sample is self selected and not nationally representative. That is pedagogically useful as long as you clearly separate predictive performance within this sample from claims about the population. The files are also very large, so pick one IAT and one year to start.
+
+::: {style="color: lightblue"}
+### 15. Open Source Psychometrics Project
+:::
+
+[openpsychometrics.org/\_rawdata](https://openpsychometrics.org/_rawdata/)
+
+Anonymous raw data from online personality and individual differences assessments. Most datasets are a ZIP containing a CSV plus a text codebook, which makes this the lowest friction option on the page.
+
+-   16PF style IPIP dataset: 49,159 respondents
+-   Narcissistic Personality Inventory: 11,243
+-   MACH-IV Machiavellianism: 73,489
+-   Big Five: 19,719
+-   Firstborn Personality Scale: 41,842
+-   Introversion and Extraversion: 7,188
+
+**Project questions.** Predict a self reported personality category from item responses. Predict demographic or behavioral variables from personality items. Compare sparse regression against tree based models. Test whether a short subset of items predicts a longer scale score.
+
+**Caution.** Volunteer internet samples, so discuss self selection explicitly. And avoid trivial targets, such as predicting a scale score from the exact items summed to create it, unless scale shortening is the actual point.
+
+::: {style="color: lightblue"}
+### 16. IPUMS CPS
+:::
+
+[cps.ipums.org](https://cps.ipums.org/)
+
+Harmonized decades of monthly United States Current Population Survey microdata. Free after registration, and you build a custom extract rather than downloading everything. Covers employment, education, family structure, income, disability, health insurance, food security, and selected supplements on volunteering and internet use.
+
+**Project questions.** Predict labor force participation. Predict food insecurity. Predict employment transitions. Predict volunteering.
+
+Less purely psychological than MIDUS or openESM, but strong for social, occupational, and developmental questions.
+
+::: {style="color: lightblue"}
+### 17. Health and Retirement Study
+:::
+
+[hrs.isr.umich.edu](https://hrs.isr.umich.edu/)
+
+A major longitudinal study of United States adults over 50 and their spouses, available after registration. Covers cognition, depression, personality, health, disability, family, work and retirement, economic stress, and social engagement.
+
+**Project questions.** Predict later cognitive performance. Predict retirement transition. Predict self rated health or functional limitation. Predict depressive symptoms from social, economic, and health variables.
+
+An excellent advanced project, though access and longitudinal data management make it harder than GSS or NHANES.

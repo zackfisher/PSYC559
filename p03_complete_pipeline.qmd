@@ -37,17 +37,48 @@ The pipeline is six steps:
 ## Step 1: Split
 :::
 
+Before we do anything else, we set aside the data we are not allowed to look at.
+
+::: {style="color: lightblue"}
+### Loading the Data
+:::
+
 ```{r}
+# make_ames() builds the Ames housing data frame for us. It comes from the
+# AmesHousing package we loaded above, so there is no file to download.
 ames <- make_ames()
 
-set.seed(559)
-split <- initial_split(ames, prop = 0.7, strata = "Sale_Price")
-
-ames_train <- training(split)
-ames_test  <- testing(split)
+# dim() reports the number of rows and then the number of columns
+dim(ames)
 ```
 
-From this point until step 6, `ames_test` does not appear anywhere.
+::: {style="color: lightblue"}
+### Making the Split
+:::
+
+```{r}
+# The split is random, so we fix R's random number generator first. Without
+# this line you get a different split every time you run the file, and none
+# of your numbers reproduce. The number 559 is arbitrary. Any number works,
+# as long as you use the same one each time.
+set.seed(559)
+
+# initial_split() does not hand back data. It hands back a set of
+# instructions recording which rows belong on which side.
+#   prop   = 0.7           put 70 percent of the rows in the training set
+#   strata = "Sale_Price"  split within price bands, so both sides end up
+#                          with a similar mix of cheap and expensive houses
+split <- initial_split(ames, prop = 0.7, strata = "Sale_Price")
+
+# training() and testing() are what actually give you the two data frames
+ames_train <- training(split)
+ames_test  <- testing(split)
+
+# Check that the sizes came out roughly where we expected
+c(train = nrow(ames_train), test = nrow(ames_test))
+```
+
+From this point until step 6, `ames_test` does not appear anywhere. That single sentence is the whole discipline of this page.
 
 ::: {style="color: yellow"}
 ## Step 2: A Preprocessing Recipe
@@ -55,7 +86,19 @@ From this point until step 6, `ames_test` does not appear anywhere.
 
 Most data need work before modelling. A **recipe** is a written list of those steps that is *learned from the training data and then applied elsewhere*.
 
+::: {style="color: lightblue"}
+### Writing the Recipe
+:::
+
 ```{r}
+# recipe() takes a formula and some data.
+#   Sale_Price ~ ...  the thing on the left of the ~ is what we predict,
+#                     everything on the right is what we predict it from
+#   data = ames_train only the training data, never the full dataset
+#
+# The %>% is the pipe. It takes whatever is on its left and feeds it into
+# the function on its right, so each step_ below is added to the growing
+# recipe one after another.
 rec <- recipe(Sale_Price ~ Gr_Liv_Area + Year_Built + Neighborhood,
               data = ames_train) %>%
   step_other(all_nominal_predictors(), threshold = 0.05) %>%
@@ -63,15 +106,45 @@ rec <- recipe(Sale_Price ~ Gr_Liv_Area + Year_Built + Neighborhood,
   step_dummy(all_nominal_predictors()) %>%
   step_zv(all_predictors())
 
+# Printing the recipe shows the plan. Notice it has not touched any data yet.
 rec
 ```
 
-Reading it in order:
+::: {style="color: lightblue"}
+### Reading the Steps in Order
+:::
 
 -   `step_other` lumps rare neighborhoods into a single "other" category, since a neighborhood appearing four times cannot support its own estimate.
 -   `step_normalize` centers and scales the numeric predictors.
 -   `step_dummy` converts categories into 0 and 1 indicator columns.
 -   `step_zv` drops any predictor with zero variance.
+
+The helpers inside the parentheses are how you say "all the columns of this kind" without typing their names. `all_nominal_predictors()` means every categorical predictor, `all_numeric_predictors()` means every numeric one. This matters because `step_dummy` creates new columns, so you cannot know all the column names in advance anyway.
+
+::: {style="color: lightblue"}
+### Seeing What the Recipe Actually Does
+:::
+
+A recipe on its own is only a plan. Two more functions make it real, and you will meet both again throughout the course.
+
+-   `prep()` **learns** from the training data. It works out which neighborhoods are rare, and what the means and standard deviations are.
+-   `bake()` **applies** what was learned and hands you the transformed data.
+
+You do not normally call these yourself, because `train()` does it for you in step 4. We do it here once just so you can see the output.
+
+```{r}
+# Learn the numbers from the training data
+rec_prepped <- prep(rec)
+
+# Apply them. new_data = NULL is the way to say "give me back the training
+# data you already prepped" rather than handing it some new dataset.
+baked <- bake(rec_prepped, new_data = NULL)
+
+# The original three predictors have become many more columns, because
+# step_dummy turned each neighborhood into its own 0/1 indicator
+dim(baked)
+head(names(baked), 10)
+```
 
 ::: {.callout-important icon="false"}
 ## Why a Recipe Rather Than Just Doing It
@@ -87,35 +160,65 @@ This is data leakage, which the [Data Splitting](week2_3.qmd) page listed as a h
 ## Step 3: Resampling Scheme
 :::
 
+We still need a way to compare models without touching the test set. That is what cross validation is for, and `trainControl()` is where you describe it.
+
 ```{r}
+# This object is just a set of instructions. It does not run anything yet.
+#   method = "cv"  use k fold cross validation
+#   number = 10    use 10 folds
+#
+# In words: chop the training data into 10 pieces, hold each piece out in
+# turn, fit on the other 9, and score on the piece that was held out.
 cv <- trainControl(method = "cv", number = 10)
 ```
+
+Notice we have now written down three things and fit nothing. A split, a recipe, and a resampling plan. Step 4 is where they all get used at once.
 
 ::: {style="color: yellow"}
 ## Step 4: Fit
 :::
 
+::: {style="color: lightblue"}
+### Fitting the First Model
+:::
+
 Passing the recipe to `train()` rather than a formula means the recipe is re-learned inside every fold, on that fold's training portion only. That is what keeps the leakage protection honest during cross validation.
 
 ```{r}
+# train() refits inside every fold, and the folds are chosen randomly, so we
+# set the seed again to make the whole thing reproducible
 set.seed(559)
 
 fit_lm <- train(
-  rec,
-  data      = ames_train,
-  method    = "lm",
-  trControl = cv,
-  metric    = "RMSE"
+  rec,                    # the recipe from step 2, not a formula
+  data      = ames_train, # training data only
+  method    = "lm",       # ordinary linear regression
+  trControl = cv,         # the resampling plan from step 3
+  metric    = "RMSE"      # the number used to judge the model
 )
 
 fit_lm$results
 ```
+
+::: {style="color: lightblue"}
+### Reading the Output
+:::
+
+That one row is the summary of ten separate model fits.
+
+-   `RMSE`, `Rsquared`, and `MAE` are each **averaged across the 10 folds**, not computed once.
+-   The `SD` columns tell you how much each number bounced around from fold to fold. A large SD is a warning that your estimate is unstable, usually because the dataset is small.
+-   There is only one row here because linear regression has nothing to tune. In the next step there will be one row per candidate setting.
 
 ::: {style="color: yellow"}
 ## Step 5: Compare Candidates
 :::
 
 The no free lunch theorem from [Important Terms and Distinctions](week2_1.qmd) said we cannot know in advance which method wins. So we try more than one and compare them on the same folds.
+
+::: {style="color: lightblue"}
+### Adding a Second Candidate
+:::
 
 Here is a **lasso** model, which has a hyperparameter to tune. Lasso is a linear regression that pays a penalty for large coefficients, and `lambda` sets how steep that penalty is. What it is really doing is the subject of the regression unit. The only thing that matters here is that it has a knob on it, and that cross validation is what turns the knob.
 
@@ -127,25 +230,48 @@ set.seed(559)
 fit_lasso <- train(
   rec,
   data      = ames_train,
-  method    = "glmnet",
-  trControl = cv,
+  method    = "glmnet",   # the package that fits penalized regressions
+  trControl = cv,         # the same resampling plan as before
   metric    = "RMSE",
+
+  # expand.grid() builds a table of every combination of the values you give
+  # it. Here alpha is fixed at 1 and lambda takes five values, so we get five
+  # candidate settings, and caret scores each one by cross validation.
   tuneGrid  = expand.grid(alpha = 1, lambda = c(1, 10, 100, 1000, 10000))
 )
 
+# Pull out just the columns worth looking at
 fit_lasso$results[, c("lambda", "RMSE", "Rsquared", "MAE")]
 ```
 
-Each row is one value of `lambda`, scored by cross validation. Notice the shape of that column. Small penalties barely move the model, so those rows are nearly identical. Once the penalty gets large enough it starts squashing coefficients that were doing useful work, and the error climbs. `train()` keeps the best row:
+::: {style="color: lightblue"}
+### Reading the Tuning Table
+:::
+
+Each row is one value of `lambda`, scored by cross validation. Notice the shape of that column. Small penalties barely move the model, so those rows are nearly identical. Once the penalty gets large enough it starts squashing coefficients that were doing useful work, and the error climbs.
+
+This is the bias variance tradeoff showing up as a column of numbers. Too little penalty and the model chases noise. Too much and it cannot follow the signal.
+
+`train()` keeps the best row for you:
 
 ```{r}
+# bestTune reports the setting that won, and it is the one train() will use
+# when you later call predict()
 fit_lasso$bestTune
 ```
 
-Now compare the two models. Because both used the same seed and the same folds, this is a fair comparison.
+::: {style="color: lightblue"}
+### Comparing Them on the Same Folds
+:::
+
+Because both models used the same seed and the same resampling plan, they were scored on exactly the same 10 folds. That is what makes the comparison fair. If the folds differed, you could not tell whether a difference came from the model or from an easier set of folds.
 
 ```{r}
+# resamples() collects the fold by fold results of several fitted models so
+# they can be compared side by side
 results <- resamples(list(linear = fit_lm, lasso = fit_lasso))
+
+# The RMSE distribution across folds for each model
 summary(results)$statistics$RMSE
 ```
 
@@ -171,15 +297,32 @@ The validation folds picked the value of `lambda`, and the validation folds pick
 
 Pick the winner, then look at the test data for the first and only time. The two candidates tied, so we keep the simpler one.
 
+::: {style="color: lightblue"}
+### Making the Final Prediction
+:::
+
 ```{r}
+# Choosing the model is a decision, and it was made using the cross
+# validated numbers above, not the test set
 final_model <- fit_lm
 
+# predict() applies the whole pipeline to new data. The recipe travels with
+# the model, so the test rows get lumped, normalized, and dummy coded using
+# the values learned from the training data. You do not redo any of it.
 test_predictions <- predict(final_model, ames_test)
 
+# postResample() compares predictions against the truth and returns all
+# three regression metrics at once
 postResample(pred = test_predictions, obs = ames_test$Sale_Price)
 ```
 
+::: {style="color: lightblue"}
+### Reading the Final Numbers
+:::
+
 That is the number you report. It is an estimate of how the model will perform on houses nobody has seen.
+
+It is worth comparing it to the cross validated RMSE from step 4. They will not match exactly, and neither one is wrong. The cross validated number was an estimate made from the training data. This one is measured on data the model has genuinely never seen. If the test number were dramatically worse, that would be a signal that something in the pipeline had been fit too closely to the training data.
 
 ::: {.callout-important icon="false"}
 ## The Rule

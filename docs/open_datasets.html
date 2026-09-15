@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Numeric Feature Engineering – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Open Datasets – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_5a.html">Feature Engineering</a></li><li class="breadcrumb-item"><a href="./week2_5e.html">Numeric Feature Engineering</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./open_datasets.html">Resources</a></li><li class="breadcrumb-item"><a href="./open_datasets.html">Open Datasets</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -273,7 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_5e.html" class="sidebar-item-text sidebar-link active">
+  <a href="./week2_5e.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Numeric Feature Engineering</span></a>
   </div>
 </li>
@@ -364,7 +364,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./open_datasets.html" class="sidebar-item-text sidebar-link">
+  <a href="./open_datasets.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Open Datasets</span></a>
   </div>
 </li>
@@ -380,19 +380,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#numeric-feature-engineering" id="toc-numeric-feature-engineering" class="nav-link" data-scroll-target="#numeric-feature-engineering">Numeric Feature Engineering</a></li>
-  <li><a href="#skewness" id="toc-skewness" class="nav-link" data-scroll-target="#skewness">Skewness</a></li>
-  <li><a href="#standardization" id="toc-standardization" class="nav-link" data-scroll-target="#standardization">Standardization</a></li>
+  <li><a href="#what-makes-a-dataset-a-good-fit" id="toc-what-makes-a-dataset-a-good-fit" class="nav-link active" data-scroll-target="#what-makes-a-dataset-a-good-fit">What Makes a Dataset a Good Fit</a></li>
+  <li><a href="#quick-shortlist" id="toc-quick-shortlist" class="nav-link" data-scroll-target="#quick-shortlist">Quick Shortlist</a></li>
+  <li><a href="#the-datasets" id="toc-the-datasets" class="nav-link" data-scroll-target="#the-datasets">The Datasets</a></li>
+  <li><a href="#general-social-survey-gss" id="toc-general-social-survey-gss" class="nav-link" data-scroll-target="#general-social-survey-gss">1. General Social Survey (GSS)</a></li>
+  <li><a href="#openesm" id="toc-openesm" class="nav-link" data-scroll-target="#openesm">2. openESM</a></li>
+  <li><a href="#nhanes" id="toc-nhanes" class="nav-link" data-scroll-target="#nhanes">3. NHANES</a></li>
+  <li><a href="#nsduh" id="toc-nsduh" class="nav-link" data-scroll-target="#nsduh">4. NSDUH</a></li>
+  <li><a href="#yrbss" id="toc-yrbss" class="nav-link" data-scroll-target="#yrbss">5. YRBSS</a></li>
+  <li><a href="#brfss" id="toc-brfss" class="nav-link" data-scroll-target="#brfss">6. BRFSS</a></li>
+  <li><a href="#nhis" id="toc-nhis" class="nav-link" data-scroll-target="#nhis">7. NHIS</a></li>
+  <li><a href="#midus" id="toc-midus" class="nav-link" data-scroll-target="#midus">8. MIDUS</a></li>
+  <li><a href="#add-health" id="toc-add-health" class="nav-link" data-scroll-target="#add-health">9. Add Health</a></li>
+  <li><a href="#nlsy97-and-nlsy79" id="toc-nlsy97-and-nlsy79" class="nav-link" data-scroll-target="#nlsy97-and-nlsy79">10. NLSY97 and NLSY79</a></li>
+  <li><a href="#world-values-survey" id="toc-world-values-survey" class="nav-link" data-scroll-target="#world-values-survey">11. World Values Survey</a></li>
+  <li><a href="#european-social-survey" id="toc-european-social-survey" class="nav-link" data-scroll-target="#european-social-survey">12. European Social Survey</a></li>
+  <li><a href="#anes" id="toc-anes" class="nav-link" data-scroll-target="#anes">13. ANES</a></li>
+  <li><a href="#project-implicit" id="toc-project-implicit" class="nav-link" data-scroll-target="#project-implicit">14. Project Implicit</a></li>
+  <li><a href="#open-source-psychometrics-project" id="toc-open-source-psychometrics-project" class="nav-link" data-scroll-target="#open-source-psychometrics-project">15. Open Source Psychometrics Project</a></li>
+  <li><a href="#ipums-cps" id="toc-ipums-cps" class="nav-link" data-scroll-target="#ipums-cps">16. IPUMS CPS</a></li>
+  <li><a href="#health-and-retirement-study" id="toc-health-and-retirement-study" class="nav-link" data-scroll-target="#health-and-retirement-study">17. Health and Retirement Study</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_5a.html">Feature Engineering</a></li><li class="breadcrumb-item"><a href="./week2_5e.html">Numeric Feature Engineering</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./open_datasets.html">Resources</a></li><li class="breadcrumb-item"><a href="./open_datasets.html">Open Datasets</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Numeric Feature Engineering</h1>
+<h1 class="title">Open Datasets</h1>
 </div>
 
 
@@ -409,47 +425,338 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="setup" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>This page lists real, openly available datasets that are large and rich enough to support a full machine learning project. These are not teaching datasets. They are the actual data that psychologists publish on, which means you get real codebooks, real missingness, and real decisions to make.</p>
+<section id="what-makes-a-dataset-a-good-fit" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="what-makes-a-dataset-a-good-fit">What Makes a Dataset a Good Fit</h2>
 </section>
-<p>To follow along, load these packages and the dataset we assembled on the <a href="./week2_5b.html">Example Data</a> page. If you did not build it yourself, you can <a href="data/data.RDS">download <code>data.RDS</code></a> and save it in a <code>data</code> folder next to your script.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)       <span class="co"># data manipulation and the pipe</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)  <span class="co"># the recipes package, used for every step below</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/data.RDS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="numeric-feature-engineering" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="numeric-feature-engineering">Numeric Feature Engineering</h2>
+<p>A dataset worth building a project on usually has most of the following.</p>
+<ul>
+<li>Thousands of observations, or many repeated observations per participant.</li>
+<li>Enough predictors that feature selection, regularization, and model comparison actually mean something.</li>
+<li>Outcomes that are psychologically interesting and interpretable.</li>
+<li>A real codebook and real data cleaning decisions.</li>
+<li>Public access that you can reasonably navigate on your own.</li>
+<li>Something you can work with in R without special computing infrastructure.</li>
+<li>Enough complexity for a complete project: cleaning, exploration, prediction, validation, interpretation, and limitations.</li>
+</ul>
+<section id="quick-shortlist" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="quick-shortlist">Quick Shortlist</h2>
 </section>
-<p>Feature engineering on continuous or numeric features involves transforming the raw data to make it more useful for modeling. Common motivations include capturing nonlinear relationships (e.g., log or polynomial transforms), improving distributional properties (reducing skew or outlier impact), and putting features on comparable scales through standardization.</p>
-<p>In some cases, continuous variables are binned into categories or combined into interactions to highlight patterns. Overall, these transformations help models detect structure in the data more effectively and improve both performance and interpretability.</p>
-<section id="skewness" class="level3" style="color: orange">
-<h3 class="anchored" data-anchor-id="skewness">Skewness</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>Main psychology areas</th>
+<th>Approximate scale</th>
+<th>R access</th>
+<th>Friction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>GSS</strong></td>
+<td>Attitudes, well-being, religion, family, trust</td>
+<td>75,699 rows, 6,942 variables (1972 to 2024)</td>
+<td><code>gssr</code> package</td>
+<td>Very low</td>
+</tr>
+<tr class="even">
+<td><strong>openESM</strong></td>
+<td>Emotion, stress, affect, daily life</td>
+<td>Many repeated observations per person</td>
+<td><code>openesm</code> package</td>
+<td>Very low</td>
+</tr>
+<tr class="odd">
+<td><strong>NHANES</strong></td>
+<td>Depression, sleep, activity, cognition, health</td>
+<td>Thousands per cycle</td>
+<td><code>nhanesA</code>, <code>nhanesdata</code></td>
+<td>Very low</td>
+</tr>
+<tr class="even">
+<td><strong>NSDUH</strong></td>
+<td>Mental health, substance use, treatment</td>
+<td>Large annual national survey</td>
+<td>Official R format files</td>
+<td>Very low</td>
+</tr>
+<tr class="odd">
+<td><strong>YRBSS</strong></td>
+<td>Adolescent behavior, mental health, sleep</td>
+<td>20,103 cases in 2023</td>
+<td>Public download</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>BRFSS</strong></td>
+<td>Mental health days, sleep, activity</td>
+<td>457,670 records, 345 variables (2024)</td>
+<td><code>haven::read_xpt()</code></td>
+<td>Low</td>
+</tr>
+<tr class="odd">
+<td><strong>NHIS</strong></td>
+<td>Health, functioning, distress</td>
+<td>Large annual samples</td>
+<td>Public CSV</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>MIDUS</strong></td>
+<td>Well-being, personality, stress, aging</td>
+<td>~7,100 plus follow-ups</td>
+<td>ICPSR / MIDUS Portal</td>
+<td>Medium</td>
+</tr>
+<tr class="odd">
+<td><strong>Add Health</strong></td>
+<td>Adolescence, peers, family, education</td>
+<td>Multi-wave longitudinal</td>
+<td>ICPSR public use</td>
+<td>Medium</td>
+</tr>
+<tr class="even">
+<td><strong>NLSY97 / NLSY79</strong></td>
+<td>Development, education, work, life course</td>
+<td>8,984 and 12,686</td>
+<td>NLS Investigator</td>
+<td>Medium</td>
+</tr>
+<tr class="odd">
+<td><strong>WVS / IVS</strong></td>
+<td>Values, trust, cross-cultural psychology</td>
+<td>&gt;80,000 in Wave 7</td>
+<td>RDS / RData files</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>ESS</strong></td>
+<td>Well-being, trust, identity, attitudes</td>
+<td>Tens of thousands per round</td>
+<td><code>essurvey</code> package</td>
+<td>Low to medium</td>
+</tr>
+<tr class="odd">
+<td><strong>ANES</strong></td>
+<td>Political psychology, identity, affect</td>
+<td>5,521 in 2024</td>
+<td>CSV / SPSS / Stata</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>Project Implicit</strong></td>
+<td>Implicit and explicit attitudes</td>
+<td>Millions of sessions</td>
+<td>OSF downloads</td>
+<td>Low to medium</td>
+</tr>
+<tr class="odd">
+<td><strong>Open Psychometrics</strong></td>
+<td>Personality, individual differences</td>
+<td>~7,000 to &gt;70,000</td>
+<td>CSV downloads</td>
+<td>Very low</td>
+</tr>
+<tr class="even">
+<td><strong>IPUMS CPS</strong></td>
+<td>Family, work, income, demographics</td>
+<td>Very large monthly microdata</td>
+<td>IPUMS extracts</td>
+<td>Medium</td>
+</tr>
+<tr class="odd">
+<td><strong>HRS</strong></td>
+<td>Aging, cognition, health, retirement</td>
+<td>Large longitudinal panel</td>
+<td>Registered download</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<section id="the-datasets" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="the-datasets">The Datasets</h2>
 </section>
-<p>Parametric models with distributional assumptions (e.g., GLMs, and some regularized models) can benefit from minimizing the skewness of numeric features. One popular transformation is the <a href="https://en.wikipedia.org/wiki/Power_transform#Yeo%E2%80%93Johnson_transformation">Yeo-Johnson transformation</a>.</p>
-<p>The Yeo-Johnsontransformation is a statistical technique used to stabilize variance and make data more normally distributed, similar to the Box-Cox transformation but more flexible. Unlike Box-Cox, it can handle both positive and negative values, making it useful for real-world data that span zero.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all_numeric_predictors() applies the transformation to the numeric features</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and leaves the outcome alone. A recipe only records the plan at this stage,</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># so nothing is actually transformed until the recipe is prepped.</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">recipe</span>(happy <span class="sc">~</span> ., <span class="at">data =</span> data) <span class="sc">%&gt;%</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_YeoJohnson</span>(<span class="fu">all_numeric_predictors</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="standardization" class="level3" style="color: orange">
-<h3 class="anchored" data-anchor-id="standardization">Standardization</h3>
+<section id="general-social-survey-gss" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="general-social-survey-gss">1. General Social Survey (GSS)</h3>
 </section>
-<p>We will often want to standardize variables prior to our model fitting to put them on a common scale, typically with mean of zero and a standard deviation of one.</p>
-<p>This prevents features with larger numeric ranges (e.g., income in dollars vs.&nbsp;age in years) from dominating distance-based methods (like k-NN, SVMs, or clustering). It can also help with optimization problems, may improve convergence and can help ensure that regularization penalties (like in ridge or lasso regression) are applied fairly across predictors.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># step_center subtracts the mean, step_scale divides by the standard</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># deviation. Run together they standardize each feature. Both learn those</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># numbers from the training data alone, which is what keeps information</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># from the test set out of the calculation.</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">recipe</span>(happy <span class="sc">~</span> ., <span class="at">data =</span> data) <span class="sc">%&gt;%</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_center</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_scale</span>(<span class="fu">all_numeric_predictors</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p><a href="https://gss.norc.org/">gss.norc.org</a> | <a href="https://github.com/kjhealy/gssr"><code>gssr</code> package</a></p>
+<p>Decades of United States survey data on social attitudes, happiness, religion, family, work, trust, political attitudes, social relationships, and demographics. You already met this dataset in the <a href="./week2_5b.html">Feature Engineering</a> unit.</p>
+<p>The current <code>gssr</code> cumulative file packages the 1972 to 2024 GSS with <strong>75,699 rows and 6,942 variables</strong>, plus several panel datasets.</p>
+<p><strong>Why it works.</strong> A very large set of candidate predictors, many possible continuous, ordinal, and categorical outcomes, real missingness and skip patterns, and an unusually good codebook. Different students can ask genuinely different questions from the same source.</p>
+<p><strong>Project questions.</strong> Predict self-reported happiness from social, economic, and attitudinal variables. Predict confidence in institutions. Predict social trust. Predict attitudes toward a social issue from broader values. Compare accuracy across historical periods.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"gssr"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">repos =</span> <span class="fu">c</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://kjhealy.r-universe.dev"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://cloud.r-project.org"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The companion <code>gssrdoc</code> package integrates much of the codebook into R help.</p>
+<p><strong>Caution.</strong> Do not throw all 7,000 variables blindly into a model. You need a substantively justified set of candidate features, and choosing it is part of the work.</p>
+<section id="openesm" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="openesm">2. openESM</h3>
+</section>
+<p><a href="https://openesmdata.org/">openesmdata.org</a> | <a href="https://openesmdata.org/docs/packages/">R package docs</a></p>
+<p>A curated collection of harmonized <strong>experience sampling</strong> datasets. Observations are collected repeatedly during daily life and typically include affect, stress, symptoms, context, and behavior. This is genuinely psychological data rather than generic tabular data.</p>
+<p><strong>Why it works.</strong> You can predict affect, stress, symptoms, or behavior at the next measurement. The repeated measures structure is an opportunity to see why ordinary random splitting can mislead you. It supports both person level and observation level questions, and the harmonization removes a lot of idiosyncratic preprocessing.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"openesm"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openesm)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">list_datasets</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">get_dataset</span>(<span class="st">"0001"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cite</span>(dat)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">notes</span>(dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run <code>list_datasets()</code> first so you can compare studies on sample size, number of time points, constructs, and design.</p>
+<p><strong>Project questions.</strong> Predict next observation affect from recent affect and context. Predict high stress moments from time of day and preceding states. Predict person average well-being from within person patterns. Compare person specific against population level prediction.</p>
+<p><strong>Caution, and this one matters.</strong> Do not randomly split individual rows into training and test sets when the same participants appear in both. Depending on your question, split by participant, by time, or both. This is one of the clearest real examples of leakage you will encounter.</p>
+<section id="nhanes" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="nhanes">3. NHANES</h3>
+</section>
+<p><a href="https://www.cdc.gov/nchs/nhanes/">cdc.gov/nchs/nhanes</a> | <a href="https://cran.r-project.org/package=nhanesA"><code>nhanesA</code></a></p>
+<p>Interviews, questionnaires, physical examinations, and laboratory measurements combined. Attractive for psychology because you can pair psychological variables with sleep, activity, medication, nutrition, and biological measures. The 2021 to 2023 cycle includes the PHQ-9 depression screener, sleep, physical activity, smoking, health status, and more.</p>
+<p><strong>Why it works.</strong> It mixes self report, behavioral, physical, and biological predictors, which makes feature engineering meaningful. It has realistic missing data and supports both classification and regression.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"nhanesA"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nhanesA)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>dpq <span class="ot">&lt;-</span> <span class="fu">nhanes</span>(<span class="st">"DPQ_L"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Project questions.</strong> Predict depression symptom severity from sleep, activity, and health variables. Predict self rated health. Predict sleep duration or sleep problems. Predict physical activity.</p>
+<p><strong>Caution.</strong> Watch for outcome leakage. Do not predict a PHQ-9 total score using the nine items that the total is computed from.</p>
+<section id="nsduh" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="nsduh">4. NSDUH</h3>
+</section>
+<p><a href="https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health">samhsa.gov</a></p>
+<p>A large national survey covering mental health, substance use, treatment, functioning, and demographics for ages 12 and up. The public use files download directly in <strong>R format</strong>.</p>
+<p><strong>Why it works.</strong> Large sample, many binary and continuous outcomes, extensive codebook, and good material for logistic regression, regularization, trees, and calibration.</p>
+<p><strong>Project questions.</strong> Predict treatment utilization from symptoms and demographics. Predict broad categories of substance use. Predict psychological distress or functional impairment. Compare models across age groups.</p>
+<p><strong>Caution.</strong> These are sensitive outcomes. Frame your project as a statistical prediction exercise, never as a clinical or diagnostic tool. Also note that SAMHSA warns about trend comparability around the 2021 redesign, so pooling across years takes care.</p>
+<section id="yrbss" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="yrbss">5. YRBSS</h3>
+</section>
+<p><a href="https://www.cdc.gov/yrbs/data/">cdc.gov/yrbs/data</a></p>
+<p>High school student data on health behavior, sleep, activity, substance use, school experiences, and mental health. The 2023 national file has <strong>20,103 usable records</strong>.</p>
+<p><strong>Why it works.</strong> Large enough for genuine three way splitting, with variables that are immediately understandable and many binary outcomes that make evaluation intuitive. The codebook is manageable compared with other federal surveys, and there are strong openings to discuss class imbalance and fairness.</p>
+<p><strong>Project questions.</strong> Predict insufficient sleep from school and behavioral variables. Predict physical activity level. Predict a school related behavioral outcome.</p>
+<p><strong>Caution.</strong> Participants are minors and some outcomes are sensitive. Interpret responsibly and do not present a class model as a screening tool.</p>
+<section id="brfss" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="brfss">6. BRFSS</h3>
+</section>
+<p><a href="https://www.cdc.gov/brfss/annual_data/annual_data.htm">cdc.gov/brfss</a></p>
+<p>An enormous health survey. The 2024 file has <strong>457,670 records and 345 variables</strong>, covering self rated health, mental health days, sleep, activity, disability, chronic conditions, and healthcare access.</p>
+<p><strong>Why it works.</strong> The sample size means you can hold out a real test set and compare simple against flexible models without running out of data. Good for rare outcomes and class imbalance.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>brfss <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"LLCP2024.XPT"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Project questions.</strong> Predict number of poor mental health days. Predict self rated health. Predict insufficient sleep. Predict frequent mental distress.</p>
+<p><strong>Caution.</strong> With a sample this large, tiny improvements in a test metric become statistically detectable while remaining substantively meaningless. Do not confuse the two.</p>
+<section id="nhis" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="nhis">7. NHIS</h3>
+</section>
+<p><a href="https://www.cdc.gov/nchs/nhis/">cdc.gov/nchs/nhis</a></p>
+<p>A large annual health survey with separate adult and child public use files, released as CSV with extensive documentation. Depending on the year it covers psychological distress, functional limitations, sleep, pain, disability, healthcare access, and health behaviors.</p>
+<p><strong>Project questions.</strong> Predict self rated health. Predict psychological distress. Predict functional limitation. Predict healthcare use. Compare prediction across subgroups.</p>
+<p>A good alternative to BRFSS when you want something a bit more focused.</p>
+<section id="midus" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="midus">8. MIDUS</h3>
+</section>
+<p><a href="https://midus.wisc.edu/">midus.wisc.edu</a> | <a href="https://midus.wisc.edu/data-access/">Data access</a></p>
+<p>One of the most psychologically rich large longitudinal datasets available. It was designed to study how psychological, social, and biological factors contribute to health and well-being across adulthood. The original sample was about <strong>7,100 adults</strong>, with follow up waves and refresher cohorts.</p>
+<p>Constructs include positive and negative affect, psychological well-being, personality, perceived control, stress, social support and strain, family, work, physical health, cognition, and biomarkers in some projects.</p>
+<p><strong>Why it works.</strong> You can build a psychologically meaningful model without assembling measures from a dozen unrelated sources.</p>
+<p><strong>Project questions.</strong> Predict later well-being from earlier psychosocial variables. Predict self rated health from personality, stress, and relationships. Predict change in an outcome. Compare demographic against psychological predictors.</p>
+<p><strong>Access.</strong> Public use through ICPSR or the MIDUS Portal, with registration and terms of use. Genomics, neuroimaging, and geographic files are restricted. Use the standard public survey files.</p>
+<section id="add-health" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="add-health">9. Add Health</h3>
+</section>
+<p><a href="https://www.icpsr.umich.edu/web/DSDR/studies/21600">ICPSR public use archive</a></p>
+<p>Follows participants from adolescence into adulthood. The public use archive spans <strong>1994 to 2025</strong> and does not require an ICPSR member affiliation. Strong on development, family, peers, school, mental health, health behavior, romantic relationships, education, and the transition to adulthood.</p>
+<p><strong>Project questions.</strong> Predict an adult outcome from adolescent characteristics. Predict educational attainment. Predict later self rated health from adolescent variables. Predict change across waves.</p>
+<p><strong>Caution.</strong> If you predict later outcomes from earlier waves, establish a clear temporal ordering first. Leakage here usually comes in through a variable measured <em>after</em> the thing you are predicting.</p>
+<section id="nlsy97-and-nlsy79" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="nlsy97-and-nlsy79">10. NLSY97 and NLSY79</h3>
+</section>
+<p><a href="https://www.nlsinfo.org/">nlsinfo.org</a> | <a href="https://www.nlsinfo.org/content/access-data-investigator">Data access</a></p>
+<p>Bureau of Labor Statistics longitudinal studies with extremely rich life course information, free through the NLS Investigator.</p>
+<ul>
+<li><strong>NLSY97:</strong> 8,984 respondents, ages 12 to 17 at first interview in 1997, currently through Round 21.</li>
+<li><strong>NLSY79:</strong> originally 12,686 respondents, followed from young adulthood onward.</li>
+<li><strong>NLSY79 Child and Young Adult:</strong> more than 10,000 children across waves.</li>
+</ul>
+<p>The full datasets contain over <strong>100,000 variables</strong>, so build a custom extract rather than downloading everything.</p>
+<p><strong>Project questions.</strong> Predict college completion from adolescent characteristics. Predict employment or income category. Predict later health behavior. Predict family or work transitions.</p>
+<p>Especially strong if you want a project about genuinely prospective prediction.</p>
+<section id="world-values-survey" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="world-values-survey">11. World Values Survey</h3>
+</section>
+<p><a href="https://www.worldvaluessurvey.org/">worldvaluessurvey.org</a></p>
+<p>A major cross national survey of values and beliefs. Wave 7 contains more than <strong>80,000 respondents across 64 societies</strong>, and the integrated EVS/WVS files are larger still. Covers life satisfaction, trust, social values, religion, family and gender attitudes, and political trust. Distributed directly as <code>.rds</code> and <code>.RData</code>.</p>
+<p><strong>Project questions.</strong> Predict life satisfaction. Predict generalized social trust. Train on one set of countries and test on another. Compare country specific against pooled models.</p>
+<p><strong>Caution.</strong> A random row split mixes respondents from the same countries across training and test. If your question is about cross cultural generalization, hold out whole countries instead.</p>
+<section id="european-social-survey" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="european-social-survey">12. European Social Survey</h3>
+</section>
+<p><a href="https://ess.sikt.no/">ess.sikt.no</a> | <a href="https://cran.r-project.org/package=essurvey"><code>essurvey</code></a></p>
+<p>A repeated cross national European survey with high quality measures of attitudes, well-being, trust, identity, inequality, and behavior.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"essurvey"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(essurvey)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The data portal also provides an API. You may need a free ESS account depending on the route you use.</p>
+<p><strong>Project questions.</strong> Predict life satisfaction. Predict generalized trust. Predict loneliness or social connectedness where available. Test generalization across countries.</p>
+<p><strong>Caution.</strong> Same as WVS. Country structure matters, and a random split answers a different question from a country holdout.</p>
+<section id="anes" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="anes">13. ANES</h3>
+</section>
+<p><a href="https://electionstudies.org/data-center/">electionstudies.org</a></p>
+<p>The core dataset for political psychology. The 2024 Time Series study has <strong>5,521 respondents</strong> with pre and post election waves, and the cumulative file spans 1948 to 2024. Covers political identity, affect toward groups and candidates, trust, issue attitudes, participation, values, and economic perceptions.</p>
+<p><strong>Project questions.</strong> Predict turnout or participation. Predict political interest. Predict affect toward a candidate or group. Predict change between the pre and post election waves.</p>
+<p>Distributed as CSV, SPSS, and Stata, all easy to import.</p>
+<section id="project-implicit" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="project-implicit">14. Project Implicit</h3>
+</section>
+<p><a href="https://implicit.harvard.edu/implicit/">Project Implicit</a> | <a href="https://osf.io/y9hiq/">Open data archive</a></p>
+<p>Anonymized data from the Project Implicit demonstration website, including Implicit Association Test responses alongside explicit attitudes and demographics. Individual datasets can contain hundreds of thousands or millions of observations.</p>
+<p><strong>Why it works.</strong> A direct line to social cognition, at enormous scale, with a natural comparison between predicting implicit and explicit attitudes.</p>
+<p><strong>Project questions.</strong> Predict IAT D-score from demographics and explicit attitudes. Predict explicit attitudes from implicit measures. Compare performance across years, or train on one period and test on a later one.</p>
+<p><strong>Caution.</strong> The sample is self selected and not nationally representative. That is pedagogically useful as long as you clearly separate predictive performance within this sample from claims about the population. The files are also very large, so pick one IAT and one year to start.</p>
+<section id="open-source-psychometrics-project" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="open-source-psychometrics-project">15. Open Source Psychometrics Project</h3>
+</section>
+<p><a href="https://openpsychometrics.org/_rawdata/">openpsychometrics.org/_rawdata</a></p>
+<p>Anonymous raw data from online personality and individual differences assessments. Most datasets are a ZIP containing a CSV plus a text codebook, which makes this the lowest friction option on the page.</p>
+<ul>
+<li>16PF style IPIP dataset: 49,159 respondents</li>
+<li>Narcissistic Personality Inventory: 11,243</li>
+<li>MACH-IV Machiavellianism: 73,489</li>
+<li>Big Five: 19,719</li>
+<li>Firstborn Personality Scale: 41,842</li>
+<li>Introversion and Extraversion: 7,188</li>
+</ul>
+<p><strong>Project questions.</strong> Predict a self reported personality category from item responses. Predict demographic or behavioral variables from personality items. Compare sparse regression against tree based models. Test whether a short subset of items predicts a longer scale score.</p>
+<p><strong>Caution.</strong> Volunteer internet samples, so discuss self selection explicitly. And avoid trivial targets, such as predicting a scale score from the exact items summed to create it, unless scale shortening is the actual point.</p>
+<section id="ipums-cps" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="ipums-cps">16. IPUMS CPS</h3>
+</section>
+<p><a href="https://cps.ipums.org/">cps.ipums.org</a></p>
+<p>Harmonized decades of monthly United States Current Population Survey microdata. Free after registration, and you build a custom extract rather than downloading everything. Covers employment, education, family structure, income, disability, health insurance, food security, and selected supplements on volunteering and internet use.</p>
+<p><strong>Project questions.</strong> Predict labor force participation. Predict food insecurity. Predict employment transitions. Predict volunteering.</p>
+<p>Less purely psychological than MIDUS or openESM, but strong for social, occupational, and developmental questions.</p>
+<section id="health-and-retirement-study" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="health-and-retirement-study">17. Health and Retirement Study</h3>
+</section>
+<p><a href="https://hrs.isr.umich.edu/">hrs.isr.umich.edu</a></p>
+<p>A major longitudinal study of United States adults over 50 and their spouses, available after registration. Covers cognition, depression, personality, health, disability, family, work and retirement, economic stress, and social engagement.</p>
+<p><strong>Project questions.</strong> Predict later cognitive performance. Predict retirement transition. Predict self rated health or functional limitation. Predict depressive symptoms from social, economic, and health variables.</p>
+<p>An excellent advanced project, though access and longitudinal data management make it harder than GSS or NHANES.</p>
 
 
 

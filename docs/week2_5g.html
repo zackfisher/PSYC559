@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Workflow – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -67,15 +73,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-932b3046337f5c054d0c428ad2bce24f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-223e1ba6472b6e8039235b59a4424451.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -128,8 +133,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">PSYC559: Applied Machine Learning in Psychology</a> 
+    </div>
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
@@ -347,6 +353,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Resources</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./open_datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open Datasets</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -358,7 +381,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#workflow-in-r" id="toc-workflow-in-r" class="nav-link" data-scroll-target="#workflow-in-r">Workflow in R</a></li>
+  <li><a href="#step-1-build-the-data" id="toc-step-1-build-the-data" class="nav-link" data-scroll-target="#step-1-build-the-data">Step 1: Build the Data</a></li>
+  <li><a href="#downloading-and-selecting-the-variables" id="toc-downloading-and-selecting-the-variables" class="nav-link" data-scroll-target="#downloading-and-selecting-the-variables">Downloading and Selecting the Variables</a></li>
+  <li><a href="#cleaning-it-up" id="toc-cleaning-it-up" class="nav-link" data-scroll-target="#cleaning-it-up">Cleaning It Up</a></li>
+  <li><a href="#step-2-split" id="toc-step-2-split" class="nav-link" data-scroll-target="#step-2-split">Step 2: Split</a></li>
+  <li><a href="#step-3-a-preprocessing-recipe" id="toc-step-3-a-preprocessing-recipe" class="nav-link" data-scroll-target="#step-3-a-preprocessing-recipe">Step 3: A Preprocessing Recipe</a></li>
+  <li><a href="#what-a-recipe-is" id="toc-what-a-recipe-is" class="nav-link" data-scroll-target="#what-a-recipe-is">What a Recipe Is</a></li>
+  <li><a href="#writing-the-blueprint" id="toc-writing-the-blueprint" class="nav-link" data-scroll-target="#writing-the-blueprint">Writing the Blueprint</a></li>
+  <li><a href="#reading-the-steps-in-order" id="toc-reading-the-steps-in-order" class="nav-link" data-scroll-target="#reading-the-steps-in-order">Reading the Steps in Order</a></li>
+  <li><a href="#seeing-what-the-recipe-actually-does" id="toc-seeing-what-the-recipe-actually-does" class="nav-link" data-scroll-target="#seeing-what-the-recipe-actually-does">Seeing What the Recipe Actually Does</a></li>
+  <li><a href="#step-4-resampling-scheme" id="toc-step-4-resampling-scheme" class="nav-link" data-scroll-target="#step-4-resampling-scheme">Step 4: Resampling Scheme</a></li>
+  <li><a href="#step-5-fit-and-tune" id="toc-step-5-fit-and-tune" class="nav-link" data-scroll-target="#step-5-fit-and-tune">Step 5: Fit and Tune</a></li>
+  <li><a href="#fitting-the-model" id="toc-fitting-the-model" class="nav-link" data-scroll-target="#fitting-the-model">Fitting the Model</a></li>
+  <li><a href="#reading-the-tuning-output" id="toc-reading-the-tuning-output" class="nav-link" data-scroll-target="#reading-the-tuning-output">Reading the Tuning Output</a></li>
+  <li><a href="#step-6-the-test-set-once" id="toc-step-6-the-test-set-once" class="nav-link" data-scroll-target="#step-6-the-test-set-once">Step 6: The Test Set, Once</a></li>
+  <li><a href="#making-the-final-prediction" id="toc-making-the-final-prediction" class="nav-link" data-scroll-target="#making-the-final-prediction">Making the Final Prediction</a></li>
+  <li><a href="#reading-the-final-numbers" id="toc-reading-the-final-numbers" class="nav-link" data-scroll-target="#reading-the-final-numbers">Reading the Final Numbers</a></li>
   </ul>
 </nav>
     </div>
@@ -395,153 +433,256 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)       <span class="co"># train() for fitting and cross validation</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glmnet)      <span class="co"># the lasso model we fit at the end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="workflow-in-r" class="level3" style="color: orange">
-<h3 class="anchored" data-anchor-id="workflow-in-r">Workflow in R</h3>
+<p>This page puts the whole unit together. Everything we have covered separately, missing data, filtering, numeric transformations, and categorical encoding, now happens in one pipeline on real data, <strong>starting from scratch</strong>.</p>
+<p>The shape will look familiar from <a href="./p03_complete_pipeline.html">A Complete Pipeline</a>. It is the same six steps, with a different dataset and a recipe that does considerably more work:</p>
+<ol type="1">
+<li>Build the data</li>
+<li>Split</li>
+<li>Write a preprocessing recipe</li>
+<li>Choose a resampling scheme</li>
+<li>Fit and tune</li>
+<li>Evaluate on the test set, exactly once</li>
+</ol>
+<section id="step-1-build-the-data" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="step-1-build-the-data">Step 1: Build the Data</h2>
 </section>
-<p>To illustrate how this process works together in R code, let’s do a simple analysis using our example data, <strong>starting from scratch.</strong></p>
-<p>The steps below simply re-downloads our data, selects the variables we want to keep, cleans up the missing data codes and does some basic relabeling.</p>
+<p>The steps below re-download our data, select the variables we want to keep, clean up the missing value codes, and do some basic relabeling.</p>
+<section id="downloading-and-selecting-the-variables" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="downloading-and-selecting-the-variables">Downloading and Selecting the Variables</h3>
+</section>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2024</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> <span class="st">"happy"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>features <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"age"</span>,     <span class="co"># age of participant</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sex"</span>,     <span class="co"># sex of participant</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"race"</span>,    <span class="co"># race of participant</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"educ"</span>,    <span class="co"># highest education completed by participant</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"income"</span>,  <span class="co"># income of participant</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"childs"</span>,  <span class="co"># number of children participant has</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"wrkstat"</span>, <span class="co"># work force status</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"marital"</span>, <span class="co"># marital status</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"born"</span>,    <span class="co"># whether or not participant was born in USA</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"partyid"</span>, <span class="co"># political party of participant</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"adults"</span>,  <span class="co"># num of fam members 18 or older</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"earnrs"</span>   <span class="co"># number of earners in family  </span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> gss24[,<span class="fu">c</span>(target, features)]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Downloads the full 2024 GSS. This is a big file, so it takes a moment.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>gss24 <span class="ot">&lt;-</span> <span class="fu">gss_get_yr</span>(<span class="dv">2024</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The variable we want to predict</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> <span class="st">"happy"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>features <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"age"</span>,     <span class="co"># age of participant</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sex"</span>,     <span class="co"># sex of participant</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"race"</span>,    <span class="co"># race of participant</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"educ"</span>,    <span class="co"># highest education completed by participant</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"income"</span>,  <span class="co"># income of participant</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"childs"</span>,  <span class="co"># number of children participant has</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"wrkstat"</span>, <span class="co"># work force status</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"marital"</span>, <span class="co"># marital status</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"born"</span>,    <span class="co"># whether or not participant was born in USA</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"partyid"</span>, <span class="co"># political party of participant</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"adults"</span>,  <span class="co"># num of fam members 18 or older</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"earnrs"</span>   <span class="co"># number of earners in family</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># define which varibles are categorical and continuous</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>cat_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sex"</span>,<span class="st">"race"</span>, <span class="st">"educ"</span>, <span class="st">"wrkstat"</span>, <span class="st">"marital"</span>, <span class="st">"born"</span>, <span class="st">"partyid"</span>)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>con_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>,<span class="st">"income"</span>,<span class="st">"childs"</span>,<span class="st">"adults"</span>,<span class="st">"earnrs"</span>,<span class="st">"happy"</span>)</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>capwords <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">strict =</span> <span class="cn">FALSE</span>) {</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    cap <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">paste</span>(<span class="fu">toupper</span>(<span class="fu">substring</span>(x, <span class="dv">1</span>, <span class="dv">1</span>)),</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                  {x <span class="ot">&lt;-</span> <span class="fu">substring</span>(x, <span class="dv">2</span>); <span class="cf">if</span>(strict) <span class="fu">tolower</span>(x) <span class="cf">else</span> x},</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                             <span class="at">sep =</span> <span class="st">""</span>, <span class="at">collapse =</span> <span class="st">" "</span> )</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sapply</span>(<span class="fu">strsplit</span>(x, <span class="at">split =</span> <span class="st">" "</span>), cap, <span class="at">USE.NAMES =</span> <span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">names</span>(x)))</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert all missing to NA</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">everything</span>(), haven<span class="sc">::</span>zap_missing), </span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make all categorical variables factors and relabel nicely</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">all_of</span>(cat_vars), forcats<span class="sc">::</span>as_factor),</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">all_of</span>(con_vars), as.numeric),</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">all_of</span>(cat_vars), \(x) forcats<span class="sc">::</span><span class="fu">fct_relabel</span>(x, capwords, <span class="at">strict =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="sc">!</span><span class="fu">is.na</span>(data<span class="sc">$</span>happy),]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Square brackets subset as [rows, columns]. The empty rows slot keeps every</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># row, and the columns slot keeps only our target and features.</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> gss24[, <span class="fu">c</span>(target, features)]</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3986   13</code></pre>
 </div>
+</div>
+<section id="cleaning-it-up" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="cleaning-it-up">Cleaning It Up</h3>
+</section>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define which varibles are categorical and continuous</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cat_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sex"</span>,<span class="st">"race"</span>, <span class="st">"educ"</span>, <span class="st">"wrkstat"</span>, <span class="st">"marital"</span>, <span class="st">"born"</span>, <span class="st">"partyid"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>con_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>,<span class="st">"income"</span>,<span class="st">"childs"</span>,<span class="st">"adults"</span>,<span class="st">"earnrs"</span>,<span class="st">"happy"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Tidies up label text, turning "NEVER MARRIED" into "Never Married"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>capwords <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">strict =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    cap <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">paste</span>(<span class="fu">toupper</span>(<span class="fu">substring</span>(x, <span class="dv">1</span>, <span class="dv">1</span>)),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                  {x <span class="ot">&lt;-</span> <span class="fu">substring</span>(x, <span class="dv">2</span>); <span class="cf">if</span>(strict) <span class="fu">tolower</span>(x) <span class="cf">else</span> x},</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">sep =</span> <span class="st">""</span>, <span class="at">collapse =</span> <span class="st">" "</span> )</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sapply</span>(<span class="fu">strsplit</span>(x, <span class="at">split =</span> <span class="st">" "</span>), cap, <span class="at">USE.NAMES =</span> <span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">names</span>(x)))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># mutate() applies each step below to the columns named in it, and across()</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># is what lets a single line act on a whole group of columns at once.</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The GSS fills unanswered questions with special codes rather than</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># leaving them blank. zap_missing turns all of those into a plain NA.</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This has to run first, or the codes survive as if they were answers.</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">everything</span>(), haven<span class="sc">::</span>zap_missing),</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Categorical columns become factors, using the labels the GSS ships</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">all_of</span>(cat_vars), forcats<span class="sc">::</span>as_factor),</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Continuous columns become plain numbers we can do arithmetic on</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">all_of</span>(con_vars), as.numeric),</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Tidy the label text, turning "NEVER MARRIED" into "Never Married".</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The \(x) is shorthand for function(x), needed only so we can pass</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># capwords its strict = TRUE argument.</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">all_of</span>(cat_vars), \(x) forcats<span class="sc">::</span><span class="fu">fct_relabel</span>(x, capwords, <span class="at">strict =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows with no outcome. is.na() flags the missing ones and the ! negates</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co"># it, so this keeps every row where happy was actually answered. There is</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="co"># nothing to learn from a case whose answer we do not know.</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="sc">!</span><span class="fu">is.na</span>(data<span class="sc">$</span>happy), ]</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3954   13</code></pre>
+</div>
+</div>
+<p>Notice what we did <strong>not</strong> do here. We did not impute anything, drop low variance features, or standardize. Those are all modelling decisions, and they belong inside the recipe in step 3 so they can be learned from the training data alone.</p>
+<section id="step-2-split" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="step-2-split">Step 2: Split</h2>
+</section>
 <p>We can now separate our data into a training and test set.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stratified sampling with the rsample package, which tidymodels loaded above</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(data, <span class="at">prop =</span> <span class="fl">0.7</span>, <span class="at">strata =</span> <span class="st">"happy"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>data_train  <span class="ot">&lt;-</span> <span class="fu">training</span>(split)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data_test   <span class="ot">&lt;-</span> <span class="fu">testing</span>(split)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The split is random, so fix the random number generator to make it</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># reproducible. Any number works as long as you reuse the same one.</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># initial_split() records which rows go where. It does not return data.</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   prop   = 0.7      70 percent of rows go to training</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   strata = "happy"  split within levels of happy, so both halves end up</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#                     with a similar mix of happiness responses</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(data, <span class="at">prop =</span> <span class="fl">0.7</span>, <span class="at">strata =</span> <span class="st">"happy"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># These two are what actually hand you the data frames</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>data_train  <span class="ot">&lt;-</span> <span class="fu">training</span>(split)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>data_test   <span class="ot">&lt;-</span> <span class="fu">testing</span>(split)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># From here until step 6, data_test is never touched</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">train =</span> <span class="fu">nrow</span>(data_train), <span class="at">test =</span> <span class="fu">nrow</span>(data_test))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>train  test 
+ 2766  1188 </code></pre>
 </div>
-<p>Now, we will formally introduce the <code>recipes</code> package.</p>
+</div>
+<section id="step-3-a-preprocessing-recipe" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="step-3-a-preprocessing-recipe">Step 3: A Preprocessing Recipe</h2>
+</section>
+<section id="what-a-recipe-is" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="what-a-recipe-is">What a Recipe Is</h3>
+</section>
 <p>The <strong><code>recipes</code></strong> package is part of the <code>tidymodels</code> framework and is designed for feature engineering. In machine learning, raw data usually isn’t ready to be used directly in a model. You might need to do all the things we discussed in these notes.</p>
 <p>Instead of doing all these steps manually, <code>recipes</code> lets us define a sequence of preprocessing steps (called a recipe) that can be applied consistently to training and test data.</p>
-<p>A recipe typically goes through three main stages:</p>
-<section id="define-the-recipe" class="level4">
-<h4 class="anchored" data-anchor-id="define-the-recipe">1. Define the recipe</h4>
+<p>A recipe goes through three stages.</p>
 <ul>
-<li>Write down the <em>blueprint</em> of preprocessing steps you want to apply.<br>
-</li>
-<li>Example: “Impute missing values, standardize numeric predictors, and one-hot encode categorical variables.”<br>
-</li>
-<li>At this stage, the recipe only <strong>records what to do</strong>, not how to do it.</li>
+<li><strong>Define.</strong> Write down the <em>blueprint</em> of preprocessing steps you want to apply, for example “impute missing values, standardize numeric predictors, and encode categorical variables.” At this stage the recipe only <strong>records what to do</strong>, not how to do it.</li>
+<li><strong>Prep.</strong> Use the training data to <strong>learn any parameters needed</strong>, such as the means and standard deviations for standardizing, the category levels for encoding, or the values used to impute.</li>
+<li><strong>Bake.</strong> Apply the recipe to a dataset and actually transform it, using the information learned during prep. The output is processed data ready for a model.</li>
 </ul>
+<p>That separation is the whole point. Because the learning happens in prep and only on training data, the same stored values get applied to the test set later, and nothing from the test set can leak backward into the fitting.</p>
+<section id="writing-the-blueprint" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="writing-the-blueprint">Writing the Blueprint</h3>
 </section>
-<section id="prep" class="level4">
-<h4 class="anchored" data-anchor-id="prep">2. Prep</h4>
-<ul>
-<li>Use the training data to <strong>learn any parameters needed</strong> for preprocessing.<br>
-</li>
-<li>Example: Calculate means and standard deviations for standardization, determine category levels for encoding, or find values to impute.<br>
-</li>
-<li>After prepping, the recipe is ready to be applied consistently to new data.</li>
-</ul>
+<p>The following defines <code>happy</code> as the target variable and then uses all the remaining columns as features based on <code>data_train</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note the data argument: data_train, never the full dataset. Everything the</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># recipe learns must come from the training rows only.</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The order of the steps is a real decision, not a style choice:</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   1. filter first, so we do not spend effort imputing a column we drop</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   2. impute next, so later steps are not working around missing values</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   3. dummy code, which turns each factor into numeric indicator columns</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   4. center and scale last, so the new indicator columns get scaled too</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>blueprint <span class="ot">&lt;-</span> <span class="fu">recipe</span>(happy <span class="sc">~</span> ., <span class="at">data =</span> data_train) <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># drop categorical features with almost no variation</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_nzv</span>(<span class="fu">all_nominal</span>())  <span class="sc">%&gt;%</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fill gaps using a bagged tree model, which predicts each missing value</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># from the other columns rather than using a single summary number</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_bag</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># one_hot = FALSE drops one level per factor as the reference category</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_factor_predictors</span>(), <span class="at">one_hot =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># subtract the mean, then divide by the standard deviation. The</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># -all_outcomes() part excludes happy, since we do not rescale the target.</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_center</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_scale</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>())</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Printing shows the plan. Nothing has been computed against the data yet.</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>blueprint</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="reading-the-steps-in-order" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="reading-the-steps-in-order">Reading the Steps in Order</h3>
 </section>
-<section id="bake" class="level4">
-<h4 class="anchored" data-anchor-id="bake">3. Bake</h4>
-<ul>
-<li>Apply the recipe to a dataset (training, validation, or test).<br>
-</li>
-<li>This step actually transforms the data using the information learned during the <code>prep</code> stage.<br>
-</li>
-<li>The output is a processed dataset that can be used directly in a machine learning model.</li>
-</ul>
-<p>For example, the following defines <code>happy</code> as the target variable and then uses all the remaining columns as features based on <code>data_train</code>. We then:</p>
 <ol type="1">
 <li><p>Remove near-zero variance features that are categorical (aka nominal).</p></li>
-<li><p>Impute missing data</p></li>
+<li><p>Impute missing data.</p></li>
 <li><p>Dummy encode our categorical features.</p></li>
-<li><p>Center and scale (i.e., standardize) all numeric features</p></li>
+<li><p>Center and scale (i.e., standardize) all numeric features.</p></li>
 </ol>
+<p>Each of those is something we covered on its own page. <code>step_nzv()</code> is <a href="./week2_5d.html">Feature Filtering</a>, <code>step_impute_bag()</code> is <a href="./week2_5c.html">Missing Data</a>, <code>step_dummy()</code> is <a href="./week2_5f.html">Categorical Feature Engineering</a>, and the centering and scaling is <a href="./week2_5e.html">Numeric Feature Engineering</a>. The recipe is where they stop being separate lessons and become one object.</p>
+<section id="seeing-what-the-recipe-actually-does" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="seeing-what-the-recipe-actually-does">Seeing What the Recipe Actually Does</h3>
+</section>
+<p>Printing the blueprint only showed the plan. To see the result you have to prep it and bake it. You will not normally do this yourself, because <code>train()</code> does it for you in step 5, but it is worth running once so you can see what your model is actually being handed.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>blueprint <span class="ot">&lt;-</span> <span class="fu">recipe</span>(happy <span class="sc">~</span> ., <span class="at">data =</span> data_train) <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_nzv</span>(<span class="fu">all_nominal</span>())  <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_bag</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_factor_predictors</span>(), <span class="at">one_hot =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_center</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_scale</span>(<span class="fu">all_numeric</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>()) </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>blueprint</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># these are example steps you don't need to run for any reason other</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># than troubleshooting</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare &lt;- prep(blueprint, training = data_train)</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># baked_train &lt;- bake(prepare, new_data = data_train)</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># baked_test  &lt;- bake(prepare, new_data = data_test)</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># baked_train</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prep() learns from the training data: which levels are rare, what the</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># imputation models are, and what each mean and standard deviation is.</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>prepared <span class="ot">&lt;-</span> <span class="fu">prep</span>(blueprint, <span class="at">training =</span> data_train)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># bake() applies what was learned. new_data = NULL means "give me back the</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># training data you already prepped" rather than some new dataset.</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>baked_train <span class="ot">&lt;-</span> <span class="fu">bake</span>(prepared, <span class="at">new_data =</span> <span class="cn">NULL</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># We started with 12 predictors. Dummy coding turned each factor into</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># several indicator columns, so the model sees far more than 12.</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(baked_train)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2766   48</code></pre>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">names</span>(baked_train), <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "age"             "income"          "childs"          "adults"         
+ [5] "earnrs"          "happy"           "sex_Female"      "race_Black"     
+ [9] "race_Other"      "educ_X1st.Grade"</code></pre>
+</div>
+</div>
+<p>The same prepped recipe can be applied to the test set later, using the values learned above rather than recomputing anything:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>baked_test <span class="ot">&lt;-</span> <span class="fu">bake</span>(prepared, <span class="at">new_data =</span> data_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="step-4-resampling-scheme" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="step-4-resampling-scheme">Step 4: Resampling Scheme</h2>
+</section>
+<p>We still need a way to compare candidate settings without touching the test set, so we describe a cross validation plan.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This object is only a set of instructions. It does not run anything yet.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"cv"</span>, <span class="co"># k-folds cross-validation</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">number =</span> <span class="dv">10</span>    <span class="co"># 10 folds</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="step-5-fit-and-tune" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="step-5-fit-and-tune">Step 5: Fit and Tune</h2>
+</section>
+<section id="fitting-the-model" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="fitting-the-model">Fitting the Model</h3>
+</section>
 <p>Next, we can fit a model using the <code>caret</code> package, using our blueprint as the first argument and then <code>caret</code> takes care of the rest.</p>
 <p>The model we fit here is the <strong>lasso</strong>, a linear regression that pays a penalty for large coefficients. The size of that penalty is set by <code>lambda</code>, and <code>lambda</code> is a hyperparameter, so we do not pick it ourselves. We hand <code>caret</code> a grid of candidate values and let cross validation choose. The regression unit covers what the lasso is actually doing.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify cross-validation plan</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"cv"</span>, <span class="co"># k-folds cross-validation</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">number =</span> <span class="dv">10</span>    <span class="co"># 10 folds</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a grid of candidate penalty values. These are spaced evenly on a log</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># scale rather than a linear one, because what matters is the order of</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># magnitude of the penalty, not the gap between neighboring values.</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>hyper_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha  =</span> <span class="dv">1</span>,  <span class="co"># alpha = 1 is lasso, alpha = 0 would be ridge</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda =</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="sc">-</span><span class="fl">1.5</span>, <span class="at">length.out =</span> <span class="dv">10</span>)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Tune a lasso model using grid search</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>lasso_fit <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  blueprint,</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data_train,</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"glmnet"</span>,</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> cv,</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneGrid =</span> hyper_grid,</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric =</span> <span class="st">"RMSE"</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>lasso_fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a grid of candidate penalty values. These are spaced evenly on a log</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># scale rather than a linear one, because what matters is the order of</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># magnitude of the penalty, not the gap between neighboring values.</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>hyper_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha  =</span> <span class="dv">1</span>,  <span class="co"># alpha = 1 is lasso, alpha = 0 would be ridge</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda =</span> <span class="dv">10</span><span class="sc">^</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="sc">-</span><span class="fl">1.5</span>, <span class="at">length.out =</span> <span class="dv">10</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Tune a lasso model using grid search</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>lasso_fit <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  blueprint,          <span class="co"># the recipe, not a formula</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data_train,  <span class="co"># training data only</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"glmnet"</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> cv,     <span class="co"># the resampling plan from step 4</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneGrid =</span> hyper_grid,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric =</span> <span class="st">"RMSE"</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>lasso_fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>glmnet 
 
@@ -550,38 +691,90 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 Recipe steps: nzv, impute_bag, dummy, center, scale 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 2490, 2489, 2490, 2489, 2489, 2490, ... 
+Summary of sample sizes: 2490, 2490, 2489, 2489, 2489, 2489, ... 
 Resampling results across tuning parameters:
 
   lambda        RMSE       Rsquared    MAE      
-  0.0001000000  0.6258543  0.06491289  0.4789038
-  0.0001895736  0.6258051  0.06499590  0.4788032
-  0.0003593814  0.6256919  0.06517357  0.4785414
-  0.0006812921  0.6255112  0.06544064  0.4780932
-  0.0012915497  0.6252052  0.06591667  0.4772992
-  0.0024484367  0.6247003  0.06678340  0.4758017
-  0.0046415888  0.6241377  0.06782775  0.4732279
-  0.0087992254  0.6241786  0.06783760  0.4690798
-  0.0166810054  0.6254857  0.06675550  0.4618068
-  0.0316227766  0.6307757  0.05596282  0.4502938
+  0.0001000000  0.6279744  0.05866007  0.4812291
+  0.0001895736  0.6278483  0.05892440  0.4810829
+  0.0003593814  0.6276644  0.05924826  0.4807861
+  0.0006812921  0.6274281  0.05958374  0.4803004
+  0.0012915497  0.6270186  0.06017733  0.4793920
+  0.0024484367  0.6263359  0.06125183  0.4777478
+  0.0046415888  0.6255705  0.06246183  0.4749556
+  0.0087992254  0.6250505  0.06364302  0.4702215
+  0.0166810054  0.6260765  0.06266886  0.4626950
+  0.0316227766  0.6310686  0.05346310  0.4504854
 
 Tuning parameter 'alpha' was held constant at a value of 1
 RMSE was used to select the optimal model using the smallest value.
-The final values used for the model were alpha = 1 and lambda = 0.004641589.</code></pre>
+The final values used for the model were alpha = 1 and lambda = 0.008799225.</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lasso_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Passing <code>blueprint</code> to <code>train()</code> rather than prepping it yourself matters. The recipe is re-learned inside every fold, on that fold’s training portion only, so the imputation models and the means and standard deviations never see the held out fold.</p>
+<section id="reading-the-tuning-output" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="reading-the-tuning-output">Reading the Tuning Output</h3>
+</section>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lasso_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="week2_5g_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="week2_5g_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The plot shows cross validated error against the size of the penalty. It falls at first, because a little shrinkage removes noise the model was chasing, then turns and climbs once the penalty is strong enough to flatten coefficients that were carrying real signal. The bottom of that curve is the value <code>caret</code> keeps.</p>
-
-
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The winning penalty, and the one train() will use when we call predict()</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>lasso_fit<span class="sc">$</span>bestTune</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  alpha      lambda
+8     1 0.008799225</code></pre>
+</div>
+</div>
+<section id="step-6-the-test-set-once" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="step-6-the-test-set-once">Step 6: The Test Set, Once</h2>
 </section>
+<section id="making-the-final-prediction" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="making-the-final-prediction">Making the Final Prediction</h3>
+</section>
+<p>Every decision so far was made using the training data and the cross validation folds. Now, and only now, we look at the test set.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># predict() applies the entire pipeline to new data. The recipe travels with</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the model, so the test rows get filtered, imputed, dummy coded, and</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># standardized using the values learned from the training data. You do not</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># redo any of it, and you must not refit any of it.</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>test_predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(lasso_fit, data_test)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">postResample</span>(<span class="at">pred =</span> test_predictions, <span class="at">obs =</span> data_test<span class="sc">$</span>happy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      RMSE   Rsquared        MAE 
+0.63278345 0.04452139 0.47590521 </code></pre>
+</div>
+</div>
+<section id="reading-the-final-numbers" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="reading-the-final-numbers">Reading the Final Numbers</h3>
+</section>
+<p>That is the number you would report. Compare it against the cross validated RMSE from step 5. They will not match exactly, and neither is wrong. The cross validated number was an estimate built from the training data, while this one is measured on rows the model has genuinely never seen.</p>
+<p>Notice also that the R squared here is small. That is an honest result rather than a failure. Self reported happiness is difficult to predict from demographics, and a model that says so is more useful than one that has been tuned until it looks impressive.</p>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>The Rule
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you now go back, change the recipe or the model, and re-run this, the number stops meaning what it meant. The test set has become part of model selection, and your estimate is optimistic again.</p>
+<p>You get one look. This is why steps 1 through 5 exist.</p>
+</div>
+</div>
+
+
 
 </main> <!-- /main -->
 <script>

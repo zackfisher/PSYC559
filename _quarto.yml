@@ -38,6 +38,7 @@ project:
     - week6_2.qmd
     - week6_3.qmd
     - lab01_rmarkdown.qmd
+    - open_datasets.qmd
 website:
   title: "PSYC559: Applied Machine Learning in Psychology"
 
@@ -131,10 +132,14 @@ website:
           - week6_1.qmd
           - week6_2.qmd
           - week6_3.qmd
-      # Labs stay last in the sidebar.
+      # Labs stay last among the course content.
       - section: "Labs"
         contents:
           - lab01_rmarkdown.qmd
+      # Resources sit at the very end of the sidebar.
+      - section: "Resources"
+        contents:
+          - open_datasets.qmd
 format:
   html:
     theme: darkly

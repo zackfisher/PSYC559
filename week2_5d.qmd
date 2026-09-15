@@ -60,8 +60,21 @@ Zero and near-zero variance variables typically offer little to no information f
 We can use the `caret` [@caret] package in R to look at these different metrics for our example data.
 
 ```{r}
-# saveMetrics = TRUE returns the diagnostics for every variable rather than
-# just the column numbers of the ones flagged for removal
+# nearZeroVar() checks every column against the two rules above.
+#   saveMetrics = TRUE returns the diagnostics for every variable. Without it
+#   you get back only the column numbers of the ones it would drop, which is
+#   useful for code but useless for understanding what is going on.
 caret::nearZeroVar(data, saveMetrics = TRUE) %>%
-  tibble::rownames_to_column() 
+
+  # the variable names arrive as row names rather than as a real column,
+  # which makes them awkward to read, so this moves them into a column
+  tibble::rownames_to_column()
 ```
+
+Four columns come back. The two that matter are the ones from the rule of thumb above.
+
+-   `freqRatio` is the frequency of the most common value divided by the frequency of the second most common. A big number means one value dominates the variable.
+-   `percentUnique` is how many distinct values the variable has, as a percentage of the number of rows. A small number means the variable is close to constant.
+-   `zeroVar` and `nzv` are `TRUE` or `FALSE` flags. They are `caret` applying the thresholds for you and saying whether it would drop the variable.
+
+In a real pipeline you would not run this by hand. You would add `step_nzv()` to a recipe and let it happen inside the resampling, for the reasons the [Overview](week2_5a.qmd) gave. Running it here is just so you can see what the decision is based on.

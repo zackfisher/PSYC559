@@ -30,22 +30,32 @@ Many models require that the predictors take numeric form. There are exceptionss
 Sometimes features will contain levels that have very few observations. For example, take a look at the work status variable `wrkstat`. There are 8 unique levels and some have relatively few observations. For example, `With A Job, But Not At Work Because Of Temporary Illness, Vacation, Strike`.
 
 ```{r}
+# count() tallies how many rows fall into each level of wrkstat and puts the
+# tally in a column called n. arrange(n) then sorts by that column, smallest
+# first, which brings the rare levels we care about to the top.
 count(data, wrkstat) %>% arrange(n)
 ```
 
 Sometimes we can benefit from collapsing, or “lumping” these into a lesser number of categories. In the above examples, we may want to collapse all levels that are observed in less than 5% of the training sample into an `Other` category. We can use `step_other()` to do so.
 
 ```{r}
+# Write the recipe. step_other() does the lumping.
+#   wrkstat          the column to lump, though you can name several
+#   threshold = 0.05 any level holding less than 5 percent of the rows
+#                    gets collapsed
+#   other = "Other"  what to call the new combined level
 lumping <- recipe(happy ~ ., data = data) %>%
-  step_other(wrkstat, threshold = 0.05, 
+  step_other(wrkstat, threshold = 0.05,
              other = "Other")
 
-# Apply this blue print --> you will learn about this at 
-# the end of the chapter
+# prep() works out which levels actually fall below the threshold, and bake()
+# applies that decision and hands back the changed data. You will see this
+# pair again in the Workflow section at the end of the unit.
 apply_2_training <- prep(lumping, training = data) %>%
   bake(data)
 
-# New distribution of Neighborhood
+# Count wrkstat again and compare against the table above. The rare levels
+# have been folded into a single Other category.
 count(apply_2_training, wrkstat) %>% arrange(n)
 ```
 
@@ -68,6 +78,15 @@ However, this creates perfect collinearity which causes problems with some predi
 Below is an example of one-hot encoding the predictors in our model.
 
 ```{r}
+# step_dummy() turns categorical columns into numeric indicator columns.
+#   all_factor_predictors() selects every categorical predictor at once, so
+#                           you do not have to name them
+#   one_hot = TRUE          make one column per level, as in the first image
+#   one_hot = FALSE         drop one level to act as the reference category,
+#                           which is the dummy coding in the second image and
+#                           what regression models normally want
 recipe(happy ~ ., data = data) %>%
   step_dummy(all_factor_predictors(), one_hot = TRUE)
 ```
+
+Printing the recipe only shows the plan. It tells you a dummy step exists, but not how many columns it will create, because that is not known until the recipe is prepped and it sees how many levels each variable has.

@@ -1,9 +1,9 @@
 ---
 title: "Workflow"
-format: 
-  html: 
+format:
+  html:
     fontsize: 25px
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: references.bib
 ---
@@ -22,17 +22,32 @@ library(caret)       # train() for fitting and cross validation
 library(glmnet)      # the lasso model we fit at the end
 ```
 
-::: {style="color: orange"}
-### Workflow in R
+This page puts the whole unit together. Everything we have covered separately, missing data, filtering, numeric transformations, and categorical encoding, now happens in one pipeline on real data, **starting from scratch**.
+
+The shape will look familiar from [A Complete Pipeline](p03_complete_pipeline.qmd). It is the same six steps, with a different dataset and a recipe that does considerably more work:
+
+1.  Build the data
+2.  Split
+3.  Write a preprocessing recipe
+4.  Choose a resampling scheme
+5.  Fit and tune
+6.  Evaluate on the test set, exactly once
+
+::: {style="color: yellow"}
+## Step 1: Build the Data
 :::
 
-To illustrate how this process works together in R code, let’s do a simple analysis using our example data, **starting from scratch.**
+The steps below re-download our data, select the variables we want to keep, clean up the missing value codes, and do some basic relabeling.
 
-The steps below simply re-downloads our data, selects the variables we want to keep, cleans up the missing data codes and does some basic relabeling.
+::: {style="color: lightblue"}
+### Downloading and Selecting the Variables
+:::
 
 ```{r}
+# Downloads the full 2024 GSS. This is a big file, so it takes a moment.
 gss24 <- gss_get_yr(2024)
 
+# The variable we want to predict
 target <- "happy"
 
 features <- c(
@@ -47,16 +62,26 @@ features <- c(
   "born",    # whether or not participant was born in USA
   "partyid", # political party of participant
   "adults",  # num of fam members 18 or older
-  "earnrs"   # number of earners in family  
+  "earnrs"   # number of earners in family
 )
 
-data <- gss24[,c(target, features)]
+# Square brackets subset as [rows, columns]. The empty rows slot keeps every
+# row, and the columns slot keeps only our target and features.
+data <- gss24[, c(target, features)]
 
+dim(data)
+```
 
+::: {style="color: lightblue"}
+### Cleaning It Up
+:::
+
+```{r}
 # define which varibles are categorical and continuous
 cat_vars <- c("sex","race", "educ", "wrkstat", "marital", "born", "partyid")
 con_vars <- c("age","income","childs","adults","earnrs","happy")
 
+# Tidies up label text, turning "NEVER MARRIED" into "Never Married"
 capwords <- function(x, strict = FALSE) {
     cap <- function(x) paste(toupper(substring(x, 1, 1)),
                   {x <- substring(x, 2); if(strict) tolower(x) else x},
@@ -64,97 +89,187 @@ capwords <- function(x, strict = FALSE) {
     sapply(strsplit(x, split = " "), cap, USE.NAMES = !is.null(names(x)))
 }
 
+# mutate() applies each step below to the columns named in it, and across()
+# is what lets a single line act on a whole group of columns at once.
 data <- data |>
   mutate(
-    # Convert all missing to NA
-    across(everything(), haven::zap_missing), 
-    # Make all categorical variables factors and relabel nicely
+
+    # The GSS fills unanswered questions with special codes rather than
+    # leaving them blank. zap_missing turns all of those into a plain NA.
+    # This has to run first, or the codes survive as if they were answers.
+    across(everything(), haven::zap_missing),
+
+    # Categorical columns become factors, using the labels the GSS ships
     across(all_of(cat_vars), forcats::as_factor),
+
+    # Continuous columns become plain numbers we can do arithmetic on
     across(all_of(con_vars), as.numeric),
+
+    # Tidy the label text, turning "NEVER MARRIED" into "Never Married".
+    # The \(x) is shorthand for function(x), needed only so we can pass
+    # capwords its strict = TRUE argument.
     across(all_of(cat_vars), \(x) forcats::fct_relabel(x, capwords, strict = TRUE))
   )
 
-data <- data[!is.na(data$happy),]
+# Drop rows with no outcome. is.na() flags the missing ones and the ! negates
+# it, so this keeps every row where happy was actually answered. There is
+# nothing to learn from a case whose answer we do not know.
+data <- data[!is.na(data$happy), ]
+
+dim(data)
 ```
+
+Notice what we did **not** do here. We did not impute anything, drop low variance features, or standardize. Those are all modelling decisions, and they belong inside the recipe in step 3 so they can be learned from the training data alone.
+
+::: {style="color: yellow"}
+## Step 2: Split
+:::
 
 We can now separate our data into a training and test set.
 
 ```{r}
-# Stratified sampling with the rsample package, which tidymodels loaded above
+# The split is random, so fix the random number generator to make it
+# reproducible. Any number works as long as you reuse the same one.
 set.seed(123)
+
+# initial_split() records which rows go where. It does not return data.
+#   prop   = 0.7      70 percent of rows go to training
+#   strata = "happy"  split within levels of happy, so both halves end up
+#                     with a similar mix of happiness responses
 split <- initial_split(data, prop = 0.7, strata = "happy")
+
+# These two are what actually hand you the data frames
 data_train  <- training(split)
 data_test   <- testing(split)
+
+# From here until step 6, data_test is never touched
+c(train = nrow(data_train), test = nrow(data_test))
 ```
 
-Now, we will formally introduce the `recipes` package.
+::: {style="color: yellow"}
+## Step 3: A Preprocessing Recipe
+:::
 
-The **`recipes`** package is part of the `tidymodels` framework and is designed for feature engineering. In machine learning, raw data usually isn’t ready to be used directly in a model. You might need to do all the things we discussed in these notes.
+::: {style="color: lightblue"}
+### What a Recipe Is
+:::
+
+The **`recipes`** package is part of the `tidymodels` framework and is designed for feature engineering. In machine learning, raw data usually isn't ready to be used directly in a model. You might need to do all the things we discussed in these notes.
 
 Instead of doing all these steps manually, `recipes` lets us define a sequence of preprocessing steps (called a recipe) that can be applied consistently to training and test data.
 
-A recipe typically goes through three main stages:
+A recipe goes through three stages.
 
-#### 1. Define the recipe
+-   **Define.** Write down the *blueprint* of preprocessing steps you want to apply, for example "impute missing values, standardize numeric predictors, and encode categorical variables." At this stage the recipe only **records what to do**, not how to do it.
+-   **Prep.** Use the training data to **learn any parameters needed**, such as the means and standard deviations for standardizing, the category levels for encoding, or the values used to impute.
+-   **Bake.** Apply the recipe to a dataset and actually transform it, using the information learned during prep. The output is processed data ready for a model.
 
--   Write down the *blueprint* of preprocessing steps you want to apply.\
--   Example: “Impute missing values, standardize numeric predictors, and one-hot encode categorical variables.”\
--   At this stage, the recipe only **records what to do**, not how to do it.
+That separation is the whole point. Because the learning happens in prep and only on training data, the same stored values get applied to the test set later, and nothing from the test set can leak backward into the fitting.
 
-#### 2. Prep
+::: {style="color: lightblue"}
+### Writing the Blueprint
+:::
 
--   Use the training data to **learn any parameters needed** for preprocessing.\
--   Example: Calculate means and standard deviations for standardization, determine category levels for encoding, or find values to impute.\
--   After prepping, the recipe is ready to be applied consistently to new data.
+The following defines `happy` as the target variable and then uses all the remaining columns as features based on `data_train`.
 
-#### 3. Bake
+```{r}
+# Note the data argument: data_train, never the full dataset. Everything the
+# recipe learns must come from the training rows only.
+#
+# The order of the steps is a real decision, not a style choice:
+#   1. filter first, so we do not spend effort imputing a column we drop
+#   2. impute next, so later steps are not working around missing values
+#   3. dummy code, which turns each factor into numeric indicator columns
+#   4. center and scale last, so the new indicator columns get scaled too
+blueprint <- recipe(happy ~ ., data = data_train) %>%
 
--   Apply the recipe to a dataset (training, validation, or test).\
--   This step actually transforms the data using the information learned during the `prep` stage.\
--   The output is a processed dataset that can be used directly in a machine learning model.
+  # drop categorical features with almost no variation
+  step_nzv(all_nominal())  %>%
 
-For example, the following defines `happy` as the target variable and then uses all the remaining columns as features based on `data_train`. We then:
+  # fill gaps using a bagged tree model, which predicts each missing value
+  # from the other columns rather than using a single summary number
+  step_impute_bag(all_predictors()) %>%
+
+  # one_hot = FALSE drops one level per factor as the reference category
+  step_dummy(all_factor_predictors(), one_hot = FALSE) %>%
+
+  # subtract the mean, then divide by the standard deviation. The
+  # -all_outcomes() part excludes happy, since we do not rescale the target.
+  step_center(all_numeric(), -all_outcomes()) %>%
+  step_scale(all_numeric(), -all_outcomes())
+
+# Printing shows the plan. Nothing has been computed against the data yet.
+blueprint
+```
+
+::: {style="color: lightblue"}
+### Reading the Steps in Order
+:::
 
 1.  Remove near-zero variance features that are categorical (aka nominal).
 
-2.  Impute missing data
+2.  Impute missing data.
 
 3.  Dummy encode our categorical features.
 
-4.  Center and scale (i.e., standardize) all numeric features
+4.  Center and scale (i.e., standardize) all numeric features.
+
+Each of those is something we covered on its own page. `step_nzv()` is [Feature Filtering](week2_5d.qmd), `step_impute_bag()` is [Missing Data](week2_5c.qmd), `step_dummy()` is [Categorical Feature Engineering](week2_5f.qmd), and the centering and scaling is [Numeric Feature Engineering](week2_5e.qmd). The recipe is where they stop being separate lessons and become one object.
+
+::: {style="color: lightblue"}
+### Seeing What the Recipe Actually Does
+:::
+
+Printing the blueprint only showed the plan. To see the result you have to prep it and bake it. You will not normally do this yourself, because `train()` does it for you in step 5, but it is worth running once so you can see what your model is actually being handed.
 
 ```{r}
-blueprint <- recipe(happy ~ ., data = data_train) %>%
-  step_nzv(all_nominal())  %>%
-  step_impute_bag(all_predictors()) %>%
-  step_dummy(all_factor_predictors(), one_hot = FALSE) %>%
-  step_center(all_numeric(), -all_outcomes()) %>%
-  step_scale(all_numeric(), -all_outcomes()) 
+# prep() learns from the training data: which levels are rare, what the
+# imputation models are, and what each mean and standard deviation is.
+prepared <- prep(blueprint, training = data_train)
 
-blueprint
+# bake() applies what was learned. new_data = NULL means "give me back the
+# training data you already prepped" rather than some new dataset.
+baked_train <- bake(prepared, new_data = NULL)
 
-# these are example steps you don't need to run for any reason other
-# than troubleshooting
-
-# prepare <- prep(blueprint, training = data_train)
-# prepare
-
-# baked_train <- bake(prepare, new_data = data_train)
-# baked_test  <- bake(prepare, new_data = data_test)
-# baked_train
+# We started with 12 predictors. Dummy coding turned each factor into
+# several indicator columns, so the model sees far more than 12.
+dim(baked_train)
+head(names(baked_train), 10)
 ```
+
+The same prepped recipe can be applied to the test set later, using the values learned above rather than recomputing anything:
+
+```{r, eval=FALSE}
+baked_test <- bake(prepared, new_data = data_test)
+```
+
+::: {style="color: yellow"}
+## Step 4: Resampling Scheme
+:::
+
+We still need a way to compare candidate settings without touching the test set, so we describe a cross validation plan.
+
+```{r}
+# This object is only a set of instructions. It does not run anything yet.
+cv <- trainControl(
+  method = "cv", # k-folds cross-validation
+  number = 10    # 10 folds
+)
+```
+
+::: {style="color: yellow"}
+## Step 5: Fit and Tune
+:::
+
+::: {style="color: lightblue"}
+### Fitting the Model
+:::
 
 Next, we can fit a model using the `caret` package, using our blueprint as the first argument and then `caret` takes care of the rest.
 
 The model we fit here is the **lasso**, a linear regression that pays a penalty for large coefficients. The size of that penalty is set by `lambda`, and `lambda` is a hyperparameter, so we do not pick it ourselves. We hand `caret` a grid of candidate values and let cross validation choose. The regression unit covers what the lasso is actually doing.
 
 ```{r, cache=TRUE}
-# Specify cross-validation plan
-cv <- trainControl(
-  method = "cv", # k-folds cross-validation
-  number = 10    # 10 folds
-)
-
 # Create a grid of candidate penalty values. These are spaced evenly on a log
 # scale rather than a linear one, because what matters is the order of
 # magnitude of the penalty, not the gap between neighboring values.
@@ -165,17 +280,66 @@ hyper_grid <- expand.grid(
 
 # Tune a lasso model using grid search
 lasso_fit <- train(
-  blueprint,
-  data = data_train,
+  blueprint,          # the recipe, not a formula
+  data = data_train,  # training data only
   method = "glmnet",
-  trControl = cv,
+  trControl = cv,     # the resampling plan from step 4
   tuneGrid = hyper_grid,
   metric = "RMSE"
 )
 
 lasso_fit
+```
 
+Passing `blueprint` to `train()` rather than prepping it yourself matters. The recipe is re-learned inside every fold, on that fold's training portion only, so the imputation models and the means and standard deviations never see the held out fold.
+
+::: {style="color: lightblue"}
+### Reading the Tuning Output
+:::
+
+```{r}
 ggplot(lasso_fit)
 ```
 
 The plot shows cross validated error against the size of the penalty. It falls at first, because a little shrinkage removes noise the model was chasing, then turns and climbs once the penalty is strong enough to flatten coefficients that were carrying real signal. The bottom of that curve is the value `caret` keeps.
+
+```{r}
+# The winning penalty, and the one train() will use when we call predict()
+lasso_fit$bestTune
+```
+
+::: {style="color: yellow"}
+## Step 6: The Test Set, Once
+:::
+
+::: {style="color: lightblue"}
+### Making the Final Prediction
+:::
+
+Every decision so far was made using the training data and the cross validation folds. Now, and only now, we look at the test set.
+
+```{r}
+# predict() applies the entire pipeline to new data. The recipe travels with
+# the model, so the test rows get filtered, imputed, dummy coded, and
+# standardized using the values learned from the training data. You do not
+# redo any of it, and you must not refit any of it.
+test_predictions <- predict(lasso_fit, data_test)
+
+postResample(pred = test_predictions, obs = data_test$happy)
+```
+
+::: {style="color: lightblue"}
+### Reading the Final Numbers
+:::
+
+That is the number you would report. Compare it against the cross validated RMSE from step 5. They will not match exactly, and neither is wrong. The cross validated number was an estimate built from the training data, while this one is measured on rows the model has genuinely never seen.
+
+Notice also that the R squared here is small. That is an honest result rather than a failure. Self reported happiness is difficult to predict from demographics, and a model that says so is more useful than one that has been tuned until it looks impressive.
+
+::: {.callout-important icon="false"}
+## The Rule
+
+If you now go back, change the recipe or the model, and re-run this, the number stops meaning what it meant. The test set has become part of model selection, and your estimate is optimistic again.
+
+You get one look. This is why steps 1 through 5 exist.
+:::
