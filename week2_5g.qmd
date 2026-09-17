@@ -14,6 +14,17 @@ bibliography: references.bib
 
 This page rebuilds the data from scratch, so there is no file to download. You only need these packages.
 
+::: {.callout-warning icon="false"}
+## If You Have Not Installed `gssr`
+
+`gssr` is not on CRAN, so `install.packages("gssr")` will not find it. Install it once from the console with `remotes`, exactly as on the [Example Data](week2_5b.qmd) page:
+
+```{r, eval=FALSE}
+install.packages("remotes")
+remotes::install_github("kjhealy/gssr")
+```
+:::
+
 ```{r}
 library(gssr)        # downloading the GSS data
 library(dplyr)       # data manipulation and the pipe

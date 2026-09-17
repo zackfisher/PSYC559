@@ -1,229 +1,593 @@
 ---
 title: "Simple Linear Regression"
-format: 
-  html: 
+format:
+  html:
     fontsize: 25px
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
-data <- readRDS("data/data.RDS")
-library(dplyr)
-library(tidymodels)
-```
+Linear regression is usually taught as a statistical model for testing hypotheses. 
+
+In this course we will generally treat linear regression as a **prediction algorithm**. 
+
+In this way it learns coefficients from data by minimizing a loss function, uses them to predict new cases, and gets evaluated on data it has never seen.
+
+For now we will skip a discussion of inference in linear regression, but for those who are interested the material can be found here: [Inference in Linear Regression](week3_1b_inference.qmd).
 
 ::: {style="color: yellow"}
-## Overview of Simple Linear Regression
+## Setup
 :::
-
-Simple linear regression is a statistical method used to model the relationship between two variables:\
-- **one feature** (also called the predictor or independent variable),\
-- **one target** (also called the outcome or dependent variable).
-
-The general form of a simple linear regression model is:
-
-$$
-Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i, \quad \quad \text{for}\:i=1,2,\dots,n 
-$$
-
-where:\
-- $Y_i$ : the ith observation on the target variable we want to predict.\
-- $X$ : the ith observation of the feature (or predictor) variable.\
-- $\beta_0$: the intercept, which represents the expected value of $Y$ when $X=0$.\
-- $\beta_1$: the slope, which tells us how much $Y$ changes for a one-unit increase in $X$\
-- $\varepsilon_i$: the ith observation of the error term, which captures random variation not explained by $X$.
-
-In practice, we estimate the parameters $\beta_0$ and $\beta_1$ using data by minimizing the residual sum of squares (RSS). It can be helpful to visualize what is meant by residual sum of squares and the fitted or optimal regression line.
-
-![https://wallstreetmojo-files.s3.ap-south-1.amazonaws.com/2022/05/Residual-sum-of-squares.jpg](images/rss.jpg){width="1000"}
-
-Once we have estimated the coefficients by finding the coefficients that minimize the RSS, the fitted equation can then be written as:
-
-$$
-\hat{Y}_i = b_0 + b_1 X_i
-$$
-
-where $\hat{Y}_i$ is the predicted value of $Y$ for the ith case (or person), and $b_0, b_1$ are the estimated coefficients from the sample data.
-
-This simple framework allows us to understand how two variables are related and to make predictions about $Y$ given new values of $X$.
-
-::: {style="color: yellow"}
-## Example Data: Ames Housing
-:::
-
-The **Ames Housing dataset** is a widely used dataset in regression and machine learning tutorials. It contains detailed information about residential homes in Ames, Iowa, and is often used to predict **sale prices** of homes based on various characteristics. For the regression chapters we will use the Ames Housing dataset to illustrate concepts in linear regression.
-
--   Originally collected by Dean De Cock for data science education purposes.\
--   Available in R via the `AmesHousing` or `modeldata` packages.\
--   Contains 2930 observations (homes) and 82 variables describing different aspects of the homes.
-
-The dataset includes a mix of **numerical, categorical, and ordinal variables** covering:
-
-1.  **Property Characteristics**
-    -   Lot area (`Lot_Area`), lot shape (``` Lot``_``Shape ```), overall quality (``` Overall``_``Qual ```), overall condition (``` Overall``_``Cond ```)
-2.  **Building Attributes**
-    -   Year built (``` Year``_``Built ```), year remodeled (``` Year``_``Remod``_``Add ```), total square footage (``` Gr``_``Liv``_``Area ```), basement area (``` Total``_``Bsmt``_``SF ```)
-3.  **Garage Features**
-    -   Garage type (``` Garage``_``Type ```), number of cars (``` Garage``_``Cars ```), garage area (``` Garage``_``Area ```)
-4.  **Exterior and Structural Details**
-    -   Exterior material (``` Exter``_``Qual ```), roof style (``` Roof``_``Style ```), foundation type (`Foundation`)
-5.  **Neighborhood Information**
-    -   Neighborhood (`Neighborhood`) describing location and local characteristics
-6.  **Sale Information**
-    -   Sale price (``` Sale``_``Price ```), the target variable
-    -   Sale condition (``` Sale``_``Condition ```)
 
 ```{r}
-# Install and load package
-# install.packages("AmesHousing")
-library(AmesHousing)
+library(dplyr)   # data manipulation and the pipe
+library(ggplot2) # plots
+library(naniar)  # missing data visualization
+```
 
-# Load data
-ames <- make_ames()
+We use the **student dropout and academic success** data throughout the regression unit. The same dataset returns in [Multiple Linear Regression](week3_2.qmd) and again in the logistic regression pages, where the outcome changes to a dichotomous variable.
 
-# View first few rows
-head(ames)
+-   4,424 students from a Portuguese higher education institution.
+-   36 features covering demographics, socio-economic background, and academic record.
+-   Grades are on the Portuguese 0 to 20 scale.
+-   [Download `dropout.csv`](data/dropout.csv), or get it from the [UCI Repository](https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success).
 
-# Summary of key variables
-summary(ames$Sale_Price)
-summary(ames$Gr_Liv_Area)
-table(ames$Neighborhood)
+```{r}
+# The file is semicolon separated, which is common in European data, so
+# read.csv needs to be told that with sep = ";"
+dropout <- read.csv("data/dropout.csv", sep = ";")
+
+# The original column names are long and full of dots once R cleans them up.
+# Renaming the handful we use keeps the code below readable.
+dropout <- dropout %>%
+  rename(
+    grade_sem1      = Curricular.units.1st.sem..grade.,
+    grade_sem2      = Curricular.units.2nd.sem..grade.,
+    admission_grade = Admission.grade,
+    age             = Age.at.enrollment,
+    scholarship     = Scholarship.holder,
+    fees_current    = Tuition.fees.up.to.date
+  )
+
+dim(dropout)
 ```
 
 ::: {style="color: yellow"}
-## Simple Linear Regression in R
+## 1. What Problem Does Linear Regression Solve?
 :::
 
-We can fit a simple linear regression model using the `lm()` function in R. Note we are not using cross-validation here, simply fitting the training data to illustrate the concept of simple linear regression.
+Linear regression predicts a **continuous outcome** from one or more input variables.
+
+Our question: **can we predict a student's second semester grade from their first semester grade?**
+
+That is a regression problem because the answer is a number, a grade somewhere on the 0 to 20 scale. 
+
+::: {style="color: lightblue"}
+### A Data Decision First
+:::
+
+Before modelling anything, look at the data. Start where the [Missing Data](week2_5c.qmd) page told you to start.
+
+```{r}
+# Black would mark missing values, gray observed ones.
+# 37 column names are too many to read, so they are hidden.
+vis_miss(dropout, warn_large_data = FALSE) +
+  labs(x = "37 columns") +
+  theme(axis.text.x = element_blank())
+```
+
+The plot is entirely gray, so no values are missing.
+
+```{r}
+# Confirm it directly
+sum(is.na(dropout))
+```
+
+So the data look clear but let's dig a little further.
+
+::: {style="color: lightblue"}
+### Plotting the Data
+:::
+
+Look at the outcome itself rather than at its missingness.
+
+```{r}
+ggplot(dropout, aes(grade_sem2)) +
+  geom_histogram(bins = 60, fill = "orange") +
+  labs(x = "Second semester grade", y = "Number of students") +
+  theme_minimal(base_size = 14)
+```
+
+There is a tall spike at zero, then **nothing at all until 10**.
+
+```{r}
+# How many students sit at exactly zero?
+sum(dropout$grade_sem2 == 0)
+
+# What is the lowest grade among everybody else?
+min(dropout$grade_sem2[dropout$grade_sem2 > 0])
+```
+
+The zeros are not low grades. Here zero might be a missingness **code**:
+
+```{r}
+# Of the students with a grade of zero, how many approved zero units?
+dropout %>%
+  filter(grade_sem2 == 0) %>%
+  summarise(
+    students          = n(),
+    approved_no_units = sum(Curricular.units.2nd.sem..approved. == 0)
+  )
+```
+
+Every student with a grade of zero completed no curricular units, so there was no grade to record and the field was filled with a zero instead.
+
+::: {.callout-important icon="false"}
+## Missing Data Coded as a Value
+
+On the [Missing Data](week2_5c.qmd) page we recoded placeholder values like `-99` into `NA` so that R would treat them as missing. This is the same problem, but harder to spot, because `0` is a plausible grade.
+
+`vis_miss()` and `is.na()` do not catch it, and `summary()` reports a mean that averages real grades together with non-grades.
+
+Plotting the outcome is what caught it. 
+:::
+
+Mixing these two groups would mean fitting one line through students who completed units and students who completed none.
+
+```{r}
+# Keep students who actually completed units in both semesters
+completers <- dropout %>%
+  filter(grade_sem1 > 0, grade_sem2 > 0)
+
+nrow(completers)
+
+summary(completers$grade_sem2)
+```
+
+::: {style="color: yellow"}
+## 2. From a Scatterplot to a Prediction Equation
+:::
+
+Start by looking at the relationship.
+
+```{r}
+ggplot(completers, aes(x = grade_sem1, y = grade_sem2)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(method = "lm", se = FALSE, color = "orange") +
+  scale_x_continuous(limits = c(10, 20)) +
+  scale_y_continuous(limits = c(10, 20)) +
+  labs(x = "First semester grade", y = "Second semester grade") +
+  theme_minimal(base_size = 14)
+```
+
+The orange line is the prediction equation. Written out, it is:
+
+$$
+\hat{y} = b_0 + b_1 x
+$$
+
+-   $\hat{y}$ is the **predicted** second semester grade. The hat means predicted rather than observed.
+-   $x$ is the first semester grade.
+-   $b_0$ is the **intercept**: the prediction when $x = 0$.
+-   $b_1$ is the **slope**: how much the prediction moves for a one point increase in $x$.
+
+This equation produces a prediction for any value of $x$, including values no student in the data had. That is what makes it a prediction algorithm.
+
+Our intercept and slope coefficients from a regression are estimates of **parameters** learned from the data, not hyperparameters supplied during learning. 
+
+::: {style="color: yellow"}
+## 3. How Does the Algorithm Learn?
+:::
+The algorithm does not know the right coefficients in advance. It **searches for the coefficients that make its predictions as close as possible to the observed outcomes.** 
+
+To do that it needs a definition of how close a prediction is.
+
+::: {style="color: lightblue"}
+### Residuals
+:::
+
+For each student, the **residual** is what the model got wrong:
+
+$$
+e_i = y_i - \hat{y}_i
+$$
+
+Observed minus predicted. A positive residual means the student did better than predicted, a negative one means worse.
+
+Residuals cannot simply be averaged, because the positives and negatives would cancel. So we square them first, which also makes large misses count for much more than small ones.
+
+::: {style="color: lightblue"}
+### The Loss Function
+:::
+
+Averaging the squared residuals gives the **mean squared error**:
+
+$$
+\operatorname{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2
+$$
+
+This is the **loss function**. It is a single number scoring how badly a given pair of coefficients does. Fitting the model means choosing $b_0$ and $b_1$ to make that number as small as possible.
+
+> **Fitting a model means finding the coefficients that minimize a loss function.**
+
+This idea stays true for nearly every algorithm in the rest of the course. What changes later is the shape of the prediction equation and sometimes the choice of loss function. The idea of minimizing a loss does not change.
+
+::: {style="color: lightblue"}
+### Scoring One Candidate Line
+:::
+
+Before searching over many coefficients, score one candidate by hand. Suppose the algorithm tries $b_0 = 4$ and $b_1 = 0.7$. Take a student whose first semester grade was 14 and whose second semester grade was 15.
+
+$$
+\begin{aligned}
+\hat{y} &= b_0 + b_1 x = 4 + 0.7 \times 14 = 13.8 \\
+e &= y - \hat{y} = 15 - 13.8 = 1.2 \\
+e^2 &= 1.2^2 = 1.44
+\end{aligned}
+$$
+
+-   **Plug in** the coefficients and the student's $x$ to get the prediction $\hat{y}$.
+-   **Subtract** the prediction from the observed $y$ to get the residual $e$.
+-   **Square** the residual so it can be averaged.
+
+Now do the same thing for five students.
+
+```{r}
+# One candidate pair of coefficients
+b0 <- 4
+b1 <- 0.7
+
+# Five real students from the data
+five <- dropout %>%
+  slice(3949, 551, 2860, 2066, 2494) %>%
+  select(grade_sem1, grade_sem2) %>%
+  mutate(
+    y_hat    = b0 + b1 * grade_sem1,  # plug x into the equation
+    residual = grade_sem2 - y_hat,    # observed minus predicted
+    squared  = residual^2
+  )
+
+five
+
+# Average the squared residuals to get the MSE for this candidate line
+mean(five$squared)
+```
+
+The student from the formula is the fourth row. In the plot:
+
+-   **Filled dots** are the observed grades $y$.
+-   **Open dots** on the orange line are the predictions $\hat{y}$.
+-   **Dashed segments** are the residuals $e$.
+
+```{r}
+#| echo: false
+ggplot(five, aes(grade_sem1, grade_sem2)) +
+  geom_abline(intercept = b0, slope = b1, color = "orange", linewidth = 1) +
+  geom_segment(aes(xend = grade_sem1, yend = y_hat),
+               linetype = "dashed", color = "gray40") +
+  geom_point(aes(y = y_hat), shape = 21, size = 3, stroke = 1.2,
+             fill = "white", color = "orange") +
+  geom_point(size = 3) +
+  geom_text(aes(y = (grade_sem2 + y_hat) / 2,
+                label = sprintf("e = %.1f", residual)),
+            hjust = 0, nudge_x = 0.1, size = 4.5) +
+  # Label the student worked through in the formula above
+  annotate("text", x = 13.9, y = c(15, 14.05), hjust = 1, size = 4.5,
+           label = c("observed y = 15", "predicted ŷ = 13.8")) +
+  annotate("text", x = 10.8, y = 14.5, hjust = 0, size = 5,
+           label = "candidate line: ŷ = 4 + 0.7x") +
+  scale_x_continuous(limits = c(10.8, 15.7)) +
+  labs(x = "First semester grade (x)", y = "Second semester grade (y)") +
+  theme_minimal(base_size = 14)
+```
+
+For these five students, the MSE of this candidate line is 1.53. Change $b_0$ or $b_1$ and the line moves. Every $\hat{y}$ changes, every residual changes, and the MSE changes with them. Fitting is the search for the line where that number is smallest.
+
+Rather than trusting `lm()`, try a range of slopes and compute the loss for each:
+
+```{r}
+# Fix the intercept at a sensible value and try many slopes
+try_slopes <- seq(0, 1.5, by = 0.01)
+
+# For each candidate slope, compute the mean squared error it produces
+loss <- sapply(try_slopes, function(b1) {
+  b0   <- mean(completers$grade_sem2) - b1 * mean(completers$grade_sem1)
+  pred <- b0 + b1 * completers$grade_sem1
+  mean((completers$grade_sem2 - pred)^2)
+})
+
+# The slope with the smallest loss
+try_slopes[which.min(loss)]
+```
+
+```{r}
+ggplot(data.frame(slope = try_slopes, mse = loss), aes(slope, mse)) +
+  geom_line(color = "orange", linewidth = 1) +
+  geom_vline(xintercept = try_slopes[which.min(loss)], linetype = "dashed") +
+  labs(x = "Candidate slope", y = "Mean squared error") +
+  theme_minimal(base_size = 14)
+```
+
+The curve has one bottom, and the dashed line marks it. That is the slope the algorithm picks. `lm()` finds this point directly with algebra rather than by trying values, but it is solving the same problem.
+
+::: {style="color: lightblue"}
+### Fitting It Properly
+:::
+
+```{r}
+fit <- lm(grade_sem2 ~ grade_sem1, data = completers)
+
+coef(fit)
+```
 
 ::: callout-note
 ## R's Formula Syntax: `y ~ x`
 
-The first argument to `lm()` is a **formula**, written with the tilde `~`. Read the tilde as "modeled as a function of": `Sale_Price ~ Gr_Liv_Area` means "predict `Sale_Price` using `Gr_Liv_Area`." The target always goes on the left of the `~` and the features go on the right. Two extensions you'll see soon:
+The first argument to `lm()` is a **formula**, written with the tilde `~`. Read the tilde as "modeled as a function of": `grade_sem2 ~ grade_sem1` means "predict `grade_sem2` using `grade_sem1`." The target always goes on the left of the `~` and the features go on the right. Two extensions you will see soon:
 
--   Multiple features are joined with `+`, e.g. `y ~ x1 + x2` (next section).
+-   Multiple features are joined with `+`, e.g. `y ~ x1 + x2`.
 -   `y ~ .` is shorthand for "use *all* other variables in the data as features."
 
-This formula syntax isn't specific to `lm()`. The same pattern reappears in `glm()`, `caret`, `tidymodels`, and most modeling functions in R, so it's worth getting comfortable with it now.
+This formula syntax is not specific to `lm()`. The same pattern reappears in `glm()`, `caret`, `tidymodels`, and most modeling functions in R, so it is worth getting comfortable with now.
 :::
 
-For example, if we want to predict sale price (`Sale_Price`) based on house square footage (`Gr_Liv_Area`), we can use the following code:
+Reading the coefficients as predictions rather than as findings:
 
-```{r, eval=T}
-fit_slr <- lm(
-  Sale_Price ~ Gr_Liv_Area, 
-  data = ames
-)
-summary(fit_slr)
-```
+-   The intercept is the predicted second semester grade for a student whose first semester grade was 0. No student in `completers` has a grade of 0, so this is a number the equation needs rather than a claim about anybody.
+-   The slope says that two students one grade point apart in the first semester are predicted to be about that fraction of a point apart in the second.
 
-We can interpret the results from summary in the following way:
-
-The estimated coefficients from our model are $\beta_0=13,289$ and $\beta_1=111.7$.
-
-We interpret the intercept, $\beta_0=13,289$, as the estimated mean sale price when the square footage is 0. While this interpretation may not be meaningful in a real-world context (since a house with 0 square footage does not exist), it serves as a baseline for our model.
-
-We interpret the slope coefficient, $\beta_1=111.7$, as the estimated change in mean sale price for each additional square foot of living area. Specifically, for each one-unit increase in square footage, the mean sale price is estimated to increase by \$111.7, holding all else constant. This indicates a positive relationship between square footage and sale price in our sample.
-
-::: {style="color: orange"}
-### Inference in Simple Linear Regression
-:::
-
-In addition to estimating the coefficients, we can also perform hypothesis tests and construct confidence intervals to assess the statistical significance and precision of our estimates.
-
-#### Accuracy of the Least Squares Estimates
-
-How accurate are the least squares estimates of $\beta_0$ and $\beta_1$?
-
-Point estimates by themselves are not very informative. It is often desirable to associate an estimate with some measure of its variability.
-
-#### Standard Errors
-
-The variability of an estimate is typically measured by its **standard error (SE)**, which is the square root of its variance.
-
-If we assume the errors in the linear regression model are i.i.d. $\sim (0, \sigma^2)$, then simple expressions for the SEs of the estimated coefficients exist. These are displayed in the **`Std. Error`** column of the output from `summary()`.
-
-#### t-Tests for Coefficients
-
-From these SEs, we can derive t-tests to determine whether individual coefficients are significantly different from zero.
-
-The t-statistic is defined as:
-
-$$
-t = \frac{\hat{\beta}_j}{SE(\hat{\beta}_j)}
-$$
-
-In R’s `summary()` output, this corresponds to the **`t value`** column.\
-- The reported t-statistic measures how many standard errors the coefficient is away from zero.\
-- Large absolute values (greater than about 2) suggest statistical significance at the $\alpha = 0.05$ level.\
-- The corresponding p-values are given in the **`Pr(>|t|)`** column.
-
-#### Confidence Intervals for Coefficients
-
-Under the same assumptions, we can also construct confidence intervals for each coefficient. The traditional $100(1-\alpha)\%$ confidence interval for $\beta_j$ is:
-
-$$
-\hat{\beta}_j \pm t_{1-\alpha/2, \, n-p} \cdot SE(\hat{\beta}_j)
-$$
-
-In R, one-at-a-time confidence intervals for regression coefficients can be obtained with the `confint()` function.
-
-\
-For example, a 95% confidence interval for the coefficients in a simple linear regression model can be computed as:
+Substitute a value to make a prediction by hand:
 
 ```{r}
-confint(fit_slr, level = 0.95)
+b <- coef(fit)
+
+# A student who scored 14 in the first semester
+b[1] + b[2] * 14
+
+# The same thing, done properly
+predict(fit, newdata = data.frame(grade_sem1 = 14))
 ```
 
-In general, a 95% confidence interval for a parameter (say, a slope $\beta_1$) means:
+::: {.callout-tip icon="false"}
+## Quick Check
 
-> If we were to repeat the study many times (same design, new random samples each time), and for each sample we computed a 95% CI, then 95% of those intervals would contain the true parameter value.
-
-::: {style="color: orange"}
-### The Error Term
+1.  The slope is less than 1. A student scored 18 in the first semester. Does the model predict they will score above or below 18 next semester, and why?
+2.  Why can the residuals not simply be averaged without squaring them first?
 :::
 
-In the simple linear regression model
-
-$$
-Y_i = \beta_0 + \beta_1 X + \varepsilon_i
-$$
-
-the error term $\varepsilon$ is at the heart of the model.
-
--   The error term $\varepsilon$ represents the part of $Y$ that the model cannot explain with $X$.\
--   It captures **random noise**, measurement error, and the influence of variables not included in the model.\
--   Without $\varepsilon$, the regression line would perfectly fit every data point, which almost never happens in real data.
-
-::: {style="color: orange"}
-### Assumptions About the Error Term
+::: {style="color: yellow"}
+## 4. Training Performance Versus Generalization
 :::
 
-Classical linear regression (the Gauss and Markov framework) makes several key assumptions about $\varepsilon$:
+Everything so far used all the data at once. That tells us how well the line fits the students we already have, which is not the question we care about.
 
--   $E[\varepsilon] = 0$: on average, the errors cancel out (no systematic bias).\
--   $\text{Var}(\varepsilon) = \sigma^2$: the variance of errors is constant across all values of $X$ (**homoscedasticity**).\
--   Errors are independent of each other.\
--   Errors are uncorrelated with the predictor $X$.
+The question is how well it predicts students we have **never seen**.
 
-::: {style="color: orange"}
-### The Variance of the Error Term ($\sigma^2$)
+```{r}
+set.seed(559)
+
+# 70 percent of rows for training, the rest held back
+n         <- nrow(completers)
+train_idx <- sample(n, size = floor(0.7 * n))
+
+train <- completers[train_idx, ]
+test  <- completers[-train_idx, ]
+
+c(train = nrow(train), test = nrow(test))
+```
+
+```{r}
+# Estimate the coefficients using the training data only
+fit_train <- lm(grade_sem2 ~ grade_sem1, data = train)
+
+# Then predict the students the model has never seen
+predictions <- predict(fit_train, newdata = test)
+
+head(round(predictions, 2))
+```
+
+This is the overarching objective of the course: the coefficients (estimates of the parameters) come from the training data, the evaluation comes from the test data.
+
+::: {style="color: yellow"}
+## 5. How Do We Evaluate Predictions?
 :::
 
--   $\sigma^2$ measures how much the actual values of $Y$ scatter around the regression line.\
--   A smaller $\sigma^2$ means data points are tightly clustered around the line → better model fit.\
--   A larger $\sigma^2$ means more unexplained variability → less precise predictions.
+We have predictions and we have the truth. Now we need a number summarizing how far apart they are.
 
-In practice, $\sigma^2$ is unknown, so we estimate it with the **residual variance**:
+```{r}
+actual    <- test$grade_sem2
+residuals <- actual - predictions
+
+# MAE: average size of the error, ignoring direction
+mae <- mean(abs(residuals))
+
+# RMSE: square, average, then undo the squaring. Large misses count more.
+rmse <- sqrt(mean(residuals^2))
+
+c(MAE = mae, RMSE = rmse)
+```
+
+Both are in grade points, which is what makes them easy to talk about. An MAE of roughly 0.8 means the typical prediction is off by about eight tenths of a grade point on a 20 point scale.
+
+::: callout-note
+## MSE Versus RMSE
+
+Section 3 fit the model by minimizing MSE. Here we report RMSE. The two are closely related.
+
+-   **RMSE is the square root of MSE.** That is the only difference between them.
+-   **MSE is in squared units.** Here that means squared grade points, which are hard to interpret.
+-   **RMSE is back in the original units.** The square root returns it to grade points, so it can be read next to MAE.
+-   **Both pick the same model.** The coefficients with the smallest MSE also have the smallest RMSE, because taking a square root does not change which number is smaller.
+-   **An example:** if every prediction missed by 2 grade points, the MSE would be 4 and the RMSE would be 2.
+
+The usual habit is to minimize MSE when fitting, because the math is simpler, and to report RMSE when evaluating, because it is easier to read. On this test set the two happen to be almost equal, because the MSE is close to 1.
+:::
+
+**R squared** answers a different question, namely how much of the outcome's variation the model accounts for:
+
+```{r}
+r2 <- 1 - sum(residuals^2) / sum((actual - mean(actual))^2)
+r2
+```
+
+It is unitless, which makes it easy to compare across problems and easy to over read. For a first lecture, prefer MAE and RMSE, because their units are the units of the thing you are predicting.
+
+::: {style="color: lightblue"}
+### Always Compare Against a Baseline
+:::
+
+A metric on its own is hard to judge. Whether an RMSE of 1.0 is good depends on what you compare it to.
+
+The simplest baseline ignores the predictor entirely and guesses the same value for everybody. The right value to guess is the **training** mean, because the test set is supposed to be unavailable when you build anything.
+
+```{r}
+baseline_prediction <- mean(train$grade_sem2)
+
+baseline_mae  <- mean(abs(actual - baseline_prediction))
+baseline_rmse <- sqrt(mean((actual - baseline_prediction)^2))
+
+rbind(
+  model    = c(MAE = mae,          RMSE = rmse),
+  baseline = c(MAE = baseline_mae, RMSE = baseline_rmse)
+)
+```
+
+The model is better than guessing the average, and the table shows by how much.
+
+::: {.callout-important icon="false"}
+## Use the Training Mean, Not the Test Mean
+
+Compute the baseline from the training set, even though you evaluate on the test set. The test set is meant to be unavailable while you build the model. A baseline computed from test data has already used it, so it is not a fair comparison.
+:::
+
+::: {style="color: yellow"}
+## 6. From One Predictor to Several
+:::
+
+Nothing about the machinery changes when you add predictors. The equation just gets longer:
 
 $$
-s^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - 2}
+\hat{y} = b_0 + b_1 x_1 + b_2 x_2
 $$
 
-where:\
-- $y_i$: the observed outcome,\
-- $\hat{y}_i$: the predicted outcome,\
-- $n$: the sample size,\
-- denominator $n-2$ accounts for the two estimated parameters ($\beta_0, \beta_1$).
+Each coefficient describes how the prediction changes for a one unit increase in its own predictor, **holding the others constant**.
+
+```{r}
+fit_multi <- lm(grade_sem2 ~ grade_sem1 + admission_grade + scholarship,
+                data = train)
+
+coef(fit_multi)
+```
+
+Did it help?
+
+```{r}
+pred_multi <- predict(fit_multi, newdata = test)
+
+c(one_predictor   = rmse,
+  three_predictors = sqrt(mean((actual - pred_multi)^2)))
+```
+
+Only slightly. [Multiple Linear Regression](week3_2.qmd) looks at this in more detail.
+
+::: {style="color: yellow"}
+## 7. What Does "Linear" Actually Mean?
+:::
+
+Students often assume linear regression can only describe straight lines. It can also describe curves.
+
+Linear regression is linear **in its coefficients**, not in its predictors. The predictors can be transformed however you like, and the model is still a linear model.
+
+```{r}
+# A squared term is allowed. I() tells R to treat ^2 as arithmetic
+# rather than as special formula syntax.
+fit_curved <- lm(grade_sem2 ~ grade_sem1 + I(grade_sem1^2), data = train)
+
+coef(fit_curved)
+```
+
+```{r}
+ggplot(train, aes(grade_sem1, grade_sem2)) +
+  geom_point(alpha = 0.15) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE,
+              aes(color = "straight line")) +
+  geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE,
+              aes(color = "with squared term")) +
+  scale_color_manual(values = c("straight line" = "orange",
+                                "with squared term" = "steelblue"), name = NULL) +
+  labs(x = "First semester grade", y = "Second semester grade") +
+  theme_minimal(base_size = 14)
+```
+
+If the true pattern curves and you insist on a straight line, the model is **underfitting**: it is too simple to capture what is there, and it will be wrong in a systematic, predictable direction rather than at random.
+
+::: {style="color: yellow"}
+## 8. When Might Linear Regression Fail?
+:::
+
+
+::: {style="color: lightblue"}
+### Predictors That Are Pure Noise
+:::
+
+Here we add 20 predictors of random numbers to a small training sample of 30 students.
+
+```{r}
+set.seed(559)
+
+small_train <- train[1:30, ]
+noise_test  <- test
+
+# 20 columns of pure random noise, in both the training and test data
+for (j in 1:20) {
+  small_train[[paste0("noise", j)]] <- rnorm(nrow(small_train))
+  noise_test[[paste0("noise", j)]]  <- rnorm(nrow(noise_test))
+}
+
+f <- as.formula(paste("grade_sem2 ~ grade_sem1 +",
+                      paste0("noise", 1:20, collapse = " + ")))
+
+fit_noise <- lm(f, data = small_train)
+
+# How good does it look on the data it was fit to?
+summary(fit_noise)$r.squared
+```
+
+The training R squared is high. Now score the model on students it has never seen, alongside a model with only `grade_sem1` and the baseline:
+
+```{r}
+fit_small <- lm(grade_sem2 ~ grade_sem1, data = small_train)
+
+c(
+  with_noise   = sqrt(mean((noise_test$grade_sem2 - predict(fit_noise, noise_test))^2)),
+  no_noise     = sqrt(mean((test$grade_sem2      - predict(fit_small, test))^2)),
+  baseline     = sqrt(mean((test$grade_sem2      - mean(small_train$grade_sem2))^2))
+)
+```
+
+The model with the noise predictors has a higher test RMSE than the baseline, so it predicts worse than guessing the average. The random columns carry no information, yet the training fit improved. With many predictors and few rows, a model can fit the noise in its training data.
+
+This is **overfitting**.
+
+::: {style="color: lightblue"}
+### Extrapolation
+:::
+
+```{r}
+# No student in the data has a first semester grade of 2, or of 25
+predict(fit, newdata = data.frame(grade_sem1 = c(2, 25)))
+```
+
+R returns both predictions without a warning, even though 2 is far below anything in the data and 25 is not a possible grade on the 0 to 20 scale.
+
+::: {.callout-tip icon="false"}
+## Discussion
+
+1.  Why does the fitted line not pass through every point?
+2.  We added 20 columns of pure noise and the training fit improved. Explain to somebody who has not taken this course why that happened.
+:::
+
+
+
+Next: [Multiple Linear Regression](week3_2.qmd).

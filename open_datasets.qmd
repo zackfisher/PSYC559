@@ -65,6 +65,18 @@ The current `gssr` cumulative file packages the 1972 to 2024 GSS with **75,699 r
 
 **Project questions.** Predict self-reported happiness from social, economic, and attitudinal variables. Predict confidence in institutions. Predict social trust. Predict attitudes toward a social issue from broader values. Compare accuracy across historical periods.
 
+`gssr` is **not on CRAN**, so it needs a non-standard install. Run this once in the console:
+
+```r
+install.packages("remotes")
+remotes::install_github("kjhealy/gssr")
+
+# optional companion that puts the GSS codebook into R's help system
+remotes::install_github("kjhealy/gssrdoc")
+```
+
+The author also publishes it through r-universe, if you prefer that route:
+
 ```r
 install.packages(
   "gssr",
@@ -73,12 +85,14 @@ install.packages(
     "https://cloud.r-project.org"
   )
 )
+```
 
+Then:
+
+```r
 library(gssr)
 data(gss_all)
 ```
-
-The companion `gssrdoc` package integrates much of the codebook into R help.
 
 **Caution.** Do not throw all 7,000 variables blindly into a model. You need a substantively justified set of candidate features, and choosing it is part of the work.
 

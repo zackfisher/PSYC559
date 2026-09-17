@@ -27,6 +27,21 @@ sees them. It is usually where most of the work in an applied project goes.
 
 # Setup
 
+One of these packages needs a non-standard install. **`gssr` is not on CRAN**, so
+`install.packages("gssr")` will fail. It comes from the author's GitHub instead.
+
+Run this once in the console, not in this document, and then knit as usual.
+
+```{r install, eval=FALSE}
+install.packages("remotes")
+remotes::install_github("kjhealy/gssr")
+
+# optional: puts the GSS codebook into R's help system
+remotes::install_github("kjhealy/gssrdoc")
+```
+
+Everything else here is on CRAN and installs normally with `install.packages()`.
+
 ```{r packages, cache=FALSE}
 library(gssr)        # downloading the General Social Survey data
 library(dplyr)       # data manipulation and the pipe

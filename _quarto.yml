@@ -4,6 +4,9 @@ project:
   resources:
     - data/ifood_df.csv
     - data/data.RDS
+    - data/dropout.csv
+    - data/data-final-shuffled.csv
+    - data/data-final.RDS
     - rmd/
   render:
     - index.qmd
@@ -26,6 +29,7 @@ project:
     - week2_5f.qmd
     - week2_5g.qmd
     - week3_1.qmd
+    - week3_1b_inference.qmd
     - week3_2.qmd
     - week3_3.qmd
     - week3_4.qmd
@@ -117,6 +121,7 @@ website:
       - section: "Regression Methods"
         contents:
           - week3_1.qmd
+          - week3_1b_inference.qmd
           - week3_2.qmd
           - week3_3.qmd
           - week3_4.qmd

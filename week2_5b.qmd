@@ -26,7 +26,40 @@ A video introduction to the General Social Survey, covering what it is and how i
 
 There are two ways to access the GSS data. One is using the [GSS Data Explorer](#0). Another option is using the `gssr` [@gssr] R package. Here we will use the `gssr` [@gssr] package to download some example data.
 
-To follow along, load these two packages first.
+::: {.callout-warning icon="false"}
+## Installing `gssr` First
+
+`gssr` is **not on CRAN**, so plain `install.packages("gssr")` will fail with a message saying the package is not available. It is distributed from the author's GitHub instead, so you install it with the `remotes` package.
+
+Run these lines **once, in the console**. As always, they do not belong in a document.
+
+```{r, eval=FALSE}
+# remotes is on CRAN, so this part is an ordinary install
+install.packages("remotes")
+
+# the data package itself
+remotes::install_github("kjhealy/gssr")
+
+# optional companion that puts the GSS codebook into R's help system
+remotes::install_github("kjhealy/gssrdoc")
+```
+
+If `install_github()` gives you trouble, the author also publishes the package through r-universe, which behaves like a normal install once you point it at the right repository:
+
+```{r, eval=FALSE}
+install.packages(
+  "gssr",
+  repos = c(
+    "https://kjhealy.r-universe.dev",
+    "https://cloud.r-project.org"
+  )
+)
+```
+
+Either route works. You only need one.
+:::
+
+Once it is installed, load these two packages to follow along.
 
 ```{r}
 library(gssr)   # downloading the GSS data

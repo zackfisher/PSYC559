@@ -337,6 +337,12 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./week3_1b_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inference in Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./week3_2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Multiple Linear Regression</span></a>
   </div>
@@ -409,13 +415,24 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview-of-simple-linear-regression" id="toc-overview-of-simple-linear-regression" class="nav-link active" data-scroll-target="#overview-of-simple-linear-regression">Overview of Simple Linear Regression</a></li>
-  <li><a href="#example-data-ames-housing" id="toc-example-data-ames-housing" class="nav-link" data-scroll-target="#example-data-ames-housing">Example Data: Ames Housing</a></li>
-  <li><a href="#simple-linear-regression-in-r" id="toc-simple-linear-regression-in-r" class="nav-link" data-scroll-target="#simple-linear-regression-in-r">Simple Linear Regression in R</a></li>
-  <li><a href="#inference-in-simple-linear-regression" id="toc-inference-in-simple-linear-regression" class="nav-link" data-scroll-target="#inference-in-simple-linear-regression">Inference in Simple Linear Regression</a></li>
-  <li><a href="#the-error-term" id="toc-the-error-term" class="nav-link" data-scroll-target="#the-error-term">The Error Term</a></li>
-  <li><a href="#assumptions-about-the-error-term" id="toc-assumptions-about-the-error-term" class="nav-link" data-scroll-target="#assumptions-about-the-error-term">Assumptions About the Error Term</a></li>
-  <li><a href="#the-variance-of-the-error-term-sigma2" id="toc-the-variance-of-the-error-term-sigma2" class="nav-link" data-scroll-target="#the-variance-of-the-error-term-sigma2">The Variance of the Error Term (<span class="math inline">\(\sigma^2\)</span>)</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#what-problem-does-linear-regression-solve" id="toc-what-problem-does-linear-regression-solve" class="nav-link" data-scroll-target="#what-problem-does-linear-regression-solve">1. What Problem Does Linear Regression Solve?</a></li>
+  <li><a href="#a-data-decision-first" id="toc-a-data-decision-first" class="nav-link" data-scroll-target="#a-data-decision-first">A Data Decision First</a></li>
+  <li><a href="#plotting-the-data" id="toc-plotting-the-data" class="nav-link" data-scroll-target="#plotting-the-data">Plotting the Data</a></li>
+  <li><a href="#from-a-scatterplot-to-a-prediction-equation" id="toc-from-a-scatterplot-to-a-prediction-equation" class="nav-link" data-scroll-target="#from-a-scatterplot-to-a-prediction-equation">2. From a Scatterplot to a Prediction Equation</a></li>
+  <li><a href="#how-does-the-algorithm-learn" id="toc-how-does-the-algorithm-learn" class="nav-link" data-scroll-target="#how-does-the-algorithm-learn">3. How Does the Algorithm Learn?</a></li>
+  <li><a href="#residuals" id="toc-residuals" class="nav-link" data-scroll-target="#residuals">Residuals</a></li>
+  <li><a href="#the-loss-function" id="toc-the-loss-function" class="nav-link" data-scroll-target="#the-loss-function">The Loss Function</a></li>
+  <li><a href="#scoring-one-candidate-line" id="toc-scoring-one-candidate-line" class="nav-link" data-scroll-target="#scoring-one-candidate-line">Scoring One Candidate Line</a></li>
+  <li><a href="#fitting-it-properly" id="toc-fitting-it-properly" class="nav-link" data-scroll-target="#fitting-it-properly">Fitting It Properly</a></li>
+  <li><a href="#training-performance-versus-generalization" id="toc-training-performance-versus-generalization" class="nav-link" data-scroll-target="#training-performance-versus-generalization">4. Training Performance Versus Generalization</a></li>
+  <li><a href="#how-do-we-evaluate-predictions" id="toc-how-do-we-evaluate-predictions" class="nav-link" data-scroll-target="#how-do-we-evaluate-predictions">5. How Do We Evaluate Predictions?</a></li>
+  <li><a href="#always-compare-against-a-baseline" id="toc-always-compare-against-a-baseline" class="nav-link" data-scroll-target="#always-compare-against-a-baseline">Always Compare Against a Baseline</a></li>
+  <li><a href="#from-one-predictor-to-several" id="toc-from-one-predictor-to-several" class="nav-link" data-scroll-target="#from-one-predictor-to-several">6. From One Predictor to Several</a></li>
+  <li><a href="#what-does-linear-actually-mean" id="toc-what-does-linear-actually-mean" class="nav-link" data-scroll-target="#what-does-linear-actually-mean">7. What Does “Linear” Actually Mean?</a></li>
+  <li><a href="#when-might-linear-regression-fail" id="toc-when-might-linear-regression-fail" class="nav-link" data-scroll-target="#when-might-linear-regression-fail">8. When Might Linear Regression Fail?</a></li>
+  <li><a href="#predictors-that-are-pure-noise" id="toc-predictors-that-are-pure-noise" class="nav-link" data-scroll-target="#predictors-that-are-pure-noise">Predictors That Are Pure Noise</a></li>
+  <li><a href="#extrapolation" id="toc-extrapolation" class="nav-link" data-scroll-target="#extrapolation">Extrapolation</a></li>
   </ul>
 </nav>
     </div>
@@ -441,152 +458,322 @@ window.Quarto = {
 </header>
 
 
-<section id="overview-of-simple-linear-regression" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="overview-of-simple-linear-regression">Overview of Simple Linear Regression</h2>
+<p>Linear regression is usually taught as a statistical model for testing hypotheses.</p>
+<p>In this course we will generally treat linear regression as a <strong>prediction algorithm</strong>.</p>
+<p>In this way it learns coefficients from data by minimizing a loss function, uses them to predict new cases, and gets evaluated on data it has never seen.</p>
+<p>For now we will skip a discussion of inference in linear regression, but for those who are interested the material can be found here: <a href="./week3_1b_inference.html">Inference in Linear Regression</a>.</p>
+<section id="setup" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
 </section>
-<p>Simple linear regression is a statistical method used to model the relationship between two variables:<br>
-- <strong>one feature</strong> (also called the predictor or independent variable),<br>
-- <strong>one target</strong> (also called the outcome or dependent variable).</p>
-<p>The general form of a simple linear regression model is:</p>
-<p><span class="math display">\[
-Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i, \quad \quad \text{for}\:i=1,2,\dots,n
-\]</span></p>
-<p>where:<br>
-- <span class="math inline">\(Y_i\)</span> : the ith observation on the target variable we want to predict.<br>
-- <span class="math inline">\(X\)</span> : the ith observation of the feature (or predictor) variable.<br>
-- <span class="math inline">\(\beta_0\)</span>: the intercept, which represents the expected value of <span class="math inline">\(Y\)</span> when <span class="math inline">\(X=0\)</span>.<br>
-- <span class="math inline">\(\beta_1\)</span>: the slope, which tells us how much <span class="math inline">\(Y\)</span> changes for a one-unit increase in <span class="math inline">\(X\)</span><br>
-- <span class="math inline">\(\varepsilon_i\)</span>: the ith observation of the error term, which captures random variation not explained by <span class="math inline">\(X\)</span>.</p>
-<p>In practice, we estimate the parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> using data by minimizing the residual sum of squares (RSS). It can be helpful to visualize what is meant by residual sum of squares and the fitted or optimal regression line.</p>
-<div class="quarto-figure quarto-figure-center">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)   <span class="co"># data manipulation and the pipe</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># plots</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)  <span class="co"># missing data visualization</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We use the <strong>student dropout and academic success</strong> data throughout the regression unit. The same dataset returns in <a href="./week3_2.html">Multiple Linear Regression</a> and again in the logistic regression pages, where the outcome changes to a dichotomous variable.</p>
+<ul>
+<li>4,424 students from a Portuguese higher education institution.</li>
+<li>36 features covering demographics, socio-economic background, and academic record.</li>
+<li>Grades are on the Portuguese 0 to 20 scale.</li>
+<li><a href="data/dropout.csv">Download <code>dropout.csv</code></a>, or get it from the <a href="https://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success">UCI Repository</a>.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The file is semicolon separated, which is common in European data, so</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># read.csv needs to be told that with sep = ";"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>dropout <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/dropout.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># The original column names are long and full of dots once R cleans them up.</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Renaming the handful we use keeps the code below readable.</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>dropout <span class="ot">&lt;-</span> dropout <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">grade_sem1      =</span> Curricular.units<span class="fl">.1</span>st.sem..grade.,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">grade_sem2      =</span> Curricular.units<span class="fl">.2</span>nd.sem..grade.,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">admission_grade =</span> Admission.grade,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">age             =</span> Age.at.enrollment,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">scholarship     =</span> Scholarship.holder,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">fees_current    =</span> Tuition.fees.up.to.date</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(dropout)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4424   37</code></pre>
+</div>
+</div>
+<section id="what-problem-does-linear-regression-solve" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="what-problem-does-linear-regression-solve">1. What Problem Does Linear Regression Solve?</h2>
+</section>
+<p>Linear regression predicts a <strong>continuous outcome</strong> from one or more input variables.</p>
+<p>Our question: <strong>can we predict a student’s second semester grade from their first semester grade?</strong></p>
+<p>That is a regression problem because the answer is a number, a grade somewhere on the 0 to 20 scale.</p>
+<section id="a-data-decision-first" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="a-data-decision-first">A Data Decision First</h3>
+</section>
+<p>Before modelling anything, look at the data. Start where the <a href="./week2_5c.html">Missing Data</a> page told you to start.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Black would mark missing values, gray observed ones.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 37 column names are too many to read, so they are hidden.</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(dropout, <span class="at">warn_large_data =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"37 columns"</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
 <figure class="figure">
-<p><img src="images/rss.jpg" class="img-fluid figure-img" width="1000"></p>
-<figcaption>https://wallstreetmojo-files.s3.ap-south-1.amazonaws.com/2022/05/Residual-sum-of-squares.jpg</figcaption>
+<p><img src="week3_1_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-<p>Once we have estimated the coefficients by finding the coefficients that minimize the RSS, the fitted equation can then be written as:</p>
-<p><span class="math display">\[
-\hat{Y}_i = b_0 + b_1 X_i
-\]</span></p>
-<p>where <span class="math inline">\(\hat{Y}_i\)</span> is the predicted value of <span class="math inline">\(Y\)</span> for the ith case (or person), and <span class="math inline">\(b_0, b_1\)</span> are the estimated coefficients from the sample data.</p>
-<p>This simple framework allows us to understand how two variables are related and to make predictions about <span class="math inline">\(Y\)</span> given new values of <span class="math inline">\(X\)</span>.</p>
-<section id="example-data-ames-housing" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="example-data-ames-housing">Example Data: Ames Housing</h2>
-</section>
-<p>The <strong>Ames Housing dataset</strong> is a widely used dataset in regression and machine learning tutorials. It contains detailed information about residential homes in Ames, Iowa, and is often used to predict <strong>sale prices</strong> of homes based on various characteristics. For the regression chapters we will use the Ames Housing dataset to illustrate concepts in linear regression.</p>
-<ul>
-<li>Originally collected by Dean De Cock for data science education purposes.<br>
-</li>
-<li>Available in R via the <code>AmesHousing</code> or <code>modeldata</code> packages.<br>
-</li>
-<li>Contains 2930 observations (homes) and 82 variables describing different aspects of the homes.</li>
-</ul>
-<p>The dataset includes a mix of <strong>numerical, categorical, and ordinal variables</strong> covering:</p>
-<ol type="1">
-<li><strong>Property Characteristics</strong>
-<ul>
-<li>Lot area (<code>Lot_Area</code>), lot shape (<code>Lot``_``Shape</code>), overall quality (<code>Overall``_``Qual</code>), overall condition (<code>Overall``_``Cond</code>)</li>
-</ul></li>
-<li><strong>Building Attributes</strong>
-<ul>
-<li>Year built (<code>Year``_``Built</code>), year remodeled (<code>Year``_``Remod``_``Add</code>), total square footage (<code>Gr``_``Liv``_``Area</code>), basement area (<code>Total``_``Bsmt``_``SF</code>)</li>
-</ul></li>
-<li><strong>Garage Features</strong>
-<ul>
-<li>Garage type (<code>Garage``_``Type</code>), number of cars (<code>Garage``_``Cars</code>), garage area (<code>Garage``_``Area</code>)</li>
-</ul></li>
-<li><strong>Exterior and Structural Details</strong>
-<ul>
-<li>Exterior material (<code>Exter``_``Qual</code>), roof style (<code>Roof``_``Style</code>), foundation type (<code>Foundation</code>)</li>
-</ul></li>
-<li><strong>Neighborhood Information</strong>
-<ul>
-<li>Neighborhood (<code>Neighborhood</code>) describing location and local characteristics</li>
-</ul></li>
-<li><strong>Sale Information</strong>
-<ul>
-<li>Sale price (<code>Sale``_``Price</code>), the target variable</li>
-<li>Sale condition (<code>Sale``_``Condition</code>)</li>
-</ul></li>
-</ol>
+</div>
+</div>
+<p>The plot is entirely gray, so no values are missing.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install and load package</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("AmesHousing")</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AmesHousing)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>ames <span class="ot">&lt;-</span> <span class="fu">make_ames</span>()</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># View first few rows</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ames)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confirm it directly</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(dropout))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 81
-  MS_SubClass             MS_Zoning Lot_Frontage Lot_Area Street Alley Lot_Shape
-  &lt;fct&gt;                   &lt;fct&gt;            &lt;dbl&gt;    &lt;int&gt; &lt;fct&gt;  &lt;fct&gt; &lt;fct&gt;    
-1 One_Story_1946_and_New… Resident…          141    31770 Pave   No_A… Slightly…
-2 One_Story_1946_and_New… Resident…           80    11622 Pave   No_A… Regular  
-3 One_Story_1946_and_New… Resident…           81    14267 Pave   No_A… Slightly…
-4 One_Story_1946_and_New… Resident…           93    11160 Pave   No_A… Regular  
-5 Two_Story_1946_and_New… Resident…           74    13830 Pave   No_A… Slightly…
-6 Two_Story_1946_and_New… Resident…           78     9978 Pave   No_A… Slightly…
-# ℹ 74 more variables: Land_Contour &lt;fct&gt;, Utilities &lt;fct&gt;, Lot_Config &lt;fct&gt;,
-#   Land_Slope &lt;fct&gt;, Neighborhood &lt;fct&gt;, Condition_1 &lt;fct&gt;, Condition_2 &lt;fct&gt;,
-#   Bldg_Type &lt;fct&gt;, House_Style &lt;fct&gt;, Overall_Qual &lt;fct&gt;, Overall_Cond &lt;fct&gt;,
-#   Year_Built &lt;int&gt;, Year_Remod_Add &lt;int&gt;, Roof_Style &lt;fct&gt;, Roof_Matl &lt;fct&gt;,
-#   Exterior_1st &lt;fct&gt;, Exterior_2nd &lt;fct&gt;, Mas_Vnr_Type &lt;fct&gt;,
-#   Mas_Vnr_Area &lt;dbl&gt;, Exter_Qual &lt;fct&gt;, Exter_Cond &lt;fct&gt;, Foundation &lt;fct&gt;,
-#   Bsmt_Qual &lt;fct&gt;, Bsmt_Cond &lt;fct&gt;, Bsmt_Exposure &lt;fct&gt;, …</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of key variables</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ames<span class="sc">$</span>Sale_Price)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  12789  129500  160000  180796  213500  755000 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ames<span class="sc">$</span>Gr_Liv_Area)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    334    1126    1442    1500    1743    5642 </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ames<span class="sc">$</span>Neighborhood)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-                             North_Ames                           College_Creek 
-                                    443                                     267 
-                               Old_Town                                 Edwards 
-                                    239                                     194 
-                               Somerset                      Northridge_Heights 
-                                    182                                     166 
-                                Gilbert                                  Sawyer 
-                                    165                                     151 
-                         Northwest_Ames                             Sawyer_West 
-                                    131                                     125 
-                               Mitchell                               Brookside 
-                                    114                                     108 
-                               Crawford                  Iowa_DOT_and_Rail_Road 
-                                    103                                      93 
-                             Timberland                              Northridge 
-                                     72                                      71 
-                            Stone_Brook South_and_West_of_Iowa_State_University 
-                                     51                                      48 
-                            Clear_Creek                          Meadow_Village 
-                                     44                                      37 
-                              Briardale                     Bloomington_Heights 
-                                     30                                      28 
-                                Veenker                         Northpark_Villa 
-                                     24                                      23 
-                                Blueste                                  Greens 
-                                     10                                       8 
-                            Green_Hills                                Landmark 
-                                      2                                       1 
-                            Hayden_Lake 
-                                      0 </code></pre>
+<pre><code>[1] 0</code></pre>
 </div>
 </div>
-<section id="simple-linear-regression-in-r" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="simple-linear-regression-in-r">Simple Linear Regression in R</h2>
+<p>So the data look clear but let’s dig a little further.</p>
+<section id="plotting-the-data" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="plotting-the-data">Plotting the Data</h3>
 </section>
-<p>We can fit a simple linear regression model using the <code>lm()</code> function in R. Note we are not using cross-validation here, simply fitting the training data to illustrate the concept of simple linear regression.</p>
+<p>Look at the outcome itself rather than at its missingness.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dropout, <span class="fu">aes</span>(grade_sem2)) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">60</span>, <span class="at">fill =</span> <span class="st">"orange"</span>) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Second semester grade"</span>, <span class="at">y =</span> <span class="st">"Number of students"</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week3_1_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There is a tall spike at zero, then <strong>nothing at all until 10</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How many students sit at exactly zero?</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(dropout<span class="sc">$</span>grade_sem2 <span class="sc">==</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 870</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What is the lowest grade among everybody else?</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(dropout<span class="sc">$</span>grade_sem2[dropout<span class="sc">$</span>grade_sem2 <span class="sc">&gt;</span> <span class="dv">0</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+</div>
+<p>The zeros are not low grades. Here zero might be a missingness <strong>code</strong>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Of the students with a grade of zero, how many approved zero units?</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dropout <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(grade_sem2 <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">students          =</span> <span class="fu">n</span>(),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">approved_no_units =</span> <span class="fu">sum</span>(Curricular.units<span class="fl">.2</span>nd.sem..approved. <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  students approved_no_units
+1      870               870</code></pre>
+</div>
+</div>
+<p>Every student with a grade of zero completed no curricular units, so there was no grade to record and the field was filled with a zero instead.</p>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Missing Data Coded as a Value
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>On the <a href="./week2_5c.html">Missing Data</a> page we recoded placeholder values like <code>-99</code> into <code>NA</code> so that R would treat them as missing. This is the same problem, but harder to spot, because <code>0</code> is a plausible grade.</p>
+<p><code>vis_miss()</code> and <code>is.na()</code> do not catch it, and <code>summary()</code> reports a mean that averages real grades together with non-grades.</p>
+<p>Plotting the outcome is what caught it.</p>
+</div>
+</div>
+<p>Mixing these two groups would mean fitting one line through students who completed units and students who completed none.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep students who actually completed units in both semesters</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>completers <span class="ot">&lt;-</span> dropout <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(grade_sem1 <span class="sc">&gt;</span> <span class="dv">0</span>, grade_sem2 <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(completers)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3512</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(completers<span class="sc">$</span>grade_sem2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  10.00   11.75   12.67   12.75   13.67   18.57 </code></pre>
+</div>
+</div>
+<section id="from-a-scatterplot-to-a-prediction-equation" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="from-a-scatterplot-to-a-prediction-equation">2. From a Scatterplot to a Prediction Equation</h2>
+</section>
+<p>Start by looking at the relationship.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(completers, <span class="fu">aes</span>(<span class="at">x =</span> grade_sem1, <span class="at">y =</span> grade_sem2)) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"orange"</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"First semester grade"</span>, <span class="at">y =</span> <span class="st">"Second semester grade"</span>) <span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week3_1_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The orange line is the prediction equation. Written out, it is:</p>
+<p><span class="math display">\[
+\hat{y} = b_0 + b_1 x
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\hat{y}\)</span> is the <strong>predicted</strong> second semester grade. The hat means predicted rather than observed.</li>
+<li><span class="math inline">\(x\)</span> is the first semester grade.</li>
+<li><span class="math inline">\(b_0\)</span> is the <strong>intercept</strong>: the prediction when <span class="math inline">\(x = 0\)</span>.</li>
+<li><span class="math inline">\(b_1\)</span> is the <strong>slope</strong>: how much the prediction moves for a one point increase in <span class="math inline">\(x\)</span>.</li>
+</ul>
+<p>This equation produces a prediction for any value of <span class="math inline">\(x\)</span>, including values no student in the data had. That is what makes it a prediction algorithm.</p>
+<p>Our intercept and slope coefficients from a regression are estimates of <strong>parameters</strong> learned from the data, not hyperparameters supplied during learning.</p>
+<section id="how-does-the-algorithm-learn" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="how-does-the-algorithm-learn">3. How Does the Algorithm Learn?</h2>
+</section>
+<p>The algorithm does not know the right coefficients in advance. It <strong>searches for the coefficients that make its predictions as close as possible to the observed outcomes.</strong></p>
+<p>To do that it needs a definition of how close a prediction is.</p>
+<section id="residuals" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="residuals">Residuals</h3>
+</section>
+<p>For each student, the <strong>residual</strong> is what the model got wrong:</p>
+<p><span class="math display">\[
+e_i = y_i - \hat{y}_i
+\]</span></p>
+<p>Observed minus predicted. A positive residual means the student did better than predicted, a negative one means worse.</p>
+<p>Residuals cannot simply be averaged, because the positives and negatives would cancel. So we square them first, which also makes large misses count for much more than small ones.</p>
+<section id="the-loss-function" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="the-loss-function">The Loss Function</h3>
+</section>
+<p>Averaging the squared residuals gives the <strong>mean squared error</strong>:</p>
+<p><span class="math display">\[
+\operatorname{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2
+\]</span></p>
+<p>This is the <strong>loss function</strong>. It is a single number scoring how badly a given pair of coefficients does. Fitting the model means choosing <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> to make that number as small as possible.</p>
+<blockquote class="blockquote">
+<p><strong>Fitting a model means finding the coefficients that minimize a loss function.</strong></p>
+</blockquote>
+<p>This idea stays true for nearly every algorithm in the rest of the course. What changes later is the shape of the prediction equation and sometimes the choice of loss function. The idea of minimizing a loss does not change.</p>
+<section id="scoring-one-candidate-line" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="scoring-one-candidate-line">Scoring One Candidate Line</h3>
+</section>
+<p>Before searching over many coefficients, score one candidate by hand. Suppose the algorithm tries <span class="math inline">\(b_0 = 4\)</span> and <span class="math inline">\(b_1 = 0.7\)</span>. Take a student whose first semester grade was 14 and whose second semester grade was 15.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\hat{y} &amp;= b_0 + b_1 x = 4 + 0.7 \times 14 = 13.8 \\
+e &amp;= y - \hat{y} = 15 - 13.8 = 1.2 \\
+e^2 &amp;= 1.2^2 = 1.44
+\end{aligned}
+\]</span></p>
+<ul>
+<li><strong>Plug in</strong> the coefficients and the student’s <span class="math inline">\(x\)</span> to get the prediction <span class="math inline">\(\hat{y}\)</span>.</li>
+<li><strong>Subtract</strong> the prediction from the observed <span class="math inline">\(y\)</span> to get the residual <span class="math inline">\(e\)</span>.</li>
+<li><strong>Square</strong> the residual so it can be averaged.</li>
+</ul>
+<p>Now do the same thing for five students.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One candidate pair of coefficients</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Five real students from the data</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>five <span class="ot">&lt;-</span> dropout <span class="sc">%&gt;%</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">3949</span>, <span class="dv">551</span>, <span class="dv">2860</span>, <span class="dv">2066</span>, <span class="dv">2494</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(grade_sem1, grade_sem2) <span class="sc">%&gt;%</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y_hat    =</span> b0 <span class="sc">+</span> b1 <span class="sc">*</span> grade_sem1,  <span class="co"># plug x into the equation</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">residual =</span> grade_sem2 <span class="sc">-</span> y_hat,    <span class="co"># observed minus predicted</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">squared  =</span> residual<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>five</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  grade_sem1 grade_sem2 y_hat residual squared
+1         11       13.0  11.7      1.3    1.69
+2         12       12.0  12.4     -0.4    0.16
+3         13       12.5  13.1     -0.6    0.36
+4         14       15.0  13.8      1.2    1.44
+5         15       12.5  14.5     -2.0    4.00</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average the squared residuals to get the MSE for this candidate line</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(five<span class="sc">$</span>squared)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.53</code></pre>
+</div>
+</div>
+<p>The student from the formula is the fourth row. In the plot:</p>
+<ul>
+<li><strong>Filled dots</strong> are the observed grades <span class="math inline">\(y\)</span>.</li>
+<li><strong>Open dots</strong> on the orange line are the predictions <span class="math inline">\(\hat{y}\)</span>.</li>
+<li><strong>Dashed segments</strong> are the residuals <span class="math inline">\(e\)</span>.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week3_1_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For these five students, the MSE of this candidate line is 1.53. Change <span class="math inline">\(b_0\)</span> or <span class="math inline">\(b_1\)</span> and the line moves. Every <span class="math inline">\(\hat{y}\)</span> changes, every residual changes, and the MSE changes with them. Fitting is the search for the line where that number is smallest.</p>
+<p>Rather than trusting <code>lm()</code>, try a range of slopes and compute the loss for each:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the intercept at a sensible value and try many slopes</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>try_slopes <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">1.5</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># For each candidate slope, compute the mean squared error it produces</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>loss <span class="ot">&lt;-</span> <span class="fu">sapply</span>(try_slopes, <span class="cf">function</span>(b1) {</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  b0   <span class="ot">&lt;-</span> <span class="fu">mean</span>(completers<span class="sc">$</span>grade_sem2) <span class="sc">-</span> b1 <span class="sc">*</span> <span class="fu">mean</span>(completers<span class="sc">$</span>grade_sem1)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> b0 <span class="sc">+</span> b1 <span class="sc">*</span> completers<span class="sc">$</span>grade_sem1</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>((completers<span class="sc">$</span>grade_sem2 <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co"># The slope with the smallest loss</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>try_slopes[<span class="fu">which.min</span>(loss)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">slope =</span> try_slopes, <span class="at">mse =</span> loss), <span class="fu">aes</span>(slope, mse)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"orange"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> try_slopes[<span class="fu">which.min</span>(loss)], <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Candidate slope"</span>, <span class="at">y =</span> <span class="st">"Mean squared error"</span>) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week3_1_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The curve has one bottom, and the dashed line marks it. That is the slope the algorithm picks. <code>lm()</code> finds this point directly with algebra rather than by trying values, but it is solving the same problem.</p>
+<section id="fitting-it-properly" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="fitting-it-properly">Fitting It Properly</h3>
+</section>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(grade_sem2 <span class="sc">~</span> grade_sem1, <span class="at">data =</span> completers)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)  grade_sem1 
+  3.8489194   0.6978087 </code></pre>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -597,141 +784,314 @@ Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i, \quad \quad \text{for}\:i=1,2,\dots
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The first argument to <code>lm()</code> is a <strong>formula</strong>, written with the tilde <code>~</code>. Read the tilde as “modeled as a function of”: <code>Sale_Price ~ Gr_Liv_Area</code> means “predict <code>Sale_Price</code> using <code>Gr_Liv_Area</code>.” The target always goes on the left of the <code>~</code> and the features go on the right. Two extensions you’ll see soon:</p>
+<p>The first argument to <code>lm()</code> is a <strong>formula</strong>, written with the tilde <code>~</code>. Read the tilde as “modeled as a function of”: <code>grade_sem2 ~ grade_sem1</code> means “predict <code>grade_sem2</code> using <code>grade_sem1</code>.” The target always goes on the left of the <code>~</code> and the features go on the right. Two extensions you will see soon:</p>
 <ul>
-<li>Multiple features are joined with <code>+</code>, e.g.&nbsp;<code>y ~ x1 + x2</code> (next section).</li>
+<li>Multiple features are joined with <code>+</code>, e.g.&nbsp;<code>y ~ x1 + x2</code>.</li>
 <li><code>y ~ .</code> is shorthand for “use <em>all</em> other variables in the data as features.”</li>
 </ul>
-<p>This formula syntax isn’t specific to <code>lm()</code>. The same pattern reappears in <code>glm()</code>, <code>caret</code>, <code>tidymodels</code>, and most modeling functions in R, so it’s worth getting comfortable with it now.</p>
+<p>This formula syntax is not specific to <code>lm()</code>. The same pattern reappears in <code>glm()</code>, <code>caret</code>, <code>tidymodels</code>, and most modeling functions in R, so it is worth getting comfortable with now.</p>
 </div>
 </div>
-<p>For example, if we want to predict sale price (<code>Sale_Price</code>) based on house square footage (<code>Gr_Liv_Area</code>), we can use the following code:</p>
+<p>Reading the coefficients as predictions rather than as findings:</p>
+<ul>
+<li>The intercept is the predicted second semester grade for a student whose first semester grade was 0. No student in <code>completers</code> has a grade of 0, so this is a number the equation needs rather than a claim about anybody.</li>
+<li>The slope says that two students one grade point apart in the first semester are predicted to be about that fraction of a point apart in the second.</li>
+</ul>
+<p>Substitute a value to make a prediction by hand:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit_slr <span class="ot">&lt;-</span> <span class="fu">lm</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  Sale_Price <span class="sc">~</span> Gr_Liv_Area, </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> ames</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_slr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># A student who scored 14 in the first semester</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>b[<span class="dv">1</span>] <span class="sc">+</span> b[<span class="dv">2</span>] <span class="sc">*</span> <span class="dv">14</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = Sale_Price ~ Gr_Liv_Area, data = ames)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--483467  -30219   -1966   22728  334323 
-
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) 13289.634   3269.703   4.064 4.94e-05 ***
-Gr_Liv_Area   111.694      2.066  54.061  &lt; 2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 56520 on 2928 degrees of freedom
-Multiple R-squared:  0.4995,    Adjusted R-squared:  0.4994 
-F-statistic:  2923 on 1 and 2928 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre><code>(Intercept) 
+   13.61824 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The same thing, done properly</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">grade_sem1 =</span> <span class="dv">14</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1 
+13.61824 </code></pre>
 </div>
 </div>
-<p>We can interpret the results from summary in the following way:</p>
-<p>The estimated coefficients from our model are <span class="math inline">\(\beta_0=13,289\)</span> and <span class="math inline">\(\beta_1=111.7\)</span>.</p>
-<p>We interpret the intercept, <span class="math inline">\(\beta_0=13,289\)</span>, as the estimated mean sale price when the square footage is 0. While this interpretation may not be meaningful in a real-world context (since a house with 0 square footage does not exist), it serves as a baseline for our model.</p>
-<p>We interpret the slope coefficient, <span class="math inline">\(\beta_1=111.7\)</span>, as the estimated change in mean sale price for each additional square foot of living area. Specifically, for each one-unit increase in square footage, the mean sale price is estimated to increase by $111.7, holding all else constant. This indicates a positive relationship between square footage and sale price in our sample.</p>
-<section id="inference-in-simple-linear-regression" class="level3" style="color: orange">
-<h3 class="anchored" data-anchor-id="inference-in-simple-linear-regression">Inference in Simple Linear Regression</h3>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Quick Check
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>The slope is less than 1. A student scored 18 in the first semester. Does the model predict they will score above or below 18 next semester, and why?</li>
+<li>Why can the residuals not simply be averaged without squaring them first?</li>
+</ol>
+</div>
+</div>
+<section id="training-performance-versus-generalization" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="training-performance-versus-generalization">4. Training Performance Versus Generalization</h2>
 </section>
-<p>In addition to estimating the coefficients, we can also perform hypothesis tests and construct confidence intervals to assess the statistical significance and precision of our estimates.</p>
-<section id="accuracy-of-the-least-squares-estimates" class="level4">
-<h4 class="anchored" data-anchor-id="accuracy-of-the-least-squares-estimates">Accuracy of the Least Squares Estimates</h4>
-<p>How accurate are the least squares estimates of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>?</p>
-<p>Point estimates by themselves are not very informative. It is often desirable to associate an estimate with some measure of its variability.</p>
-</section>
-<section id="standard-errors" class="level4">
-<h4 class="anchored" data-anchor-id="standard-errors">Standard Errors</h4>
-<p>The variability of an estimate is typically measured by its <strong>standard error (SE)</strong>, which is the square root of its variance.</p>
-<p>If we assume the errors in the linear regression model are i.i.d. <span class="math inline">\(\sim (0, \sigma^2)\)</span>, then simple expressions for the SEs of the estimated coefficients exist. These are displayed in the <strong><code>Std. Error</code></strong> column of the output from <code>summary()</code>.</p>
-</section>
-<section id="t-tests-for-coefficients" class="level4">
-<h4 class="anchored" data-anchor-id="t-tests-for-coefficients">t-Tests for Coefficients</h4>
-<p>From these SEs, we can derive t-tests to determine whether individual coefficients are significantly different from zero.</p>
-<p>The t-statistic is defined as:</p>
-<p><span class="math display">\[
-t = \frac{\hat{\beta}_j}{SE(\hat{\beta}_j)}
-\]</span></p>
-<p>In R’s <code>summary()</code> output, this corresponds to the <strong><code>t value</code></strong> column.<br>
-- The reported t-statistic measures how many standard errors the coefficient is away from zero.<br>
-- Large absolute values (greater than about 2) suggest statistical significance at the <span class="math inline">\(\alpha = 0.05\)</span> level.<br>
-- The corresponding p-values are given in the <strong><code>Pr(&gt;|t|)</code></strong> column.</p>
-</section>
-<section id="confidence-intervals-for-coefficients" class="level4">
-<h4 class="anchored" data-anchor-id="confidence-intervals-for-coefficients">Confidence Intervals for Coefficients</h4>
-<p>Under the same assumptions, we can also construct confidence intervals for each coefficient. The traditional <span class="math inline">\(100(1-\alpha)\%\)</span> confidence interval for <span class="math inline">\(\beta_j\)</span> is:</p>
-<p><span class="math display">\[
-\hat{\beta}_j \pm t_{1-\alpha/2, \, n-p} \cdot SE(\hat{\beta}_j)
-\]</span></p>
-<p>In R, one-at-a-time confidence intervals for regression coefficients can be obtained with the <code>confint()</code> function.</p>
-<p><br>
-For example, a 95% confidence interval for the coefficients in a simple linear regression model can be computed as:</p>
+<p>Everything so far used all the data at once. That tells us how well the line fits the students we already have, which is not the question we care about.</p>
+<p>The question is how well it predicts students we have <strong>never seen</strong>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(fit_slr, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 70 percent of rows for training, the rest held back</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>n         <span class="ot">&lt;-</span> <span class="fu">nrow</span>(completers)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>train_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(n, <span class="at">size =</span> <span class="fu">floor</span>(<span class="fl">0.7</span> <span class="sc">*</span> n))</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> completers[train_idx, ]</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>test  <span class="ot">&lt;-</span> completers[<span class="sc">-</span>train_idx, ]</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">train =</span> <span class="fu">nrow</span>(train), <span class="at">test =</span> <span class="fu">nrow</span>(test))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                2.5 %     97.5 %
-(Intercept) 6878.4845 19700.7842
-Gr_Liv_Area  107.6429   115.7451</code></pre>
+<pre><code>train  test 
+ 2458  1054 </code></pre>
 </div>
 </div>
-<p>In general, a 95% confidence interval for a parameter (say, a slope <span class="math inline">\(\beta_1\)</span>) means:</p>
-<blockquote class="blockquote">
-<p>If we were to repeat the study many times (same design, new random samples each time), and for each sample we computed a 95% CI, then 95% of those intervals would contain the true parameter value.</p>
-</blockquote>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate the coefficients using the training data only</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>fit_train <span class="ot">&lt;-</span> <span class="fu">lm</span>(grade_sem2 <span class="sc">~</span> grade_sem1, <span class="at">data =</span> train)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Then predict the students the model has never seen</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_train, <span class="at">newdata =</span> test)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">round</span>(predictions, <span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    4     6     7    10    15    16 
+12.11 13.54 11.79 11.20 11.98 11.81 </code></pre>
+</div>
+</div>
+<p>This is the overarching objective of the course: the coefficients (estimates of the parameters) come from the training data, the evaluation comes from the test data.</p>
+<section id="how-do-we-evaluate-predictions" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="how-do-we-evaluate-predictions">5. How Do We Evaluate Predictions?</h2>
 </section>
-<section id="the-error-term" class="level3" style="color: orange">
-<h3 class="anchored" data-anchor-id="the-error-term">The Error Term</h3>
+<p>We have predictions and we have the truth. Now we need a number summarizing how far apart they are.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>actual    <span class="ot">&lt;-</span> test<span class="sc">$</span>grade_sem2</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>residuals <span class="ot">&lt;-</span> actual <span class="sc">-</span> predictions</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># MAE: average size of the error, ignoring direction</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>mae <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(residuals))</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># RMSE: square, average, then undo the squaring. Large misses count more.</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(residuals<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">MAE =</span> mae, <span class="at">RMSE =</span> rmse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      MAE      RMSE 
+0.7752931 1.0063456 </code></pre>
+</div>
+</div>
+<p>Both are in grade points, which is what makes them easy to talk about. An MAE of roughly 0.8 means the typical prediction is off by about eight tenths of a grade point on a 20 point scale.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>MSE Versus RMSE
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Section 3 fit the model by minimizing MSE. Here we report RMSE. The two are closely related.</p>
+<ul>
+<li><strong>RMSE is the square root of MSE.</strong> That is the only difference between them.</li>
+<li><strong>MSE is in squared units.</strong> Here that means squared grade points, which are hard to interpret.</li>
+<li><strong>RMSE is back in the original units.</strong> The square root returns it to grade points, so it can be read next to MAE.</li>
+<li><strong>Both pick the same model.</strong> The coefficients with the smallest MSE also have the smallest RMSE, because taking a square root does not change which number is smaller.</li>
+<li><strong>An example:</strong> if every prediction missed by 2 grade points, the MSE would be 4 and the RMSE would be 2.</li>
+</ul>
+<p>The usual habit is to minimize MSE when fitting, because the math is simpler, and to report RMSE when evaluating, because it is easier to read. On this test set the two happen to be almost equal, because the MSE is close to 1.</p>
+</div>
+</div>
+<p><strong>R squared</strong> answers a different question, namely how much of the outcome’s variation the model accounts for:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(residuals<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">sum</span>((actual <span class="sc">-</span> <span class="fu">mean</span>(actual))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>r2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4531134</code></pre>
+</div>
+</div>
+<p>It is unitless, which makes it easy to compare across problems and easy to over read. For a first lecture, prefer MAE and RMSE, because their units are the units of the thing you are predicting.</p>
+<section id="always-compare-against-a-baseline" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="always-compare-against-a-baseline">Always Compare Against a Baseline</h3>
 </section>
-<p>In the simple linear regression model</p>
+<p>A metric on its own is hard to judge. Whether an RMSE of 1.0 is good depends on what you compare it to.</p>
+<p>The simplest baseline ignores the predictor entirely and guesses the same value for everybody. The right value to guess is the <strong>training</strong> mean, because the test set is supposed to be unavailable when you build anything.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>baseline_prediction <span class="ot">&lt;-</span> <span class="fu">mean</span>(train<span class="sc">$</span>grade_sem2)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>baseline_mae  <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(actual <span class="sc">-</span> baseline_prediction))</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>baseline_rmse <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((actual <span class="sc">-</span> baseline_prediction)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">model    =</span> <span class="fu">c</span>(<span class="at">MAE =</span> mae,          <span class="at">RMSE =</span> rmse),</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">baseline =</span> <span class="fu">c</span>(<span class="at">MAE =</span> baseline_mae, <span class="at">RMSE =</span> baseline_rmse)</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               MAE     RMSE
+model    0.7752931 1.006346
+baseline 1.0834865 1.361074</code></pre>
+</div>
+</div>
+<p>The model is better than guessing the average, and the table shows by how much.</p>
+<div class="callout callout-style-default callout-important no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Use the Training Mean, Not the Test Mean
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compute the baseline from the training set, even though you evaluate on the test set. The test set is meant to be unavailable while you build the model. A baseline computed from test data has already used it, so it is not a fair comparison.</p>
+</div>
+</div>
+<section id="from-one-predictor-to-several" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="from-one-predictor-to-several">6. From One Predictor to Several</h2>
+</section>
+<p>Nothing about the machinery changes when you add predictors. The equation just gets longer:</p>
 <p><span class="math display">\[
-Y_i = \beta_0 + \beta_1 X + \varepsilon_i
+\hat{y} = b_0 + b_1 x_1 + b_2 x_2
 \]</span></p>
-<p>the error term <span class="math inline">\(\varepsilon\)</span> is at the heart of the model.</p>
-<ul>
-<li>The error term <span class="math inline">\(\varepsilon\)</span> represents the part of <span class="math inline">\(Y\)</span> that the model cannot explain with <span class="math inline">\(X\)</span>.<br>
-</li>
-<li>It captures <strong>random noise</strong>, measurement error, and the influence of variables not included in the model.<br>
-</li>
-<li>Without <span class="math inline">\(\varepsilon\)</span>, the regression line would perfectly fit every data point, which almost never happens in real data.</li>
-</ul>
-<section id="assumptions-about-the-error-term" class="level3" style="color: orange">
-<h3 class="anchored" data-anchor-id="assumptions-about-the-error-term">Assumptions About the Error Term</h3>
+<p>Each coefficient describes how the prediction changes for a one unit increase in its own predictor, <strong>holding the others constant</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fit_multi <span class="ot">&lt;-</span> <span class="fu">lm</span>(grade_sem2 <span class="sc">~</span> grade_sem1 <span class="sc">+</span> admission_grade <span class="sc">+</span> scholarship,</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> train)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_multi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    (Intercept)      grade_sem1 admission_grade     scholarship 
+     3.03836323      0.67528895      0.00822168      0.16012839 </code></pre>
+</div>
+</div>
+<p>Did it help?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>pred_multi <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_multi, <span class="at">newdata =</span> test)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">one_predictor   =</span> rmse,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">three_predictors =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((actual <span class="sc">-</span> pred_multi)<span class="sc">^</span><span class="dv">2</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   one_predictor three_predictors 
+        1.006346         1.006006 </code></pre>
+</div>
+</div>
+<p>Only slightly. <a href="./week3_2.html">Multiple Linear Regression</a> looks at this in more detail.</p>
+<section id="what-does-linear-actually-mean" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="what-does-linear-actually-mean">7. What Does “Linear” Actually Mean?</h2>
 </section>
-<p>Classical linear regression (the Gauss and Markov framework) makes several key assumptions about <span class="math inline">\(\varepsilon\)</span>:</p>
-<ul>
-<li><span class="math inline">\(E[\varepsilon] = 0\)</span>: on average, the errors cancel out (no systematic bias).<br>
-</li>
-<li><span class="math inline">\(\text{Var}(\varepsilon) = \sigma^2\)</span>: the variance of errors is constant across all values of <span class="math inline">\(X\)</span> (<strong>homoscedasticity</strong>).<br>
-</li>
-<li>Errors are independent of each other.<br>
-</li>
-<li>Errors are uncorrelated with the predictor <span class="math inline">\(X\)</span>.</li>
-</ul>
-<section id="the-variance-of-the-error-term-sigma2" class="level3" style="color: orange">
-<h3 class="anchored" data-anchor-id="the-variance-of-the-error-term-sigma2">The Variance of the Error Term (<span class="math inline">\(\sigma^2\)</span>)</h3>
+<p>Students often assume linear regression can only describe straight lines. It can also describe curves.</p>
+<p>Linear regression is linear <strong>in its coefficients</strong>, not in its predictors. The predictors can be transformed however you like, and the model is still a linear model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A squared term is allowed. I() tells R to treat ^2 as arithmetic</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># rather than as special formula syntax.</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>fit_curved <span class="ot">&lt;-</span> <span class="fu">lm</span>(grade_sem2 <span class="sc">~</span> grade_sem1 <span class="sc">+</span> <span class="fu">I</span>(grade_sem1<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> train)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fit_curved)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    (Intercept)      grade_sem1 I(grade_sem1^2) 
+     7.94206832      0.05238366      0.02514251 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(train, <span class="fu">aes</span>(grade_sem1, grade_sem2)) <span class="sc">+</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"straight line"</span>)) <span class="sc">+</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">color =</span> <span class="st">"with squared term"</span>)) <span class="sc">+</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"straight line"</span> <span class="ot">=</span> <span class="st">"orange"</span>,</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"with squared term"</span> <span class="ot">=</span> <span class="st">"steelblue"</span>), <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"First semester grade"</span>, <span class="at">y =</span> <span class="st">"Second semester grade"</span>) <span class="sc">+</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week3_1_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If the true pattern curves and you insist on a straight line, the model is <strong>underfitting</strong>: it is too simple to capture what is there, and it will be wrong in a systematic, predictable direction rather than at random.</p>
+<section id="when-might-linear-regression-fail" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="when-might-linear-regression-fail">8. When Might Linear Regression Fail?</h2>
 </section>
-<ul>
-<li><span class="math inline">\(\sigma^2\)</span> measures how much the actual values of <span class="math inline">\(Y\)</span> scatter around the regression line.<br>
-</li>
-<li>A smaller <span class="math inline">\(\sigma^2\)</span> means data points are tightly clustered around the line → better model fit.<br>
-</li>
-<li>A larger <span class="math inline">\(\sigma^2\)</span> means more unexplained variability → less precise predictions.</li>
-</ul>
-<p>In practice, <span class="math inline">\(\sigma^2\)</span> is unknown, so we estimate it with the <strong>residual variance</strong>:</p>
-<p><span class="math display">\[
-s^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - 2}
-\]</span></p>
-<p>where:<br>
-- <span class="math inline">\(y_i\)</span>: the observed outcome,<br>
-- <span class="math inline">\(\hat{y}_i\)</span>: the predicted outcome,<br>
-- <span class="math inline">\(n\)</span>: the sample size,<br>
-- denominator <span class="math inline">\(n-2\)</span> accounts for the two estimated parameters (<span class="math inline">\(\beta_0, \beta_1\)</span>).</p>
+<section id="predictors-that-are-pure-noise" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="predictors-that-are-pure-noise">Predictors That Are Pure Noise</h3>
+</section>
+<p>Here we add 20 predictors of random numbers to a small training sample of 30 students.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>small_train <span class="ot">&lt;-</span> train[<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>, ]</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>noise_test  <span class="ot">&lt;-</span> test</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 20 columns of pure random noise, in both the training and test data</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) {</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  small_train[[<span class="fu">paste0</span>(<span class="st">"noise"</span>, j)]] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">nrow</span>(small_train))</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>  noise_test[[<span class="fu">paste0</span>(<span class="st">"noise"</span>, j)]]  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">nrow</span>(noise_test))</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"grade_sem2 ~ grade_sem1 +"</span>,</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">paste0</span>(<span class="st">"noise"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">collapse =</span> <span class="st">" + "</span>)))</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>fit_noise <span class="ot">&lt;-</span> <span class="fu">lm</span>(f, <span class="at">data =</span> small_train)</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a><span class="co"># How good does it look on the data it was fit to?</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_noise)<span class="sc">$</span>r.squared</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8867479</code></pre>
+</div>
+</div>
+<p>The training R squared is high. Now score the model on students it has never seen, alongside a model with only <code>grade_sem1</code> and the baseline:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>fit_small <span class="ot">&lt;-</span> <span class="fu">lm</span>(grade_sem2 <span class="sc">~</span> grade_sem1, <span class="at">data =</span> small_train)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">with_noise   =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((noise_test<span class="sc">$</span>grade_sem2 <span class="sc">-</span> <span class="fu">predict</span>(fit_noise, noise_test))<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">no_noise     =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((test<span class="sc">$</span>grade_sem2      <span class="sc">-</span> <span class="fu">predict</span>(fit_small, test))<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">baseline     =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((test<span class="sc">$</span>grade_sem2      <span class="sc">-</span> <span class="fu">mean</span>(small_train<span class="sc">$</span>grade_sem2))<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>with_noise   no_noise   baseline 
+  3.315435   1.008197   1.388660 </code></pre>
+</div>
+</div>
+<p>The model with the noise predictors has a higher test RMSE than the baseline, so it predicts worse than guessing the average. The random columns carry no information, yet the training fit improved. With many predictors and few rows, a model can fit the noise in its training data.</p>
+<p>This is <strong>overfitting</strong>.</p>
+<section id="extrapolation" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="extrapolation">Extrapolation</h3>
+</section>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># No student in the data has a first semester grade of 2, or of 25</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">grade_sem1 =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">25</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        1         2 
+ 5.244537 21.294136 </code></pre>
+</div>
+</div>
+<p>R returns both predictions without a warning, even though 2 is far below anything in the data and 25 is not a possible grade on the 0 to 20 scale.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Discussion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Why does the fitted line not pass through every point?</li>
+<li>We added 20 columns of pure noise and the training fit improved. Explain to somebody who has not taken this course why that happened.</li>
+</ol>
+</div>
+</div>
+<p>Next: <a href="./week3_2.html">Multiple Linear Regression</a>.</p>
 
 
 

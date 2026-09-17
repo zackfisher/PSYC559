@@ -308,6 +308,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./week3_1b_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inference in Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./week3_2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Multiple Linear Regression</span></a>
   </div>
@@ -592,17 +598,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The current <code>gssr</code> cumulative file packages the 1972 to 2024 GSS with <strong>75,699 rows and 6,942 variables</strong>, plus several panel datasets.</p>
 <p><strong>Why it works.</strong> A very large set of candidate predictors, many possible continuous, ordinal, and categorical outcomes, real missingness and skip patterns, and an unusually good codebook. Different students can ask genuinely different questions from the same source.</p>
 <p><strong>Project questions.</strong> Predict self-reported happiness from social, economic, and attitudinal variables. Predict confidence in institutions. Predict social trust. Predict attitudes toward a social issue from broader values. Compare accuracy across historical periods.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"gssr"</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">repos =</span> <span class="fu">c</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://kjhealy.r-universe.dev"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://cloud.r-project.org"</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The companion <code>gssrdoc</code> package integrates much of the codebook into R help.</p>
+<p><code>gssr</code> is <strong>not on CRAN</strong>, so it needs a non-standard install. Run this once in the console:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"kjhealy/gssr"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># optional companion that puts the GSS codebook into R's help system</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"kjhealy/gssrdoc"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The author also publishes it through r-universe, if you prefer that route:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"gssr"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">repos =</span> <span class="fu">c</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://kjhealy.r-universe.dev"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://cloud.r-project.org"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Caution.</strong> Do not throw all 7,000 variables blindly into a model. You need a substantively justified set of candidate features, and choosing it is part of the work.</p>
 <section id="openesm" class="level3" style="color: lightblue">
 <h3 class="anchored" data-anchor-id="openesm">2. openESM</h3>
@@ -610,15 +622,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="https://openesmdata.org/">openesmdata.org</a> | <a href="https://openesmdata.org/docs/packages/">R package docs</a></p>
 <p>A curated collection of harmonized <strong>experience sampling</strong> datasets. Observations are collected repeatedly during daily life and typically include affect, stress, symptoms, context, and behavior. This is genuinely psychological data rather than generic tabular data.</p>
 <p><strong>Why it works.</strong> You can predict affect, stress, symptoms, or behavior at the next measurement. The repeated measures structure is an opportunity to see why ordinary random splitting can mislead you. It supports both person level and observation level questions, and the harmonization removes a lot of idiosyncratic preprocessing.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"openesm"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openesm)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">list_datasets</span>()</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">get_dataset</span>(<span class="st">"0001"</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cite</span>(dat)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">notes</span>(dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"openesm"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openesm)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">list_datasets</span>()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">get_dataset</span>(<span class="st">"0001"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cite</span>(dat)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">notes</span>(dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Run <code>list_datasets()</code> first so you can compare studies on sample size, number of time points, constructs, and design.</p>
 <p><strong>Project questions.</strong> Predict next observation affect from recent affect and context. Predict high stress moments from time of day and preceding states. Predict person average well-being from within person patterns. Compare person specific against population level prediction.</p>
 <p><strong>Caution, and this one matters.</strong> Do not randomly split individual rows into training and test sets when the same participants appear in both. Depending on your question, split by participant, by time, or both. This is one of the clearest real examples of leakage you will encounter.</p>
@@ -628,10 +640,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="https://www.cdc.gov/nchs/nhanes/">cdc.gov/nchs/nhanes</a> | <a href="https://cran.r-project.org/package=nhanesA"><code>nhanesA</code></a></p>
 <p>Interviews, questionnaires, physical examinations, and laboratory measurements combined. Attractive for psychology because you can pair psychological variables with sleep, activity, medication, nutrition, and biological measures. The 2021 to 2023 cycle includes the PHQ-9 depression screener, sleep, physical activity, smoking, health status, and more.</p>
 <p><strong>Why it works.</strong> It mixes self report, behavioral, physical, and biological predictors, which makes feature engineering meaningful. It has realistic missing data and supports both classification and regression.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"nhanesA"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nhanesA)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>dpq <span class="ot">&lt;-</span> <span class="fu">nhanes</span>(<span class="st">"DPQ_L"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"nhanesA"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nhanesA)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>dpq <span class="ot">&lt;-</span> <span class="fu">nhanes</span>(<span class="st">"DPQ_L"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Project questions.</strong> Predict depression symptom severity from sleep, activity, and health variables. Predict self rated health. Predict sleep duration or sleep problems. Predict physical activity.</p>
 <p><strong>Caution.</strong> Watch for outcome leakage. Do not predict a PHQ-9 total score using the nine items that the total is computed from.</p>
 <section id="nsduh" class="level3" style="color: lightblue">
@@ -656,8 +668,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="https://www.cdc.gov/brfss/annual_data/annual_data.htm">cdc.gov/brfss</a></p>
 <p>An enormous health survey. The 2024 file has <strong>457,670 records and 345 variables</strong>, covering self rated health, mental health days, sleep, activity, disability, chronic conditions, and healthcare access.</p>
 <p><strong>Why it works.</strong> The sample size means you can hold out a real test set and compare simple against flexible models without running out of data. Good for rare outcomes and class imbalance.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>brfss <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"LLCP2024.XPT"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>brfss <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"LLCP2024.XPT"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Project questions.</strong> Predict number of poor mental health days. Predict self rated health. Predict insufficient sleep. Predict frequent mental distress.</p>
 <p><strong>Caution.</strong> With a sample this large, tiny improvements in a test metric become statistically detectable while remaining substantively meaningless. Do not confuse the two.</p>
 <section id="nhis" class="level3" style="color: lightblue">
@@ -708,8 +720,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <p><a href="https://ess.sikt.no/">ess.sikt.no</a> | <a href="https://cran.r-project.org/package=essurvey"><code>essurvey</code></a></p>
 <p>A repeated cross national European survey with high quality measures of attitudes, well-being, trust, identity, inequality, and behavior.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"essurvey"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(essurvey)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"essurvey"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(essurvey)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The data portal also provides an API. You may need a free ESS account depending on the route you use.</p>
 <p><strong>Project questions.</strong> Predict life satisfaction. Predict generalized trust. Predict loneliness or social connectedness where available. Test generalization across countries.</p>
 <p><strong>Caution.</strong> Same as WVS. Country structure matters, and a random split answers a different question from a country holdout.</p>
