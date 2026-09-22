@@ -44,6 +44,83 @@
     ]
   },
   {
+    "objectID": "week3_4.html",
+    "href": "week3_4.html",
+    "title": "Multiple Logistic Regression",
+    "section": "",
+    "text": "Simple Logistic Regression predicted dropout from a single predictor. This page adds more predictors, scores the models on students they have never seen, and works through the measures used to judge a classifier.\nlibrary(dplyr)           # data manipulation and the pipe\nlibrary(ggplot2)         # plots\nlibrary(rsample)         # splitting\nlibrary(caret)           # train() for fitting and cross validation\nlibrary(vip)             # variable importance plots\nlibrary(marginaleffects) # predictions and marginal effects\nMultiple logistic regression extends the simple logistic regression framework to include more than one predictor variable:\nMultiple logistic regression allows us to model the relationship between a single outcome variable \\(Y_i\\) and multiple predictors \\(X_{1i}, X_{2i}, \\dots, X_{pi}\\) for each observation \\(i = 1, \\dots, n\\).\nAgain let’s use the dropout data.\ndropout &lt;- read.csv(\"data/dropout.csv\", sep = \";\")\n\n# 1 for students who dropped out, 0 for the enrolled and the graduated\ndropout$Dropout &lt;- ifelse(dropout$Target == \"Dropout\", 1, 0)\n\n# Age at enrollment, mean centered, so 0 is a student of average age\ndropout$Age_star &lt;- as.numeric(\n  scale(dropout$Age.at.enrollment, center = TRUE, scale = FALSE)\n)\nThe general form of the multiple logistic regression model is:\n\\[\np(Y_i) = \\frac{e^{\\beta_0 + \\beta_1 X_{1i} + \\beta_2 X_{2i} + \\dots + \\beta_p X_{pi}}}{1 + e^{\\beta_0 + \\beta_1 X_{1i} + \\beta_2 X_{2i} + \\dots + \\beta_p X_{pi}}}\n\\]\nThe coefficients \\(\\beta_0, \\beta_1, \\dots, \\beta_p\\) are estimated by maximum likelihood, since least squares is not appropriate for binary outcomes. As described in Simple Logistic Regression, maximizing the likelihood is the same as minimizing log loss, and adding predictors does not change the procedure. There are simply more coefficients to search over.\nIn R, we fit a multiple regression model with the glm() function:\nfit_mult &lt;- glm(\n  Dropout ~ Age_star + Debtor,\n  family = \"binomial\",\n  data = dropout\n)\n\nsummary(fit_mult)\n\n\nCall:\nglm(formula = Dropout ~ Age_star + Debtor, family = \"binomial\", \n    data = dropout)\n\nCoefficients:\n             Estimate Std. Error z value Pr(&gt;|z|)    \n(Intercept) -0.948869   0.036623  -25.91   &lt;2e-16 ***\nAge_star     0.065876   0.004414   14.93   &lt;2e-16 ***\nDebtor       1.347617   0.101097   13.33   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n(Dispersion parameter for binomial family taken to be 1)\n\n    Null deviance: 5554.5  on 4423  degrees of freedom\nResidual deviance: 5100.5  on 4421  degrees of freedom\nAIC: 5106.5\n\nNumber of Fisher Scoring iterations: 4\nSo far we have considered three possibilities for interpreting logistic regression results:\nHowever, as we include more covariates in our model, interpretation becomes more difficult. We can only think about “holding other variables constant” on the log-odds and odds scale. For nonlinear models, marginal effects provide an intuitive and easy to interpret method for understanding and communicating results.\nMarginal effects are partial derivatives of the regression equation with respect to each variable in the model for each unit in the data.\nPut differently, the marginal effect measures the association between a change in an explanatory variable and a change in the response. The marginal effect is the slope of the prediction function, measured at a specific value of the explanatory variable.\nIn linear models the effect of a given change in an independent variable is the same regardless of (1) the value of that variable at the start of its change, and (2) the level of the other variables in the model.\nIn nonlinear models the effect of a given change in an independent variable (1) depends on the values of other variables in the model, and (2) is no longer equal to the parameter itself.\nConsider a linear and nonlinear model for happiness as a function of personal spending and a dummy variable indicating whether someone is rich.\nA Few Observations\nFor the linear model:\nFor the nonlinear model:\nTo look at marginal effects we will use the marginaleffects package.\nFor example, let’s look at the impact of Debtor on the probability of dropping out.\nmarginaleffects::plot_predictions(\n  fit_mult,\n  condition = \"Debtor\"\n)\nWhat if we were interested in the relationship between Age and Debtor on the probability of dropping out.\nmarginaleffects::plot_predictions(\n  fit_mult,\n  condition = c(\"Age_star\", \"Debtor\")\n)\nThus, marginal effects provide a way to understand and communicate the results of nonlinear models.\nTo assess how accurate our models are we will go back to our cross-validation framework. First, let’s split our data into test and train sets.\nset.seed(123)\n\ndropout$Dropout &lt;- as.factor(dropout$Dropout)\n\n# Age_star already carries this information, so drop the raw variable\ndropout$Age.at.enrollment &lt;- NULL\n\nsplit &lt;- initial_split(\n  dropout,\n  prop = 0.7,\n  strata = \"Dropout\"\n)\ndropout_train  &lt;- training(split)\ndropout_test   &lt;- testing(split)\n\nc(train = nrow(dropout_train), test = nrow(dropout_test))\n\ntrain  test \n 3096  1328\nNow, let’s consider three different models we may want to compare:\n# Train model using 10-fold cross-validation\nset.seed(123)  # for reproducibility\n(cv_model1 &lt;- train(\n  form = Dropout ~ Age_star,\n  data = dropout_train,\n  method = \"glm\",\n  family = \"binomial\",\n  trControl = trainControl(method = \"cv\", number = 10)\n))\n\nGeneralized Linear Model \n\n3096 samples\n   1 predictor\n   2 classes: '0', '1' \n\nNo pre-processing\nResampling: Cross-Validated (10 fold) \nSummary of sample sizes: 2786, 2787, 2786, 2786, 2787, 2787, ... \nResampling results:\n\n  Accuracy   Kappa    \n  0.6824965  0.1098779\n# model 2 CV\nset.seed(123)\n(cv_model2 &lt;- train(\n  form = Dropout ~ Age_star + Debtor,\n  data = dropout_train,\n  method = \"glm\",\n  family = \"binomial\",\n  trControl = trainControl(method = \"cv\", number = 10)\n))\n\nGeneralized Linear Model \n\n3096 samples\n   2 predictor\n   2 classes: '0', '1' \n\nNo pre-processing\nResampling: Cross-Validated (10 fold) \nSummary of sample sizes: 2786, 2787, 2786, 2786, 2787, 2787, ... \nResampling results:\n\n  Accuracy   Kappa    \n  0.7070554  0.2323849\n# model 3 CV\nset.seed(123)\n(cv_model3 &lt;- train(\n  form = Dropout ~ .,\n  data = dropout_train,\n  method = \"glm\",\n  family = \"binomial\",\n  trControl = trainControl(method = \"cv\", number = 10)\n))\n\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\nWarning: glm.fit: algorithm did not converge\n\n\nGeneralized Linear Model \n\n3096 samples\n  37 predictor\n   2 classes: '0', '1' \n\nNo pre-processing\nResampling: Cross-Validated (10 fold) \nSummary of sample sizes: 2786, 2787, 2786, 2786, 2787, 2787, ... \nResampling results:\n\n  Accuracy  Kappa\n  1         1\nAccuracy of 1 and a Kappa of 1, on data the folds held out. The model predicts every student correctly, and R prints convergence warnings while fitting it.\n# Target is the variable Dropout was built from, so it cannot be a predictor\ndropout_train$Target &lt;- NULL\ndropout_test$Target  &lt;- NULL\n\n# model 3 CV, refit without the leaked variable\nset.seed(123)\n(cv_model3 &lt;- train(\n  form = Dropout ~ .,\n  data = dropout_train,\n  method = \"glm\",\n  family = \"binomial\",\n  trControl = trainControl(method = \"cv\", number = 10)\n))\n\nGeneralized Linear Model \n\n3096 samples\n  36 predictor\n   2 classes: '0', '1' \n\nNo pre-processing\nResampling: Cross-Validated (10 fold) \nSummary of sample sizes: 2786, 2787, 2786, 2786, 2787, 2787, ... \nResampling results:\n\n  Accuracy   Kappa    \n  0.8769326  0.7053757\n# Extract out of sample performance measures\nsummary(resamples(list(\n  model1 = cv_model1,\n  model2 = cv_model2,\n  model3 = cv_model3\n)))\n\n\nCall:\nsummary.resamples(object = resamples(list(model1 = cv_model1, model2\n = cv_model2, model3 = cv_model3)))\n\nModels: model1, model2, model3 \nNumber of resamples: 10 \n\nAccuracy \n            Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA's\nmodel1 0.6548387 0.6771845 0.6860841 0.6824965 0.6910694 0.7022654    0\nmodel2 0.6903226 0.6956576 0.7032258 0.7070554 0.7170608 0.7378641    0\nmodel3 0.8381877 0.8673139 0.8774194 0.8769326 0.8894248 0.9223301    0\n\nKappa \n             Min.    1st Qu.    Median      Mean   3rd Qu.      Max. NA's\nmodel1 0.05504587 0.08128886 0.1071698 0.1098779 0.1256038 0.1807021    0\nmodel2 0.16730491 0.20248171 0.2328163 0.2323849 0.2637005 0.3031822    0\nmodel3 0.61400090 0.67115168 0.7080421 0.7053757 0.7336519 0.8187418    0\nCross validated accuracy climbs from about 0.68 for model 1 to about 0.88 for model 3. Before calling that good, we need the number any model has to beat, which is the accuracy of predicting the most common outcome for everybody.\n# Predict \"did not drop out\" for every student\nmax(table(dropout_train$Dropout)) / nrow(dropout_train)\n\n[1] 0.6789406\nModel 1, with age as its only predictor, is essentially at that baseline. It looks respectable on its own and adds nothing. Model 3 is well above it.\nThe cross validated numbers come from the training data. The test set has not been touched, so we use it once, on the model the folds preferred.\n# Predictions for students the model has never seen\npred_class &lt;- predict(cv_model3, dropout_test)\nWhen building a classification model, we need to assess how well it performs. Different metrics emphasize different aspects of performance, depending on the context (e.g., balanced vs. imbalanced data, cost of false positives vs. false negatives).\nBelow is an overview of common evaluation metrics.\nAll classification measures are based on the confusion matrix:\nWe can look at a confusion matrix in R using the confusionMatrix() function from the caret package.\n# create confusion matrix on the test set\nconfusionMatrix(\n  data = relevel(pred_class, ref = \"1\"),\n  reference = relevel(dropout_test$Dropout, ref = \"1\")\n)\n\nConfusion Matrix and Statistics\n\n          Reference\nPrediction   1   0\n         1 308  49\n         0 119 852\n                                          \n               Accuracy : 0.8735          \n                 95% CI : (0.8544, 0.8909)\n    No Information Rate : 0.6785          \n    P-Value [Acc &gt; NIR] : &lt; 2.2e-16       \n                                          \n                  Kappa : 0.697           \n                                          \n Mcnemar's Test P-Value : 1.018e-07       \n                                          \n            Sensitivity : 0.7213          \n            Specificity : 0.9456          \n         Pos Pred Value : 0.8627          \n         Neg Pred Value : 0.8774          \n             Prevalence : 0.3215          \n         Detection Rate : 0.2319          \n   Detection Prevalence : 0.2688          \n      Balanced Accuracy : 0.8335          \n                                          \n       'Positive' Class : 1\nRead the output alongside the two rows that report the baseline. Accuracy is about 0.87 and the No Information Rate is about 0.68, which is the majority class rule we computed above. The p value beneath them tests whether the model beats that rule.\n\\[\n\\text{Accuracy} = \\frac{TP + TN}{TP + TN + FP + FN}\n\\]\n\\[\n\\text{Precision} = \\frac{TP}{TP + FP}\n\\]\n\\[\n\\text{Sensitivity} = \\frac{TP}{TP + FN}\n\\]\n\\[\n\\text{Specificity} = \\frac{TN}{TN + FP}\n\\]\n\\[\n\\kappa = \\frac{P_o - P_e}{1 - P_e}\n\\]\nwhere:\n\\[\n\\text{MCC} = \\frac{TP \\cdot TN - FP \\cdot FN}{\\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}\n\\]\nEvery measure above is computed from predicted classes, but logistic regression predicts probabilities. Turning a probability into a class requires a cutoff, and predict() quietly uses 0.5. That cutoff is a choice, not a property of the model.\n# Refit the chosen model with glm() so we can work with probabilities directly\nfit_final &lt;- glm(Dropout ~ ., family = \"binomial\", data = dropout_train)\n\n# Predicted probability of dropping out for each test student\nprob_test &lt;- predict(fit_final, newdata = dropout_test, type = \"response\")\n\n# Accuracy, sensitivity, and specificity at three cutoffs\nsapply(c(0.3, 0.5, 0.7), function(cut) {\n  pred &lt;- factor(ifelse(prob_test &gt; cut, 1, 0), levels = c(0, 1))\n  cm   &lt;- table(pred, dropout_test$Dropout)\n  c(threshold   = cut,\n    accuracy    = sum(diag(cm)) / sum(cm),\n    sensitivity = cm[\"1\", \"1\"] / sum(cm[, \"1\"]),\n    specificity = cm[\"0\", \"0\"] / sum(cm[, \"0\"]))\n})\n\n                 [,1]      [,2]      [,3]\nthreshold   0.3000000 0.5000000 0.7000000\naccuracy    0.8584337 0.8734940 0.8637048\nsensitivity 0.8337237 0.7213115 0.6323185\nspecificity 0.8701443 0.9456160 0.9733629\nLowering the cutoff to 0.3 flags more students as likely to drop out. Sensitivity rises, because fewer students who really do drop out are missed, and specificity falls, because more students who stay are flagged. Accuracy barely moves across all three cutoffs, which is a reminder that it is the least informative of the three.\nThe right cutoff depends on what the predictions are for. A university deciding who receives an outreach call can afford false positives and would rather not miss anyone, so it would choose a low cutoff.\nThe vip() function from the vip package in R (Variable Importance Plots) is commonly used to visualize the relative importance of predictors in a model.\nThe vip() function takes any fitted model object, such as lm() for linear regression, glm(), random forests, or xgboost.\nFor linear and logistic regression models, vip() ranks predictors by the absolute value of their test statistics, the t statistics for lm() and the z statistics for glm(). Predictors with larger absolute values are ranked as more influential.\nvip(cv_model3, num_features = 20, method = \"model\")",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#example-data",
+    "href": "week3_4.html#example-data",
+    "title": "Multiple Logistic Regression",
+    "section": "Example Data",
+    "text": "Example Data",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#the-model",
+    "href": "week3_4.html#the-model",
+    "title": "Multiple Logistic Regression",
+    "section": "The Model",
+    "text": "The Model",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#estimating-the-model",
+    "href": "week3_4.html#estimating-the-model",
+    "title": "Multiple Logistic Regression",
+    "section": "Estimating the Model",
+    "text": "Estimating the Model",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#implementation-in-r",
+    "href": "week3_4.html#implementation-in-r",
+    "title": "Multiple Logistic Regression",
+    "section": "Implementation in R",
+    "text": "Implementation in R",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#interpretation-of-coefficients",
+    "href": "week3_4.html#interpretation-of-coefficients",
+    "title": "Multiple Logistic Regression",
+    "section": "Interpretation of Coefficients",
+    "text": "Interpretation of Coefficients",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#outcome-measures-for-classification-tasks",
+    "href": "week3_4.html#outcome-measures-for-classification-tasks",
+    "title": "Multiple Logistic Regression",
+    "section": "Outcome Measures for Classification Tasks",
+    "text": "Outcome Measures for Classification Tasks",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
     "objectID": "week3_2.html",
     "href": "week3_2.html",
     "title": "Multiple Linear Regression",
@@ -422,7 +499,7 @@
     "href": "week2_3.html",
     "title": "Data Splitting",
     "section": "",
-    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1] 5 6 1\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 10  1  3\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
+    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1]  6  8 10\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 10  8  2\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
     "crumbs": [
       "The Modeling Pipeline",
       "Data Splitting"
@@ -1350,6 +1427,50 @@
     ]
   },
   {
+    "objectID": "week3_3.html",
+    "href": "week3_3.html",
+    "title": "Simple Logistic Regression",
+    "section": "",
+    "text": "Simple Linear Regression predicted a continuous outcome.\nThis page keeps the same machinery, except the outcome is now dichotomous (0/1).\nlibrary(dplyr)   # data manipulation and the pipe\nlibrary(ggplot2) # plots\nSimple logistic regression is used when the target (outcome) variable is binary (e.g., success/failure, yes/no, 0/1) and we have a single feature (predictor).\nInstead of modeling the outcome directly, logistic regression models the probability of the event occurring.\nProblem Classes in ML separates supervised problems by the type of the target. A continuous target makes it a regression problem. A categorical target makes it a classification problem. Dropping out is a category, so everything on this page is classification, despite the word regression in the name.\nThe name is not an accident. The model is a linear model, and it is fit the same way, but what it returns is a probability:\nSuppose we want to model a binary outcome \\(Y \\in \\{0,1\\}\\) (e.g., pass/fail, success/failure). At first, we might think of using linear regression:\n\\[\n\\hat{Y} = \\beta_0 + \\beta_1 X\n\\]\nand interpret \\(\\hat{Y}\\) as the probability that \\(Y=1\\).\nLinear regression does not constrain predictions. For some values of \\(X\\), \\(\\hat{Y}\\) might be negative or greater than 1, which is impossible for probabilities.\nLet’s fit a regression to binary data to make this concrete.\nset.seed(123)\n\n# Simulate some data\nn &lt;- 100\nx &lt;- runif(n, -3, 3)              # predictor\np &lt;- 1 / (1 + exp(-(-0.5 + 1*x))) # true logistic relationship\ny &lt;- rbinom(n, 1, p)              # binary outcome\n\nsim &lt;- data.frame(x, y)\n\n# Fit linear regression (treat y as numeric 0/1)\nlm_fit &lt;- lm(y ~ x, data = sim)\n\n# Predictions across a grid of x values\nx_grid &lt;- data.frame(x = seq(-3, 3, length.out = 200))\nx_grid$lm_pred &lt;- predict(lm_fit, newdata = x_grid)\n\nggplot(sim, aes(x, y)) +\n  geom_point(alpha = 0.6) +\n  # The dashed lines mark 0 and 1, the only values a probability can take\n  geom_hline(yintercept = c(0, 1), linetype = \"dashed\", color = \"gray40\") +\n  geom_line(data = x_grid, aes(x, lm_pred), color = \"orange\", linewidth = 1) +\n  labs(x = \"x\", y = \"Predicted and observed\") +\n  ylim(-0.2, 1.2) +\n  theme_minimal(base_size = 14)\nThe line dips below 0 on the left, so it already returns predictions that cannot be probabilities. Extend x a little past 3 and it climbs above 1 as well.\nIn binary data, the variance of \\(Y\\) is\n\\[\n   \\mathrm{Var}(Y) = p(1-p)\n\\]\nwhich depends on \\(p\\). The spread of residuals will be smallest near \\(p=0\\) or \\(p=1\\) and largest near \\(p=0.5\\). That is heteroskedasticity. Linear regression assumes constant variance (homoskedasticity), so its assumptions are violated.\nLet’s show this visually.\nsim$fitted    &lt;- fitted(lm_fit)\nsim$residuals &lt;- residuals(lm_fit)\n\nggplot(sim, aes(fitted, residuals)) +\n  geom_point(alpha = 0.6) +\n  geom_hline(yintercept = 0, color = \"orange\", linewidth = 1) +\n  labs(x = \"Fitted values\", y = \"Residuals\") +\n  theme_minimal(base_size = 14)\nThe residuals fall on two parallel lines, one for the cases with \\(y = 1\\) and one for those with \\(y = 0\\). Near fitted values of 0 and 1 almost every point sits on one of the two lines, so the spread is narrow. Near 0.5 both lines are occupied and the spread is at its widest. That is the changing variance the formula describes.\nIn reality, probabilities often follow an S shaped curve. They change slowly when predictors are very small or very large, and change more quickly in the middle. Linear regression cannot capture this shape.\nCan you think of a real-world example where this might happen?\nLogistic regression fixes these problems by modeling the log-odds of success as a linear function:\n\\[\n\\text{logit}(p(x)) = \\ln \\left(\\frac{p(x)}{1-p(x)}\\right) = \\beta_0 + \\beta_1 X\n\\]\nThis ensures:\nSimple Linear Regression described fitting as a search: choose the coefficients that make a loss function as small as possible. That description still holds here. What changes is the loss.\nSquared error is the wrong loss for a probability, because the outcome is 0 or 1 while the prediction is a number in between. The standard choice is log loss, also called cross entropy:\n\\[\n\\text{log loss} = -\\frac{1}{n}\\sum_{i=1}^{n}\n\\left[ y_i \\ln(\\hat{p}_i) + (1 - y_i) \\ln(1 - \\hat{p}_i) \\right]\n\\]\nMinimizing log loss is the same thing as maximizing the likelihood, which is why logistic regression is usually described as a maximum likelihood method. Unlike linear regression there is no closed form solution, so glm() solves it by iterating until the coefficients stop changing. The idea from the previous pages does not change: fitting a model means finding the coefficients that minimize a loss function.\nThe Predict Students’ Dropout and Academic Success dataset was contributed to the UCI Machine Learning Repository in December 2021.\nThe dataset is designed for classification tasks:\n- Target: Predict whether a student will eventually graduate, remain enrolled without graduating, or drop out.\n- Motivation: Enable early identification of students at risk of failure or dropout, supporting targeted interventions.\n- Challenge: The outcome classes are imbalanced, which makes predictive modeling more complex.\nDataset link: UCI Repository\nThe key characteristics of the dataset are:\nFeatures describing student status at admission include:\nThe dataset also records how many curricular units each student enrolled in, approved, and their average grade, for the first and second semesters.\nThe target variable records the student’s final status.\nLogistic regression needs a binary outcome, so we recode this into a single indicator: 1 for students who dropped out, 0 for everybody else. That groups the students who are still enrolled together with the graduates. It is a modeling decision rather than a fact about the data, and a different question, such as who is on track to graduate, would call for a different grouping.\ndropout &lt;- read.csv(\"data/dropout.csv\", sep = \";\")\n\n# 1 for students who dropped out, 0 for the enrolled and the graduated\ndropout$Dropout &lt;- ifelse(dropout$Target == \"Dropout\", 1, 0)\n\ntable(dropout$Target)\n\n\n Dropout Enrolled Graduate \n    1421      794     2209 \n\nmean(dropout$Dropout)\n\n[1] 0.3212025\nAbout 32 percent of the students dropped out, which is worth remembering. Any model we build has to be judged against a rule that simply predicts the more common outcome for everybody.\nFirst, let’s fit an intercept-only model to the data.\nIn our example the variable Dropout indicates whether a subject dropped out. Let’s start with the simplest model for predicting Dropout, the intercept-only model:\n\\[\n\\text{logit}(\\pi_i) = b_0\n\\]\nwhere \\(\\pi_i = P(\\text{Dropout}_i = 1)\\).\nWe can use the glm() function to fit the model to the data\nfit_intercept &lt;- glm(\n  Dropout ~ 1,\n  family = \"binomial\",\n  data = dropout\n)\n\nsummary(fit_intercept)\n\n\nCall:\nglm(formula = Dropout ~ 1, family = \"binomial\", data = dropout)\n\nCoefficients:\n            Estimate Std. Error z value Pr(&gt;|z|)    \n(Intercept)  -0.7482     0.0322  -23.24   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n(Dispersion parameter for binomial family taken to be 1)\n\n    Null deviance: 5554.5  on 4423  degrees of freedom\nResidual deviance: 5554.5  on 4423  degrees of freedom\nAIC: 5556.5\n\nNumber of Fisher Scoring iterations: 4\nWithout wanting to get too detailed, we do not need to specify the logit link here because it is the canonical link function for the binomial distribution. This essentially means there is a direct correspondence between the predicted mean and the distribution’s canonical location parameter.\nIn the intercept-only model, the intercept, \\(b_0\\), reflects\nexp(-0.7482)\n\n[1] 0.4732176\n\\[ P(Dropout_i = 1) = \\pi_i = \\frac{e^{b_0}}{1+e^{b_0}} \\] or, equivalently, in R\nexp(-0.7482)/(1 + exp(-0.7482))\n\n[1] 0.3212136\nWe can also confirm that the backward transformed parameter from this intercept-only logistic regression matches the expectation we get from the descriptives of the raw data.\nmean(dropout$Dropout)\n\n[1] 0.3212025\nNote: If \\(\\beta_j &gt; 0\\) then \\(\\mathrm{exp}(b_j) &gt; 1\\), indicating a positive relationship between \\(X_{j}\\) and the probability of the event occurring. If \\(\\beta_j &lt; 0\\), the opposite relationship holds.\nOK, let’s include a predictor in our logistic regression model. Let’s start with Age.at.enrollment such that\n\\[ logit(\\pi_i) = b_0 + b_1Age^{*}_{1i} \\]\nwhere \\(\\pi_i = P(Dropout_i = 1)\\). Here, \\(Age^{*}\\) is age at enrollment, mean centered, so a value of 0 corresponds to a student of average age, about 23 years old.\nLet’s fit the model in R.\ndropout$Age_star &lt;- as.numeric(\n  scale(dropout$Age.at.enrollment, center = TRUE, scale = FALSE)\n)\n\nfit_pred &lt;- glm(\n  Dropout ~ 1 + Age_star,\n  family = \"binomial\",\n  data = dropout,\n)\nsummary(fit_pred)\n\n\nCall:\nglm(formula = Dropout ~ 1 + Age_star, family = \"binomial\", data = dropout)\n\nCoefficients:\n             Estimate Std. Error z value Pr(&gt;|z|)    \n(Intercept) -0.776123   0.033364  -23.26   &lt;2e-16 ***\nAge_star     0.068854   0.004364   15.78   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n(Dispersion parameter for binomial family taken to be 1)\n\n    Null deviance: 5554.5  on 4423  degrees of freedom\nResidual deviance: 5283.1  on 4422  degrees of freedom\nAIC: 5287.1\n\nNumber of Fisher Scoring iterations: 4\nAgain, There are essentially three ways to interpret coefficients from a logistic regression model:\nLog-Odds\nThe parameter estimate \\(b_0\\) reflects the expected log-odds (\\(-0.776123\\)) of dropping out for an individual who is approximately 23 years old (the average age at admission).\nThe estimate for \\(b_1\\) indicates the expected difference of the log-odds of dropping out for a 1-year difference in age. Therefore, we expect a \\(0.07\\) difference in the log-odds of dropping out for a \\(1\\) year difference in age.\nOdds\nParameter estimates from a logistic regression are often reported in terms of odds rather than log-odds. To obtain parameters in odds units, we simply exponentiate the coefficients. Note that this is just one of the steps of the inverse link function (which would take us all the way to probability units).\nexp(cbind(OR = coef(fit_pred), confint(fit_pred)))\n\n                   OR     2.5 %    97.5 %\n(Intercept) 0.4601866 0.4309351 0.4911538\nAge_star    1.0712794 1.0622291 1.0805629\nIn other words, the odds of dropping out for an average-aged student \\(exp(-0.776123) = 0.46\\).\nIn regard to the slope coefficient, for 1-year difference in age, we expect to see about \\(7\\%\\) increase in the odds of dropping out. This increase does not depend on the age of the individual. Note this is significant and we would likely report this interpretation. Essentially, if the odds ratio is equal to one, the predictor did not have an impact on the outcome.\nFinally, we can also interpret the coefficients in terms of probabilities.\nRemember, probabilities range from \\([0,1]\\), whereas log-odds (the output from the raw logistic regression equation) can range from \\((-\\infty,\\infty)\\), and odds and odds ratios can range from \\((0,\\infty)\\). Due to the bounded range of probabilities, probabilities are non-linear, but log-odds can be linear.\nFor example, as age goes up by constant increments, the probability of dropping out will increase by varying amounts, but the log-odds will increase by a constant amount, and the odds will increase by a constant multiplicative factor.\nFor this reason it is not so simple to interpret probabilities in logistic regression from the coefficient directly. Often it is much simpler to plot the probabilities across a range of the predictor variables.\nggplot(dropout, aes(x = Age_star, y = Dropout)) +\n  geom_point(alpha = 0.05, size = 2) +\n  stat_smooth(method = \"glm\", method.args = list(family = \"binomial\"),\n              se = TRUE, color = \"orange\") +\n  labs(x = \"Age at enrollment, mean centered\", y = \"Dropout (0 or 1)\") +\n  theme_minimal(base_size = 14)\nThe density of the observations is visualized by manipulating the transparency (alpha) level of the data points. The predicted curve based on our model has a non-linear shape. If we were to plot the relationship on the logit scale instead, it would be a straight line.\nNext: Multiple Logistic Regression.",
+    "crumbs": [
+      "Regression Methods",
+      "Simple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_3.html#logistic-regression-solution",
+    "href": "week3_3.html#logistic-regression-solution",
+    "title": "Simple Logistic Regression",
+    "section": "Logistic Regression Solution",
+    "text": "Logistic Regression Solution",
+    "crumbs": [
+      "Regression Methods",
+      "Simple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_3.html#example-data-dropout-data",
+    "href": "week3_3.html#example-data-dropout-data",
+    "title": "Simple Logistic Regression",
+    "section": "Example Data: Dropout Data",
+    "text": "Example Data: Dropout Data",
+    "crumbs": [
+      "Regression Methods",
+      "Simple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_3.html#simple-logistic-regression-in-r",
+    "href": "week3_3.html#simple-logistic-regression-in-r",
+    "title": "Simple Logistic Regression",
+    "section": "Simple Logistic Regression in R",
+    "text": "Simple Logistic Regression in R",
+    "crumbs": [
+      "Regression Methods",
+      "Simple Logistic Regression"
+    ]
+  },
+  {
     "objectID": "lab01_rmarkdown.html",
     "href": "lab01_rmarkdown.html",
     "title": "Lab: R Markdown",
@@ -1490,6 +1611,72 @@
     "crumbs": [
       "Labs",
       "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "week3_3.html#setup",
+    "href": "week3_3.html#setup",
+    "title": "Simple Logistic Regression",
+    "section": "Setup",
+    "text": "Setup",
+    "crumbs": [
+      "Regression Methods",
+      "Simple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_3.html#overview-of-simple-logistic-regression",
+    "href": "week3_3.html#overview-of-simple-logistic-regression",
+    "title": "Simple Logistic Regression",
+    "section": "Overview of Simple Logistic Regression",
+    "text": "Overview of Simple Logistic Regression",
+    "crumbs": [
+      "Regression Methods",
+      "Simple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#setup",
+    "href": "week3_4.html#setup",
+    "title": "Multiple Logistic Regression",
+    "section": "Setup",
+    "text": "Setup",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#overview-of-multiple-logistic-regression",
+    "href": "week3_4.html#overview-of-multiple-logistic-regression",
+    "title": "Multiple Logistic Regression",
+    "section": "Overview of Multiple Logistic Regression",
+    "text": "Overview of Multiple Logistic Regression",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#assessing-model-accuracy",
+    "href": "week3_4.html#assessing-model-accuracy",
+    "title": "Multiple Logistic Regression",
+    "section": "Assessing Model Accuracy",
+    "text": "Assessing Model Accuracy",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
+    ]
+  },
+  {
+    "objectID": "week3_4.html#scoring-the-test-set",
+    "href": "week3_4.html#scoring-the-test-set",
+    "title": "Multiple Logistic Regression",
+    "section": "Scoring the Test Set",
+    "text": "Scoring the Test Set",
+    "crumbs": [
+      "Regression Methods",
+      "Multiple Logistic Regression"
     ]
   }
 ]

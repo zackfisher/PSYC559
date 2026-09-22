@@ -1,26 +1,36 @@
 ---
 title: "Multiple Logistic Regression"
-format: 
-  html: 
+format:
+  html:
     fontsize: 25px
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
-data <- readRDS("data/data.RDS")
-library(dplyr)
-library(tidymodels)
+[Simple Logistic Regression](week3_3.qmd) predicted dropout from a single predictor. This page adds more predictors, scores the models on students they have never seen, and works through the measures used to judge a classifier.
+
+::: {style="color: yellow"}
+## Setup
+:::
+
+```{r}
+library(dplyr)           # data manipulation and the pipe
+library(ggplot2)         # plots
+library(rsample)         # splitting
+library(caret)           # train() for fitting and cross validation
+library(vip)             # variable importance plots
+library(marginaleffects) # predictions and marginal effects
 ```
 
 ::: {style="color: yellow"}
 ## Overview of Multiple Logistic Regression
 :::
 
-Multiple logistic regression extends the simple logistic regression framework to include more than one predictor variable:\
-- **more than one feature** (also called the predictors or independent variables),\
-- **one target** (also called the outcome or dependent variable).
+Multiple logistic regression extends the simple logistic regression framework to include more than one predictor variable:
+
+-   **more than one feature** (also called the predictors or independent variables),
+-   **one target** (also called the outcome or dependent variable).
 
 Multiple logistic regression allows us to model the relationship between a single outcome variable $Y_i$ and multiple predictors $X_{1i}, X_{2i}, \dots, X_{pi}$ for each observation $i = 1, \dots, n$.
 
@@ -28,12 +38,18 @@ Multiple logistic regression allows us to model the relationship between a singl
 ## Example Data
 :::
 
-Again let's use `dropout` data.
+Again let's use the `dropout` data.
 
 ```{r}
 dropout <- read.csv("data/dropout.csv", sep = ";")
+
+# 1 for students who dropped out, 0 for the enrolled and the graduated
 dropout$Dropout <- ifelse(dropout$Target == "Dropout", 1, 0)
-dropout$Age_star <- scale(dropout$Age.at.enrollment, center = TRUE, scale = FALSE)
+
+# Age at enrollment, mean centered, so 0 is a student of average age
+dropout$Age_star <- as.numeric(
+  scale(dropout$Age.at.enrollment, center = TRUE, scale = FALSE)
+)
 ```
 
 ::: {style="color: yellow"}
@@ -50,8 +66,7 @@ $$
 ## Estimating the Model
 :::
 
-The coefficients $\beta_0, \beta_1, \dots, \beta_p$ are typically estimated by maximum likelihood estimation (MLE), since least squares is not appropriate for binary outcomes.
-
+The coefficients $\beta_0, \beta_1, \dots, \beta_p$ are estimated by maximum likelihood, since least squares is not appropriate for binary outcomes. As described in [Simple Logistic Regression](week3_3.qmd), maximizing the likelihood is the same as minimizing log loss, and adding predictors does not change the procedure. There are simply more coefficients to search over.
 
 ::: {style="color: yellow"}
 ## Implementation in R
@@ -61,28 +76,27 @@ In R, we fit a multiple regression model with the `glm()` function:
 
 ```{r}
 fit_mult <- glm(
-  Dropout ~ Age_star + Debtor, 
-  family = "binomial", 
+  Dropout ~ Age_star + Debtor,
+  family = "binomial",
   data = dropout
 )
 
 summary(fit_mult)
 ```
 
-
 ::: {style="color: yellow"}
 ## Interpretation of Coefficients
 :::
 
-So far we have considered two possibilities for interpreting logistic regression results:
+So far we have considered three possibilities for interpreting logistic regression results:
 
 - Interpreting the log-odds directly
 - Transforming the log-odds into odds
 - A probability metric (for a single explanatory variable)
 
-However, as we include more covariates in our model, interpretation becomes more difficult. We can only think about "holding other variable constant" in the log-odds and odds scale. For nonlinear model **marginal effects** provide us with an intuitive and easy to interpret method for understanding and communicating results.
+However, as we include more covariates in our model, interpretation becomes more difficult. We can only think about "holding other variables constant" on the log-odds and odds scale. For nonlinear models, **marginal effects** provide an intuitive and easy to interpret method for understanding and communicating results.
 
-::: {style="color: orange"}
+::: {style="color: lightblue"}
 ### Marginal Effects
 :::
 
@@ -96,42 +110,33 @@ In nonlinear models the effect of a given change in an independent variable (1) 
 
 Consider a linear and nonlinear model for happiness as a function of personal spending and a dummy variable indicating whether someone is rich.
 
-
 ![](/images/marginals.jpg)
 
 **A Few Observations**
 
-**For the linear model**: - Whether one is rich or poor does no impact
-the relationship between happiness and personal spending. - Differences
-in happiness levels between rich and poor are not dependent on the
-amount of money one spends.
+For the linear model:
 
-**From the nonlinear model**: - Whether one is rich or poor does impact
-the relationship between happiness and personal spending. - Differences
-in happiness levels between rich and poor are dependent on the amount of
-money one spends.
+-   Whether one is rich or poor does not impact the relationship between happiness and personal spending.
+-   Differences in happiness levels between rich and poor are not dependent on the amount of money one spends.
 
+For the nonlinear model:
 
+-   Whether one is rich or poor does impact the relationship between happiness and personal spending.
+-   Differences in happiness levels between rich and poor are dependent on the amount of money one spends.
 
-::: {style="color: lightyellow"}
+::: {style="color: lightblue"}
 ### Marginal Effects in R
 :::
 
 To look at marginal effects we will use the `marginaleffects` package.
-
-```{r}
-# install.packages("marginaleffects")
-library(marginaleffects)
-```
 
 For example, let's look at the impact of `Debtor` on the probability of
 dropping out.
 
 ```{r}
 marginaleffects::plot_predictions(
-  fit_mult, 
-  condition = c("Debtor"), 
-  conf.int = TRUE
+  fit_mult,
+  condition = "Debtor"
 )
 ```
 
@@ -140,16 +145,15 @@ What if we were interested in the relationship between `Age` and
 
 ```{r}
 marginaleffects::plot_predictions(
-  fit_mult, 
-  condition = c("Age_star","Debtor")
+  fit_mult,
+  condition = c("Age_star", "Debtor")
 )
 ```
 
 Thus, marginal effects provide a way to understand and communicate the results of nonlinear models.
 
-
-::: {style="color: orange"}
-### Assessing Model Accuracy
+::: {style="color: yellow"}
+## Assessing Model Accuracy
 :::
 
 To assess how accurate our models are we will go back to our cross-validation framework. First, let's split our data into test and train sets.
@@ -158,44 +162,44 @@ To assess how accurate our models are we will go back to our cross-validation fr
 set.seed(123)
 
 dropout$Dropout <- as.factor(dropout$Dropout)
+
+# Age_star already carries this information, so drop the raw variable
 dropout$Age.at.enrollment <- NULL
 
 split <- initial_split(
-  dropout, 
-  prop = 0.7, 
+  dropout,
+  prop = 0.7,
   strata = "Dropout"
 )
 dropout_train  <- training(split)
 dropout_test   <- testing(split)
 
-
+c(train = nrow(dropout_train), test = nrow(dropout_test))
 ```
 
-Now, let's consider three different models we may want to compare: 
+Now, let's consider three different models we may want to compare:
 
 1. **Model 1**: A simple logistic regression using only Age_star as a predictor.\
 2. **Model 2**: A multiple logistic regression using Age and Debtor as predictors.\
 3. **Model 3**: A full model using all available predictors.
 
-::: {style="color: lightyellow"}
+::: {style="color: lightblue"}
 #### Model 1
 :::
 
 ```{r, warning=FALSE, message=FALSE}
-library(caret)
 # Train model using 10-fold cross-validation
 set.seed(123)  # for reproducibility
 (cv_model1 <- train(
-  form = Dropout ~ Age_star, 
-  data = dropout_train, 
+  form = Dropout ~ Age_star,
+  data = dropout_train,
   method = "glm",
   family = "binomial",
   trControl = trainControl(method = "cv", number = 10)
 ))
 ```
 
-
-::: {style="color: lightyellow"}
+::: {style="color: lightblue"}
 #### Model 2
 :::
 
@@ -203,78 +207,107 @@ set.seed(123)  # for reproducibility
 # model 2 CV
 set.seed(123)
 (cv_model2 <- train(
-  form = Dropout ~ Age_star + Debtor, 
-  data = dropout_train, 
+  form = Dropout ~ Age_star + Debtor,
+  data = dropout_train,
   method = "glm",
   family = "binomial",
   trControl = trainControl(method = "cv", number = 10)
 ))
 ```
 
-::: {style="color: lightyellow"}
+::: {style="color: lightblue"}
 #### Model 3
 :::
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
+#| warning: true
+#| message: false
 # model 3 CV
 set.seed(123)
 (cv_model3 <- train(
-  form = Dropout ~ ., 
-  data = dropout_train, 
+  form = Dropout ~ .,
+  data = dropout_train,
   method = "glm",
   family = "binomial",
   trControl = trainControl(method = "cv", number = 10)
 ))
 ```
 
-Why did we get warnings for our full model and seeminly perfect accuracy?
+Accuracy of 1 and a Kappa of 1, on data the folds held out. The model predicts every student correctly, and R prints convergence warnings while fitting it.
 
-The warnings are likely due to perfect separation in the data, which can occur when a predictor variable perfectly predicts the outcome variable. This can lead to issues with model convergence and unreliable estimates.  
+::: {.callout-important icon="false"}
+## The Model Was Given the Answer
+
+`Dropout ~ .` uses every remaining column as a predictor, and one of those columns is `Target`, the original three category outcome. We built `Dropout` from `Target` at the top of this page, so `Target` is not a predictor of the outcome. It *is* the outcome, written a different way.
+
+This is **target leakage**: information that would not be available at prediction time, or that encodes the answer directly, gets into the feature set. The warnings come from the mechanism, which is perfect separation. Once a predictor splits the outcome perfectly, the coefficients run off toward infinity and the fitting algorithm cannot converge.
+
+Leakage does not always announce itself with an accuracy of 1. A variable recorded after the outcome, or derived from it, can inflate performance quietly enough to look like a good model. When results look too good, check what the model was allowed to see.
+:::
 
 ```{r, warning=FALSE, message=FALSE}
-
+# Target is the variable Dropout was built from, so it cannot be a predictor
 dropout_train$Target <- NULL
+dropout_test$Target  <- NULL
 
-# model 3 CV
+# model 3 CV, refit without the leaked variable
 set.seed(123)
 (cv_model3 <- train(
-  form = Dropout ~ ., 
-  data = dropout_train, 
+  form = Dropout ~ .,
+  data = dropout_train,
   method = "glm",
   family = "binomial",
   trControl = trainControl(method = "cv", number = 10)
 ))
 ```
-
 
 ```{r}
 # Extract out of sample performance measures
 summary(resamples(list(
-  model1 = cv_model1, 
-  model2 = cv_model2, 
+  model1 = cv_model1,
+  model2 = cv_model2,
   model3 = cv_model3
 )))
 ```
 
+::: {style="color: lightblue"}
+### Compare Against a Baseline
+:::
 
+Cross validated accuracy climbs from about 0.68 for model 1 to about 0.88 for model 3. Before calling that good, we need the number any model has to beat, which is the accuracy of predicting the most common outcome for everybody.
+
+```{r}
+# Predict "did not drop out" for every student
+max(table(dropout_train$Dropout)) / nrow(dropout_train)
+```
+
+Model 1, with age as its only predictor, is essentially at that baseline. It looks respectable on its own and adds nothing. Model 3 is well above it.
+
+::: {style="color: yellow"}
+## Scoring the Test Set
+:::
+
+The cross validated numbers come from the training data. The test set has not been touched, so we use it once, on the model the folds preferred.
+
+```{r}
+# Predictions for students the model has never seen
+pred_class <- predict(cv_model3, dropout_test)
+```
 
 ::: {style="color: yellow"}
 ## Outcome Measures for Classification Tasks
 :::
 
-
-When building a classification model, we need to assess how well it performs.  
-Different metrics emphasize different aspects of performance, depending on the context (e.g., balanced vs. imbalanced data, cost of false positives vs. false negatives).  
+When building a classification model, we need to assess how well it performs.
+Different metrics emphasize different aspects of performance, depending on the context (e.g., balanced vs. imbalanced data, cost of false positives vs. false negatives).
 
 Below is an overview of common evaluation metrics.
 
-
-::: {style="color: orange"}
+::: {style="color: lightblue"}
 ### Confusion Matrix
 :::
 
 All classification measures are based on the **confusion matrix**:
-
 
 |               | Actual Positive | Actual Negative |
 |---------------|----------------|----------------|
@@ -284,30 +317,27 @@ All classification measures are based on the **confusion matrix**:
 We can look at a confusion matrix in R using the `confusionMatrix()` function from the **`caret`** package.
 
 ```{r}
-# Make predictions on the test set      
-pred_class <- predict(cv_model3, dropout_train)
-
-# create confusion matrix
+# create confusion matrix on the test set
 confusionMatrix(
-  data = relevel(pred_class, ref = "1"), 
-  reference = relevel(dropout_train$Dropout, ref = "1")
+  data = relevel(pred_class, ref = "1"),
+  reference = relevel(dropout_test$Dropout, ref = "1")
 )
 ```
 
-::: {style="color: orange"}
+Read the output alongside the two rows that report the baseline. Accuracy is about 0.87 and the No Information Rate is about 0.68, which is the majority class rule we computed above. The p value beneath them tests whether the model beats that rule.
+
+::: {style="color: lightblue"}
 ### Accuracy
 :::
-
 
 $$
 \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
 $$
 
-- **Pros**: Simple, intuitive; works well when classes are balanced.  
-- **Cons**: Misleading with imbalanced data (e.g., if 95% of cases are negative, a trivial model predicting “negative” achieves 95% accuracy).  
+- **Pros**: Simple, intuitive; works well when classes are balanced.
+- **Cons**: Misleading with imbalanced data. In our data 68 percent of students did not drop out, so a model that predicts "did not drop out" for everybody is already 68 percent accurate.
 
-
-::: {style="color: orange"}
+::: {style="color: lightblue"}
 ### Precision
 :::
 
@@ -315,42 +345,37 @@ $$
 \text{Precision} = \frac{TP}{TP + FP}
 $$
 
-- **Interpretation**: Of all predicted positives, how many are actually positive?  
-- **Pros**: Useful when the cost of false positives is high (e.g., spam detection).  
-- **Cons**: Ignores false negatives.  
+- **Interpretation**: Of all predicted positives, how many are actually positive?
+- **Pros**: Useful when the cost of false positives is high (e.g., spam detection).
+- **Cons**: Ignores false negatives.
 
-
-::: {style="color: orange"}
-### Sensitivity 
+::: {style="color: lightblue"}
+### Sensitivity (Recall)
 :::
 
-
 $$
-\text{Recall} = \frac{TP}{TP + FN}
+\text{Sensitivity} = \frac{TP}{TP + FN}
 $$
 
-- **Interpretation**: Of all actual positives, how many did we correctly identify?  
-- **Pros**: Useful when missing positives is costly (e.g., disease screening).  
-- **Cons**: Can be maximized by predicting "positive" for everything (but then precision suffers).  
+- **Interpretation**: Of all actual positives, how many did we correctly identify?
+- **Pros**: Useful when missing positives is costly (e.g., disease screening).
+- **Cons**: Can be maximized by predicting "positive" for everything (but then precision suffers).
 
-
-::: {style="color: orange"}
-### Specificity 
+::: {style="color: lightblue"}
+### Specificity
 :::
 
 $$
 \text{Specificity} = \frac{TN}{TN + FP}
 $$
 
-- **Interpretation**: Of all actual negatives, how many did we correctly identify?  
-- **Pros**: Useful when the cost of false positives is important.  
-- **Cons**: Ignores how well positives are classified.  
+- **Interpretation**: Of all actual negatives, how many did we correctly identify?
+- **Pros**: Useful when the cost of false positives is important.
+- **Cons**: Ignores how well positives are classified.
 
-
-::: {style="color: orange"}
+::: {style="color: lightblue"}
 ### Cohen's Kappa
-::: 
-
+:::
 
 $$
 \kappa = \frac{P_o - P_e}{1 - P_e}
@@ -358,40 +383,71 @@ $$
 
 where:
 
-- $P_o = \frac{TP + TN}{TP + TN + FP + FN}$ is the observed accuracy  
-- $P_e = \frac{(TP + FP)(TP + FN) + (FN + TN)(FP + TN)}{(TP + TN + FP + FN)^2}$ is the expected accuracy by chance  
+- $P_o = \frac{TP + TN}{TP + TN + FP + FN}$ is the observed accuracy
+- $P_e = \frac{(TP + FP)(TP + FN) + (FN + TN)(FP + TN)}{(TP + TN + FP + FN)^2}$ is the expected accuracy by chance
 
-- **Interpretation**: measures the agreement between predicted and actual classifications, while adjusting for the agreement expected by chance  
-- **Pros**: rovides a single summary measure that accounts for both agreement and disagreement. 
+- **Interpretation**: measures the agreement between predicted and actual classifications, while adjusting for the agreement expected by chance
+- **Pros**: provides a single summary measure that accounts for both agreement and disagreement.
 - **Cons**: Can be less intuitive
 
-::: {style="color: orange"}
-# Matthews Correlation Coefficient (MCC)
-::: 
+::: {style="color: lightblue"}
+### Matthews Correlation Coefficient (MCC)
+:::
 
 $$
 \text{MCC} = \frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}
 $$
 
-- **Pros**: Balanced measure even with imbalanced classes; considers all parts of the confusion matrix.  
-- **Cons**: Less intuitive than accuracy  
+- **Pros**: Balanced measure even with imbalanced classes; considers all parts of the confusion matrix.
+- **Cons**: Less intuitive than accuracy
+
+::: {style="color: lightblue"}
+### Choosing a Threshold
+:::
+
+Every measure above is computed from predicted classes, but logistic regression predicts **probabilities**. Turning a probability into a class requires a cutoff, and `predict()` quietly uses 0.5. That cutoff is a choice, not a property of the model.
+
+```{r}
+# Refit the chosen model with glm() so we can work with probabilities directly
+fit_final <- glm(Dropout ~ ., family = "binomial", data = dropout_train)
+
+# Predicted probability of dropping out for each test student
+prob_test <- predict(fit_final, newdata = dropout_test, type = "response")
+
+# Accuracy, sensitivity, and specificity at three cutoffs
+sapply(c(0.3, 0.5, 0.7), function(cut) {
+  pred <- factor(ifelse(prob_test > cut, 1, 0), levels = c(0, 1))
+  cm   <- table(pred, dropout_test$Dropout)
+  c(threshold   = cut,
+    accuracy    = sum(diag(cm)) / sum(cm),
+    sensitivity = cm["1", "1"] / sum(cm[, "1"]),
+    specificity = cm["0", "0"] / sum(cm[, "0"]))
+})
+```
+
+Lowering the cutoff to 0.3 flags more students as likely to drop out. Sensitivity rises, because fewer students who really do drop out are missed, and specificity falls, because more students who stay are flagged. Accuracy barely moves across all three cutoffs, which is a reminder that it is the least informative of the three.
 
 
-::: {style="color: orange"}
-#### Feature Importance
+::: {style="color: lightblue"}
+### Feature Importance
 :::
 
 The `vip()` function from the **`vip`** package in R (Variable Importance Plots) is commonly used to visualize the relative importance of predictors in a model.
 
-```{r,warning=FALSE, message=FALSE}
-# Load package
-library(vip)
-```
-
 The `vip()` function takes any fitted model object, such as `lm()` for linear regression, `glm()`, random forests, or xgboost.
 
-For linear regression models, vip() typically uses the absolute value of the t-statistics of the coefficients as a measure of importance. Predictors with larger absolute t-values are considered more influential on the response.
+For linear and logistic regression models, `vip()` ranks predictors by the absolute value of their test statistics, the t statistics for `lm()` and the z statistics for `glm()`. Predictors with larger absolute values are ranked as more influential.
 
 ```{r, warning=FALSE, message=FALSE}
 vip(cv_model3, num_features = 20, method = "model")
 ```
+
+
+::: {.callout-tip icon="false"}
+## Discussion
+
+1.  Model 3 reached an accuracy of 1 before we removed `Target`. Explain to somebody who has not taken this course why that number was worthless.
+2.  A model that predicts "did not drop out" for every student is 68 percent accurate here. What would its sensitivity and specificity be?
+3.  The university wants to contact students at risk of dropping out. Would you raise or lower the 0.5 cutoff, and what does that cost?
+4.  Why does accuracy barely change across the three cutoffs while sensitivity changes a great deal?
+:::
