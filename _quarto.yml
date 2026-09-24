@@ -5,6 +5,7 @@ project:
     - data/ifood_df.csv
     - data/data.RDS
     - data/dropout.csv
+    - data/depression.csv
     - data/data-final-shuffled.csv
     - data/data-final.RDS
     - rmd/

@@ -318,6 +318,35 @@ symptoms <- 18 + as.vector(X %*% beta) + rnorm(n, sd = 5)
 
 :::: {.slide}
 ::: {style="color: yellow"}
+## Following Along
+:::
+
+The 240 students are simulated, and the exact dataset these slides use is posted on the course site. It reads straight into R over the web:
+
+```{r}
+#| eval: false
+dat <- read.csv("https://zackfisher.github.io/PSYC559/data/depression.csv")
+
+str(dat[, 1:5])
+```
+
+-   `symptoms` is the outcome, the score at the end of the semester.
+-   The next 30 columns are the predictors, named as they are on these slides.
+-   `split` records which students are training and which are test, so your results match what you see here.
+
+```{r}
+#| eval: false
+train_df <- subset(dat, split == "train", select = -split)
+test_df  <- subset(dat, split == "test",  select = -split)
+
+c(train = nrow(train_df), test = nrow(test_df))
+```
+
+Run `set.seed(5)` before each `train()` call and every number on the following slides will reproduce exactly.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
 ## Train and Test Data
 :::
 We divide the 240 students into two parts.

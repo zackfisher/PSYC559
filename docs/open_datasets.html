@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Open Datasets – PSYC559: Applied Machine Learning in Psychology</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4b807711a074c809fb7a41e0e0412991.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./open_datasets.html">Resources</a></li><li class="breadcrumb-item"><a href="./open_datasets.html">Open Datasets</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">PSYC559: Applied Machine Learning in Psychology</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Table of Contents</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Course Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./f01_welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome to PSYC559</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./f02_explanation_prediction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">From Explanation to Prediction</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction to R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction to Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Important Terms and Distinctions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Problem Classes in ML</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">The Modeling Pipeline</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Splitting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bias and Variance</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./p01_splitting_resampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Splitting and Resampling in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./p02_evaluating_performance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Evaluating Model Performance</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./p03_complete_pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A Complete Pipeline</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Feature Engineering</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Example Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Missing Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5d.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Feature Filtering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5e.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Numeric Feature Engineering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5f.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Categorical Feature Engineering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5g.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Workflow</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Regression Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_1b_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inference in Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1b_regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Tree Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Dimension Reduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lab01_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab: R Markdown</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Resources</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./open_datasets.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Open Datasets</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./open_datasets.html">Resources</a></li><li class="breadcrumb-item"><a href="./open_datasets.html">Open Datasets</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Open Datasets</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This page lists real, openly available datasets that are large and rich enough to support a full machine learning project. These are not teaching datasets. They are the actual data that psychologists publish on, which means you get real codebooks, real missingness, and real decisions to make.</p>
+<section id="what-makes-a-dataset-a-good-fit" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="what-makes-a-dataset-a-good-fit">What Makes a Dataset a Good Fit</h2>
+</section>
+<p>A dataset worth building a project on usually has most of the following.</p>
+<ul>
+<li>Thousands of observations, or many repeated observations per participant.</li>
+<li>Enough predictors that feature selection, regularization, and model comparison actually mean something.</li>
+<li>Outcomes that are psychologically interesting and interpretable.</li>
+<li>A real codebook and real data cleaning decisions.</li>
+<li>Public access that you can reasonably navigate on your own.</li>
+<li>Something you can work with in R without special computing infrastructure.</li>
+<li>Enough complexity for a complete project: cleaning, exploration, prediction, validation, interpretation, and limitations.</li>
+</ul>
+<section id="quick-shortlist" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="quick-shortlist">Quick Shortlist</h2>
+</section>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>Main psychology areas</th>
+<th>Approximate scale</th>
+<th>R access</th>
+<th>Friction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>GSS</strong></td>
+<td>Attitudes, well-being, religion, family, trust</td>
+<td>75,699 rows, 6,942 variables (1972 to 2024)</td>
+<td><code>gssr</code> package</td>
+<td>Very low</td>
+</tr>
+<tr class="even">
+<td><strong>openESM</strong></td>
+<td>Emotion, stress, affect, daily life</td>
+<td>Many repeated observations per person</td>
+<td><code>openesm</code> package</td>
+<td>Very low</td>
+</tr>
+<tr class="odd">
+<td><strong>NHANES</strong></td>
+<td>Depression, sleep, activity, cognition, health</td>
+<td>Thousands per cycle</td>
+<td><code>nhanesA</code>, <code>nhanesdata</code></td>
+<td>Very low</td>
+</tr>
+<tr class="even">
+<td><strong>NSDUH</strong></td>
+<td>Mental health, substance use, treatment</td>
+<td>Large annual national survey</td>
+<td>Official R format files</td>
+<td>Very low</td>
+</tr>
+<tr class="odd">
+<td><strong>YRBSS</strong></td>
+<td>Adolescent behavior, mental health, sleep</td>
+<td>20,103 cases in 2023</td>
+<td>Public download</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>BRFSS</strong></td>
+<td>Mental health days, sleep, activity</td>
+<td>457,670 records, 345 variables (2024)</td>
+<td><code>haven::read_xpt()</code></td>
+<td>Low</td>
+</tr>
+<tr class="odd">
+<td><strong>NHIS</strong></td>
+<td>Health, functioning, distress</td>
+<td>Large annual samples</td>
+<td>Public CSV</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>MIDUS</strong></td>
+<td>Well-being, personality, stress, aging</td>
+<td>~7,100 plus follow-ups</td>
+<td>ICPSR / MIDUS Portal</td>
+<td>Medium</td>
+</tr>
+<tr class="odd">
+<td><strong>Add Health</strong></td>
+<td>Adolescence, peers, family, education</td>
+<td>Multi-wave longitudinal</td>
+<td>ICPSR public use</td>
+<td>Medium</td>
+</tr>
+<tr class="even">
+<td><strong>NLSY97 / NLSY79</strong></td>
+<td>Development, education, work, life course</td>
+<td>8,984 and 12,686</td>
+<td>NLS Investigator</td>
+<td>Medium</td>
+</tr>
+<tr class="odd">
+<td><strong>WVS / IVS</strong></td>
+<td>Values, trust, cross-cultural psychology</td>
+<td>&gt;80,000 in Wave 7</td>
+<td>RDS / RData files</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>ESS</strong></td>
+<td>Well-being, trust, identity, attitudes</td>
+<td>Tens of thousands per round</td>
+<td><code>essurvey</code> package</td>
+<td>Low to medium</td>
+</tr>
+<tr class="odd">
+<td><strong>ANES</strong></td>
+<td>Political psychology, identity, affect</td>
+<td>5,521 in 2024</td>
+<td>CSV / SPSS / Stata</td>
+<td>Low</td>
+</tr>
+<tr class="even">
+<td><strong>Project Implicit</strong></td>
+<td>Implicit and explicit attitudes</td>
+<td>Millions of sessions</td>
+<td>OSF downloads</td>
+<td>Low to medium</td>
+</tr>
+<tr class="odd">
+<td><strong>Open Psychometrics</strong></td>
+<td>Personality, individual differences</td>
+<td>~7,000 to &gt;70,000</td>
+<td>CSV downloads</td>
+<td>Very low</td>
+</tr>
+<tr class="even">
+<td><strong>IPUMS CPS</strong></td>
+<td>Family, work, income, demographics</td>
+<td>Very large monthly microdata</td>
+<td>IPUMS extracts</td>
+<td>Medium</td>
+</tr>
+<tr class="odd">
+<td><strong>HRS</strong></td>
+<td>Aging, cognition, health, retirement</td>
+<td>Large longitudinal panel</td>
+<td>Registered download</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<section id="the-datasets" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="the-datasets">The Datasets</h2>
+</section>
+<section id="general-social-survey-gss" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="general-social-survey-gss">1. General Social Survey (GSS)</h3>
+</section>
+<p><a href="https://gss.norc.org/">gss.norc.org</a> | <a href="https://github.com/kjhealy/gssr"><code>gssr</code> package</a></p>
+<p>Decades of United States survey data on social attitudes, happiness, religion, family, work, trust, political attitudes, social relationships, and demographics. You already met this dataset in the <a href="./week2_5b.html">Feature Engineering</a> unit.</p>
+<p>The current <code>gssr</code> cumulative file packages the 1972 to 2024 GSS with <strong>75,699 rows and 6,942 variables</strong>, plus several panel datasets.</p>
+<p><strong>Why it works.</strong> A very large set of candidate predictors, many possible continuous, ordinal, and categorical outcomes, real missingness and skip patterns, and an unusually good codebook. Different students can ask genuinely different questions from the same source.</p>
+<p><strong>Project questions.</strong> Predict self-reported happiness from social, economic, and attitudinal variables. Predict confidence in institutions. Predict social trust. Predict attitudes toward a social issue from broader values. Compare accuracy across historical periods.</p>
+<p><code>gssr</code> is <strong>not on CRAN</strong>, so it needs a non-standard install. Run this once in the console:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"kjhealy/gssr"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># optional companion that puts the GSS codebook into R's help system</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"kjhealy/gssrdoc"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The author also publishes it through r-universe, if you prefer that route:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"gssr"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">repos =</span> <span class="fu">c</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://kjhealy.r-universe.dev"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://cloud.r-project.org"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gssr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(gss_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Caution.</strong> Do not throw all 7,000 variables blindly into a model. You need a substantively justified set of candidate features, and choosing it is part of the work.</p>
+<section id="openesm" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="openesm">2. openESM</h3>
+</section>
+<p><a href="https://openesmdata.org/">openesmdata.org</a> | <a href="https://openesmdata.org/docs/packages/">R package docs</a></p>
+<p>A curated collection of harmonized <strong>experience sampling</strong> datasets. Observations are collected repeatedly during daily life and typically include affect, stress, symptoms, context, and behavior. This is genuinely psychological data rather than generic tabular data.</p>
+<p><strong>Why it works.</strong> You can predict affect, stress, symptoms, or behavior at the next measurement. The repeated measures structure is an opportunity to see why ordinary random splitting can mislead you. It supports both person level and observation level questions, and the harmonization removes a lot of idiosyncratic preprocessing.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"openesm"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openesm)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">list_datasets</span>()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">get_dataset</span>(<span class="st">"0001"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cite</span>(dat)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">notes</span>(dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run <code>list_datasets()</code> first so you can compare studies on sample size, number of time points, constructs, and design.</p>
+<p><strong>Project questions.</strong> Predict next observation affect from recent affect and context. Predict high stress moments from time of day and preceding states. Predict person average well-being from within person patterns. Compare person specific against population level prediction.</p>
+<p><strong>Caution, and this one matters.</strong> Do not randomly split individual rows into training and test sets when the same participants appear in both. Depending on your question, split by participant, by time, or both. This is one of the clearest real examples of leakage you will encounter.</p>
+<section id="nhanes" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="nhanes">3. NHANES</h3>
+</section>
+<p><a href="https://www.cdc.gov/nchs/nhanes/">cdc.gov/nchs/nhanes</a> | <a href="https://cran.r-project.org/package=nhanesA"><code>nhanesA</code></a></p>
+<p>Interviews, questionnaires, physical examinations, and laboratory measurements combined. Attractive for psychology because you can pair psychological variables with sleep, activity, medication, nutrition, and biological measures. The 2021 to 2023 cycle includes the PHQ-9 depression screener, sleep, physical activity, smoking, health status, and more.</p>
+<p><strong>Why it works.</strong> It mixes self report, behavioral, physical, and biological predictors, which makes feature engineering meaningful. It has realistic missing data and supports both classification and regression.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"nhanesA"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nhanesA)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>dpq <span class="ot">&lt;-</span> <span class="fu">nhanes</span>(<span class="st">"DPQ_L"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Project questions.</strong> Predict depression symptom severity from sleep, activity, and health variables. Predict self rated health. Predict sleep duration or sleep problems. Predict physical activity.</p>
+<p><strong>Caution.</strong> Watch for outcome leakage. Do not predict a PHQ-9 total score using the nine items that the total is computed from.</p>
+<section id="nsduh" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="nsduh">4. NSDUH</h3>
+</section>
+<p><a href="https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health">samhsa.gov</a></p>
+<p>A large national survey covering mental health, substance use, treatment, functioning, and demographics for ages 12 and up. The public use files download directly in <strong>R format</strong>.</p>
+<p><strong>Why it works.</strong> Large sample, many binary and continuous outcomes, extensive codebook, and good material for logistic regression, regularization, trees, and calibration.</p>
+<p><strong>Project questions.</strong> Predict treatment utilization from symptoms and demographics. Predict broad categories of substance use. Predict psychological distress or functional impairment. Compare models across age groups.</p>
+<p><strong>Caution.</strong> These are sensitive outcomes. Frame your project as a statistical prediction exercise, never as a clinical or diagnostic tool. Also note that SAMHSA warns about trend comparability around the 2021 redesign, so pooling across years takes care.</p>
+<section id="yrbss" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="yrbss">5. YRBSS</h3>
+</section>
+<p><a href="https://www.cdc.gov/yrbs/data/">cdc.gov/yrbs/data</a></p>
+<p>High school student data on health behavior, sleep, activity, substance use, school experiences, and mental health. The 2023 national file has <strong>20,103 usable records</strong>.</p>
+<p><strong>Why it works.</strong> Large enough for genuine three way splitting, with variables that are immediately understandable and many binary outcomes that make evaluation intuitive. The codebook is manageable compared with other federal surveys, and there are strong openings to discuss class imbalance and fairness.</p>
+<p><strong>Project questions.</strong> Predict insufficient sleep from school and behavioral variables. Predict physical activity level. Predict a school related behavioral outcome.</p>
+<p><strong>Caution.</strong> Participants are minors and some outcomes are sensitive. Interpret responsibly and do not present a class model as a screening tool.</p>
+<section id="brfss" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="brfss">6. BRFSS</h3>
+</section>
+<p><a href="https://www.cdc.gov/brfss/annual_data/annual_data.htm">cdc.gov/brfss</a></p>
+<p>An enormous health survey. The 2024 file has <strong>457,670 records and 345 variables</strong>, covering self rated health, mental health days, sleep, activity, disability, chronic conditions, and healthcare access.</p>
+<p><strong>Why it works.</strong> The sample size means you can hold out a real test set and compare simple against flexible models without running out of data. Good for rare outcomes and class imbalance.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>brfss <span class="ot">&lt;-</span> <span class="fu">read_xpt</span>(<span class="st">"LLCP2024.XPT"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Project questions.</strong> Predict number of poor mental health days. Predict self rated health. Predict insufficient sleep. Predict frequent mental distress.</p>
+<p><strong>Caution.</strong> With a sample this large, tiny improvements in a test metric become statistically detectable while remaining substantively meaningless. Do not confuse the two.</p>
+<section id="nhis" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="nhis">7. NHIS</h3>
+</section>
+<p><a href="https://www.cdc.gov/nchs/nhis/">cdc.gov/nchs/nhis</a></p>
+<p>A large annual health survey with separate adult and child public use files, released as CSV with extensive documentation. Depending on the year it covers psychological distress, functional limitations, sleep, pain, disability, healthcare access, and health behaviors.</p>
+<p><strong>Project questions.</strong> Predict self rated health. Predict psychological distress. Predict functional limitation. Predict healthcare use. Compare prediction across subgroups.</p>
+<p>A good alternative to BRFSS when you want something a bit more focused.</p>
+<section id="midus" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="midus">8. MIDUS</h3>
+</section>
+<p><a href="https://midus.wisc.edu/">midus.wisc.edu</a> | <a href="https://midus.wisc.edu/data-access/">Data access</a></p>
+<p>One of the most psychologically rich large longitudinal datasets available. It was designed to study how psychological, social, and biological factors contribute to health and well-being across adulthood. The original sample was about <strong>7,100 adults</strong>, with follow up waves and refresher cohorts.</p>
+<p>Constructs include positive and negative affect, psychological well-being, personality, perceived control, stress, social support and strain, family, work, physical health, cognition, and biomarkers in some projects.</p>
+<p><strong>Why it works.</strong> You can build a psychologically meaningful model without assembling measures from a dozen unrelated sources.</p>
+<p><strong>Project questions.</strong> Predict later well-being from earlier psychosocial variables. Predict self rated health from personality, stress, and relationships. Predict change in an outcome. Compare demographic against psychological predictors.</p>
+<p><strong>Access.</strong> Public use through ICPSR or the MIDUS Portal, with registration and terms of use. Genomics, neuroimaging, and geographic files are restricted. Use the standard public survey files.</p>
+<section id="add-health" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="add-health">9. Add Health</h3>
+</section>
+<p><a href="https://www.icpsr.umich.edu/web/DSDR/studies/21600">ICPSR public use archive</a></p>
+<p>Follows participants from adolescence into adulthood. The public use archive spans <strong>1994 to 2025</strong> and does not require an ICPSR member affiliation. Strong on development, family, peers, school, mental health, health behavior, romantic relationships, education, and the transition to adulthood.</p>
+<p><strong>Project questions.</strong> Predict an adult outcome from adolescent characteristics. Predict educational attainment. Predict later self rated health from adolescent variables. Predict change across waves.</p>
+<p><strong>Caution.</strong> If you predict later outcomes from earlier waves, establish a clear temporal ordering first. Leakage here usually comes in through a variable measured <em>after</em> the thing you are predicting.</p>
+<section id="nlsy97-and-nlsy79" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="nlsy97-and-nlsy79">10. NLSY97 and NLSY79</h3>
+</section>
+<p><a href="https://www.nlsinfo.org/">nlsinfo.org</a> | <a href="https://www.nlsinfo.org/content/access-data-investigator">Data access</a></p>
+<p>Bureau of Labor Statistics longitudinal studies with extremely rich life course information, free through the NLS Investigator.</p>
+<ul>
+<li><strong>NLSY97:</strong> 8,984 respondents, ages 12 to 17 at first interview in 1997, currently through Round 21.</li>
+<li><strong>NLSY79:</strong> originally 12,686 respondents, followed from young adulthood onward.</li>
+<li><strong>NLSY79 Child and Young Adult:</strong> more than 10,000 children across waves.</li>
+</ul>
+<p>The full datasets contain over <strong>100,000 variables</strong>, so build a custom extract rather than downloading everything.</p>
+<p><strong>Project questions.</strong> Predict college completion from adolescent characteristics. Predict employment or income category. Predict later health behavior. Predict family or work transitions.</p>
+<p>Especially strong if you want a project about genuinely prospective prediction.</p>
+<section id="world-values-survey" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="world-values-survey">11. World Values Survey</h3>
+</section>
+<p><a href="https://www.worldvaluessurvey.org/">worldvaluessurvey.org</a></p>
+<p>A major cross national survey of values and beliefs. Wave 7 contains more than <strong>80,000 respondents across 64 societies</strong>, and the integrated EVS/WVS files are larger still. Covers life satisfaction, trust, social values, religion, family and gender attitudes, and political trust. Distributed directly as <code>.rds</code> and <code>.RData</code>.</p>
+<p><strong>Project questions.</strong> Predict life satisfaction. Predict generalized social trust. Train on one set of countries and test on another. Compare country specific against pooled models.</p>
+<p><strong>Caution.</strong> A random row split mixes respondents from the same countries across training and test. If your question is about cross cultural generalization, hold out whole countries instead.</p>
+<section id="european-social-survey" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="european-social-survey">12. European Social Survey</h3>
+</section>
+<p><a href="https://ess.sikt.no/">ess.sikt.no</a> | <a href="https://cran.r-project.org/package=essurvey"><code>essurvey</code></a></p>
+<p>A repeated cross national European survey with high quality measures of attitudes, well-being, trust, identity, inequality, and behavior.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"essurvey"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(essurvey)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The data portal also provides an API. You may need a free ESS account depending on the route you use.</p>
+<p><strong>Project questions.</strong> Predict life satisfaction. Predict generalized trust. Predict loneliness or social connectedness where available. Test generalization across countries.</p>
+<p><strong>Caution.</strong> Same as WVS. Country structure matters, and a random split answers a different question from a country holdout.</p>
+<section id="anes" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="anes">13. ANES</h3>
+</section>
+<p><a href="https://electionstudies.org/data-center/">electionstudies.org</a></p>
+<p>The core dataset for political psychology. The 2024 Time Series study has <strong>5,521 respondents</strong> with pre and post election waves, and the cumulative file spans 1948 to 2024. Covers political identity, affect toward groups and candidates, trust, issue attitudes, participation, values, and economic perceptions.</p>
+<p><strong>Project questions.</strong> Predict turnout or participation. Predict political interest. Predict affect toward a candidate or group. Predict change between the pre and post election waves.</p>
+<p>Distributed as CSV, SPSS, and Stata, all easy to import.</p>
+<section id="project-implicit" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="project-implicit">14. Project Implicit</h3>
+</section>
+<p><a href="https://implicit.harvard.edu/implicit/">Project Implicit</a> | <a href="https://osf.io/y9hiq/">Open data archive</a></p>
+<p>Anonymized data from the Project Implicit demonstration website, including Implicit Association Test responses alongside explicit attitudes and demographics. Individual datasets can contain hundreds of thousands or millions of observations.</p>
+<p><strong>Why it works.</strong> A direct line to social cognition, at enormous scale, with a natural comparison between predicting implicit and explicit attitudes.</p>
+<p><strong>Project questions.</strong> Predict IAT D-score from demographics and explicit attitudes. Predict explicit attitudes from implicit measures. Compare performance across years, or train on one period and test on a later one.</p>
+<p><strong>Caution.</strong> The sample is self selected and not nationally representative. That is pedagogically useful as long as you clearly separate predictive performance within this sample from claims about the population. The files are also very large, so pick one IAT and one year to start.</p>
+<section id="open-source-psychometrics-project" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="open-source-psychometrics-project">15. Open Source Psychometrics Project</h3>
+</section>
+<p><a href="https://openpsychometrics.org/_rawdata/">openpsychometrics.org/_rawdata</a></p>
+<p>Anonymous raw data from online personality and individual differences assessments. Most datasets are a ZIP containing a CSV plus a text codebook, which makes this the lowest friction option on the page.</p>
+<ul>
+<li>16PF style IPIP dataset: 49,159 respondents</li>
+<li>Narcissistic Personality Inventory: 11,243</li>
+<li>MACH-IV Machiavellianism: 73,489</li>
+<li>Big Five: 19,719</li>
+<li>Firstborn Personality Scale: 41,842</li>
+<li>Introversion and Extraversion: 7,188</li>
+</ul>
+<p><strong>Project questions.</strong> Predict a self reported personality category from item responses. Predict demographic or behavioral variables from personality items. Compare sparse regression against tree based models. Test whether a short subset of items predicts a longer scale score.</p>
+<p><strong>Caution.</strong> Volunteer internet samples, so discuss self selection explicitly. And avoid trivial targets, such as predicting a scale score from the exact items summed to create it, unless scale shortening is the actual point.</p>
+<section id="ipums-cps" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="ipums-cps">16. IPUMS CPS</h3>
+</section>
+<p><a href="https://cps.ipums.org/">cps.ipums.org</a></p>
+<p>Harmonized decades of monthly United States Current Population Survey microdata. Free after registration, and you build a custom extract rather than downloading everything. Covers employment, education, family structure, income, disability, health insurance, food security, and selected supplements on volunteering and internet use.</p>
+<p><strong>Project questions.</strong> Predict labor force participation. Predict food insecurity. Predict employment transitions. Predict volunteering.</p>
+<p>Less purely psychological than MIDUS or openESM, but strong for social, occupational, and developmental questions.</p>
+<section id="health-and-retirement-study" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="health-and-retirement-study">17. Health and Retirement Study</h3>
+</section>
+<p><a href="https://hrs.isr.umich.edu/">hrs.isr.umich.edu</a></p>
+<p>A major longitudinal study of United States adults over 50 and their spouses, available after registration. Covers cognition, depression, personality, health, disability, family, work and retirement, economic stress, and social engagement.</p>
+<p><strong>Project questions.</strong> Predict later cognitive performance. Predict retirement transition. Predict self rated health or functional limitation. Predict depressive symptoms from social, economic, and health variables.</p>
+<p>An excellent advanced project, though access and longitudinal data management make it harder than GSS or NHANES.</p>
+
+
+
+</main> <!-- /main -->
+<script>
+// Floating page controls: text size and sidebar visibility.
+// Choices persist across pages via localStorage.
+(function () {
+  var KEY_SCALE = "psyc559-scale";
+  var KEY_SIDEBAR = "psyc559-sidebar-hidden";
+
+  function applyScale(s) {
+    var m = document.querySelector("main.content");
+    if (m) m.style.fontSize = s + "em";
+    localStorage.setItem(KEY_SCALE, s);
+  }
+
+  function applySidebar(hidden) {
+    document.body.classList.toggle("sidebar-hidden", hidden);
+    localStorage.setItem(KEY_SIDEBAR, hidden ? "1" : "0");
+    var btn = document.getElementById("psyc-sidebar-btn");
+    if (btn) btn.textContent = hidden ? "Show menu" : "Hide menu";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var scale = parseFloat(localStorage.getItem(KEY_SCALE));
+    if (!scale || isNaN(scale)) scale = 1;
+    var hidden = localStorage.getItem(KEY_SIDEBAR) === "1";
+
+    var bar = document.createElement("div");
+    bar.id = "psyc-controls";
+    bar.innerHTML =
+      '<button id="psyc-smaller" title="Smaller text">A-</button>' +
+      '<button id="psyc-larger" title="Larger text">A+</button>' +
+      '<button id="psyc-sidebar-btn" title="Show or hide the sidebar">Hide menu</button>';
+    document.body.appendChild(bar);
+
+    document.getElementById("psyc-smaller").addEventListener("click", function () {
+      scale = Math.max(0.7, Math.round((scale - 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-larger").addEventListener("click", function () {
+      scale = Math.min(2.0, Math.round((scale + 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-sidebar-btn").addEventListener("click", function () {
+      hidden = !hidden;
+      applySidebar(hidden);
+    });
+
+    applyScale(scale);
+    applySidebar(hidden);
+  });
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,202 @@
+.spoiler {
+  background-color: gray;
+  color: gray;
+  border-radius: 4px;
+  padding: 0.2em 0.4em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.spoiler.revealed {
+  color: white;
+  background-color: #333; /* a dark grey so the text stands out */
+}
+
+hr {
+    height: 5px;
+    color: white;
+    background-color: white;
+}
+
+.caption{
+   text-align: center;
+}
+
+/* Lower-level subsection headings (h4-h6): lightblue and a little larger.
+   The h2 and h3 levels already get their color from inline styles. */
+main.content h4,
+main.content h5,
+main.content h6 {
+  color: lightblue;
+}
+
+main.content h4 { font-size: 1.5rem; }
+main.content h5 { font-size: 1.32rem; }
+main.content h6 { font-size: 1.2rem; }
+
+/* Callout titles keep the callout's own styling */
+main.content .callout h2,
+main.content .callout h3,
+main.content .callout h4,
+main.content .callout h5,
+main.content .callout h6 {
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Inline code inside headings: drop the light background chip and
+   match the heading's color (fixes yellow-on-white section titles) */
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* Note callouts (e.g., Further Information boxes): match the site's
+   yellow accent instead of Quarto's default blue */
+div.callout-note.callout {
+  border-left-color: yellow;
+}
+div.callout-note.callout-style-default > .callout-header {
+  background-color: rgba(255, 255, 0, 0.18);
+}
+
+/* Floating page controls: text size and sidebar toggle */
+#psyc-controls {
+  position: fixed;
+  bottom: 0.75rem;
+  right: 0.9rem;
+  z-index: 1080;
+  display: flex;
+  gap: 0.3rem;
+}
+
+#psyc-controls button {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid #777;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #ddd;
+  cursor: pointer;
+}
+
+#psyc-controls button:hover {
+  background: rgba(255, 255, 0, 0.35);
+  color: #fff;
+}
+
+body.sidebar-hidden #quarto-sidebar {
+  display: none !important;
+}
+
+/* Quarto's grid reserves fixed columns for the docked sidebar, so hiding it
+   is not enough: the leading columns must collapse for the content to move
+   left. This mirrors Quarto's own docked template with the sidebar columns
+   replaced by flexible space, keeping every named grid line intact so the
+   right-hand table of contents still lands in its column. */
+body.sidebar-hidden #quarto-content.page-columns {
+  grid-template-columns:
+    [screen-start] 1.5em
+    [screen-start-inset page-start page-start-inset body-start-outset body-start] 1fr
+    [body-content-start] minmax(500px, calc(1100px - 3em))
+    [body-content-end] 1.5em
+    [body-end] 50px
+    [body-end-outset] minmax(50px, 200px)
+    [page-end-inset] 50px
+    [page-end] 1fr
+    [screen-end-inset] 1.5em
+    [screen-end] !important;
+}
+
+@media print {
+  #psyc-controls { display: none; }
+}
+
+/* Homepage quick-link cards */
+.quick-links .card {
+  transition: transform 0.15s ease;
+}
+.quick-links .card:hover {
+  transform: translateY(-4px);
+}
+.quick-links .card h3 {
+  margin-top: 0;
+  border-bottom: none;
+}
+.quick-links .btn {
+  margin: 0.25em;
+}
+
+/* -----------------------------------------------------------------
+   SLIDE MODE
+   A page opts in by adding `body-classes: slides` to its YAML header
+   and wrapping each screenful of content in ::: {.slide} ... :::
+
+   Note: headings on this site live inside color divs, so Quarto emits
+   a <section> holding only the heading, with the content as a sibling.
+   Sections therefore cannot be used as chunks; .slide is the unit.
+   ----------------------------------------------------------------- */
+body.slides main.content .slide {
+  min-height: 66vh;
+  padding: 1rem 0 2.5rem;
+  border-bottom: 1px solid #3d3d3d;
+  scroll-snap-align: start;
+  scroll-margin-top: 1rem;
+}
+
+body.slides main.content .slide > :first-child,
+body.slides main.content .slide > section:first-child > h2,
+body.slides main.content .slide > section:first-child > h3 {
+  margin-top: 0;
+}
+
+/* A heading's own section adds nothing to the chunk's height. */
+body.slides main.content .slide > section.level2,
+body.slides main.content .slide > section.level3 {
+  min-height: 0;
+}
+
+/* Gentle snapping: scrolling settles on a chunk without fighting the
+   trackpad, and chunks taller than the screen still scroll normally. */
+body.slides {
+  scroll-snap-type: y proximity;
+}
+
+@media print {
+  body.slides main.content .slide {
+    min-height: 0;
+    border-bottom: none;
+  }
+}
+
+/* Two column comparison inside a slide: ::: {.slide .two-col} with one
+   ::: {} div per column. Collapses to a single column when narrow. */
+main.content .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+main.content .two-col > div {
+  min-width: 0;
+}
+
+main.content .two-col > div + div {
+  border-left: 1px solid #3d3d3d;
+  padding-left: 2rem;
+}
+
+@media (max-width: 1000px) {
+  main.content .two-col {
+    grid-template-columns: 1fr;
+  }
+  main.content .two-col > div + div {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid #3d3d3d;
+    padding-top: 1.5rem;
+  }
+}
