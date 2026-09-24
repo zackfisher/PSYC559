@@ -15,7 +15,11 @@ bibliography: references.bib
 :::
 In today's lecture we will cover:
 
-- A Conceptual Introduction
+-   **A conceptual introduction.** 
+-   **Some Historical Example** 
+-   **A Worked Example.** 
+-   **Four Models, One Framework.** 
+-   **Loose Ends** 
 ::::
 
 :::: {.slide}

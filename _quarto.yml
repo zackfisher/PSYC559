@@ -33,7 +33,6 @@ project:
     - week3_2.qmd
     - week3_3.qmd
     - week3_4.qmd
-    - week4_1.qmd
     - week4_1b_regularization.qmd
     - week5_1.qmd
     - week5_2.qmd
@@ -123,7 +122,6 @@ website:
           - week3_2.qmd
           - week3_3.qmd
           - week3_4.qmd
-          - week4_1.qmd
           - week4_1b_regularization.qmd
       - section: "Tree Methods"
         contents:
