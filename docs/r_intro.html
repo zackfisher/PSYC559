@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-223e1ba6472b6e8039235b59a4424451.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4b807711a074c809fb7a41e0e0412991.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -330,6 +330,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Multiple Logistic Regression</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularized Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1b_regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -393,37 +405,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#basic-r-programming" id="toc-basic-r-programming" class="nav-link active" data-scroll-target="#basic-r-programming">Basic R Programming</a></li>
-  <li><a href="#setting-up-your-environment" id="toc-setting-up-your-environment" class="nav-link" data-scroll-target="#setting-up-your-environment">Setting Up Your Environment</a></li>
-  <li><a href="#r-packages" id="toc-r-packages" class="nav-link" data-scroll-target="#r-packages">R Packages</a></li>
-  <li><a href="#installing-r-packages" id="toc-installing-r-packages" class="nav-link" data-scroll-target="#installing-r-packages">Installing R Packages</a></li>
-  <li><a href="#using-r-packages" id="toc-using-r-packages" class="nav-link" data-scroll-target="#using-r-packages">Using R Packages</a></li>
-  <li><a href="#finding-useful-r-packages" id="toc-finding-useful-r-packages" class="nav-link" data-scroll-target="#finding-useful-r-packages">Finding Useful R Packages</a></li>
-  <li><a href="#reading-in-data" id="toc-reading-in-data" class="nav-link" data-scroll-target="#reading-in-data">Reading in Data</a></li>
-  <li><a href="#loading-data" id="toc-loading-data" class="nav-link" data-scroll-target="#loading-data">Loading Data</a></li>
-  <li><a href="#working-with-data-frames" id="toc-working-with-data-frames" class="nav-link" data-scroll-target="#working-with-data-frames">Working with Data Frames</a></li>
-  <li><a href="#data-frames" id="toc-data-frames" class="nav-link" data-scroll-target="#data-frames">Data Frames</a></li>
-  <li><a href="#selecting-a-variable-with" id="toc-selecting-a-variable-with" class="nav-link" data-scroll-target="#selecting-a-variable-with">Selecting a Variable with <code>$</code></a></li>
-  <li><a href="#subsetting-with-rows-columns" id="toc-subsetting-with-rows-columns" class="nav-link" data-scroll-target="#subsetting-with-rows-columns">Subsetting with <code>[rows, columns]</code></a></li>
-  <li><a href="#missing-values-na" id="toc-missing-values-na" class="nav-link" data-scroll-target="#missing-values-na">Missing Values: <code>NA</code></a></li>
-  <li><a href="#the-pipe-operator" id="toc-the-pipe-operator" class="nav-link" data-scroll-target="#the-pipe-operator">The Pipe Operator <code>%&gt;%</code></a></li>
-  <li><a href="#data-wrangling-with-dplyr" id="toc-data-wrangling-with-dplyr" class="nav-link" data-scroll-target="#data-wrangling-with-dplyr">Data Wrangling with <code>dplyr</code></a></li>
-  <li><a href="#two-dialects-one-language" id="toc-two-dialects-one-language" class="nav-link" data-scroll-target="#two-dialects-one-language">Two Dialects, One Language</a></li>
-  <li><a href="#describing-data-numerically" id="toc-describing-data-numerically" class="nav-link" data-scroll-target="#describing-data-numerically">Describing Data Numerically</a></li>
-  <li><a href="#numerical-summaries-of-data-frames" id="toc-numerical-summaries-of-data-frames" class="nav-link" data-scroll-target="#numerical-summaries-of-data-frames">Numerical Summaries of Data Frames</a></li>
-  <li><a href="#describing-data-visually" id="toc-describing-data-visually" class="nav-link" data-scroll-target="#describing-data-visually">Describing Data Visually</a></li>
-  <li><a href="#data-visualization" id="toc-data-visualization" class="nav-link" data-scroll-target="#data-visualization">Data Visualization</a></li>
-  <li><a href="#r-markdown-and-course-setup" id="toc-r-markdown-and-course-setup" class="nav-link" data-scroll-target="#r-markdown-and-course-setup">R Markdown and Course Setup</a></li>
-  <li><a href="#r-markdown" id="toc-r-markdown" class="nav-link" data-scroll-target="#r-markdown">R Markdown</a></li>
-  <li><a href="#install-the-course-packages" id="toc-install-the-course-packages" class="nav-link" data-scroll-target="#install-the-course-packages">Install the Course Packages</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 

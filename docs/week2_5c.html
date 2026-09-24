@@ -99,7 +99,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-223e1ba6472b6e8039235b59a4424451.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4b807711a074c809fb7a41e0e0412991.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,7 +132,7 @@ div.csl-indent {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -349,6 +349,18 @@ div.csl-indent {
  <span class="menu-text">Multiple Logistic Regression</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularized Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1b_regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -412,27 +424,7 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#missing-data-mechanisms" id="toc-missing-data-mechanisms" class="nav-link" data-scroll-target="#missing-data-mechanisms">Missing Data Mechanisms</a></li>
-  <li><a href="#missing-completely-at-random-mcar" id="toc-missing-completely-at-random-mcar" class="nav-link" data-scroll-target="#missing-completely-at-random-mcar">Missing Completely at Random (MCAR)</a></li>
-  <li><a href="#missing-at-random-mar" id="toc-missing-at-random-mar" class="nav-link" data-scroll-target="#missing-at-random-mar">Missing at Random (MAR)</a></li>
-  <li><a href="#missing-not-at-random-mnar" id="toc-missing-not-at-random-mnar" class="nav-link" data-scroll-target="#missing-not-at-random-mnar">Missing Not at Random (MNAR)</a></li>
-  <li><a href="#handling-missing-data-in-r" id="toc-handling-missing-data-in-r" class="nav-link" data-scroll-target="#handling-missing-data-in-r">Handling Missing Data in R</a></li>
-  <li><a href="#recoding-values-with-na" id="toc-recoding-values-with-na" class="nav-link" data-scroll-target="#recoding-values-with-na">Recoding Values with <code>NA</code></a></li>
-  <li><a href="#missing-data-visualization" id="toc-missing-data-visualization" class="nav-link" data-scroll-target="#missing-data-visualization">Missing Data Visualization</a></li>
-  <li><a href="#once-we-have-recoded-our-data-in-a-consistent-manner-we-can-use-visualizations-to-explore-the-missing-data.-the-vis_miss-function-from-naniar-is-a-good-starting-point-for-visualizing-the-amount-of-missing-data-in-our-dataset.-the-plots-shows-the-missing-values-in-black-and-non-missing-values-in-gray.-in-addition-percentages-of-missing-data-in-both-the-dataset-and-individual-variables-are-provided." id="toc-once-we-have-recoded-our-data-in-a-consistent-manner-we-can-use-visualizations-to-explore-the-missing-data.-the-vis_miss-function-from-naniar-is-a-good-starting-point-for-visualizing-the-amount-of-missing-data-in-our-dataset.-the-plots-shows-the-missing-values-in-black-and-non-missing-values-in-gray.-in-addition-percentages-of-missing-data-in-both-the-dataset-and-individual-variables-are-provided." class="nav-link" data-scroll-target="#once-we-have-recoded-our-data-in-a-consistent-manner-we-can-use-visualizations-to-explore-the-missing-data.-the-vis_miss-function-from-naniar-is-a-good-starting-point-for-visualizing-the-amount-of-missing-data-in-our-dataset.-the-plots-shows-the-missing-values-in-black-and-non-missing-values-in-gray.-in-addition-percentages-of-missing-data-in-both-the-dataset-and-individual-variables-are-provided.">Once we have recoded our data in a consistent manner we can use visualizations to explore the missing data. The <code>vis_miss()</code> function from <code>naniar</code> is a good starting point for visualizing the amount of missing data in our dataset. The plots shows the missing values in black and non-missing values in gray. In addition, percentages of missing data in both the dataset and individual variables are provided.</a></li>
-  <li><a href="#missing-data-activity" id="toc-missing-data-activity" class="nav-link" data-scroll-target="#missing-data-activity">Missing Data Activity</a></li>
-  <li><a href="#handling-missing-data" id="toc-handling-missing-data" class="nav-link" data-scroll-target="#handling-missing-data">Handling Missing Data</a></li>
-  <li><a href="#listwise-deletion" id="toc-listwise-deletion" class="nav-link" data-scroll-target="#listwise-deletion">Listwise Deletion</a></li>
-  <li><a href="#imputation" id="toc-imputation" class="nav-link" data-scroll-target="#imputation">Imputation</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 

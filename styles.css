@@ -128,3 +128,75 @@ body.sidebar-hidden #quarto-content.page-columns {
 .quick-links .btn {
   margin: 0.25em;
 }
+
+/* -----------------------------------------------------------------
+   SLIDE MODE
+   A page opts in by adding `body-classes: slides` to its YAML header
+   and wrapping each screenful of content in ::: {.slide} ... :::
+
+   Note: headings on this site live inside color divs, so Quarto emits
+   a <section> holding only the heading, with the content as a sibling.
+   Sections therefore cannot be used as chunks; .slide is the unit.
+   ----------------------------------------------------------------- */
+body.slides main.content .slide {
+  min-height: 66vh;
+  padding: 1rem 0 2.5rem;
+  border-bottom: 1px solid #3d3d3d;
+  scroll-snap-align: start;
+  scroll-margin-top: 1rem;
+}
+
+body.slides main.content .slide > :first-child,
+body.slides main.content .slide > section:first-child > h2,
+body.slides main.content .slide > section:first-child > h3 {
+  margin-top: 0;
+}
+
+/* A heading's own section adds nothing to the chunk's height. */
+body.slides main.content .slide > section.level2,
+body.slides main.content .slide > section.level3 {
+  min-height: 0;
+}
+
+/* Gentle snapping: scrolling settles on a chunk without fighting the
+   trackpad, and chunks taller than the screen still scroll normally. */
+body.slides {
+  scroll-snap-type: y proximity;
+}
+
+@media print {
+  body.slides main.content .slide {
+    min-height: 0;
+    border-bottom: none;
+  }
+}
+
+/* Two column comparison inside a slide: ::: {.slide .two-col} with one
+   ::: {} div per column. Collapses to a single column when narrow. */
+main.content .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+main.content .two-col > div {
+  min-width: 0;
+}
+
+main.content .two-col > div + div {
+  border-left: 1px solid #3d3d3d;
+  padding-left: 2rem;
+}
+
+@media (max-width: 1000px) {
+  main.content .two-col {
+    grid-template-columns: 1fr;
+  }
+  main.content .two-col > div + div {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid #3d3d3d;
+    padding-top: 1.5rem;
+  }
+}

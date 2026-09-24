@@ -34,6 +34,7 @@ project:
     - week3_3.qmd
     - week3_4.qmd
     - week4_1.qmd
+    - week4_1b_regularization.qmd
     - week5_1.qmd
     - week5_2.qmd
     - week5_3.qmd
@@ -68,8 +69,7 @@ website:
     # (released 9/6 — Feature engineering: week2_5a through week2_5g)
     # (released 9/6 — Linear regression: week3_1, week3_2)
     # (released 9/21 — Logistic regression: week3_3, week3_4)
-    # 9/10 — Regularized regression
-    - week4_1.qmd
+    # (released 9/22 — Regularized regression: week4_1)
     # 9/22 — KNN and decision trees
     - week5_1.qmd
     # 9/24 — Bagging and random forests
@@ -124,6 +124,7 @@ website:
           - week3_3.qmd
           - week3_4.qmd
           - week4_1.qmd
+          - week4_1b_regularization.qmd
       - section: "Tree Methods"
         contents:
           - week5_1.qmd
@@ -148,7 +149,11 @@ format:
     theme: darkly
     css: styles.css
     include-after-body: _controls.html
-    toc: true
+    # The "On this page" table of contents is off site wide.
+    toc: false
+    # Width of the main content column. Quarto's default is 800px.
+    grid:
+      body-width: 1000px
 execute:
   warning: false
   message: false

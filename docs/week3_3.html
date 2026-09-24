@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-223e1ba6472b6e8039235b59a4424451.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4b807711a074c809fb7a41e0e0412991.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -142,7 +142,7 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -359,6 +359,18 @@ window.Quarto = {
  <span class="menu-text">Multiple Logistic Regression</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularized Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1b_regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -422,30 +434,7 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#overview-of-simple-logistic-regression" id="toc-overview-of-simple-logistic-regression" class="nav-link" data-scroll-target="#overview-of-simple-logistic-regression">Overview of Simple Logistic Regression</a></li>
-  <li><a href="#this-is-a-classification-problem" id="toc-this-is-a-classification-problem" class="nav-link" data-scroll-target="#this-is-a-classification-problem">This Is a Classification Problem</a></li>
-  <li><a href="#starting-from-linear-regression" id="toc-starting-from-linear-regression" class="nav-link" data-scroll-target="#starting-from-linear-regression">Starting From Linear Regression</a></li>
-  <li><a href="#problems-with-using-linear-regression-for-binary-outcomes" id="toc-problems-with-using-linear-regression-for-binary-outcomes" class="nav-link" data-scroll-target="#problems-with-using-linear-regression-for-binary-outcomes">Problems with Using Linear Regression for Binary Outcomes</a></li>
-  <li><a href="#logistic-regression-solution" id="toc-logistic-regression-solution" class="nav-link" data-scroll-target="#logistic-regression-solution">Logistic Regression Solution</a></li>
-  <li><a href="#how-does-the-algorithm-learn" id="toc-how-does-the-algorithm-learn" class="nav-link" data-scroll-target="#how-does-the-algorithm-learn">How Does the Algorithm Learn?</a></li>
-  <li><a href="#example-data-dropout-data" id="toc-example-data-dropout-data" class="nav-link" data-scroll-target="#example-data-dropout-data">Example Data: Dropout Data</a></li>
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#dataset-characteristics" id="toc-dataset-characteristics" class="nav-link" data-scroll-target="#dataset-characteristics">Dataset Characteristics</a></li>
-  <li><a href="#feature-categories" id="toc-feature-categories" class="nav-link" data-scroll-target="#feature-categories">Feature Categories</a></li>
-  <li><a href="#target-variable" id="toc-target-variable" class="nav-link" data-scroll-target="#target-variable">Target Variable</a></li>
-  <li><a href="#read-in-data" id="toc-read-in-data" class="nav-link" data-scroll-target="#read-in-data">Read in Data</a></li>
-  <li><a href="#simple-logistic-regression-in-r" id="toc-simple-logistic-regression-in-r" class="nav-link" data-scroll-target="#simple-logistic-regression-in-r">Simple Logistic Regression in R</a></li>
-  <li><a href="#intercept-only-model-in-r" id="toc-intercept-only-model-in-r" class="nav-link" data-scroll-target="#intercept-only-model-in-r">Intercept-Only Model in R</a></li>
-  <li><a href="#single-predictor-model-in-r" id="toc-single-predictor-model-in-r" class="nav-link" data-scroll-target="#single-predictor-model-in-r">Single-Predictor Model in R</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -497,12 +486,20 @@ window.Quarto = {
 <li>That probability becomes a predicted class only once you apply a cutoff, which is 0.5 by default.</li>
 <li>The cutoff is a separate decision from the model. <a href="./week3_4.html">Multiple Logistic Regression</a> shows what changes when you move it.</li>
 </ul>
-<section id="two-consequences-follow-and-both-come-up-later" class="level4" style="color: lightorange">
-<h4 class="anchored" data-anchor-id="two-consequences-follow-and-both-come-up-later">Two consequences follow, and both come up later:</h4>
+<section id="two-big-differences-from-linear-regression" class="level4" style="color: lightorange">
+<h4 class="anchored" data-anchor-id="two-big-differences-from-linear-regression">Two Big Differences from Linear Regression</h4>
 </section>
 <ul>
-<li><strong>The evaluation measures change.</strong> MAE and RMSE measure distance in the units of a continuous outcome, and there is no distance between two categories. Classification uses accuracy, sensitivity, specificity, and related measures, all built from the confusion matrix. See <a href="./p02_evaluating_performance.html">Evaluating Model Performance</a>.</li>
-<li><strong>The baseline changes.</strong> For a continuous outcome the do nothing baseline predicts the mean. For a category it predicts the most common class. About 32 percent of these students dropped out, so predicting that nobody drops out is already right 68 percent of the time.</li>
+<li><p><strong>Evaluation Metrics Change:</strong></p>
+<ul>
+<li><p>MAE and RMSE measure distance in the units of a continuous outcome, and there is no distance between two categories.</p></li>
+<li><p>Classification uses accuracy, sensitivity, specificity, and related measures, all built from the confusion matrix. See <a href="./p02_evaluating_performance.html">Evaluating Model Performance</a>.</p></li>
+</ul></li>
+<li><p><strong>Baseline Model Changes:</strong></p>
+<ul>
+<li>For a continuous outcome the do nothing baseline predicts the mean.</li>
+<li>For a category it predicts the most common class. About 32 percent of these students dropped out, so predicting that nobody drops out is already right 68 percent of the time.</li>
+</ul></li>
 </ul>
 <section id="starting-from-linear-regression" class="level3" style="color: lightblue">
 <h3 class="anchored" data-anchor-id="starting-from-linear-regression">Starting From Linear Regression</h3>
@@ -512,13 +509,17 @@ window.Quarto = {
 \hat{Y} = \beta_0 + \beta_1 X
 \]</span></p>
 <p>and interpret <span class="math inline">\(\hat{Y}\)</span> as the probability that <span class="math inline">\(Y=1\)</span>.</p>
-<section id="problems-with-using-linear-regression-for-binary-outcomes" class="level3" style="color: lightblue">
-<h3 class="anchored" data-anchor-id="problems-with-using-linear-regression-for-binary-outcomes">Problems with Using Linear Regression for Binary Outcomes</h3>
+<section id="problems-with-using-linear-regression" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="problems-with-using-linear-regression">Problems with Using Linear Regression</h3>
 </section>
+<p>There are a few problems with using linear regression for binary outcomes.</p>
 <div style="color: orange">
-<p><strong>Predicted probabilities outside [0,1]:</strong></p>
+<p><strong>Problem 1: Predicted probabilities outside [0,1]:</strong></p>
 </div>
-<p>Linear regression does not constrain predictions. For some values of <span class="math inline">\(X\)</span>, <span class="math inline">\(\hat{Y}\)</span> might be negative or greater than 1, which is impossible for probabilities.</p>
+<p>Linear regression does not constrain predictions. For some values of <span class="math inline">\(X\)</span>, <span class="math inline">\(\hat{Y}\)</span> might be negative or greater than 1.</p>
+<div style="color: lightgreen">
+<p><strong>Why is this a problem?</strong></p>
+</div>
 <p>Let’s fit a regression to binary data to make this concrete.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
@@ -556,7 +557,7 @@ window.Quarto = {
 </div>
 <p>The line dips below 0 on the left, so it already returns predictions that cannot be probabilities. Extend x a little past 3 and it climbs above 1 as well.</p>
 <div style="color: orange">
-<p><strong>Non-constant variance (heteroskedasticity):</strong></p>
+<p><strong>Problem 2: Non-constant variance (heteroskedasticity):</strong></p>
 </div>
 <p>In binary data, the variance of <span class="math inline">\(Y\)</span> is</p>
 <p><span class="math display">\[
@@ -583,10 +584,12 @@ window.Quarto = {
 </div>
 <p>The residuals fall on two parallel lines, one for the cases with <span class="math inline">\(y = 1\)</span> and one for those with <span class="math inline">\(y = 0\)</span>. Near fitted values of 0 and 1 almost every point sits on one of the two lines, so the spread is narrow. Near 0.5 both lines are occupied and the spread is at its widest. That is the changing variance the formula describes.</p>
 <div style="color: orange">
-<p><strong>Nonlinear relationship between predictors and probability:</strong></p>
+<p><strong>Problem 3: Nonlinear relationship between predictors and probability:</strong></p>
 </div>
 <p>In reality, probabilities often follow an S shaped curve. They change slowly when predictors are very small or very large, and change more quickly in the middle. Linear regression cannot capture this shape.</p>
-<p><em>Can you think of a real-world example where this might happen?</em></p>
+<div style="color: lightgreen">
+<p><strong>Can you think of a real-world example where this might happen?</strong></p>
+</div>
 <section id="logistic-regression-solution" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="logistic-regression-solution">Logistic Regression Solution</h2>
 </section>
@@ -602,21 +605,49 @@ p(x) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x)}}
 <li>The variance is modeled correctly.</li>
 <li>The S shaped curve naturally captures how probabilities change with <span class="math inline">\(X\)</span>.</li>
 </ul>
-<section id="how-does-the-algorithm-learn" class="level3" style="color: lightblue">
-<h3 class="anchored" data-anchor-id="how-does-the-algorithm-learn">How Does the Algorithm Learn?</h3>
+<section id="log-loss-how-do-we-evaluate-predicted-probabilities" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="log-loss-how-do-we-evaluate-predicted-probabilities">Log Loss: How Do We Evaluate Predicted Probabilities?</h3>
 </section>
-<p><a href="./week3_1.html">Simple Linear Regression</a> described fitting as a search: choose the coefficients that make a loss function as small as possible. That description still holds here. What changes is the loss.</p>
-<p>Squared error is the wrong loss for a probability, because the outcome is 0 or 1 while the prediction is a number in between. The standard choice is <strong>log loss</strong>, also called cross entropy:</p>
-<p><span class="math display">\[
-\text{log loss} = -\frac{1}{n}\sum_{i=1}^{n}
-\left[ y_i \ln(\hat{p}_i) + (1 - y_i) \ln(1 - \hat{p}_i) \right]
-\]</span></p>
+<p>In linear regression, we measure prediction errors using squared error.</p>
+<p>In logistic regression, we typically use a different loss function called <strong>log loss</strong> (also known as cross-entropy).</p>
+<p>The basic idea is simple: <strong>We want our model to assign high probabilities to outcomes that actually occur.</strong></p>
+<p>Imagine we are predicting whether a student will pass an exam. The student passes, so the actual outcome is 1.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 45%">
+<col style="width: 54%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Predicted probability of passing</th>
+<th>How should we evaluate the prediction?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.90</td>
+<td>Good prediction!</td>
+</tr>
+<tr class="even">
+<td>0.50</td>
+<td>Uncertain prediction</td>
+</tr>
+<tr class="odd">
+<td>0.10</td>
+<td>Poor prediction!</td>
+</tr>
+</tbody>
+</table>
+<p>Log loss translates these predicted probabilities into numerical penalties.</p>
 <ul>
-<li>When <span class="math inline">\(y_i = 1\)</span>, only the first term counts, and the loss grows as <span class="math inline">\(\hat{p}_i\)</span> moves toward 0.</li>
-<li>When <span class="math inline">\(y_i = 0\)</span>, only the second term counts, and the loss grows as <span class="math inline">\(\hat{p}_i\)</span> moves toward 1.</li>
-<li>A confident prediction that turns out to be wrong is punished heavily.</li>
+<li>A prediction that assigns a high probability to the actual outcome receives a small penalty.</li>
+<li>A prediction that assigns a low probability to the actual outcome receives a large penalty.</li>
+<li>A confident prediction that turns out to be wrong receives a particularly large penalty.</li>
 </ul>
-<p>Minimizing log loss is the same thing as maximizing the likelihood, which is why logistic regression is usually described as a maximum likelihood method. Unlike linear regression there is no closed form solution, so <code>glm()</code> solves it by iterating until the coefficients stop changing. The idea from the previous pages does not change: fitting a model means finding the coefficients that minimize a loss function.</p>
+<p><strong>How does logistic regression use log loss?</strong></p>
+<p>Just as linear regression finds coefficients that minimize squared error, logistic regression finds coefficients that minimize log loss.</p>
+<p>Minimizing log loss is mathematically equivalent to maximizing the likelihood of the observed outcomes. Because there is no general closed-form solution for the logistic regression coefficients, <code>glm()</code> uses an iterative numerical algorithm to find them.</p>
+<p>The central idea remains the same: <strong>fitting a model means finding the coefficients that minimize a loss function.</strong></p>
 <section id="example-data-dropout-data" class="level2" style="color: yellow">
 <h2 class="anchored" data-anchor-id="example-data-dropout-data">Example Data: Dropout Data</h2>
 </section>

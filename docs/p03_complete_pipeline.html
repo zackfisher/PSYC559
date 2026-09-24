@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-223e1ba6472b6e8039235b59a4424451.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4b807711a074c809fb7a41e0e0412991.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -330,6 +330,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Multiple Logistic Regression</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularized Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1b_regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -393,33 +405,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#step-1-split" id="toc-step-1-split" class="nav-link active" data-scroll-target="#step-1-split">Step 1: Split</a></li>
-  <li><a href="#loading-the-data" id="toc-loading-the-data" class="nav-link" data-scroll-target="#loading-the-data">Loading the Data</a></li>
-  <li><a href="#making-the-split" id="toc-making-the-split" class="nav-link" data-scroll-target="#making-the-split">Making the Split</a></li>
-  <li><a href="#step-2-a-preprocessing-recipe" id="toc-step-2-a-preprocessing-recipe" class="nav-link" data-scroll-target="#step-2-a-preprocessing-recipe">Step 2: A Preprocessing Recipe</a></li>
-  <li><a href="#writing-the-recipe" id="toc-writing-the-recipe" class="nav-link" data-scroll-target="#writing-the-recipe">Writing the Recipe</a></li>
-  <li><a href="#reading-the-steps-in-order" id="toc-reading-the-steps-in-order" class="nav-link" data-scroll-target="#reading-the-steps-in-order">Reading the Steps in Order</a></li>
-  <li><a href="#seeing-what-the-recipe-actually-does" id="toc-seeing-what-the-recipe-actually-does" class="nav-link" data-scroll-target="#seeing-what-the-recipe-actually-does">Seeing What the Recipe Actually Does</a></li>
-  <li><a href="#step-3-resampling-scheme" id="toc-step-3-resampling-scheme" class="nav-link" data-scroll-target="#step-3-resampling-scheme">Step 3: Resampling Scheme</a></li>
-  <li><a href="#step-4-fit" id="toc-step-4-fit" class="nav-link" data-scroll-target="#step-4-fit">Step 4: Fit</a></li>
-  <li><a href="#fitting-the-first-model" id="toc-fitting-the-first-model" class="nav-link" data-scroll-target="#fitting-the-first-model">Fitting the First Model</a></li>
-  <li><a href="#reading-the-output" id="toc-reading-the-output" class="nav-link" data-scroll-target="#reading-the-output">Reading the Output</a></li>
-  <li><a href="#step-5-compare-candidates" id="toc-step-5-compare-candidates" class="nav-link" data-scroll-target="#step-5-compare-candidates">Step 5: Compare Candidates</a></li>
-  <li><a href="#adding-a-second-candidate" id="toc-adding-a-second-candidate" class="nav-link" data-scroll-target="#adding-a-second-candidate">Adding a Second Candidate</a></li>
-  <li><a href="#reading-the-tuning-table" id="toc-reading-the-tuning-table" class="nav-link" data-scroll-target="#reading-the-tuning-table">Reading the Tuning Table</a></li>
-  <li><a href="#comparing-them-on-the-same-folds" id="toc-comparing-them-on-the-same-folds" class="nav-link" data-scroll-target="#comparing-them-on-the-same-folds">Comparing Them on the Same Folds</a></li>
-  <li><a href="#step-6-the-test-set-once" id="toc-step-6-the-test-set-once" class="nav-link" data-scroll-target="#step-6-the-test-set-once">Step 6: The Test Set, Once</a></li>
-  <li><a href="#making-the-final-prediction" id="toc-making-the-final-prediction" class="nav-link" data-scroll-target="#making-the-final-prediction">Making the Final Prediction</a></li>
-  <li><a href="#reading-the-final-numbers" id="toc-reading-the-final-numbers" class="nav-link" data-scroll-target="#reading-the-final-numbers">Reading the Final Numbers</a></li>
-  <li><a href="#the-whole-thing" id="toc-the-whole-thing" class="nav-link" data-scroll-target="#the-whole-thing">The Whole Thing</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 

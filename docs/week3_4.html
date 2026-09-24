@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-223e1ba6472b6e8039235b59a4424451.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4b807711a074c809fb7a41e0e0412991.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -142,7 +142,7 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -359,6 +359,18 @@ window.Quarto = {
  <span class="menu-text">Multiple Logistic Regression</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularized Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1b_regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -422,36 +434,7 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#overview-of-multiple-logistic-regression" id="toc-overview-of-multiple-logistic-regression" class="nav-link" data-scroll-target="#overview-of-multiple-logistic-regression">Overview of Multiple Logistic Regression</a></li>
-  <li><a href="#example-data" id="toc-example-data" class="nav-link" data-scroll-target="#example-data">Example Data</a></li>
-  <li><a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model">The Model</a></li>
-  <li><a href="#estimating-the-model" id="toc-estimating-the-model" class="nav-link" data-scroll-target="#estimating-the-model">Estimating the Model</a></li>
-  <li><a href="#implementation-in-r" id="toc-implementation-in-r" class="nav-link" data-scroll-target="#implementation-in-r">Implementation in R</a></li>
-  <li><a href="#interpretation-of-coefficients" id="toc-interpretation-of-coefficients" class="nav-link" data-scroll-target="#interpretation-of-coefficients">Interpretation of Coefficients</a></li>
-  <li><a href="#marginal-effects" id="toc-marginal-effects" class="nav-link" data-scroll-target="#marginal-effects">Marginal Effects</a></li>
-  <li><a href="#marginal-effects-in-r" id="toc-marginal-effects-in-r" class="nav-link" data-scroll-target="#marginal-effects-in-r">Marginal Effects in R</a></li>
-  <li><a href="#assessing-model-accuracy" id="toc-assessing-model-accuracy" class="nav-link" data-scroll-target="#assessing-model-accuracy">Assessing Model Accuracy</a></li>
-  <li><a href="#compare-against-a-baseline" id="toc-compare-against-a-baseline" class="nav-link" data-scroll-target="#compare-against-a-baseline">Compare Against a Baseline</a></li>
-  <li><a href="#scoring-the-test-set" id="toc-scoring-the-test-set" class="nav-link" data-scroll-target="#scoring-the-test-set">Scoring the Test Set</a></li>
-  <li><a href="#outcome-measures-for-classification-tasks" id="toc-outcome-measures-for-classification-tasks" class="nav-link" data-scroll-target="#outcome-measures-for-classification-tasks">Outcome Measures for Classification Tasks</a></li>
-  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">Confusion Matrix</a></li>
-  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy">Accuracy</a></li>
-  <li><a href="#precision" id="toc-precision" class="nav-link" data-scroll-target="#precision">Precision</a></li>
-  <li><a href="#sensitivity-recall" id="toc-sensitivity-recall" class="nav-link" data-scroll-target="#sensitivity-recall">Sensitivity (Recall)</a></li>
-  <li><a href="#specificity" id="toc-specificity" class="nav-link" data-scroll-target="#specificity">Specificity</a></li>
-  <li><a href="#cohens-kappa" id="toc-cohens-kappa" class="nav-link" data-scroll-target="#cohens-kappa">Cohen’s Kappa</a></li>
-  <li><a href="#matthews-correlation-coefficient-mcc" id="toc-matthews-correlation-coefficient-mcc" class="nav-link" data-scroll-target="#matthews-correlation-coefficient-mcc">Matthews Correlation Coefficient (MCC)</a></li>
-  <li><a href="#choosing-a-threshold" id="toc-choosing-a-threshold" class="nav-link" data-scroll-target="#choosing-a-threshold">Choosing a Threshold</a></li>
-  <li><a href="#feature-importance" id="toc-feature-importance" class="nav-link" data-scroll-target="#feature-importance">Feature Importance</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -1012,7 +995,6 @@ specificity 0.8701443 0.9456160 0.9733629</code></pre>
 </div>
 </div>
 <p>Lowering the cutoff to 0.3 flags more students as likely to drop out. Sensitivity rises, because fewer students who really do drop out are missed, and specificity falls, because more students who stay are flagged. Accuracy barely moves across all three cutoffs, which is a reminder that it is the least informative of the three.</p>
-<p>The right cutoff depends on what the predictions are for. A university deciding who receives an outreach call can afford false positives and would rather not miss anyone, so it would choose a low cutoff.</p>
 <section id="feature-importance" class="level3" style="color: lightblue">
 <h3 class="anchored" data-anchor-id="feature-importance">Feature Importance</h3>
 </section>
@@ -1027,20 +1009,6 @@ specificity 0.8701443 0.9456160 0.9733629</code></pre>
 <p><img src="week3_4_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
-</div>
-</div>
-<div class="callout callout-style-default callout-warning no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>What This Plot Does and Does Not Tell You
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Ranking by test statistic means this is a plot of <strong>statistical significance</strong>, not of predictive contribution. A predictor can top this chart and still leave held out accuracy essentially unchanged.</p>
-<p>If the question is which predictors help you predict, the answer comes from removing one and seeing what happens to held out performance, not from reading a ranking off a chart.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip no-icon callout-titled">

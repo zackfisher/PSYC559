@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-223e1ba6472b6e8039235b59a4424451.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4b807711a074c809fb7a41e0e0412991.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -142,7 +142,7 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -359,6 +359,18 @@ window.Quarto = {
  <span class="menu-text">Multiple Logistic Regression</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularized Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1b_regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -422,32 +434,7 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#what-problem-does-linear-regression-solve" id="toc-what-problem-does-linear-regression-solve" class="nav-link" data-scroll-target="#what-problem-does-linear-regression-solve">1. What Problem Does Linear Regression Solve?</a></li>
-  <li><a href="#a-data-decision-first" id="toc-a-data-decision-first" class="nav-link" data-scroll-target="#a-data-decision-first">A Data Decision First</a></li>
-  <li><a href="#plotting-the-data" id="toc-plotting-the-data" class="nav-link" data-scroll-target="#plotting-the-data">Plotting the Data</a></li>
-  <li><a href="#from-a-scatterplot-to-a-prediction-equation" id="toc-from-a-scatterplot-to-a-prediction-equation" class="nav-link" data-scroll-target="#from-a-scatterplot-to-a-prediction-equation">2. From a Scatterplot to a Prediction Equation</a></li>
-  <li><a href="#how-does-the-algorithm-learn" id="toc-how-does-the-algorithm-learn" class="nav-link" data-scroll-target="#how-does-the-algorithm-learn">3. How Does the Algorithm Learn?</a></li>
-  <li><a href="#residuals" id="toc-residuals" class="nav-link" data-scroll-target="#residuals">Residuals</a></li>
-  <li><a href="#the-loss-function" id="toc-the-loss-function" class="nav-link" data-scroll-target="#the-loss-function">The Loss Function</a></li>
-  <li><a href="#scoring-one-candidate-line" id="toc-scoring-one-candidate-line" class="nav-link" data-scroll-target="#scoring-one-candidate-line">Scoring One Candidate Line</a></li>
-  <li><a href="#fitting-it-properly" id="toc-fitting-it-properly" class="nav-link" data-scroll-target="#fitting-it-properly">Fitting It Properly</a></li>
-  <li><a href="#training-performance-versus-generalization" id="toc-training-performance-versus-generalization" class="nav-link" data-scroll-target="#training-performance-versus-generalization">4. Training Performance Versus Generalization</a></li>
-  <li><a href="#how-do-we-evaluate-predictions" id="toc-how-do-we-evaluate-predictions" class="nav-link" data-scroll-target="#how-do-we-evaluate-predictions">5. How Do We Evaluate Predictions?</a></li>
-  <li><a href="#always-compare-against-a-baseline" id="toc-always-compare-against-a-baseline" class="nav-link" data-scroll-target="#always-compare-against-a-baseline">Always Compare Against a Baseline</a></li>
-  <li><a href="#from-one-predictor-to-several" id="toc-from-one-predictor-to-several" class="nav-link" data-scroll-target="#from-one-predictor-to-several">6. From One Predictor to Several</a></li>
-  <li><a href="#what-does-linear-actually-mean" id="toc-what-does-linear-actually-mean" class="nav-link" data-scroll-target="#what-does-linear-actually-mean">7. What Does “Linear” Actually Mean?</a></li>
-  <li><a href="#when-might-linear-regression-fail" id="toc-when-might-linear-regression-fail" class="nav-link" data-scroll-target="#when-might-linear-regression-fail">8. When Might Linear Regression Fail?</a></li>
-  <li><a href="#predictors-that-are-pure-noise" id="toc-predictors-that-are-pure-noise" class="nav-link" data-scroll-target="#predictors-that-are-pure-noise">Predictors That Are Pure Noise</a></li>
-  <li><a href="#extrapolation" id="toc-extrapolation" class="nav-link" data-scroll-target="#extrapolation">Extrapolation</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
