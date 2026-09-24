@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Numeric Feature Engineering – PSYC559: Applied Machine Learning in Psychology</title>
+<title>Data Splitting – PSYC559: Applied Machine Learning in Psychology</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_5a.html">Feature Engineering</a></li><li class="breadcrumb-item"><a href="./week2_5e.html">Numeric Feature Engineering</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_3.html">The Modeling Pipeline</a></li><li class="breadcrumb-item"><a href="./week2_3.html">Data Splitting</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -208,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_3.html" class="sidebar-item-text sidebar-link">
+  <a href="./week2_3.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Data Splitting</span></a>
   </div>
 </li>
@@ -273,7 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./week2_5e.html" class="sidebar-item-text sidebar-link active">
+  <a href="./week2_5e.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Numeric Feature Engineering</span></a>
   </div>
 </li>
@@ -403,9 +403,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_5a.html">Feature Engineering</a></li><li class="breadcrumb-item"><a href="./week2_5e.html">Numeric Feature Engineering</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week2_3.html">The Modeling Pipeline</a></li><li class="breadcrumb-item"><a href="./week2_3.html">Data Splitting</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Numeric Feature Engineering</h1>
+<h1 class="title">Data Splitting</h1>
 </div>
 
 
@@ -422,47 +422,343 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="setup" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<section id="data-splitting-in-machine-learning" class="level1" style="color: yellow">
+<h1>Data Splitting in Machine Learning</h1>
 </section>
-<p>To follow along, load these packages and the dataset we assembled on the <a href="./week2_5b.html">Example Data</a> page. If you did not build it yourself, you can <a href="data/data.RDS">download <code>data.RDS</code></a> and save it in a <code>data</code> folder next to your script.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)       <span class="co"># data manipulation and the pipe</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)  <span class="co"># the recipes package, used for every step below</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/data.RDS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Data splitting (e.g., dividing data into <strong>training, validation, and test samples</strong>) is crucial because it protects us from fooling ourselves about how well a model actually performs.</p>
+<section id="training-sample" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="training-sample">Training Sample</h3>
+</section>
+<ul>
+<li><p>The subset of examples used to train the learning algorithm.</p></li>
+<li><p>We estimate the model’s <strong>parameters</strong> in the training sample.</p></li>
+<li><p>If we have data from 150 participants:</p>
+<ul>
+<li>keep data from 100 to train the model.</li>
+</ul></li>
+<li><p>Using <strong>too much of our data</strong> for training is not good.</p></li>
+<li><p>Using <strong>too little of our data</strong> for training is not good.</p></li>
+</ul>
+<section id="validation-sample" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="validation-sample">Validation Sample</h3>
+</section>
+<ul>
+<li><p>Samples used to tune algorithm <strong>hyperparameters</strong> (e.g., regularization strength, number of neurons in a network).</p></li>
+<li><p>For example, from our 100 individuals in the training sample:</p>
+<ul>
+<li>Split the training data into 4 groups of 25</li>
+<li>Each of the 4 groups will be used as a validation sample, after training on the others</li>
+</ul></li>
+</ul>
+<section id="test-sample" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="test-sample">Test Sample</h3>
+</section>
+<ul>
+<li><p>The test sample used to evaluate model performance</p></li>
+<li><p>The remaining 50 individuals kept out of training: separate from training and validation.</p></li>
+<li><p>The test sample is kept completely seperate from the training and validation data.</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/data_split.png" class="img-fluid figure-img"></p>
+<figcaption>https://www.statology.org/validation-set-vs-test-set/</figcaption>
+</figure>
 </div>
-<section id="numeric-feature-engineering" class="level2" style="color: yellow">
-<h2 class="anchored" data-anchor-id="numeric-feature-engineering">Numeric Feature Engineering</h2>
-</section>
-<p>Feature engineering on continuous or numeric features involves transforming the raw data to make it more useful for modeling. Common motivations include capturing nonlinear relationships (e.g., log or polynomial transforms), improving distributional properties (reducing skew or outlier impact), and putting features on comparable scales through standardization.</p>
-<p>In some cases, continuous variables are binned into categories or combined into interactions to highlight patterns. Overall, these transformations help models detect structure in the data more effectively and improve both performance and interpretability.</p>
-<section id="skewness" class="level3" style="color: orange">
-<h3 class="anchored" data-anchor-id="skewness">Skewness</h3>
-</section>
-<p>Parametric models with distributional assumptions (e.g., GLMs, and some regularized models) can benefit from minimizing the skewness of numeric features. One popular transformation is the <a href="https://en.wikipedia.org/wiki/Power_transform#Yeo%E2%80%93Johnson_transformation">Yeo-Johnson transformation</a>.</p>
-<p>The Yeo-Johnsontransformation is a statistical technique used to stabilize variance and make data more normally distributed, similar to the Box-Cox transformation but more flexible. Unlike Box-Cox, it can handle both positive and negative values, making it useful for real-world data that span zero.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all_numeric_predictors() applies the transformation to the numeric features</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and leaves the outcome alone. A recipe only records the plan at this stage,</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># so nothing is actually transformed until the recipe is prepped.</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">recipe</span>(happy <span class="sc">~</span> ., <span class="at">data =</span> data) <span class="sc">%&gt;%</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_YeoJohnson</span>(<span class="fu">all_numeric_predictors</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<section id="standardization" class="level3" style="color: orange">
-<h3 class="anchored" data-anchor-id="standardization">Standardization</h3>
-</section>
-<p>We will often want to standardize variables prior to our model fitting to put them on a common scale, typically with mean of zero and a standard deviation of one.</p>
-<p>This prevents features with larger numeric ranges (e.g., income in dollars vs.&nbsp;age in years) from dominating distance-based methods (like k-NN, SVMs, or clustering). It can also help with optimization problems, may improve convergence and can help ensure that regularization penalties (like in ridge or lasso regression) are applied fairly across predictors.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># step_center subtracts the mean, step_scale divides by the standard</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># deviation. Run together they standardize each feature. Both learn those</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># numbers from the training data alone, which is what keeps information</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># from the test set out of the calculation.</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">recipe</span>(happy <span class="sc">~</span> ., <span class="at">data =</span> data) <span class="sc">%&gt;%</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_center</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_scale</span>(<span class="fu">all_numeric_predictors</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Example
 </div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Courses often have a similar three way split:</p>
+<ul>
+<li><strong>Homework</strong> is your training data. You learn from it and you get the answers back.</li>
+<li><strong>The practice exam</strong> is your validation data. You use it to figure out what to study next.</li>
+<li><strong>The final</strong> is your test data. You see it once, and it decides your grade.</li>
+</ul>
+<p>Now discuss two things that could go wrong:</p>
+<ol type="1">
+<li>Why wouldn’t we want the final exam to be the thing that tells us what to study?</li>
+<li>What would be the problem with taking the same practice exam over and over until you could get every question right?</li>
+</ol>
+</div>
+</div>
+<p>In our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.</p>
+<section id="parameters-vs.-hyperparameters" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="parameters-vs.-hyperparameters">Parameters vs.&nbsp;Hyperparameters</h2>
+</section>
+<ul>
+<li><p><strong>Parameters</strong> are values learned automatically (or estimated) from the training data. The model parameters are often the thing we are interested in estimating in a given algorithm.</p></li>
+<li><p>For example. the slope of the line in a simple linear regression prediction problem relating amount of treatment (feature) to depression score (target).</p></li>
+<li><p><strong>Hyperparameters</strong> are set before training begins, and control how the learning process works. The selection of hyperparameters is often critical to model performance, as in procedures like k-folds cross-validation, playing a critical role in how the model generalizes.</p></li>
+<li><p>For example, the the number of clusters used to partition the data</p></li>
+</ul>
+<section id="role-of-parameters-in-data-splitting" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="role-of-parameters-in-data-splitting">Role of Parameters in Data Splitting</h2>
+</section>
+<p>When we split data, each portion plays a distinct role:</p>
+<ul>
+<li><p><strong>Training set</strong> → Fit the model parameters.<br>
+</p></li>
+<li><p><strong>Validation set</strong> → Used to compare different hyperparameter choices.<br>
+</p></li>
+<li><p><strong>Test set</strong> → Used only once, at the very end, to estimate generalization performance.</p>
+<p><br>
+<strong>Important note</strong>: Hyperparameters should be tuned using the validation set, not the test set. If we adjust hyperparameters based on the test set, we are indirectly training on it and lose the ability to measure real-world performance.</p></li>
+</ul>
+<hr>
+<section id="example-k-means-clustering" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="example-k-means-clustering">Example: <em>k</em>-Means Clustering</h2>
+</section>
+<section id="parameters-learned-from-the-data" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="parameters-learned-from-the-data">Parameters (learned from the data)</h3>
+</section>
+<ul>
+<li><strong>Cluster centroids</strong>: the coordinates of the cluster centers.<br>
+</li>
+<li>These are <em>calculated by the algorithm</em> during training and adjusted iteratively until convergence.<br>
+</li>
+<li>You do not set them manually. The algorithm figures them out.</li>
+</ul>
+<section id="hyperparameters-set-before-training" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="hyperparameters-set-before-training">Hyperparameters (set before training)</h3>
+</section>
+<ul>
+<li><strong>Number of clusters (<em>k</em>)</strong>: chosen by the user before running the algorithm.<br>
+</li>
+<li><strong>Initialization method</strong> (e.g., random, k-means++).<br>
+</li>
+<li><strong>Maximum number of iterations</strong> allowed.<br>
+</li>
+<li>These control <em>how</em> the algorithm runs, but are not learned from the data itself.</li>
+</ul>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>See It Run
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Naftali Harris built an interactive visualization of <em>k</em>-means where you place your own points, choose <em>k</em>, and then step through the algorithm one iteration at a time.</p>
+<p><a href="https://www.naftaliharris.com/blog/visualizing-k-means-clustering/">Visualizing K-Means Clustering</a></p>
+<p>Two things to try, both of which are hyperparameter choices you just read about:</p>
+<ul>
+<li>Run the same data with a different number of clusters.</li>
+<li>Choose the starting points badly on purpose and watch where the algorithm ends up.</li>
+</ul>
+</div>
+</div>
+<hr>
+<section id="benefits-of-data-splitting-in-ml" class="level1" style="color: yellow">
+<h1>Benefits of Data Splitting in ML</h1>
+</section>
+<hr>
+<section id="prevents-overfitting-to-the-training-data" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="prevents-overfitting-to-the-training-data">Prevents Overfitting to the Training Data</h2>
+</section>
+<ul>
+<li>When a model is trained, it adapts to patterns in the training set.<br>
+</li>
+<li>If we only check performance on that same data, we might think the model is excellent, but it may just be memorizing instead of generalizing.<br>
+</li>
+<li>A separate test set lets us see how the model behaves on <em>new, unseen</em> data.</li>
+</ul>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Quick Check
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>You have data from 10,000 participants. Do you still need a test set?</li>
+<li>You split your data, fit a model, and test accuracy comes out <em>higher</em> than training accuracy. What could explain that?</li>
+</ol>
+</div>
+</div>
+<hr>
+<section id="simulates-real-world-performance" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="simulates-real-world-performance">Simulates Real-World Performance</h2>
+</section>
+<ul>
+<li>In real life, the model will be applied to data it hasn’t seen before.<br>
+</li>
+<li>By holding out a test set, we simulate that scenario, giving us a better sense of expected performance in practice.</li>
+</ul>
+<hr>
+<section id="helps-with-model-selection-tuning" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="helps-with-model-selection-tuning">Helps with Model Selection &amp; Tuning</h2>
+</section>
+<ul>
+<li>A validation set (or cross-validation) is used to choose hyperparameters (like tree depth, learning rate, regularization strength).<br>
+</li>
+<li>If we tuned on the test set, we’d essentially be “leaking” information, and performance estimates would be biased upward.<br>
+</li>
+<li>Proper splitting ensures that the test set remains untouched until the very end.</li>
+</ul>
+<hr>
+<section id="detects-data-leakage" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="detects-data-leakage">Detects Data Leakage</h2>
+</section>
+<ul>
+<li>Sometimes information from the future or from labels sneaks into the features.<br>
+</li>
+<li>If this happens, the model might look perfect on the training set but fail on a clean split.<br>
+</li>
+<li>Data splitting may not actually help data leakage though. When might it help and when might it not?</li>
+</ul>
+<hr>
+<section id="provides-a-fair-benchmark" class="level2" style="color: lightblue">
+<h2 class="anchored" data-anchor-id="provides-a-fair-benchmark">Provides a Fair Benchmark</h2>
+</section>
+<ul>
+<li>In research and industry, different models need to be compared on a <em>common, untouched test set</em>.<br>
+</li>
+<li>Without splitting, comparisons aren’t meaningful, since each model might overfit differently.</li>
+</ul>
+<hr>
+<section id="data-splitting-in-real-life" class="level1" style="color: yellow">
+<h1>Data Splitting in Real Life</h1>
+</section>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Data Splitting in Real Life
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In groups of 3 or 4 (about 6 minutes). Think of a situation outside statistics that involves learning something and then being evaluated on it. Interpret this loosely.</p>
+<p>Then map it onto the three samples:</p>
+<ul>
+<li>What plays the role of the <strong>training</strong> data?</li>
+<li>What plays the role of the <strong>validation</strong> data?</li>
+<li>What plays the role of the <strong>test</strong> data?</li>
+</ul>
+<p>Each group shares its scenario and says which of the three was hardest to identify.</p>
+</div>
+</div>
+<section id="k-folds-cross-validation" class="level1" style="color: yellow">
+<h1>K-Folds Cross-Validation</h1>
+</section>
+<p>So, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation</p>
+<section id="motivation-for-cross-validation" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="motivation-for-cross-validation">Motivation for Cross-Validation</h3>
+</section>
+<p>When talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.</p>
+<p>Let’s split our available data into two parts:</p>
+<ul>
+<li><strong>Training Set</strong>: which the model learns from<br>
+</li>
+<li><strong>Validation Set</strong>: used to check how well the model performs on data it hasn’t seen before</li>
+</ul>
+<p>This method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.</p>
+<p>This idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.</p>
+<section id="k-folds" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="k-folds">K-Folds</h3>
+</section>
+<p>One idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/cv.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>https://bradleyboehmke.github.io/HOML/process.html#splitting</figcaption>
+</figure>
+</div>
+<section id="k-folds-cross-validation-in-steps" class="level3" style="color: lightblue">
+<h3 class="anchored" data-anchor-id="k-folds-cross-validation-in-steps">K-Folds Cross-Validation in Steps</h3>
+</section>
+<p>Sometimes it is helpful to write out the steps of a procedure like this explicitly.</p>
+<section id="step-1-split-the-data-into-k-folds" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-split-the-data-into-k-folds">Step 1: Split the data into <em>k</em> folds</h4>
+<ul>
+<li>Shuffle the dataset randomly.<br>
+</li>
+<li>Divide it into <em>k</em> roughly equal-sized parts, called folds.<br>
+</li>
+<li>For example, if k =10, we have 10-fold cross-validation, and split the data into 10 parts.</li>
+</ul>
+</section>
+<section id="step-2-train-and-validate-across-folds" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-train-and-validate-across-folds">Step 2: Train and validate across folds</h4>
+<p>For each fold <em>i</em> from 1 to <em>k</em>:<br>
+1. Use fold <em>i</em> as the validation set.<br>
+2. Use the remaining <em>k</em> minus 1 folds as the training set.<br>
+3. Train the model on the training set.<br>
+4. Evaluate its performance on the validation set.</p>
+<p>At the end, we will have <em>k</em> performance scores (one per fold).</p>
+</section>
+<section id="step-3-average-the-performance" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-average-the-performance">Step 3: Average the performance</h4>
+<ul>
+<li>Compute the average performance across all <em>k</em> folds.<br>
+</li>
+<li>This gives a more reliable estimate of how well the model generalizes than using a single holdout split.</li>
+</ul>
+</section>
+<section id="step-4-hyperparameter-tuning" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-hyperparameter-tuning">Step 4: Hyperparameter tuning</h4>
+<p>To tune hyperparameters using cross-validation:<br>
+1. Define a grid of candidate hyperparameter values.<br>
+2. For each candidate:<br>
+- Repeat steps 2-3.<br>
+3. Select the hyperparameter value with the best average performance.</p>
+</section>
+<section id="step-5-retrain-on-the-full-training-set" class="level4">
+<h4 class="anchored" data-anchor-id="step-5-retrain-on-the-full-training-set">Step 5: Retrain on the full training set</h4>
+<ul>
+<li>Once the best hyperparameter is chosen, retrain the model on the entire training dataset (not just folds).<br>
+</li>
+<li>This ensures the model learns from all available data.</li>
+</ul>
+</section>
+<section id="step-6-evaluate-on-the-holdout-test-set-if-available" class="level4">
+<h4 class="anchored" data-anchor-id="step-6-evaluate-on-the-holdout-test-set-if-available">Step 6: Evaluate on the holdout test set (if available)</h4>
+<ul>
+<li>If you set aside a test set at the very beginning, now is the time to use it.<br>
+</li>
+<li>This gives an unbiased estimate of how the tuned model will perform on brand-new data.</li>
+</ul>
+</section>
+<section id="a-note-on-randomness-and-reproducibility-set.seed" class="level1" style="color: yellow">
+<h1>A Note on Randomness and Reproducibility: <code>set.seed()</code></h1>
+</section>
+<p>Notice that every splitting procedure above starts by <em>randomly</em> shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">3</span>) <span class="co"># randomly draw 3 numbers</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3 9 8</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">3</span>) <span class="co"># run it again... different draw</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4 1 9</code></pre>
+</div>
+</div>
+<p>R’s random numbers are actually <em>pseudo</em>-random: they come from a sequence determined by a starting point called the <strong>seed</strong>. If we set the seed ourselves, the “random” results become exactly reproducible:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  8  4 10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">559</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">3</span>) <span class="co"># same seed, same draw</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  8  4 10</code></pre>
+</div>
+</div>
+<p>This is why nearly every machine learning script you’ll see this semester begins with <code>set.seed()</code> before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices <em>repeatable</em>, so your results can be checked by others (including the you of next week, and me when grading).</p>
 
 
 
