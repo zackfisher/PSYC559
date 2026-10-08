@@ -1,542 +1,1098 @@
 ---
 title: "Decision Trees"
-format: 
-  html: 
+body-classes: slides
+format:
+  html:
     fontsize: 25px
-    code-folders: true
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
-data <- readRDS("data/data.RDS")
-library(dplyr)
-library(tidymodels)
-```
-
+:::: {.slide}
 ::: {style="color: yellow"}
-## Overview of Decision Trees
+## Today's Lecture
+:::
+In today's lecture we will cover:
+
+-   Introduction to decision trees
+-   How a tree chooses its splits
+-   Controlling the size of a tree
+-   Limitations of a single tree
+-   Two worked examples in R
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## A Visual Introduction to Machine Learning
 :::
 
-A decision tree is a predictive model that uses a tree-like structure to make decisions.
+This interactive story by Stephanie Yee and Tony Chu builds a decision tree,
+one split at a time, to tell homes in San Francisco from homes in New York. We
+will scroll through it and talk through each step together.
 
-It splits data into smaller and smaller groups based on feature values, ultimately leading to a prediction at the “leaves” (the end points of the tree).
+<https://r2d3.us/visual-intro-to-machine-learning-part-1/>
+::::
 
--   **Classification trees:** predict a category (e.g., spam vs. not spam).
+:::: {.slide}
+::: {style="color: yellow"}
+## Motivating Decision Trees
+:::
 
--   **Regression trees** predict a continuous outcome (e.g., house price).
+An essay lands on your desk, and you suspect AI wrote it.
 
-The name comes from the fact that the model looks like a flowchart: you start at the root (the top of the tree), follow branches based on yes/no or threshold-based questions about the features, and end up at a leaf with a prediction.
+With a partner, take two minutes to write **three yes or no questions** about
+the text that would help you decide. Put the most useful question first, and then choose one question to further refine each branch.
 
-![https://www.displayr.com/what-is-a-decision-tree/](images/what-is-a-decision-tree.webp){width="800"}
+::: {style="color: lightgreen"}
+Which question did you ask first, and why? What next?
+:::
+::::
 
-::: {style="color: orange"}
+:::: {.slide}
+::: {style="color: yellow"}
+## Decision Trees in Real Life
+:::
+
+Decision trees work the way people often make decisions: one step at a time,
+if this, then that. Each example asks a short series of yes or no questions.
+
+-   **Clinical screening**: PHQ-9 score above 10? → History of depression? →
+    Recent major stressor? → elevated risk of depression
+-   **College retention**: First semester GPA below 2.5? → Living on campus? →
+    Missed more than 20% of classes? → returns next year or not
+-   **Employee turnover**: Low job satisfaction? → Frequent overtime? → Less
+    than 2 years on the job? → leaves or stays
+-   **Relationship satisfaction**: High perceived support? → High conflict? →
+    High financial stress? → high or low satisfaction
+-   **Emergency room triage**: Difficulty breathing? → Oxygen saturation below
+    90? → Age over 65? → risk category
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### More Examples
+:::
+
+-   **Spam filtering**: Suspicious link? → Known sender? → Words like "urgent"
+    or "winner"? → spam or not
+-   **Loan approval**: Income above a cutoff? → Debt to income ratio below a
+    cutoff? → Prior defaults? → repays or not
+-   **Customer churn**: Used the service in the last 30 days? → More than 2
+    complaints? → Subscribed for over a year? → cancels or not
+-   **Medical diagnosis**: Fever? → Cough? → Positive test? → illness category
+-   **Animal identification**: Has feathers? → Can fly? → Lives mostly in
+    water? → type of animal
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### What These Examples Show
+:::
+
+-   **The questions can depend on the path.** In clinical screening, which
+    question comes second can depend on the answer to the first.
+-   **No single feature has to decide.** A spam filter combines several weak
+    clues.
+-   **A harmless looking variable can stand in for something else.** In loan
+    approval, ZIP code can act as a proxy for race and other protected
+    characteristics.
+-   **Real trees can be much bigger.** Medical trees may use dozens or hundreds
+    of predictors, but the logic is the same.
+::::
+
+
+:::: {.slide}
+::: {style="color: yellow"}
+### What Makes It Machine Learning?
+:::
+
+In the umbrella tree, we wrote the questions and the cutoffs ourselves. A
+decision tree **learns the questions and the cutoffs from the data**.
+
+We do not tell the model to ask whether GPA is below 2.5, then whether
+attendance is below 80%, then whether stress is above 7.
+
+Instead, at every split the algorithm searches over questions of the form
+
+$$
+X_j < c
+$$
+
+It learns both **which variable** $X_j$ to ask about and **which cutoff** $c$
+gives the best split.
+::::
+
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Regression Versus Trees
+:::
+
+-   A regression model asks: **how much should each variable contribute?**
+-   A decision tree asks: **what question should I ask next?**
+
+Trees come in two kinds:
+
+-   **Classification trees** predict a category, such as pass or fail.
+-   **Regression trees** predict a continuous outcome, such as a final exam score.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Why Is It Called a Tree?
+:::
+
+The model looks like a flowchart:
+
+-   You start at the **root**, the top of the tree.
+-   You follow **branches** based on yes or no questions about the features.
+-   You end at a **leaf**, which holds the prediction.
+
+![https://www.displayr.com/what-is-a-decision-tree/](images/what-is-a-decision-tree.webp){width="700"}
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
 ### Parts of a Decision Tree
 :::
 
--   **Root Node**: The top of the tree where the first split occurs. It contains all the data.
--   **Internal Nodes**: Points where the data is split based on a feature. Each internal node represents a decision based on a feature value.
--   **Branches**: The lines connecting nodes, representing the outcome of a decision.
--   **Leaf Nodes**: The end points of the tree where a prediction is made.
--   **Splits**: The conditions used to divide the data at each internal node.
+-   **Root node**: the top of the tree, where the first split happens. It
+    contains all the data.
+-   **Internal nodes**: points where the data are split on a feature.
+-   **Branches**: the lines connecting nodes, one for each answer to a split.
+-   **Leaf nodes**: the end points, where a prediction is made.
+-   **Splits**: the conditions used to divide the data at each internal node.
 
-![https://bradleyboehmke.github.io/HOML/images/decision-tree-terminology.png](images/tree_parts.png){width="800"}
+![https://bradleyboehmke.github.io/HOML/images/decision-tree-terminology.png](images/tree_parts.png){width="700"}
+::::
 
-::: {style="color: orange"}
-### Overview: How do Decision Trees Work?
+:::: {.slide}
+::: {style="color: yellow"}
+### Back to the Essay
 :::
 
-The tree is built by repeatedly asking:
+Your three questions were a decision tree:
 
-> Which feature and split best separates the data?
+-   Each question is a **split**.
+-   Your first question is the **root**, and the order of the rest is the
+    structure of the tree.
+-   Each final answer, AI or human, is a **leaf**.
 
-For **classification tasks**, we want splits that make the groups as “pure” as possible (mostly one class).
+Your questions already showed two things a tree does:
 
-For **regression tasks**, we want splits that minimize the variability within each group, often using mean squared error (MSE).
+-   A question only helps if the text can answer it. In a model, the questions
+    have to come from the features we measured.
+-   You put your most useful question first. A tree also starts with the split
+    that best separates the groups, then repeats inside each group.
+::::
 
-**At each step, the algorithm chooses the best feature and split point, divides the data, and repeats until**:
-
--   The nodes are pure enough,
--   The maximum depth is reached, or
--   There are too few samples to keep splitting.
-
-::: {style="color: lightyellow"}
-#### What Exactly is Purity?
+:::: {.slide}
+::: {style="color: yellow"}
+## How Do Decision Trees Work?
 :::
 
-In the context of a decision tree, a node is pure if it contains only examples from a single class.
+The tree is built by asking the same question over and over:
 
-For example, suppose you’re predicting whether students pass or fail a project based on whether they attend class.
+::: {style="color: lightgreen"}
+Which feature and split point best separate the data?
+:::
 
-```{r, echo=FALSE}
-#| code-fold: true
-# Toy dataset
+-   For **classification**, we want splits that make each group as **pure** as
+    possible, meaning mostly one class.
+-   For **regression**, we want splits that make the outcomes within each group
+    as similar as possible, usually measured with mean squared error.
+
+The tree keeps splitting until:
+
+-   the nodes are pure enough,
+-   the tree reaches a maximum depth, or
+-   there are too few observations left to split.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### What is Purity?
+:::
+
+A node is **pure** if every observation in it belongs to the same class.
+
+Suppose we want to predict whether students pass or fail a project from whether
+they attend class:
+
+```{r}
+#| echo: false
 students <- data.frame(
-  Student = c("A", "B", "C", "D", "E", "F"),
+  Student  = c("A", "B", "C", "D", "E", "F"),
   Attended = c("Yes", "Yes", "Yes", "No", "No", "No"),
-  Outcome = c("Pass", "Pass", "Fail", "Fail", "Fail", "Pass")
+  Outcome  = c("Pass", "Pass", "Fail", "Fail", "Fail", "Pass")
 )
 students
 ```
+::::
 
-**Step 1**: The Roote Node
+:::: {.slide}
+::: {style="color: yellow"}
+### Step 1: Impurity at the Root
+:::
 
-At the root node, we have all 6 students: 3 “pass” and 3 “fail” (50% pure).
+The root node holds all 6 students: 3 pass and 3 fail.
 
-If a node has 20 students and all of them are “pass”, that node is 100% pure.
+-   A node where all 20 students pass would be 100% pure.
+-   A node split evenly between pass and fail, like this one, is as impure as a
+    two class node can be.
 
-Since the node has 3 “pass” and 3 “fail,” it’s very impure.
-
-A common measure of impurity is the Gini impurity, which quantifies how often a randomly chosen element would be incorrectly labeled if it was randomly labeled according to the distribution of labels in the subset.
+A common measure of impurity is the **Gini impurity**: the chance that a randomly
+chosen observation would be labeled wrong if we labeled it at random, using the
+class proportions in the node.
 
 $$
-Gini = 1 - p(Pass)^2 + p(Fail)^2
-$$\
-or more generally,
-
-$$  
-Gini = 1 - \sum (p_i)^2
+\text{Gini} = 1 - \left[\, p(\text{Pass})^2 + p(\text{Fail})^2 \,\right]
 $$
 
-**Step 2**: Splitting on Attendance
+or, for any number of classes,
 
-Now let's split our data based on attendance.
+$$
+\text{Gini} = 1 - \sum_i p_i^2
+$$
 
-```{r setup, echo=FALSE}
-#| code-fold: true
+At the root, $\text{Gini} = 1 - (0.5^2 + 0.5^2) = 0.5$.
+::::
 
+:::: {.slide}
+::: {style="color: yellow"}
+### Step 2: Splitting on Attendance
+:::
+
+Now split the students by attendance and compute the Gini impurity of each group:
+
+```{r}
+#| echo: false
 group_yes <- subset(students, Attended == "Yes")
 group_no  <- subset(students, Attended == "No")
 
-# Function to compute Gini
+# Gini impurity of a set of class labels
 gini <- function(x) {
   props <- table(x) / length(x)
   1 - sum(props^2)
 }
 
-gini_yes <- gini(group_yes$Outcome)
-gini_no  <- gini(group_no$Outcome)
-
-c(Gini_Yes = gini_yes, Gini_No = gini_no)
-
+c(Gini_Yes = gini(group_yes$Outcome), Gini_No = gini(group_no$Outcome))
 ```
 
-Now, after the split:
+-   The "Yes" group has 2 pass and 1 fail, so its Gini impurity is 0.444.
+-   The "No" group has 2 fail and 1 pass, so its Gini impurity is 0.444.
 
--   The "Yes" group has 2 "Pass" and 1 "Fail" (Gini impurity = 0.444).
--   The "No" group has 2 "Fail" and 1 "Pass" (Gini impurity = 0.444).
+Both groups are still impure, but each is purer than the root, at 0.5.
+::::
 
-Both groups are still impure, but we have better separated the students based on attendance.
-
-::: {style="color: lightyellow"}
-#### Alternative Measures of Purity
+:::: {.slide}
+::: {style="color: yellow"}
+### Other Measures of Impurity
 :::
 
-Other common measures of impurity include:
-
-**Entropy**:
-
-Measures the uncertainty in a dataset. Lower entropy means higher purity.
-
-$$
-  Entropy = - \sum p_i \log_2(p_i)
-  $$ **Misclassification Error**:
-
-The fraction of samples that do not belong to the majority class in a node.
-
-$$
-  Misclassification\ Error = 1 - \max(p_i)
-  $$\
-Like the Gini coefficient, these measures help the algorithm decide the best splits to create purer nodes.
-
-::: {style="color: orange"}
-### How Purity Guides Splitting
+::: {style="color: lightblue"}
+**Entropy**
 :::
 
-At each node, the algorithm evaluates all possible splits across all features and selects the one that results in the highest increase in purity (or the largest decrease in impurity).
+Measures the uncertainty in a node. Lower entropy means higher purity.
 
-At each step, a decision tree faces the question:
+$$
+\text{Entropy} = -\sum_i p_i \log_2(p_i)
+$$
 
-> Which feature should I split on, and at what threshold?
+::: {style="color: lightblue"}
+**Misclassification error**
+:::
 
-To answer this, it evaluates all possible splits and picks the one that produces the biggest increase in purity of the child nodes compared to the parent node.
+The share of observations that do not belong to the most common class in the
+node.
 
-::: {style="color: orange"}
-### Step 1: Impurity at the Parent Node
+$$
+\text{Misclassification error} = 1 - \max_i \, p_i
+$$
+
+Like the Gini impurity, both measures help the tree choose splits that create
+purer nodes.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## How Purity Guides Splitting
+:::
+
+At every node, the tree faces the same question:
+
+::: {style="color: lightgreen"}
+Which feature should I split on, and at what threshold?
+:::
+
+To answer it, the tree tries every possible split on every feature. It picks the
+split that makes the child nodes purer than the parent by the largest amount.
+
+The next slides walk through that search one step at a time.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Steps 1 and 2: Parent and Child Impurity
+:::
+
+::: {style="color: lightblue"}
+**Step 1: Impurity at the parent node**
 :::
 
 -   The parent node contains some mix of classes.
--   Its impurity (e.g., Gini or entropy) is calculated.
+-   Compute its impurity, using Gini or entropy.
 
-::: {style="color: orange"}
-### Step 2: Impurity at Candidate Splits
+::: {style="color: lightblue"}
+**Step 2: Impurity after a candidate split**
 :::
 
-For each candidate feature and possible split point:
+For each feature and each possible split point:
 
--   Divide the data into two (or more) child nodes.
+-   Divide the data into child nodes.
 -   Compute the impurity of each child node.
--   Take a weighted average impurity across the children:
+-   Take a weighted average of the child impurities, shown on the next slide.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Impurity of a Split
+:::
+
+The impurity after a split is a weighted average of the child nodes:
 
 $$
-G\_{\text{split}} = \sum_{j=1}^{m} \frac{N_j}{N} , G_j,
-$$ where,
+G_{\text{split}} = \sum_{j=1}^{m} \frac{N_j}{N} \, G_j
+$$
 
--   $G_{\text{split}}$ is the impurity after the split.
--   $m$ is the number of child nodes.
--   $N_j$ is the number of samples in child node $j$.
--   $N$ is the total number of samples in the parent node.
+where
+
+-   $G_{\text{split}}$ is the impurity after the split,
+-   $m$ is the number of child nodes,
+-   $N_j$ is the number of observations in child node $j$,
+-   $N$ is the number of observations in the parent node, and
 -   $G_j$ is the impurity of child node $j$.
 
-Our goal is to minimize this quantity $G_{\text{split}}$. The split that results in the lowest weighted impurity is chosen.
+The split with the lowest $G_{\text{split}}$ is the best one.
+::::
 
-::: {style="color: orange"}
-### Step 3: Information Gain or Impurity Reduction
+:::: {.slide}
+::: {style="color: yellow"}
+### Step 3: Impurity Reduction
 :::
 
-For every feature we can then measure the “goodness” of a split as the reduction in impurity
+The quality of a split is how much it reduces impurity:
 
 $$
-\Delta G = G_{\text{parent}} - G_{\text{split}},
-$$ where, - $\Delta G$ is the reduction in impurity (information gain). - $G_{\text{parent}}$ is the impurity of the parent node. - $G_{\text{split}}$ is the weighted impurity after the split.
+\Delta G = G_{\text{parent}} - G_{\text{split}}
+$$
 
-::: {style="color: orange"}
-### Step 4: Choosing the Best Feature
+where
+
+-   $\Delta G$ is the reduction in impurity, also called the **information gain**,
+-   $G_{\text{parent}}$ is the impurity of the parent node, and
+-   $G_{\text{split}}$ is the weighted impurity after the split.
+
+In the attendance example, both groups hold 3 of the 6 students, so
+$G_{\text{split}} = \tfrac{3}{6}(0.444) + \tfrac{3}{6}(0.444) = 0.444$ and
+$\Delta G = 0.5 - 0.444 = 0.056$.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Step 4: Choosing the Best Split
 :::
 
--   The tree tries every possible feature (and, for numeric features, possible threshold values).
--   The feature/threshold pair that gives the largest impurity reduction is chosen for the split.
--   This process repeats recursively, growing the tree until stopping conditions are met:
-    -   max depth
-    -   minimum samples, or
-    -   node purity
+-   The tree tries every feature and, for numeric features, every possible
+    threshold.
+-   The feature and threshold with the largest impurity reduction become the
+    split.
+-   The process repeats inside each child node until a stopping rule is met:
+    -   a maximum depth,
+    -   a minimum number of observations, or
+    -   pure nodes.
+::::
 
-::: {style="color: orange"}
-### How Low Can You Go?
+:::: {.slide}
+::: {style="color: yellow"}
+### Where Does the Splitting End?
 :::
 
-Decision trees can grow very deep, creating many splits to perfectly classify the training data. However, this can lead to overfitting, where the model captures noise instead of the underlying pattern. To prevent this, we can set limits on the tree's growth, such as:
+On your own, follow this process through to its natural conclusion. Suppose the
+tree keeps choosing the best split, with no limits.
 
--   **Maximum Depth**: Limit how deep the tree can go.
--   **Minimum Samples per Leaf**: Require a minimum number of samples in each leaf node.
--   **Minimum Samples to Split**: Require a minimum number of samples to consider a split.
--   **Pruning**: Remove branches that do not provide significant predictive power.
+::: {style="color: lightgreen"}
+1.  How will the splitting end?
+2.  Will the tree predict the training sample perfectly?
+3.  What are the consequences of that?
+:::
+::::
 
-![http://www.btechsmartclass.com/data_structures/tree-terminology.html](images/depth.png){width="800"} By controlling the tree's complexity, we can improve its ability to generalize to new, unseen data. This balance between fitting the training data and maintaining generalization is crucial for building effective decision tree models.
-
-::: {style="color: lightyellow"}
-#### Early Stopping Criteria
+:::: {.slide}
+::: {style="color: yellow"}
+## How Low Can You Go?
 :::
 
-To prevent overfitting and ensure that the decision tree generalizes well to unseen data, we can implement early stopping criteria during the tree-building process. Common early stopping criteria include:
+A tree can keep splitting until it classifies every training observation
+correctly. At that point it is fitting noise, and it will predict new data
+poorly. To prevent this, we limit how much the tree can grow:
 
-**Maximum Depth**
+-   **Maximum depth**: how many levels the tree can have.
+-   **Minimum observations per leaf**: how few observations a leaf can hold.
+-   **Minimum observations to split**: how many observations a node needs before
+    it can be split.
+-   **Pruning**: removing branches that add little predictive power.
 
-Limit the maximum depth of the tree. A shallower tree is less likely to overfit. For example, we may set a maximum depth of 5 or 10 levels. If we choose too shallow a tree, it may underfit the data, however, the variance will likely be lower. If we choose too deep a tree, it may overfit the data, but, the variance will likely be higher.
+![http://www.btechsmartclass.com/data_structures/tree-terminology.html](images/depth.png){width="600"}
+::::
 
-**Minimum Samples per Leaf**
-
-We can also set a minimum number of samples that must be present in a leaf node. This prevents the tree from creating leaves that are too specific to the training data.
-
-On one hand we might allow for a single observation in a leaf, which would likely lead to overfitting. On the other hand, we might require at least 10 or 20 samples in each leaf, which could help the model generalize better.
-
-**Minimum Impurity Decrease**
-
-We could also only allow a split if it results in a significant decrease in impurity. This ensures that splits are meaningful and contribute to the model's predictive power.
-
-::: {style="color: lightyellow"}
-#### Pruning
+:::: {.slide}
+::: {style="color: yellow"}
+### Early Stopping
 :::
 
-Another approach to controlling tree complexity is pruning, which involves removing branches that do not provide significant predictive power.
+Early stopping rules stop the tree before it grows large enough to overfit.
 
-Pruning can be done in two main ways:
+::: {style="color: lightblue"}
+**Maximum depth**
+:::
 
-**Post-Pruning**
+A shallower tree is less likely to overfit. We might allow 5 or 10 levels.
 
-This involves growing the full tree and then removing branches that do not improve performance on a validation set. This can be done by evaluating the tree's performance after removing certain branches and keeping the changes that lead to better generalization.
+-   Too shallow, and the tree may underfit: more bias, less variance.
+-   Too deep, and it may overfit: less bias, more variance.
 
-**Pre-Pruning**
+::: {style="color: lightblue"}
+**Minimum observations per leaf**
+:::
 
-We could also add a penalty for tree complexity to the loss function used to evaluate splits. This encourages the model to prefer simpler trees that still perform well. Smaller penalties will lead to larger trees, while larger penalties will lead to smaller trees.
+-   Allowing a single observation in a leaf invites overfitting.
+-   Requiring at least 10 or 20 per leaf helps the tree generalize.
 
-As with regularization, we would evaluate multiple models across a spectrum of hyperparamaters (penalty parameters) and then use cross-validation to identify the optimal value that generalizes best to unseen data.
+::: {style="color: lightblue"}
+**Minimum impurity decrease**
+:::
 
-In the `rpart` package, which we will use later, the complexity parameter `cp` controls how large a decision tree can grow before it is pruned. It is the main regularization tool that balances tree complexity against generalizability.
+-   Only split when the split reduces impurity by a meaningful amount.
+::::
 
-**How `cp` Works**
+:::: {.slide}
+::: {style="color: yellow"}
+### Pruning
+:::
 
--   Each split in a tree must reduce the lack of fit by at least `cp × error`.\
--   If the reduction is smaller, the split is pruned away.\
--   Large `cp` → smaller tree (simpler, more bias, less variance).\
--   Small `cp` → larger tree (complex, less bias, more variance).
+Pruning removes branches that do not add much predictive power. There are two
+approaches.
 
-Mathematically, the cost-complexity criterion is:
+::: {style="color: lightblue"}
+**Post-pruning**
+:::
+
+Grow the full tree, then remove the branches that do not improve performance on
+validation data.
+
+::: {style="color: lightblue"}
+**Pre-pruning**
+:::
+
+Add a penalty for the size of the tree to the quantity it minimizes.
+
+-   A smaller penalty allows a larger tree.
+-   A larger penalty forces a smaller tree.
+
+As with regularization, we fit trees across a range of penalty values and use
+cross validation to pick the value that predicts new data best.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Complexity Parameter `cp`
+:::
+
+In the `rpart` package, which we use below, the complexity parameter `cp`
+controls how large a tree can grow. It is the main tool for balancing the size
+of a tree against how well it generalizes.
+
+-   Each split must reduce the lack of fit by at least `cp` times the error.
+-   Splits that fall short are pruned away.
+-   A **large** `cp` gives a smaller tree: simpler, more bias, less variance.
+-   A **small** `cp` gives a larger tree: more complex, less bias, more variance.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Cost Complexity Criterion
+:::
+
+`rpart` fits and prunes trees with **cost complexity pruning**, also called
+weakest link pruning. It minimizes
 
 $$
-R_{alpha(T)} \;=\; R(T) + \alpha |T|,
-$$ where,
-
--   $R(T)$: is the predictor error\
--   $T$: number of terminal nodes.\
--   $\alpha$: penalty hyperparameter (analogous to `cp`)
-
-n `rpart`, decision trees are fit and pruned via *cost--complexity* (weakest-link) pruning. The optimization target is
-
-$$
-C_{\alpha}(T) = R(T) + \alpha\,|T|,
+C_{\alpha}(T) = R(T) + \alpha \, |T|
 $$
 
-where,
+where
 
--   $R(T)$ is the resubstitution error (total impurity) summed over the terminal nodes of tree $T$,
--   $|T|$ is the number of terminal nodes (leaves), and
--   $\alpha \ge 0$ is the per-leaf penalty.
+-   $R(T)$ is the error of tree $T$, summed over its leaves,
+-   $|T|$ is the number of leaves, and
+-   $\alpha \ge 0$ is the penalty for each leaf. In `rpart`, `cp` plays this
+    role.
 
-**What is** $R(T)$?
+This has the same form as the loss in regularized regression: an error term plus
+a penalty for complexity.
+::::
 
-The impurity $R(T)$ depends on the learning task; it is always computed as a sum over the leaves $t$ of $T$.
+:::: {.slide}
+::: {style="color: yellow"}
+### What is $R(T)$?
+:::
 
-**Regression trees (`method="anova"`)**
+$R(T)$ depends on the task. It is always a sum over the leaves $t$ of the tree.
+
+::: {style="color: lightblue"}
+**Regression trees** (`method = "anova"`)
+:::
+
+The squared error around each leaf's mean:
 
 $$
-R(T)
-=
-\sum_{t \in \mathrm{leaves}(T)}
-\;\sum_{i \in t}
-\bigl(y_i - \bar{y}_t\bigr)^2,
+R(T) = \sum_{t \in \text{leaves}(T)} \; \sum_{i \in t} \left(y_i - \bar{y}_t\right)^2,
 \qquad
-\bar{y}_t = \frac{1}{N_t}\sum_{i \in t} y_i.
+\bar{y}_t = \frac{1}{N_t} \sum_{i \in t} y_i
 $$
 
-**Regression trees (`method="class"`)**
-
-$$
-R(T)
-=
-\sum_{t \in \mathrm{leaves}(T)}
-N_t \Bigl( 1 - \max_{k} p_{tk} \Bigr),
-\qquad
-p_{tk} = \frac{1}{N_t}\sum_{i \in t} \mathbf{1}\{y_i = k\}.
-$$
-
-::: {style="color: orange"}
-### Limitations of Standard Decision Trees
+::: {style="color: lightblue"}
+**Classification trees** (`method = "class"`)
 :::
 
-In their standard form, decision trees have several limitations:
+The number of misclassified observations in each leaf:
 
-**Overfitting and Lack of Generalization**\
-- Trees can keep splitting until each leaf is pure, perfectly fitting the training data.\
-- This often captures noise and leads to poor generalization.
+$$
+R(T) = \sum_{t \in \text{leaves}(T)} N_t \left(1 - \max_k \, p_{tk}\right),
+\qquad
+p_{tk} = \frac{1}{N_t} \sum_{i \in t} \mathbf{1}\{y_i = k\}
+$$
+::::
 
-**High Variance / Instability**\
-- Small changes in training data can lead to very different tree structures.\
-- This instability makes them unreliable when used alone.
+:::: {.slide}
+::: {style="color: yellow"}
+## Limitations of a Single Tree
+:::
 
-**Bias Toward Features with Many Levels**\
-- Features with many unique categories (e.g., IDs, zip codes) can dominate splits.\
-- The tree may overvalue these even when they’re not meaningful.
+::: {style="color: lightblue"}
+**Overfitting**
+:::
 
-**Greedy, Locally Optimal Splitting**\
-- Trees choose the best split at each step, but this is only a local optimum.\
-- They can miss better global solutions.
+-   A tree can keep splitting until every leaf is pure, fitting the training
+    data perfectly.
+-   That captures noise, and the tree generalizes poorly.
 
+::: {style="color: lightblue"}
+**High variance**
+:::
+
+-   Small changes in the training data can produce a very different tree.
+-   That makes a single tree unreliable.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### More Limitations
+:::
+
+::: {style="color: lightblue"}
+**Bias toward features with many levels**
+:::
+
+-   Features with many unique values, such as IDs or zip codes, offer many
+    possible splits and can dominate.
+-   The tree may favor them even when they are not meaningful.
+
+::: {style="color: lightblue"}
+**Greedy splitting**
+:::
+
+-   Each split is the best one available at that step, which is only a local
+    optimum.
+-   The tree can miss a better overall structure.
+
+Bagging, random forests, and boosting, which come next, address the high
+variance by combining many trees.
+::::
+
+:::: {.slide}
 ::: {style="color: yellow"}
 ## Implementation in R
 :::
 
-In R we can use the `rpart` package to create decision trees. The `rpart` package implements the widely popular CART (Classification and Regression Trees) algorithm for building decision trees.
+In R we use the `rpart` package, which implements **CART** (Classification and
+Regression Trees), the most widely used algorithm for building decision trees.
 
-::: {style="color: orange"}
-### Decision Trees: Personality Example
+As with the earlier models, we fit it through `caret::train()`, here with
+`method = "rpart"`.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Load the Required Packages
 :::
 
-We will use the following libraries:
-
-```{r,warning=FALSE,message=FALSE}
-library(rpart)
-library(caret)
-library(rsample)
-library(tidyverse)
-library(recipes)
-library(rattle)
-library(titanic)
-library(psych)
+```{r}
+library(rpart)      # decision trees (CART)
+library(caret)      # train(), cross validation, and performance metrics
+library(rsample)    # splitting data into training and test sets
+library(tidyverse)  # data manipulation and plots
+library(recipes)    # preprocessing recipes
+library(rattle)     # fancyRpartPlot() for drawing trees
+library(titanic)    # the Titanic data
+library(psych)      # describe() for descriptives
 ```
+::::
 
-Let's try to predict the variable `OPN8` using a decision tree. Remember, OPN8 is a dichotomous variable indicating whether a respondent strongly agrees (1) or does not strongly agree (0) with the statement "I use difficult words." We will use the same data preprocessing steps as before and predict our outcome using all the personality items included in our example data.
+:::: {.slide}
+::: {style="color: yellow"}
+## The Personality Data
+:::
 
-```{r,warning=FALSE,message=FALSE}
+-   **Source**: the Big Five personality test data from Kaggle, collected online
+    by Open Psychometrics. We use 1,000 respondents.
+-   **Items**: 50 statements, 10 for each of the Big Five traits: extraversion
+    (`EXT`), emotional stability (`EST`), agreeableness (`AGR`),
+    conscientiousness (`CSN`), and openness (`OPN`).
+-   **Scale**: each statement was rated from 1 (disagree) to 5 (agree), with 3
+    as neutral. A 0 means the item was skipped.
+-   **Our version**: to practice preprocessing, 20 items were recoded to 0 and 1,
+    and 10 to Low, Medium, and High. The other 20 keep the original scale.
+-   **Target**: `OPN8`, "I use difficult words," coded 1 for strongly agree and 0
+    otherwise. 44% of respondents are 1s.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Personality Example
+:::
+
+We will predict `OPN8` from the other personality items.
+
+-   `OPN8` records whether a respondent strongly agrees (1) or does not strongly
+    agree (0) with "I use difficult words."
+-   The predictors are the other 49 items, prepared the same way as before.
+
+```{r}
 data <- read.csv("data/data-final-shuffled.csv")
+
+# items coded 0 and 1, and items stored as text, are categories
 dichotomous_vars <- colnames(data)[sapply(data, max) == 1]
 character_vars   <- colnames(data)[sapply(data, class) == "character"]
-cat_vars         <- c(character_vars,dichotomous_vars)
-data[cat_vars ]  <- lapply(data[cat_vars ], as.factor)
+cat_vars         <- c(character_vars, dichotomous_vars)
+data[cat_vars]   <- lapply(data[cat_vars], as.factor)
 
 target <- "OPN8"
-data <- data[!is.na(data[,target]),]
+data   <- data[!is.na(data[, target]), ]
 
 set.seed(123)
-split <- initial_split(data, prop = 0.7, strata = target)
-data_train  <- training(split)
-data_test   <- testing(split)
+split      <- initial_split(data, prop = 0.7, strata = target)
+data_train <- training(split)
+data_test  <- testing(split)
 ```
+::::
 
-Again, we can recreate our recipe from the in-class activity.
+:::: {.slide}
+::: {style="color: yellow"}
+### The Recipe
+:::
 
-```{r,warning=FALSE,message=FALSE}
+The recipe follows the pattern from the Workflow page: impute missing values with
+bagged trees, then dummy code the factors.
+
+```{r}
 formula_string <- as.formula(paste(target, "~ ."))
 
 blueprint <- recipe(formula_string, data = data_train) %>%
   step_impute_bag(all_predictors()) %>%
-  step_dummy(all_factor_predictors(), one_hot = FALSE) 
+  step_dummy(all_factor_predictors(), one_hot = FALSE)
 ```
 
-Now, let's fit a decision tree model using 10-fold cross-validation to tune the complexity parameter (cp). The cp parameter controls the size of the decision tree and helps prevent overfitting by penalizing more complex trees. Here, `tuneLength` specifies the number of different cp values to try during the tuning process.
+Trees do not need centered or scaled predictors, because a split only depends on
+the order of the values.
 
-```{r,warning=FALSE,message=FALSE,cache=TRUE}
+`one_hot = FALSE` drops one level of each factor as the reference category.
+Regression needs that, because a full set of dummy columns is redundant with the
+intercept. A tree has no intercept, so it does not need it. We keep it so the
+recipe matches the earlier lectures.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Tuning `cp` with Cross Validation
+:::
+
+We tune `cp` with 10 fold cross validation. `tuneLength = 10` asks `caret` to try
+10 values of `cp`, and `metric = "Kappa"` picks the one with the best Kappa,
+which corrects accuracy for the agreement we would expect by chance.
+
+```{r}
+#| cache: true
+set.seed(15)
+
 cv_model_1 <- train(
   blueprint,
-  data = data_train,
-  method = "rpart",
-  trControl = trainControl(method = "cv", number = 10),
+  data       = data_train,
+  method     = "rpart",
+  metric     = "Kappa",
+  trControl  = trainControl(method = "cv", number = 10),
   tuneLength = 10
 )
 ```
+::::
 
-We can summarize the model to see the results of the cross-validation and the best `cp` value found.
+:::: {.slide}
+::: {style="color: yellow"}
+### Cross Validation Results
+:::
 
-```{r,warning=FALSE,message=FALSE}
+```{r}
 cv_model_1
 ```
+::::
 
-We can also visualize the cross-validation results to see how the model's performance varies with different values of the complexity parameter (`cp`). Here we can again see that the model achieves the best accuracy with a `cp` value of approximately 0.02.
+:::: {.slide}
+::: {style="color: yellow"}
+### Kappa Across Values of `cp`
+:::
 
-```{r,warning=FALSE,message=FALSE}
+```{r}
 ggplot(cv_model_1)
 ```
 
-To look at the final model tree structure in text form we can use the following command.
+Kappa is highest at a `cp` of about 0.023, which gives a tree with 4 leaves.
+::::
 
-```{r,warning=FALSE,message=FALSE}
-cv_model_1$finalModel
-```
-
-We can also visualize the final decision tree using the `fancyRpartPlot` function from the `rattle` package. This function provides a clear and informative visualization of the decision tree structure, including the splits, nodes, and predicted classes.
-
-```{r,warning=FALSE,message=FALSE}
-fancyRpartPlot(cv_model_1$finalModel)
-```
-
-Each rounded square in the plot above represents a decision node, showing the feature used for the split, the threshold value, and the distribution of classes in that node. The leaves (terminal nodes) show the predicted class and the probability of each class.
-
-The top number in each node is the predicted class, while the bottom number is the probability of that class. For example, in the root node, the model predicts class "0" with a probability of 0.56. This is simply the proportion of people who don't like using fancy words in the training data.
-
-The first split of the data occurs on the feature `OPN1` (I have a rich vocabulary).
-
-If a respondent (strongly) disagrees with this statement (`OPN1 < 3.5`), they are directed to the left branch of the tree, forming a leaf. This leaf contains about `38%` of the respondents and in this leaf `0.87` of respondents do not agree with the statement "I use difficult words" (`OPN8 = 0`).
-
-If a respondent (strongly) agrees with this statement (`OPN1 > 3.5`), they are directed to the right branch of the tree. In this node `0.64` of respondents agree with the statement "I use difficult words" (`OPN8 = 0`).
-
-The right branch of the tree is then further split on the feature `OPN1`, separating respondents who very strongly agree with the statement "I have a rich vocabulary" (`OPN1 > 4.5`) in the right branch, from those who are more neutral or slightly agree (`3.5 < OPN1 < 4.5`) in the left branch.
-
-The right branch of the tree ends in a terminal node (leaf) where `0.78` of respondents strongly agree with the statement "I use difficult words" (`OPN8 = 1`).
-
-The left branch of the tree is further split on the feature `EXT9` ("I don't mind being the center of attention").
-
-Those who agree at all with the statement (`EXT9 < 0.5`) are directed to the left branch, where `22%` of the sample reside and the predicted response is `0` for "I use difficult words" with a probability of `0.55`.
-
-Those who endorse (`EXT9 < 0.5`) at all are directed to the right branch, where `13%` of the sample remain and the predicted response is `1` for "I use difficult words" with a probability of `0.66`.
-
-```{r, warning = FALSE, message=FALSE}
-# Make predictions on the test set      
-pred_class <- predict(cv_model_1, data_train)
-
-# create confusion matrix
-confusionMatrix(
-  data = relevel(pred_class, ref = "1"), 
-  reference = relevel(data_train[,target], ref = "1")
-)
-
-```
-
-::: {style="color: orange"}
-### Decision Trees: Titanic Example
+:::: {.slide}
+::: {style="color: yellow"}
+### The Final Tree as Text
 :::
 
-Let's read in the Titanic training data from the `titanic` package and take a look at the data.
+```{r}
+cv_model_1$finalModel
+```
+::::
 
-This package comes with data that is pre-split into training and test sets.
+:::: {.slide}
+::: {style="color: yellow"}
+### Plotting the Tree
+:::
 
-```{r,warning=FALSE,message=FALSE}
+```{r}
+fancyRpartPlot(cv_model_1$finalModel, sub = "")
+```
+
+Each box is a node:
+
+-   The top line is the predicted class.
+-   The middle line gives the share of each class in the node, 0 first and then 1.
+-   The bottom line is the percentage of the training data that reaches the node.
+
+The split rule is printed below each box. Respondents who meet it go left.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Reading the Tree: The First Split
+:::
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 3.6
+#| out-width: "60%"
+#| fig-align: center
+# the tree cut back to its first split
+fancyRpartPlot(snip.rpart(cv_model_1$finalModel, toss = 3), sub = "")
+```
+
+-   At the root, the tree predicts `OPN8 = 0` with probability 0.56. That is the
+    share of training respondents who do not strongly agree with "I use difficult
+    words."
+-   The first split is on `OPN1`, "I have a rich vocabulary."
+-   Respondents who scored 3 or lower on `OPN1` (`OPN1 < 3.5`) go left, to a leaf
+    with 38% of the sample. In that leaf, 0.87 have `OPN8 = 0`.
+-   Respondents who scored 4 or 5 go right. In that node, 0.64 have `OPN8 = 1`.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Reading the Tree: The Second Split
+:::
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 3.6
+#| out-width: "60%"
+#| fig-align: center
+# the tree cut back to its first two splits
+fancyRpartPlot(snip.rpart(cv_model_1$finalModel, toss = 6), sub = "")
+```
+
+The right branch splits on `OPN1` again:
+
+-   Respondents who scored 5 (`OPN1 >= 4.5`) go to a leaf with 27% of the sample,
+    where 0.78 have `OPN8 = 1`.
+-   Respondents who scored 4 go to a node with 35% of the sample, where 0.53
+    have `OPN8 = 1`. That node splits once more.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Reading the Tree: The EXT9 Split
+:::
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 4.2
+#| out-width: "60%"
+#| fig-align: center
+fancyRpartPlot(cv_model_1$finalModel, sub = "")
+```
+
+Respondents who scored 4 on `OPN1` split on `EXT9_X1`, the dummy column for
+`EXT9`, "I don't mind being the center of attention."
+
+-   Respondents who do not endorse `EXT9` (`EXT9_X1 < 0.5`) go to a leaf with 22%
+    of the sample. The tree predicts `OPN8 = 0`, with probability 0.55.
+-   Respondents who endorse `EXT9` (`EXT9_X1 >= 0.5`) go to a leaf with 13% of
+    the sample. The tree predicts `OPN8 = 1`, with probability 0.66.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### How Well Does the Tree Predict?
+:::
+
+The test set gives the verdict, and we use it once.
+
+```{r}
+pred_class <- predict(cv_model_1, newdata = data_test)
+
+confusionMatrix(
+  data      = relevel(pred_class, ref = "1"),
+  reference = relevel(data_test[, target], ref = "1")
+)
+```
+
+The tree classifies 74% of the test respondents correctly. It catches 65% of
+those who strongly agree (sensitivity) and 81% of those who do not
+(specificity).
+
+Always guessing 0 would already be right 56% of the time. Kappa corrects for
+that: it is 0 for guessing, and 0.47 for this tree.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Titanic Example
+:::
+
+The `titanic` package includes the passenger list from the Titanic. We predict
+whether each passenger survived.
+
+```{r}
 titanic_train <- titanic::titanic_train
 ```
 
-Here, the features included in `titanic_train`:
+The features we use:
 
--   `Survived`: Whether the passenger survived (1) or not (0).\
--   `Pclass`: Passenger class (1st, 2nd, 3rd).
--   `Sex`: Sex of passenger.
--   `Age`: Age of the passenger.
--   `SibSp`: Number of siblings/spouses aboard.
--   `Parch`: Number of parents/children aboard.
--   `Fare`: Ticket fare.
--   `Embarked`: Port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton).
+-   `Survived`: whether the passenger survived (1) or not (0). This is the target.
+-   `Pclass`: passenger class (1st, 2nd, 3rd).
+-   `Sex`: sex of the passenger.
+-   `Age`: age in years.
+-   `SibSp`: number of siblings or spouses aboard.
+-   `Parch`: number of parents or children aboard.
+-   `Fare`: ticket fare.
+-   `Embarked`: port of embarkation (C = Cherbourg, Q = Queenstown,
+    S = Southampton).
+::::
 
-We can get basic desciptives using the `psych` package.
+:::: {.slide}
+::: {style="color: yellow"}
+### Descriptives
+:::
 
-```{r,warning=FALSE,message=FALSE}
+```{r}
 describe(titanic_train)
 ```
+::::
 
-Now, let's fit our regression tree model to the Titanic data. We will predict the `Survived` variable using all other features in the dataset.
+:::: {.slide}
+::: {style="color: yellow"}
+### Fitting the Tree
+:::
 
+Drop the columns we will not use, set the factors, build the recipe, and tune
+`cp`. `Survived` is a factor, so this is a classification tree.
 
-
-```{r,warning=FALSE,message=FALSE,cache=TRUE}
+```{r}
+#| cache: true
 titanic_train$PassengerId <- NULL
-titanic_train$Name <- NULL
-titanic_train$Ticket <- NULL
-titanic_train$Cabin <- NULL
-titanic_train$Survived <- as.factor(titanic_train$Survived)
-titanic_train$Sex <- as.factor(titanic_train$Sex)
+titanic_train$Name        <- NULL
+titanic_train$Ticket      <- NULL
+titanic_train$Cabin       <- NULL
+titanic_train$Survived    <- as.factor(titanic_train$Survived)
+titanic_train$Sex         <- as.factor(titanic_train$Sex)
 
-blueprint_titanic <- recipe(Survived ~., data = titanic_train) %>%
+blueprint_titanic <- recipe(Survived ~ ., data = titanic_train) %>%
   step_impute_bag(all_predictors()) %>%
-  step_dummy(all_factor_predictors(), one_hot = FALSE) 
+  step_dummy(all_factor_predictors(), one_hot = FALSE)
+
+set.seed(559)
 
 cv_model_titanic <- train(
   blueprint_titanic,
-  data = titanic_train,
-  method = "rpart",
-  trControl = trainControl(method = "cv", number = 10),
+  data       = titanic_train,
+  method     = "rpart",
+  metric     = "Kappa",
+  trControl  = trainControl(method = "cv", number = 10),
   tuneLength = 20
 )
-
 ```
+::::
 
-```{r,warning=FALSE,message=FALSE}
+:::: {.slide}
+::: {style="color: yellow"}
+### Kappa Across Values of `cp`
+:::
+
+```{r}
 ggplot(cv_model_titanic)
 ```
+::::
 
-We can also visualize the final decision tree using the `fancyRpartPlot` function from the `rattle` package.
+:::: {.slide}
+::: {style="color: yellow"}
+### The Final Tree
+:::
 
-```{r,warning=FALSE,message=FALSE}
-fancyRpartPlot(cv_model_titanic$finalModel)
+```{r}
+fancyRpartPlot(cv_model_titanic$finalModel, sub = "")
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Reading the Titanic Tree: The First Split
+:::
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 3.6
+#| out-width: "60%"
+#| fig-align: center
+# the tree cut back to its first split
+fancyRpartPlot(snip.rpart(cv_model_titanic$finalModel, toss = c(2, 3)), sub = "")
 ```
 
-Now, let's evaluate the model's performance using cross-validation results and a confusion matrix.
+-   At the root, 0.62 of passengers died, so the tree predicts `Survived = 0`.
+-   The first split is on `Sex_male`, the dummy column for `Sex`.
+-   Men (`Sex_male >= 0.5`) go left. They are 65% of passengers, and only 0.19
+    survived.
+-   Women go right. They are 35% of passengers, and 0.74 survived.
+::::
 
-```{r, warning = FALSE, message=FALSE}
-# Make predictions on the test set      
-pred_class <- predict(cv_model_titanic, titanic_train)
+:::: {.slide}
+::: {style="color: yellow"}
+### Reading the Titanic Tree: Men
+:::
 
-# create confusion matrix
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 4.2
+#| out-width: "60%"
+#| fig-align: center
+# the men's branch, cut back after its first two splits
+fancyRpartPlot(snip.rpart(cv_model_titanic$finalModel, toss = c(3, 5, 8, 9)), sub = "")
+```
+
+Men are split by age, then by class:
+
+-   Boys younger than 6.5 (`Age < 6.5`) are 3% of passengers, and 0.67 survived.
+-   Older males are 62% of passengers, and 0.17 survived. They split on class:
+    -   Second or third class (`Pclass >= 1.5`): 49% of passengers, 0.12 survived.
+    -   First class: 13% of passengers, 0.36 survived.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Reading the Titanic Tree: Women
+:::
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 3.6
+#| out-width: "60%"
+#| fig-align: center
+# the women's branch, cut back after its first split
+fancyRpartPlot(snip.rpart(cv_model_titanic$finalModel, toss = c(2, 6)), sub = "")
+```
+
+Women are split by class:
+
+-   First or second class (`Pclass < 2.5`): 19% of passengers, 0.95 survived.
+-   Third class: 16% of passengers, 0.50 survived. The tree keeps splitting this
+    group on fare and age.
+
+Together, the first few splits recover "women and children first," and show how
+much class mattered as well.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Performance on the Training Data
+:::
+
+`titanic_train` is the only Titanic data with `Survived` recorded, so here we
+score the tree on the same passengers it was trained on. That overstates how well
+it would do on new passengers.
+
+```{r}
+pred_class <- predict(cv_model_titanic, newdata = titanic_train)
+
 confusionMatrix(
-  data = relevel(pred_class, ref = "1"), 
-  reference = relevel(titanic_train[,"Survived"], ref = "1")
+  data      = relevel(pred_class, ref = "1"),
+  reference = relevel(titanic_train[, "Survived"], ref = "1")
 )
-
 ```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Wrapping Up
+:::
+
+A single decision tree is easy to explain: anyone can follow the questions from
+the root to a leaf. It also handles numeric and categorical predictors, needs no
+scaling, and finds interactions on its own.
+
+But a single tree has real problems:
+
+-   **It overfits.** Left alone, it splits until it fits the training data
+    perfectly.
+-   **It is unstable.** Small changes can produce a very different tree. Even the
+    size of our personality tree depended on how the folds were drawn: across
+    100 seeds, cross validation chose trees with anywhere from 2 to 17 leaves.
+-   **It is greedy.** Each split is the best one at that step, not the best tree
+    overall.
+
+::: {style="color: lightgreen"}
+Coming next: what if, instead of trusting one tree, we grew hundreds of them on
+slightly different samples and let them vote?
+:::
+
+That is the idea behind **bagging**, **random forests**, and **boosting**.
+::::
