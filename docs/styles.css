@@ -200,3 +200,14 @@ main.content .two-col > div + div {
     padding-top: 1.5rem;
   }
 }
+
+/* Compact tables: wrap a table (or a .two-col) in ::: {.compact} to shrink
+   its text and row padding so a longer table fits on one slide. */
+main.content .compact table {
+  font-size: 0.8em;
+}
+
+main.content .compact th,
+main.content .compact td {
+  padding: 0.15rem 0.5rem;
+}

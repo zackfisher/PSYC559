@@ -72,8 +72,8 @@ website:
     # (released 9/21 — Logistic regression: week3_3, week3_4)
     # (released 9/22 — Regularized regression: week4_1)
     # (released 10/8 — Decision trees: week5_1)
-    # 9/24 — Bagging and random forests
-    - week5_2.qmd
+    # (released 10/13 — Bagging: week5_2)
+    # 9/24 — Random forests
     - week5_3.qmd
     # 9/29 — Gradient boosting
     - week5_4.qmd

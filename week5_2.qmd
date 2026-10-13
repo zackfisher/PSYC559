@@ -1,62 +1,142 @@
 ---
 title: "Bagging"
-format: 
-  html: 
+body-classes: slides
+format:
+  html:
     fontsize: 25px
-    code-folders: true
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
-data <- readRDS("data/data.RDS")
-library(dplyr)
-library(tidymodels)
-library(caret)
-library(rpart)
-library(recipes)
-library(rsample)
-library(ipred)
-```
-
+:::: {.slide}
 ::: {style="color: yellow"}
-## Overview of Bagging and Decision Trees
+## Today's Lecture
+:::
+In today's lecture we will cover:
+
+-   Why one tree is not enough
+-   Bootstrapping
+-   Bagging
+-   Bagging in R
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## From One Tree to Many
 :::
 
-As we discussed previously, a limitation of standard decision trees is their high variance. This means that small changes in the training data can lead to significantly different tree structures, which can result in overfitting and poor generalization to new data.
+The decision tree lecture ended with a problem: a single tree has **high
+variance**. Small changes in the training data can produce a very different
+tree, which leads to overfitting and poor predictions on new data.
 
-Bagging, or Bootstrap Aggregating, is an ensemble learning technique designed to reduce the variance of high-variance models like decision trees.
+**Bagging**, short for **b**ootstrap **agg**regat**ing**, reduces that variance:
 
-The core idea behind bagging is to create multiple versions of a predictor (in this case, decision trees) and use these to get an aggregated predictor.
+-   Build many versions of the same model, each on a slightly different training
+    set.
+-   Combine their predictions into one.
+::::
 
-::: {style="color: orange"}
-### What is Bootstrapping?
+:::: {.slide}
+::: {style="color: yellow"}
+## One Sample, Many Possible Samples
 :::
 
-Bootstrapping is a statistical method that involves resampling with replacement from a dataset to create multiple "bootstrap" samples.
+A psychologist collects data from 150 college students and predicts their
+depressive symptoms from sleep, stress, social support, and exercise. They fit
+a decision tree, and the tree splits first on sleep.
 
-Each bootstrap sample is of the same size as the original dataset but may contain duplicate observations due to the sampling with replacement.
+::: {style="color: lightgreen"}
+-   Would another sample of 150 students produce the same tree?
+-   Would sleep still be the first split?
+-   How could we find out without recruiting another 150 students?
+:::
+::::
 
-# insert image of bootstrapping here
-
-![https://bradleyboehmke.github.io/HOML/images/bootstrap-scheme.png](images/bootstrap.png){width="800"}
-
-Since samples are drawn with replacement, each bootstrap sample is likely to contain duplicate values.
-
-In fact, on average, $63.21\%$ of the original sample ends up in any particular bootstrap sample.
-
-The original observations not contained in a particular bootstrap sample are considered **out-of-bag (OOB)**.
-
-When bootstrapping, a model can be built on the selected samples and validated on the OOB samples; this is often done, for example, in random forests (see Chapter 11).
-
-::: {style="color: orange"}
-### Boostrapping Example
+:::: {.slide}
+::: {style="color: yellow"}
+### What Depends on the Sample?
 :::
 
-Consider a dataset with 12 observations.
+-   We know what the model learned from this sample.
+-   We do not know how much of that depends on the particular people who
+    happened to take part.
+-   Classical statistics answers this with standard errors, confidence
+    intervals, and sampling distributions. For complicated models, such as a
+    tree, the math for these is hard or unknown.
+-   The bootstrap takes a different route: simulate collecting new samples,
+    using only the data we already have.
+::::
 
-The original dataset might look like this:
+:::: {.slide}
+::: {style="color: yellow"}
+### A Brief History of the Bootstrap
+:::
+
+-   In 1979, Stanford statistician Bradley Efron published [Bootstrap Methods:
+    Another Look at the Jackknife](https://doi.org/10.1214/aos/1176344552). He
+    is the same Efron from the baseball example in the regularization lecture.
+-   Before then, learning how much an estimate would vary across samples meant
+    deriving its sampling distribution by hand, or relying on a large sample
+    approximation. That works for a mean or a regression slope, and gets hard
+    for complicated estimates.
+-   Efron's idea was simple: treat the sample as a stand in for the population,
+    draw new samples from it, and repeat the calculation. It works for a very
+    wide range of problems.
+-   Related ideas came earlier, such as the jackknife of Maurice Quenouille and
+    John Tukey. Fast computers made Efron's approach practical.
+-   The name comes from "pulling yourself up by your own bootstraps": learning
+    about the population using only the sample.
+
+The bootstrap moved part of statistical inference from something we derive with
+math to something we compute. Machine learning is built on that same shift.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## What is Bootstrapping?
+:::
+
+**Bootstrapping** creates new datasets by sampling the original data **with
+replacement**.
+
+-   Each bootstrap sample has the same number of rows as the original.
+-   Some observations appear more than once, and others not at all.
+
+![https://bradleyboehmke.github.io/HOML/images/bootstrap-scheme.png](images/bootstrap.png){width="700"}
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Out of Bag Observations
+:::
+
+-   On average, a bootstrap sample contains about 63.2% of the original
+    observations.
+-   The rest, about 36.8%, are **out of bag (OOB)**.
+-   A model can be trained on the bootstrap sample and checked on its out of bag
+    observations, which act as a free validation set. Random forests, in the
+    next lecture, use this.
+
+Why 63.2%? Each draw misses a given observation with probability $1 - 1/n$, so
+after $n$ draws the observation is left out with probability
+
+$$
+\left(1 - \frac{1}{n}\right)^{n} \approx e^{-1} \approx 0.368
+$$
+::::
+
+::::: {.slide}
+::: {style="color: yellow"}
+### Bootstrapping Example
+:::
+
+The same 12 students, sampled with replacement. ID 3 appears twice and ID 11 is
+left out, so ID 11 is out of bag. A typical sample would leave out about 4.
+
+:::: {.two-col .compact}
+::: {}
+**Original data**
 
 | ID  | StudyHours | Attendance | Passed |
 |-----|------------|------------|--------|
@@ -72,8 +152,10 @@ The original dataset might look like this:
 | 10  | 7.5        | High       | Yes    |
 | 11  | 8.0        | High       | Yes    |
 | 12  | 8.5        | High       | Yes    |
+:::
 
-A bootstrap sample might look like this:
+::: {}
+**One bootstrap sample**
 
 | ID  | StudyHours | Attendance | Passed |
 |-----|------------|------------|--------|
@@ -89,152 +171,191 @@ A bootstrap sample might look like this:
 | 8   | 6.5        | High       | Yes    |
 | 10  | 7.5        | High       | Yes    |
 | 3   | 4.0        | Low        | No     |
+:::
+::::
+:::::
 
-In this example, the bootstrap sample includes some observations multiple times (e.g., ID 3 appears twice), while others (e.g., ID 11) are not included at all. The observations not included in the bootstrap sample (IDs 11) are considered out-of-bag (OOB) samples.
-
-::: {style="color: orange"}
-### Why Use Bootstrapping with Decision Trees?
+:::: {.slide}
+::: {style="color: yellow"}
+### Why Bootstrap Decision Trees?
 :::
 
-Bootstrapping helps to create diverse training datasets for building multiple decision trees. Each tree is trained on a different bootstrap sample, which introduces variability among the trees.
+-   Each tree is trained on a different bootstrap sample, so the trees differ.
+-   To predict, we combine the trees:
+    -   for **classification**, by majority vote,
+    -   for **regression**, by averaging.
+-   Combining smooths out the quirks of the individual trees and reduces
+    variance.
+-   Bagging works best with deep, unpruned trees. Each one has low bias and high
+    variance, and averaging removes much of the variance.
+::::
 
-When predictions are made, the results from all the trees are aggregated (e.g., by majority voting for classification or averaging for regression). This aggregation helps to smooth out the predictions and reduce the overall variance of the model.
-
+:::: {.slide}
 ::: {style="color: yellow"}
 ## Bagging in R
 :::
 
-Let's return to our example predicting whether a student likes to use big words based on their personality features.
+We return to the personality example from the decision tree lecture: predicting
+`OPN8`, "I use difficult words," from the other 49 items.
 
-Let's see how our original decision tree worked.
+-   First, we refit the single tree from that lecture as a benchmark.
+-   Then we bag 100 trees and compare.
+::::
 
-```{r,echo=F,show=F,results='hide',message=FALSE,warning=FALSE,cache=TRUE}
-library(caret)
-library(rpart)
-library(recipes)
-library(rsample)
-library(ipred)
+:::: {.slide}
+::: {style="color: yellow"}
+## Load the Required Packages
+:::
+
+```{r}
+library(caret)    # train() and confusionMatrix()
+library(rpart)    # decision trees
+library(recipes)  # preprocessing recipes
+library(rsample)  # splitting data into training and test sets
+library(ipred)    # bagging()
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Single Tree from Last Lecture
+:::
+
+This refits the tree from the decision tree lecture, with the same data, split,
+seed, and settings. The code is hidden because it matches that lecture.
+
+```{r}
+#| echo: false
+#| cache: true
 data <- read.csv("data/data-final-shuffled.csv")
+
 dichotomous_vars <- colnames(data)[sapply(data, max) == 1]
 character_vars   <- colnames(data)[sapply(data, class) == "character"]
-cat_vars         <- c(character_vars,dichotomous_vars)
-data[cat_vars ]  <- lapply(data[cat_vars ], as.factor)
+cat_vars         <- c(character_vars, dichotomous_vars)
+data[cat_vars]   <- lapply(data[cat_vars], as.factor)
 
 target <- "OPN8"
-data <- data[!is.na(data[,target]),]
+data   <- data[!is.na(data[, target]), ]
 
 set.seed(123)
-split <- initial_split(data, prop = 0.7, strata = target)
-data_train  <- training(split)
-data_test   <- testing(split)
+split      <- initial_split(data, prop = 0.7, strata = target)
+data_train <- training(split)
+data_test  <- testing(split)
 
-formula_string <- as.formula(paste(target, "~ ."))
-
-blueprint <- recipe(formula_string, data = data_train) %>%
+blueprint <- recipe(as.formula(paste(target, "~ .")), data = data_train) %>%
   step_impute_bag(all_predictors()) %>%
-  step_dummy(all_factor_predictors(), one_hot = FALSE) 
+  step_dummy(all_factor_predictors(), one_hot = FALSE)
+
+set.seed(15)
 
 cv_model_1 <- train(
   blueprint,
-  data = data_train,
-  method = "rpart",
-  trControl = trainControl(method = "cv", number = 10),
+  data       = data_train,
+  method     = "rpart",
+  metric     = "Kappa",
+  trControl  = trainControl(method = "cv", number = 10),
   tuneLength = 10
 )
-
-
-vip::vip(cv_model_1)
-
 ```
 
 ```{r}
-# Make predictions on the test set      
-pred_class <- predict(cv_model_1, data_test)
+pred_tree <- predict(cv_model_1, newdata = data_test)
 
-# create confusion matrix
-caret::confusionMatrix(
-  data = relevel(pred_class, ref = "1"), 
-  reference = relevel(data_test[,"OPN8"], ref = "1")
+confusionMatrix(
+  data      = relevel(pred_tree, ref = "1"),
+  reference = relevel(data_test[, target], ref = "1")
 )
 ```
+::::
 
-Now, let's implement bagging using the `caret` and `ipred` packages in R.
+:::: {.slide}
+::: {style="color: yellow"}
+### Bagging with `ipred`
+:::
+
+These data have no missing values, so the bagged trees can use the formula
+directly, without a recipe.
 
 ```{r}
-# make bootstrapping reproducible
+# make the bootstrap samples reproducible
 set.seed(123)
 
-# train bagged model
 cv_bag1 <- bagging(
   formula = OPN8 ~ .,
-  data = data_train,
-  nbagg = 100,  
-  coob = TRUE,
+  data    = data_train,
+  nbagg   = 100,
+  coob    = TRUE,
   control = rpart.control(minsplit = 2, cp = 0)
 )
 ```
 
-Let's look at the model summary and the prediction error. Compared to our non-bagged model we can see the bagged model has a lower prediction error.
+-   `nbagg = 100` grows 100 trees, each on its own bootstrap sample.
+-   `coob = TRUE` estimates the error from the out of bag observations.
+-   `rpart.control(minsplit = 2, cp = 0)` grows each tree as deep as it can, with
+    no pruning.
+::::
 
-```{r}
-# Make predictions on the test set      
-pred_class <- predict(cv_bag1, data_test)
-
-# create confusion matrix
-caret::confusionMatrix(
-  data = relevel(pred_class, ref = "1"), 
-  reference = relevel(data_test[,"OPN8"], ref = "1")
-)
-```
-
+:::: {.slide}
 ::: {style="color: yellow"}
-## Code for In-Class Activity
+### The Out of Bag Error
 :::
 
 ```{r}
-dat <- data.frame(
-  ID = 1:12,
-  StudyHours = c(2.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5),
-  Attendance = c("Low","Low","Low","Med","Med","Med","Med","High","High","High","High","High"),
-  Passed = c("No","No","No","No","No","Yes","Yes","Yes","Yes","Yes","Yes","Yes")
-)
+cv_bag1
+```
 
-fit_stump <- function(d) {
-  ord <- d[order(d$StudyHours), ]
-  mids <- zoo::rollmean(unique(ord$StudyHours), 2)           # candidate thresholds
-  if (length(mids) == 0) mids <- ord$StudyHours[1]
-  best <- data.frame(tau = NA, err = Inf)
-  for (tau in c(mids - 1e-8, mids + 1e-8)) {                 # break ties cleanly
-    pred <- ifelse(ord$StudyHours >= tau, "Yes", "No")
-    err  <- mean(pred != ord$Passed)
-    if (err < best$err) best <- data.frame(tau = tau, err = err)
-  }
-  best$tau
-}
+The out of bag error is 0.28, so the bagged trees correctly classify about
+72% of the observations they did not see. We got that estimate without
+touching the test set.
+::::
 
-B <- 1000
-taus <- numeric(B)
-oob_acc <- numeric(B)
+:::: {.slide}
+::: {style="color: yellow"}
+### Test Set Performance
+:::
 
-for (b in 1:B) {
-  idx <- sample(nrow(dat), replace = TRUE)
-  boot <- dat[idx, ]
-  taus[b] <- fit_stump(boot)
+```{r}
+pred_bag <- predict(cv_bag1, newdata = data_test)
 
-  # out-of-bag set and accuracy for model b
-  oob <- dat[-unique(idx), , drop = FALSE]
-  if (nrow(oob) == 0) { oob_acc[b] <- NA; next }
-  pred <- ifelse(oob$StudyHours >= taus[b], "Yes", "No")
-  oob_acc[b] <- mean(pred == oob$Passed)
-}
-
-# Aggregated (bagged) decision rule = majority vote over grid
-grid <- data.frame(StudyHours = seq(2.5, 8.5, by = 0.5))
-votes_yes <- sapply(grid$StudyHours, function(x) mean(x >= taus))
-bagged_class <- ifelse(votes_yes >= 0.5, "Yes", "No")
-
-list(
-  mean_OOB_accuracy = mean(oob_acc, na.rm = TRUE),
-  grid = cbind(grid, votes_yes = round(votes_yes, 3), bagged_class = bagged_class)
+confusionMatrix(
+  data      = relevel(pred_bag, ref = "1"),
+  reference = relevel(data_test[, target], ref = "1")
 )
 ```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Comparing the Two Models
+:::
+
+| Test set    | Single tree | Bagged trees |
+|-------------|------------:|-------------:|
+| Accuracy    |       0.741 |        0.774 |
+| Kappa       |       0.469 |        0.543 |
+| Sensitivity |       0.654 |        0.752 |
+| Specificity |       0.810 |        0.792 |
+
+-   Bagging raises Kappa from 0.47 to 0.54.
+-   Each bagged tree has more than 80 leaves. On its own, any one of them would
+    overfit badly. Averaging 100 of them does not.
+-   The cost: there is no longer a single tree to read.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Wrapping Up
+:::
+
+-   Bagging grows many deep trees on bootstrap samples and lets them vote.
+    Averaging reduces variance: here, test Kappa rose from 0.47 to 0.54.
+-   The out of bag observations give a built in estimate of error.
+-   The cost is interpretability. No one can read 100 trees with 80 leaves each.
+-   One problem remains: all 100 trees split first on `OPN1`. Trees that look
+    alike make similar mistakes, which limits how much averaging can help.
+
+::: {style="color: lightgreen"}
+Coming next: random forests make the trees less alike by letting each split
+consider only a random subset of the predictors.
+:::
+::::

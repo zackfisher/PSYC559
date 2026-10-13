@@ -697,7 +697,7 @@
     "href": "week2_3.html",
     "title": "Data Splitting",
     "section": "",
-    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1]  9 10  7\n\nsample(1:10, 3) # run it again... different draw\n\n[1]  8 10  2\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
+    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1]  5  8 10\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 4 6 1\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
     "crumbs": [
       "The Modeling Pipeline",
       "Data Splitting"
@@ -2032,6 +2032,83 @@
     ]
   },
   {
+    "objectID": "week5_2.html",
+    "href": "week5_2.html",
+    "title": "Bagging",
+    "section": "",
+    "text": "In today’s lecture we will cover:\n\nWhy one tree is not enough\nBootstrapping\nBagging\nBagging in R",
+    "crumbs": [
+      "Tree Methods",
+      "Bagging"
+    ]
+  },
+  {
+    "objectID": "week5_2.html#from-one-tree-to-many",
+    "href": "week5_2.html#from-one-tree-to-many",
+    "title": "Bagging",
+    "section": "From One Tree to Many",
+    "text": "From One Tree to Many",
+    "crumbs": [
+      "Tree Methods",
+      "Bagging"
+    ]
+  },
+  {
+    "objectID": "week5_2.html#what-is-bootstrapping",
+    "href": "week5_2.html#what-is-bootstrapping",
+    "title": "Bagging",
+    "section": "What is Bootstrapping?",
+    "text": "What is Bootstrapping?",
+    "crumbs": [
+      "Tree Methods",
+      "Bagging"
+    ]
+  },
+  {
+    "objectID": "week5_2.html#bagging-in-r",
+    "href": "week5_2.html#bagging-in-r",
+    "title": "Bagging",
+    "section": "Bagging in R",
+    "text": "Bagging in R",
+    "crumbs": [
+      "Tree Methods",
+      "Bagging"
+    ]
+  },
+  {
+    "objectID": "week5_2.html#load-the-required-packages",
+    "href": "week5_2.html#load-the-required-packages",
+    "title": "Bagging",
+    "section": "Load the Required Packages",
+    "text": "Load the Required Packages",
+    "crumbs": [
+      "Tree Methods",
+      "Bagging"
+    ]
+  },
+  {
+    "objectID": "week5_2.html#in-class-activity-bagging-a-stump",
+    "href": "week5_2.html#in-class-activity-bagging-a-stump",
+    "title": "Bagging",
+    "section": "In-Class Activity: Bagging a Stump",
+    "text": "In-Class Activity: Bagging a Stump",
+    "crumbs": [
+      "Tree Methods",
+      "Bagging"
+    ]
+  },
+  {
+    "objectID": "week5_2.html#wrapping-up",
+    "href": "week5_2.html#wrapping-up",
+    "title": "Bagging",
+    "section": "Wrapping Up",
+    "text": "Wrapping Up",
+    "crumbs": [
+      "Tree Methods",
+      "Bagging"
+    ]
+  },
+  {
     "objectID": "lab01_rmarkdown.html",
     "href": "lab01_rmarkdown.html",
     "title": "Lab: R Markdown",
@@ -2172,6 +2249,17 @@
     "crumbs": [
       "Labs",
       "Lab: R Markdown"
+    ]
+  },
+  {
+    "objectID": "week5_2.html#one-sample-many-possible-samples",
+    "href": "week5_2.html#one-sample-many-possible-samples",
+    "title": "Bagging",
+    "section": "One Sample, Many Possible Samples",
+    "text": "One Sample, Many Possible Samples",
+    "crumbs": [
+      "Tree Methods",
+      "Bagging"
     ]
   }
 ]
