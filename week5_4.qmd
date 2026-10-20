@@ -1,101 +1,957 @@
 ---
 title: "Gradient Boosting"
-format: 
-  html: 
+body-classes: slides
+format:
+  html:
     fontsize: 25px
-    code-folders: true
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
-data <- readRDS("data/data.RDS")
-library(dplyr)
-library(tidymodels)
-library(caret)
-library(rpart)
-library(recipes)
-library(rsample)
-library(ipred)
-```
-
+:::: {.slide}
 ::: {style="color: yellow"}
-## Overview of Gradient Boosting and Random Forests
+## Today's Lecture
+:::
+In today's lecture we will cover:
+
+-   Where we have been: trees, bagging, and random forests
+-   Boosting: learning from mistakes
+-   A brief history, from a theory question to XGBoost
+-   Gradient boosting step by step
+-   Boosting in R with `caret`
+-   What makes XGBoost different, and XGBoost in R
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Where We Have Been
 :::
 
-Before introducing gradient boosting, let's revisit bagging and random forests.
+A single decision tree is unstable: small changes in the data can produce a
+very different tree. So far we have fixed that by **combining many trees**.
 
-This is important as all three methods share a common goal: improving the performance of decision trees by reducing variance (and bias) through ensemble learning.
+-   **Bagging** grows many deep trees on bootstrap samples and averages them.
+-   **Random forests** do the same, but each split considers only a random
+    subset of predictors, which makes the trees less alike.
 
-Remember, this is all because a single decision tree can be quite unstable (e.g. have high variance) and prone to overfitting our sample data. These ensemble methods reduce that variance (and sometimes bias) by combining multiple trees.
+Both methods grow their trees **independently**, and both mainly reduce
+**variance**.
+::::
 
-::: {style="color: orange"}
-### Bagging Revisited
+:::: {.slide}
+::: {style="color: yellow"}
+### Bagging and Random Forests Revisited
 :::
 
-The key idea in bagging (bootstrap aggregation) is to build many trees independently on bootstrapped samples of the training data and aggregate their predictions.
-
-Each tree is trained in parallel as separate models and we don't share information between them.
-
-Because each tree sees a slightly different sample, their errors “average out,” reducing the variance.
-
-::: {style="color: lightyellow"}
-#### Bagging Algorithm
-:::
-
-1.  Draw many bootstrap samples from the training data.
-2.  Train a decision tree on each sample (often grown fully, with no pruning).
-3.  For regression, average predictions across trees.
-4.  For classification, take the majority vote.
-
-::: {style="color: orange"}
-### Random Forests Revisited
-:::
-
-Remember, one complaint we had about bagging is that often trees will end up looking similar (correlated), reducing the benefit of averaging.
-
-The key idea of random forests is to add an additional layer of randomness by selecting a random subset of features at each split in the tree.
-
-This further decorrelates the trees, leading to a more diverse ensemble and better performance.
-
-::: {style="color: lightyellow"}
-#### Random Forest Algorithm
+::: {style="color: lightblue"}
+**Bagging**
 :::
 
 1.  Draw many bootstrap samples from the training data.
-2.  Train a decision tree on each sample (often grown fully, with no pruning).
-    -   At each split, consider only a random subset of predictors (the `mtry` parameter in R).
-3.  For regression, average predictions across trees.
-4.  For classification, take the majority vote.
+2.  Train a decision tree on each sample, usually grown fully with no pruning.
+3.  Combine the trees: average for regression, majority vote for
+    classification.
 
-::: {style="color: orange"}
-### Introducing Boosting
+::: {style="color: lightblue"}
+**Random forests**
 :::
 
-In our previous improvements to classic decision trees we focused on reducing variance by looking across many independent trees.
+1.  Draw many bootstrap samples from the training data.
+2.  Train a decision tree on each sample. At each split, consider only a random
+    subset of the predictors (`mtry` in R).
+3.  Combine the trees the same way.
+::::
 
-Boosting takes a different approach by focusing on reducing both bias and variance through a sequential learning process.
+:::: {.slide}
+::: {style="color: yellow"}
+## A Different Idea: Learn From Mistakes
+:::
 
-Instead of building trees independently, boosting builds them sequentially, where each new tree focuses on the errors (residuals or misclassifications) of the previous ones.
+Boosting builds its trees **one after another**. Each new tree focuses on what
+the trees before it got wrong.
 
--   Each tree is typically **small (shallow)** — often just a “stump” (one or two splits).\
--   The model is built step-by-step, where each new tree “corrects” the mistakes of the ensemble so far.
-
-**Algorithm sketch (simplified gradient boosting):**
-
-1.  Start with an initial prediction (e.g., the mean of *y*).
-2.  Compute the residuals (the errors) of that model.
-3.  Fit a small tree to those residuals.
-4.  Add this tree to the model with a small learning rate (shrinkage).
-5.  Repeat for many iterations.
-
-**Result:**\
-- Gradually reduces both bias and variance.\
-- Often achieves better predictive performance than bagging/random forests, but is more sensitive to noise and tuning (learning rate, tree depth, number of trees).
+-   Each tree is **small**, often just a few splits.
+-   No single tree is a good model. Together, they add up to one.
 
 | Method | Analogy |
 |----|----|
-| **Bagging** | Many students independently take a test; average their answers. |
-| **Random Forest** | Many students take the test, but each uses a different subset of notes — encouraging diverse answers. |
-| **Boosting** | One student takes the test multiple times, learning from each mistake and improving step by step. |
+| **Bagging** | Many students take a test on their own, and we average their answers. |
+| **Random forest** | Many students take the test, each with a different subset of notes, which keeps their answers diverse. |
+| **Boosting** | One student takes the test again and again, studying the questions they missed each time. |
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Weak Learners
+:::
+
+A **weak learner** is a model that is only a little better than guessing.
+
+-   A **stump**, a tree with one split, is the classic example.
+-   On its own, a stump is a poor model. It can only ask one question.
+
+::: {style="color: lightgreen"}
+Can many weak learners, each only a little better than chance, be combined
+into one strong learner?
+:::
+
+That question started the history of boosting.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## A Brief History of Boosting
+:::
+
+::: {style="color: lightblue"}
+**A theory question, 1988 to 1990**
+:::
+
+-   Michael Kearns and Leslie Valiant asked whether weak learners could always
+    be "boosted" into a strong learner.
+-   In 1990, Robert Schapire proved that the answer is yes, in "The Strength of
+    Weak Learnability."
+
+::: {style="color: lightblue"}
+**AdaBoost, 1995 to 1997**
+:::
+
+-   Yoav Freund and Robert Schapire turned the proof into a practical method,
+    **AdaBoost**. After each round, it gives more weight to the cases the
+    model got wrong, so the next weak learner focuses on them.
+-   Their work won the 2003 Gödel Prize, a top award in theoretical computer
+    science.
+-   Leo Breiman, who invented bagging and random forests, called boosted trees
+    the "best off-the-shelf classifier in the world."
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Boosting Becomes Statistics
+:::
+
+At first, no one could fully explain why AdaBoost worked so well. Statisticians
+then showed that boosting is a familiar idea in disguise.
+
+-   In 2000, Jerome Friedman, Trevor Hastie, and Robert Tibshirani showed that
+    AdaBoost fits an additive model by gradually reducing a loss function.
+-   In 2001, Friedman generalized this as the **gradient boosting machine**.
+    Each new tree takes a small step downhill on any loss you choose: squared
+    error for regression, log loss for classification.
+-   In 2002, Friedman added **stochastic** gradient boosting: fit each tree on a
+    random subsample of the data. This borrowed an idea from bagging and made
+    the models both faster and more accurate.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### XGBoost
+:::
+
+-   In 2014, Tianqi Chen, then a graduate student at the University of
+    Washington, released **XGBoost**, short for eXtreme Gradient Boosting.
+-   It became widely known through Kaggle's Higgs Boson Machine Learning
+    Challenge in 2014, where physicists asked machine learning teams to find
+    signs of the Higgs boson in collider data.
+-   Chen and Carlos Guestrin described the method in a 2016 paper. They noted
+    that 17 of the 29 winning solutions published on Kaggle's blog in 2015 used
+    XGBoost.
+-   Newer relatives followed, such as LightGBM from Microsoft in 2017 and
+    CatBoost from Yandex. All of them are gradient boosted trees.
+
+For prediction from tables of data, which is most of what psychologists
+collect, gradient boosted trees are still among the strongest methods available.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Gradient Boosting Step by Step
+:::
+
+For a continuous outcome:
+
+1.  Start with a simple prediction for everyone, such as the mean of $y$.
+2.  Compute the **residuals**: what the current model gets wrong.
+3.  Fit a small tree to the residuals.
+4.  Add that tree to the model, scaled down by a **learning rate** $\eta$.
+5.  Repeat many times.
+
+After $m$ rounds, the model is
+
+$$
+F_m(x) = F_{m-1}(x) + \eta \, h_m(x)
+$$
+
+where $h_m$ is the small tree fit to the residuals of $F_{m-1}$.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Boosting in a Few Lines of R
+:::
+
+Here is the whole algorithm, using stumps on a made up curve.
+
+```{r}
+library(rpart)
+library(ggplot2)
+
+set.seed(559)
+x <- runif(200, 0, 10)
+y <- sin(x) + rnorm(200, sd = 0.3)
+
+pred <- rep(mean(y), 200)   # step 1: start with the mean
+eta  <- 0.1                 # the learning rate
+fits <- list()
+
+for (m in 1:100) {
+  resid <- y - pred                                        # step 2
+  stump <- rpart(resid ~ x, control = rpart.control(       # step 3
+    maxdepth = 1, cp = 0, minsplit = 2, xval = 0))
+  pred  <- pred + eta * predict(stump)                     # step 4
+  if (m %in% c(1, 5, 25, 100)) fits[[paste(m, ifelse(m == 1, "round", "rounds"))]] <- pred
+}
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Watching Boosting Learn
+:::
+
+```{r}
+#| echo: false
+#| fig-height: 4.6
+plot_df <- do.call(rbind, lapply(names(fits), function(k)
+  data.frame(x = x, y = y, pred = fits[[k]], rounds = k)))
+plot_df$rounds <- factor(plot_df$rounds, levels = names(fits))
+
+ggplot(plot_df, aes(x, y)) +
+  geom_point(alpha = 0.3, size = 1) +
+  geom_step(aes(y = pred), color = "orange", linewidth = 1) +
+  facet_wrap(~ rounds, nrow = 1) +
+  theme_minimal(base_size = 13)
+```
+
+-   After 1 round, the model is the mean plus one small step.
+-   Each round adds a stump fit to what is still unexplained.
+-   By 100 rounds, a sum of 100 stumps has traced the curve, even though no
+    single stump could.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Why "Gradient"?
+:::
+
+For squared error loss, the residual is exactly the negative gradient of the
+loss with respect to the prediction:
+
+$$
+L = \tfrac{1}{2}\left(y - F(x)\right)^2
+\qquad
+-\frac{\partial L}{\partial F(x)} = y - F(x)
+$$
+
+-   So fitting a tree to the residuals means taking a step **downhill** on the
+    loss. This is gradient descent, but the steps are trees.
+-   For other losses, such as log loss for a yes or no outcome, the tree is fit
+    to the negative gradient of that loss instead. These are called
+    **pseudo residuals**.
+-   One algorithm then works for regression, classification, and more.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Learning Rate
+:::
+
+The learning rate $\eta$, called `shrinkage` in `gbm` and `eta` in XGBoost,
+shrinks each tree's contribution.
+
+-   A **large** $\eta$ takes big steps. The model learns fast, but it can
+    overshoot and overfit.
+-   A **small** $\eta$ takes small steps. The model learns slowly, needs more
+    trees, and usually predicts better in the end.
+-   Typical values run from 0.01 to 0.3.
+
+::: {style="color: lightgreen"}
+The lasso also improves prediction by shrinking. What is being shrunk here?
+:::
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Tree Depth
+:::
+
+Boosting uses **shallow** trees, unlike bagging and random forests. The
+setting is `interaction.depth` in `gbm` and `max_depth` in XGBoost.
+
+-   **Depth 1** (stumps): each tree uses one predictor, so the model adds up
+    separate effects, with no interactions.
+-   **Depth 2**: each tree can combine two predictors, so the model can capture
+    two way interactions.
+-   **Depth $d$**: interactions among up to $d$ predictors.
+
+Values from 2 to 6 are common. Deeper trees fit more detail, and overfit
+sooner.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### More Trees Can Overfit
+:::
+
+With bagging and random forests, adding trees never hurts: averaging more trees
+only reduces variance.
+
+Boosting is different. Each tree fits what is left over, so with enough trees
+the model starts fitting noise.
+
+-   Training error keeps falling as trees are added.
+-   Error on new data falls, levels off, then rises.
+-   **Early stopping** watches the cross validated error and stops adding trees
+    once it has not improved for a set number of rounds.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Borrowing From Bagging: Subsampling
+:::
+
+Stochastic gradient boosting adds randomness to each round.
+
+-   Fit each tree on a random share of the rows, such as half. This is
+    `bag.fraction` in `gbm`, 0.5 by default, and `subsample` in XGBoost.
+-   XGBoost can also give each tree a random share of the predictors,
+    `colsample_bytree`, as in random forests.
+
+Both make the trees less alike and often improve prediction. They also make
+each round faster.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Three Ways to Combine Trees
+:::
+
+| | Bagging | Random forest | Boosting |
+|---|---|---|---|
+| How trees are grown | Independently | Independently | One after another |
+| Size of each tree | Deep | Deep | Shallow |
+| Mainly reduces | Variance | Variance | Bias |
+| Can more trees overfit? | No | No | Yes |
+| Main settings | Number of trees | `mtry` | Learning rate, depth, number of trees |
+
+::: {style="color: lightgreen"}
+Why do boosted trees need to be shallow, when bagged trees work best deep?
+:::
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Boosting in R With `caret`
+:::
+
+`caret` fits gradient boosting with `method = "gbm"`. The `gbm` package, first
+written by Greg Ridgeway, implements Friedman's gradient boosting machine.
+
+The steps are the same ones we used for trees, bagging, and random forests:
+
+1.  A recipe for the predictors.
+2.  A tuning grid, searched with cross validation in `train()`.
+3.  One look at the test set.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The `gbm` Settings
+:::
+
+`caret` tunes four settings for `method = "gbm"`:
+
+| Setting | What it controls | Typical values |
+|---|---|---|
+| `n.trees` | Number of trees | 100 to several thousand |
+| `interaction.depth` | Depth of each tree | 1 to 6 |
+| `shrinkage` | Learning rate | 0.01 to 0.3 |
+| `n.minobsinnode` | Fewest observations allowed in a leaf | 5 to 20 |
+
+For each depth and learning rate, `caret` grows the most trees once, then
+checks the cross validated error at every smaller number of trees along the
+way. A long list of `n.trees` values costs almost nothing extra.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Load the Required Packages
+:::
+
+```{r}
+library(caret)    # train(), confusionMatrix(), and varImp()
+library(gbm)      # gradient boosting, used by method = "gbm"
+library(rsample)  # splitting data into training and test sets
+library(recipes)  # dummy coding
+library(ggplot2)  # plots
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Personality Data Again
+:::
+
+The same data, split, and target as the last three lectures: predicting `OPN8`,
+"I use difficult words," from the other 49 items.
+
+```{r}
+data <- read.csv("data/data-final-shuffled.csv")
+
+# items coded 0 and 1, and items stored as text, are categories
+dichotomous_vars <- colnames(data)[sapply(data, max) == 1]
+character_vars   <- colnames(data)[sapply(data, class) == "character"]
+cat_vars         <- c(character_vars, dichotomous_vars)
+data[cat_vars]   <- lapply(data[cat_vars], as.factor)
+
+target <- "OPN8"
+
+set.seed(123)
+split      <- initial_split(data, prop = 0.7, strata = target)
+data_train <- training(split)
+data_test  <- testing(split)
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Recipe and the Grid
+:::
+
+The same recipe as the random forest. The grid crosses four depths with two
+learning rates, and checks every 25 trees up to 1,000.
+
+```{r}
+blueprint <- recipe(OPN8 ~ ., data = data_train) %>%
+  step_dummy(all_nominal_predictors())
+
+gbm_grid <- expand.grid(
+  n.trees           = seq(25, 1000, by = 25),
+  interaction.depth = c(1, 2, 3, 4),
+  shrinkage         = c(0.03, 0.1),
+  n.minobsinnode    = 10
+)
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Fitting the Boosted Model
+:::
+
+Each of the 8 depth and learning rate combinations is fit in each of the 10
+folds. `verbose = FALSE` stops `gbm` from printing every round.
+
+```{r}
+#| cache: true
+set.seed(559)
+
+gbm_model <- train(
+  blueprint,
+  data      = data_train,
+  method    = "gbm",
+  metric    = "Kappa",
+  trControl = trainControl(method = "cv", number = 10),
+  tuneGrid  = gbm_grid,
+  verbose   = FALSE
+)
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Tuning Results
+:::
+
+```{r}
+#| fig-height: 3.4
+ggplot(gbm_model) + theme_minimal(base_size = 13)
+```
+
+-   The left panel uses a learning rate of 0.03 and the right panel 0.1. Each
+    line is a tree depth.
+-   With deeper trees, Kappa peaks early and then falls as trees are added. That
+    is boosting overfitting.
+-   Cross validation chose `r gbm_model$bestTune$n.trees` trees of depth
+    `r gbm_model$bestTune$interaction.depth`, with a learning rate of
+    `r gbm_model$bestTune$shrinkage`.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Test Set Performance
+:::
+
+```{r}
+pred_gbm <- predict(gbm_model, newdata = data_test)
+
+cm_gbm <- confusionMatrix(pred_gbm, data_test$OPN8, positive = "1")
+
+cm_gbm$table
+
+round(c(cm_gbm$overall[c("Accuracy", "Kappa")],
+        cm_gbm$byClass[c("Sensitivity", "Specificity")]), 3)
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### What Mattered Most
+:::
+
+For `gbm`, `varImp()` reports **relative influence**, scaled so the top
+predictor scores 100.
+
+```{r}
+#| echo: false
+# item wording, and the random forest's top 10 from the last lecture
+items  <- read.csv("data/personality_items.csv")
+rf_top <- c("OPN1", "OPN2", "OPN10_X1", "CSN5", "OPN7",
+            "EXT6", "EXT5", "AGR6", "AGR10", "OPN4")
+
+# a dummy column such as OPN10_X1 takes the wording of its item, OPN10
+top5_table <- function(predictors) {
+  rf_rank <- match(predictors, rf_top)
+  data.frame(
+    Predictor     = paste0("`", predictors, "`"),
+    Statement     = items$statement[match(sub("_.*$", "", predictors), items$item)],
+    `Forest rank` = ifelse(is.na(rf_rank), "> 10", rf_rank),
+    check.names   = FALSE
+  )
+}
+
+code <- function(x) {
+  x <- paste0("`", x, "`")
+  if (length(x) == 1) return(x)
+  paste(paste(x[-length(x)], collapse = ", "), "and", x[length(x)])
+}
+
+new_to_top5 <- function(predictors) {
+  new  <- setdiff(predictors, rf_top[1:5])
+  gone <- setdiff(rf_top[1:5], predictors)
+  if (length(new) == 0) return("The same five predictors led the random forest.")
+  paste0("Compared with the random forest, ", code(new),
+         ifelse(length(new) == 1, " is", " are"), " new to the top five, replacing ",
+         code(gone), ".")
+}
+
+gbm_imp <- varImp(gbm_model)$importance
+gbm_top <- rownames(gbm_imp)[order(-gbm_imp$Overall)][1:5]
+```
+
+```{r}
+#| eval: false
+ggplot(varImp(gbm_model), top = 10) + theme_minimal(base_size = 13)
+```
+
+:::: {.two-col style="grid-template-columns: 2fr 3fr;"}
+::: {}
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3.6
+ggplot(varImp(gbm_model), top = 10) + theme_minimal(base_size = 13)
+```
+:::
+
+::: {}
+::: {.compact}
+```{r}
+#| echo: false
+knitr::kable(top5_table(gbm_top), align = "llc")
+```
+:::
+
+-   `r new_to_top5(gbm_top)`
+-   Importance shows how much a predictor helps, not in which direction.
+:::
+::::
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## What Makes XGBoost Different
+:::
+
+XGBoost is gradient boosting with several additions.
+
+-   **A penalty on tree complexity.** It minimizes the loss plus a penalty on
+    each tree $f$:
+    $$
+    \Omega(f) = \gamma T + \tfrac{1}{2} \lambda \sum_{j=1}^{T} w_j^2
+    $$
+    where $T$ is the number of leaves and $w_j$ are the leaf values. This is
+    regularization, applied to trees.
+-   **Smarter steps.** It uses both the slope and the curvature of the loss to
+    choose each tree, like Newton's method.
+-   **Built in handling of missing values.** At each split it learns which
+    branch missing values should follow, so imputation is optional.
+-   **Speed.** It searches for splits in parallel and bins numeric predictors,
+    so it runs fast on large data.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### XGBoost's Main Settings
+:::
+
+| Setting | What it controls | Typical values |
+|---|---|---|
+| `nrounds` | Number of trees | Chosen by early stopping |
+| `eta` | Learning rate | 0.01 to 0.3 |
+| `max_depth` | Depth of each tree | 2 to 6 |
+| `min_child_weight` | Smallest allowed leaf, measured by weight | 1 to 10 |
+| `gamma` | Smallest loss reduction needed to split | 0 to 5 |
+| `subsample` | Share of rows per tree | 0.5 to 1 |
+| `colsample_bytree` | Share of predictors per tree | 0.5 to 1 |
+| `lambda` | Penalty on leaf values | 1 by default |
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### A Tuning Strategy
+:::
+
+There are too many settings to search all at once, so tune in stages.
+
+1.  Fix a moderate learning rate, such as 0.1, and use early stopping to choose
+    the number of trees.
+2.  Tune the tree size: `max_depth` and `min_child_weight`.
+3.  Tune the randomness: `subsample` and `colsample_bytree`.
+4.  Lower the learning rate and let early stopping add trees to match.
+
+At every stage, choose using cross validation on the training data only.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## XGBoost in R
+:::
+
+`caret`'s XGBoost method, `method = "xgbTree"`, no longer works with the
+current version of the `xgboost` package, so here we call `xgboost` directly.
+The steps are the same ones we just used with `gbm`:
+
+1.  Turn the predictors into a numeric matrix.
+2.  Choose the settings with cross validation on the training data.
+3.  Fit the final model.
+4.  Evaluate it once on the test set.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Load `xgboost`
+:::
+
+The data, split, and recipe are the ones we used for `gbm`. We only need one
+more package.
+
+```{r}
+library(xgboost)  # gradient boosted trees
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### XGBoost Needs a Numeric Matrix
+:::
+
+`xgboost` does not take a formula or a data frame. We prep the same recipe we
+gave `gbm`, and `bake()` returns a matrix.
+
+```{r}
+prepped <- prep(blueprint)
+
+x_train <- bake(prepped, new_data = NULL,      all_predictors(), composition = "matrix")
+x_test  <- bake(prepped, new_data = data_test, all_predictors(), composition = "matrix")
+
+# the outcome must be coded 0 and 1
+y_train <- as.integer(data_train$OPN8 == "1")
+y_test  <- as.integer(data_test$OPN8 == "1")
+
+dtrain <- xgb.DMatrix(x_train, label = y_train)
+dtest  <- xgb.DMatrix(x_test,  label = y_test)
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Folds and Settings
+:::
+
+Fixing the folds with `createFolds()` makes the results reproducible, and lets
+every model below use the same folds.
+
+```{r}
+set.seed(559)
+folds <- createFolds(data_train$OPN8, k = 10)
+
+params <- list(
+  objective   = "binary:logistic",  # a yes or no outcome
+  eval_metric = "logloss",          # score each round by log loss
+  eta         = 0.1,                # learning rate
+  max_depth   = 2,                  # tree depth
+  tree_method = "hist"              # the fast default in current versions
+)
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Cross Validation With Early Stopping
+:::
+
+`xgb.cv()` grows trees one round at a time and tracks the cross validated log
+loss.
+
+```{r}
+cv_fit <- xgb.cv(
+  params                = params,
+  data                  = dtrain,
+  nrounds               = 1000,
+  folds                 = folds,
+  early_stopping_rounds = 50,  # stop after 50 rounds with no improvement
+  verbose               = 0
+)
+
+best_round <- which.min(cv_fit$evaluation_log$test_logloss_mean)
+best_round
+```
+
+Cross validated log loss is lowest after `r best_round` trees, so training
+stopped 50 rounds later.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Watching It Overfit
+:::
+
+What if we never stopped? Here we grow 500 trees at three learning rates, with
+no early stopping.
+
+```{r}
+#| echo: false
+#| fig-height: 3.6
+train_lab <- "Training folds (seen by the trees)"
+held_lab  <- "Held out fold (new data)"
+
+curves <- do.call(rbind, lapply(c(0.3, 0.1, 0.03), function(e) {
+  p   <- modifyList(params, list(eta = e))
+  fit <- xgb.cv(params = p, data = dtrain, nrounds = 500, folds = folds, verbose = 0)
+  data.frame(
+    round   = fit$evaluation_log$iter,
+    logloss = c(fit$evaluation_log$train_logloss_mean, fit$evaluation_log$test_logloss_mean),
+    set     = rep(c(train_lab, held_lab), each = 500),
+    eta     = paste("eta =", e)
+  )
+}))
+curves$eta <- factor(curves$eta, levels = paste("eta =", c(0.3, 0.1, 0.03)))
+
+# the number of trees with the lowest held out log loss, in each panel
+held <- curves[curves$set == held_lab, ]
+best_pts <- do.call(rbind, lapply(levels(curves$eta), function(e) {
+  d <- held[held$eta == e, ]
+  d[which.min(d$logloss), ]
+}))
+
+ggplot(curves, aes(round, logloss, color = set)) +
+  geom_vline(data = best_pts, aes(xintercept = round), linetype = "dashed",
+             color = "grey40") +
+  geom_line(linewidth = 1) +
+  geom_point(data = best_pts, size = 3, color = "black") +
+  geom_text(data = best_pts, aes(x = round, y = Inf,
+                                 label = paste("best:", round, "trees")),
+            hjust = -0.08, vjust = 1.5, color = "black", size = 4) +
+  facet_wrap(~ eta, nrow = 1) +
+  scale_color_manual(values = setNames(c("#3182bd", "#e6550d"),
+                                       c(train_lab, held_lab))) +
+  labs(x = "Number of trees", y = "Log loss (lower is better)", color = NULL) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom")
+```
+
+-   Log loss measures how far the predicted probabilities are from what
+    happened.
+-   On the training folds, more trees always help. On the held out fold, they
+    help only up to the dashed line. After that, new trees fit noise.
+-   Early stopping stops near the dashed line. A larger learning rate gets there
+    sooner, and overfits faster.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Tuning Depth and Learning Rate
+:::
+
+A small grid, with early stopping choosing the number of trees for each
+combination.
+
+```{r}
+grid <- expand.grid(eta = c(0.03, 0.1, 0.3), max_depth = c(1, 2, 3, 4))
+
+grid$rounds  <- NA
+grid$logloss <- NA
+
+for (i in seq_len(nrow(grid))) {
+  p   <- modifyList(params, list(eta = grid$eta[i], max_depth = grid$max_depth[i]))
+  fit <- xgb.cv(params = p, data = dtrain, nrounds = 2000, folds = folds,
+                early_stopping_rounds = 50, verbose = 0)
+  grid$rounds[i]  <- which.min(fit$evaluation_log$test_logloss_mean)
+  grid$logloss[i] <- min(fit$evaluation_log$test_logloss_mean)
+}
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### XGBoost Tuning Results
+:::
+
+The five best combinations, by cross validated log loss:
+
+```{r}
+grid[order(grid$logloss), ][1:5, ]
+```
+
+```{r}
+#| include: false
+best <- grid[which.min(grid$logloss), ]
+```
+
+`r if (best$max_depth == 1) "The best trees have depth 1. Stumps cannot capture interactions, so for these data an additive model, one separate effect per item, predicts best." else paste0("The best trees have depth ", best$max_depth, ", so the model uses interactions among up to ", best$max_depth, " items.")`
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Final Model
+:::
+
+We fit the best combination on all of the training data, with the number of
+trees early stopping chose.
+
+```{r}
+best <- grid[which.min(grid$logloss), ]
+
+final_params <- modifyList(params, list(eta = best$eta, max_depth = best$max_depth))
+
+set.seed(559)
+xgb_final <- xgb.train(params = final_params, data = dtrain, nrounds = best$rounds)
+```
+
+The best model uses a learning rate of `r best$eta`, trees of depth
+`r best$max_depth`, and `r best$rounds` trees.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### XGBoost Test Set Performance
+:::
+
+`predict()` returns probabilities. We call a respondent a 1 when the
+probability is above 0.5.
+
+```{r}
+prob_xgb <- predict(xgb_final, dtest)
+pred_xgb <- factor(ifelse(prob_xgb > 0.5, "1", "0"), levels = c("0", "1"))
+
+cm_xgb <- confusionMatrix(pred_xgb, data_test$OPN8, positive = "1")
+
+cm_xgb$table
+
+round(c(cm_xgb$overall[c("Accuracy", "Kappa")],
+        cm_xgb$byClass[c("Sensitivity", "Specificity")]), 3)
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Comparing Our Models
+:::
+
+The same 301 test respondents, across four lectures:
+
+| Test set    | Single tree | Bagged trees | Random forest | gbm | XGBoost |
+|-------------|------------:|-------------:|--------------:|------:|--------:|
+| Accuracy    | 0.741 | 0.774 | 0.781 | `r sprintf("%.3f", cm_gbm$overall["Accuracy"])` | `r sprintf("%.3f", cm_xgb$overall["Accuracy"])` |
+| Kappa       | 0.469 | 0.543 | 0.555 | `r sprintf("%.3f", cm_gbm$overall["Kappa"])` | `r sprintf("%.3f", cm_xgb$overall["Kappa"])` |
+| Sensitivity | 0.654 | 0.752 | 0.752 | `r sprintf("%.3f", cm_gbm$byClass["Sensitivity"])` | `r sprintf("%.3f", cm_xgb$byClass["Sensitivity"])` |
+| Specificity | 0.810 | 0.792 | 0.804 | `r sprintf("%.3f", cm_gbm$byClass["Specificity"])` | `r sprintf("%.3f", cm_xgb$byClass["Specificity"])` |
+
+-   Each step improved prediction: one tree, then many trees averaged, then
+    trees made less alike, then many small trees learning from each other's
+    mistakes.
+-   Both boosted models got there with small trees, combined carefully.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### What Mattered Most to XGBoost
+:::
+
+`xgb.importance()` ranks predictors by **gain**: how much the splits on each
+predictor improved the model, summed over all trees.
+
+```{r}
+imp <- xgb.importance(model = xgb_final)
+```
+
+:::: {.two-col style="grid-template-columns: 2fr 3fr;"}
+::: {}
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 3.6
+ggplot(head(imp, 10), aes(x = reorder(Feature, Gain), y = Gain)) +
+  geom_col(fill = "orange") +
+  coord_flip() +
+  labs(x = NULL, y = "Share of total gain") +
+  theme_minimal(base_size = 13)
+```
+:::
+
+::: {}
+::: {.compact}
+```{r}
+#| echo: false
+knitr::kable(top5_table(imp$Feature[1:5]), align = "llc")
+```
+:::
+
+-   `r new_to_top5(imp$Feature[1:5])`
+-   `OPN1` leads in every model so far.
+:::
+::::
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Wrapping Up
+:::
+
+-   Boosting grows small trees **one after another**, each fit to what the model
+    still gets wrong. It mainly reduces bias.
+-   Gradient boosting treats this as gradient descent on a loss, so one
+    algorithm handles regression and classification.
+-   The learning rate, tree depth, and number of trees work together. Early
+    stopping with cross validation picks the number of trees.
+-   In R, `caret` fits boosting with `method = "gbm"`, using the same workflow
+    as every other model this semester.
+-   XGBoost adds regularization, built in handling of missing values, and speed.
+
+::: {style="color: lightgreen"}
+These models predict well, but no one can read hundreds of trees. Next: how do
+we explain what a model like this has learned?
+:::
+::::

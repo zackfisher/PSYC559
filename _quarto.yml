@@ -73,10 +73,8 @@ website:
     # (released 9/22 — Regularized regression: week4_1)
     # (released 10/8 — Decision trees: week5_1)
     # (released 10/13 — Bagging: week5_2)
-    # 9/24 — Random forests
-    - week5_3.qmd
-    # 9/29 — Gradient boosting
-    - week5_4.qmd
+    # (released 10/20 — Random forests: week5_3)
+    # (released 10/20 — Gradient boosting: week5_4)
     # 10/22 — K-means clustering
     - week6_3.qmd
     # 10/27 — Hierarchical clustering

@@ -1,405 +1,768 @@
 ---
 title: "Random Forests"
-format: 
-  html: 
+body-classes: slides
+format:
+  html:
     fontsize: 25px
-    code-folders: true
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: references.bib
 ---
 
-```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
-data <- readRDS("data/data.RDS")
-library(dplyr)
-library(tidymodels)
-library(caret)
-library(rpart)
-library(recipes)
-library(rsample)
-library(ipred)
+:::: {.slide}
+::: {style="color: yellow"}
+## Today's Lecture
+:::
+In today's lecture we will cover:
+
+-   Why bagging is not enough
+-   The idea behind random forests
+-   The random forest algorithm
+-   Out of bag error and variable importance
+-   Tuning a random forest
+-   Random forests in R
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Why Random Forests?
+:::
+
+Random forests are among the most successful and widely used machine learning
+models. Many people treat them as the default first model for prediction from
+tables of data, because they:
+
+-   need little tuning,
+-   handle nonlinear effects and interactions on their own,
+-   work with both categorical and continuous predictors, and
+-   hold up well against noise and overfitting.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Where We Left Off
+:::
+
+Random forests build directly on the last two lectures, so we start with a
+quick recap: a single decision tree, then bagging.
+
+::: {style="color: lightgreen"}
+-   Why does a single tree overfit?
+-   Why does averaging many trees help?
+:::
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Recap: A Single Decision Tree
+:::
+
+```{r}
+#| echo: false
+#| cache: true
+#| fig-width: 7
+#| fig-height: 3.6
+#| out-width: "55%"
+#| fig-align: center
+# the same tree as the decision tree lecture: same data, split, seed, and settings
+suppressPackageStartupMessages({
+  library(rpart); library(rattle); library(caret); library(rsample); library(recipes)
+})
+
+recap_data <- read.csv("data/data-final-shuffled.csv")
+recap_cats <- c(colnames(recap_data)[sapply(recap_data, class) == "character"],
+                colnames(recap_data)[sapply(recap_data, max) == 1])
+recap_data[recap_cats] <- lapply(recap_data[recap_cats], as.factor)
+
+set.seed(123)
+recap_split <- initial_split(recap_data, prop = 0.7, strata = "OPN8")
+
+set.seed(15)
+recap_tree <- train(
+  recipe(OPN8 ~ ., data = training(recap_split)) %>%
+    step_impute_bag(all_predictors()) %>%
+    step_dummy(all_factor_predictors(), one_hot = FALSE),
+  data       = training(recap_split),
+  method     = "rpart",
+  metric     = "Kappa",
+  trControl  = trainControl(method = "cv", number = 10),
+  tuneLength = 10
+)
+
+fancyRpartPlot(recap_tree$finalModel, sub = "")
 ```
 
+-   A tree grows by greedy splits: at each node, it takes the split that most
+    reduces impurity.
+-   `cp` limits its size, and cross validation chooses `cp`. Our tree had 4
+    leaves, split first on `OPN1`, and reached a test Kappa of 0.469.
+-   Its weakness is instability. Depending only on how the folds were drawn,
+    cross validation chose trees with anywhere from 2 to 17 leaves.
+::::
+
+:::: {.slide}
 ::: {style="color: yellow"}
-## Overview of Random Forests
+### Recap: Bagging
 :::
 
-Random Forests are among the most successful and widely used machine learning models ever developed.
+Bagging, short for bootstrap aggregating, fixes that instability by averaging:
 
-Some consider random forest to be the default baseline approach for tabular data prediction problems because they:
+1.  Draw many bootstrap samples: each the same size as the data, sampled with
+    replacement.
+2.  Grow a deep, unpruned tree on each sample. Each tree has low bias and high
+    variance.
+3.  Combine the trees: majority vote for classification, average for
+    regression.
 
-- require minimal tuning,
-- handle nonlinearities and interactions automatically,
-- work well with both categorical and continuous features, and
-- are robust to noise and overfitting
+Each tree overfits its own sample in its own way. Averaging many of them cancels
+out much of that variance.
+::::
 
-::: {style="color: orange"}
-### Motivation
+:::: {.slide}
+::: {style="color: yellow"}
+### How the Trees Combine
 :::
 
-In the last two section we have covered **decision trees** and **bagging**. Summarizing those topics we’ve seen that:
+Here is one new respondent passed through 5 bagged trees. Each tree classifies
+the respondent on its own, and then we count the votes.
 
-- Decision trees are flexible but can easily **overfit** the training data. *Why is this?*  
-- Bagging (Bootstrap Aggregation) helps reduce variance by using many trees trained on different bootstrap samples.  *Why does this help?*
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 3
+library(ggplot2)
 
-However, in bagging, all trees use the same set of predictors at each split. This can be a problem when predictors are correlated.
+# five small trees; the highlighted path is where the new respondent goes
+centers <- c(1, 3.5, 6, 8.5, 11)
+left_var  <- c("EXT9", "OPN5", "CSN5", "OPN10", "EXT2")
+right_var <- c("OPN1", "EXT9", "OPN10", "AGR4", "OPN2")
+leaf_class <- list(c(0, 0, 0, 1), c(0, 1, 1, 0), c(0, 0, 0, 1),
+                   c(0, 0, 0, 1), c(1, 0, 1, 0))
+leaf_hit <- c(4, 3, 3, 4, 3)  # every tree sends the respondent right at OPN1
 
+nodes <- edges <- leaves <- NULL
+for (b in 1:5) {
+  x  <- centers[b]
+  lx <- x + c(-0.9, -0.3, 0.3, 0.9)
+  on_right <- leaf_hit[b] > 2
+  nodes <- rbind(nodes, data.frame(
+    x = c(x, x - 0.6, x + 0.6), y = c(4, 3, 3),
+    label = c("OPN1", left_var[b], right_var[b]),
+    on_path = c(TRUE, !on_right, on_right)))
+  edges <- rbind(edges, data.frame(
+    x = c(x, x, x - 0.6, x - 0.6, x + 0.6, x + 0.6),
+    y = c(4, 4, 3, 3, 3, 3),
+    xend = c(x - 0.6, x + 0.6, lx), yend = c(3, 3, 2, 2, 2, 2),
+    on_path = c(!on_right, on_right, 1:4 == leaf_hit[b])))
+  leaves <- rbind(leaves, data.frame(
+    x = lx, y = 2, class = factor(leaf_class[[b]], levels = c(0, 1)),
+    hit = 1:4 == leaf_hit[b]))
+}
+# leaves the respondent did not reach are drawn in pale colors
+leaves$fill <- ifelse(leaves$hit,
+                      c("#41ab5d", "#3182bd")[leaves$class],
+                      c("#d4ecd0", "#d3e3f3")[leaves$class])
+votes <- leaves[leaves$hit, ]
 
-::: {style="color: lightyellow"}
-### Why are Correlated Predictors a Problem?
+ggplot() +
+  geom_segment(data = edges, aes(x, y, xend = xend, yend = yend,
+                                 color = on_path, linewidth = on_path)) +
+  geom_segment(data = votes, aes(x, y - 0.25, xend = 6, yend = 0.7),
+               color = "grey55", arrow = arrow(length = unit(0.1, "in"))) +
+  geom_label(data = nodes, aes(x, y, label = label,
+                               fontface = ifelse(on_path, "bold", "plain")),
+             size = 4.2, fill = "white", label.size = 0.3) +
+  geom_point(data = leaves, aes(x, y, fill = fill), shape = 21, size = 10,
+             stroke = 0.6, color = ifelse(leaves$hit, "black", "grey60")) +
+  geom_text(data = leaves, aes(x, y, label = class), fontface = "bold",
+            size = 5, color = ifelse(leaves$hit, "white", "grey50")) +
+  annotate("text", x = centers, y = 4.5, label = paste("Tree", 1:5),
+           size = 5, fontface = "bold") +
+  annotate("point", x = 6, y = 0.2, shape = 21, size = 18,
+           fill = "#3182bd") +
+  annotate("text", x = 6, y = 0.2, label = "1", color = "white",
+           fontface = "bold", size = 7) +
+  annotate("text", x = 6.8, y = 0.2, hjust = 0, size = 5.5,
+           label = "Majority vote: 4 of 5 trees say 1") +
+  scale_color_manual(values = c("TRUE" = "black", "FALSE" = "grey80")) +
+  scale_linewidth_manual(values = c("TRUE" = 1.3, "FALSE" = 0.6)) +
+  scale_fill_identity() +
+  coord_cartesian(xlim = c(0, 12), ylim = c(-0.1, 4.6), clip = "off") +
+  theme_void() +
+  theme(legend.position = "none")
+```
+
+-   Each tree sends the respondent down to one leaf. The most common class in
+    that leaf is the tree's vote.
+-   The class with the most votes wins. Here 4 of the 5 trees vote 1, so we
+    predict `OPN8 = 1`.
+-   The share of votes, 4 out of 5 or 0.80, serves as the predicted probability.
+-   For regression, we average the trees' predicted numbers instead. Random
+    forests combine their trees the same way.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Recap: Bagging on the Personality Data
 :::
 
-When predictors are highly correlated, the trees trained on different bootstrap samples tend to:
+| Test set    | Single tree | 100 bagged trees |
+|-------------|------------:|-----------------:|
+| Accuracy    | 0.741 | 0.774 |
+| Kappa       | 0.469 | 0.543 |
+| Sensitivity | 0.654 | 0.752 |
+| Specificity | 0.810 | 0.792 |
 
-- Develop similar structures, and therefore
-- Produce similar predictions.
+-   Each bagged tree had more than 80 leaves. Any one of them overfits, but the
+    average of 100 predicted better than the single pruned tree.
+-   The out of bag error was 0.28, so about 72% of observations were classified
+    correctly by the trees that never saw them.
+-   The cost: there is no longer a single tree to read.
+::::
 
-Imagine that split choices early in the tree (e.g., always splitting on the same or a correlated variable), lead to similar subsequent splits.
+:::: {.slide}
+::: {style="color: yellow"}
+### Bagging Looks Like Cross Validation
+:::
 
-This makes the individual trees **highly correlated** with one another.
+Both methods fit many models, each on part of the data, and keep the rest for
+checking. Here are 20 observations, split up for 5 models each way.
 
-**But why is this a problem?**
+```{r}
+#| echo: false
+#| fig-height: 4.6
+library(ggplot2)
 
-The effectiveness of bagging depends on both:
+set.seed(559)
+n_obs <- 20
+n_mod <- 5
 
-- The **variance** of each model, and  
-- The **correlation** among models.
+# 5 fold cross validation: each observation is held out exactly once
+fold <- sample(rep(1:n_mod, each = n_obs / n_mod))
+cv_df <- expand.grid(obs = 1:n_obs, model = 1:n_mod)
+cv_df$times  <- ifelse(fold[cv_df$obs] == cv_df$model, 0, 1)
+cv_df$method <- "5 fold cross validation"
 
-Averaging $B$ models reduces variance approximately by:
+# bagging: each model gets a bootstrap sample drawn with replacement
+bag_df <- do.call(rbind, lapply(1:n_mod, function(b) {
+  draws <- tabulate(sample(n_obs, replace = TRUE), nbins = n_obs)
+  data.frame(obs = 1:n_obs, model = b, times = draws)
+}))
+bag_df$method <- "Bagging: 5 bootstrap samples"
+
+viz <- rbind(cv_df, bag_df)
+viz$status <- factor(ifelse(viz$times == 0, "Held out (out of bag)",
+                     ifelse(viz$times == 1, "Used once", "Used 2 or more times")),
+                     levels = c("Used once", "Used 2 or more times", "Held out (out of bag)"))
+viz$method <- factor(viz$method, levels = c("5 fold cross validation",
+                                            "Bagging: 5 bootstrap samples"))
+
+ggplot(viz, aes(obs, factor(model, levels = n_mod:1), fill = status)) +
+  geom_tile(color = "white", linewidth = 0.8) +
+  geom_text(data = subset(viz, times > 1), aes(label = times),
+            color = "white", fontface = "bold", size = 4) +
+  facet_wrap(~ method, ncol = 2) +
+  scale_fill_manual(values = c("Used once" = "#9ecae1",
+                               "Used 2 or more times" = "#2171b5",
+                               "Held out (out of bag)" = "#fd8d3c")) +
+  scale_x_continuous(breaks = c(1, 5, 10, 15, 20), expand = c(0, 0)) +
+  labs(x = "Observation", y = "Model", fill = NULL) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "bottom", panel.grid = element_blank())
+```
+
+-   In cross validation, every column has **exactly one** orange cell.
+-   In bagging, the orange cells fall at random, about 37% of each row, and some
+    observations are drawn two or three times (the numbers).
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Same Idea, Different Goal
+:::
+
+|   | $k$ fold cross validation | Bagging |
+|---|---|---|
+| Each model is fit on | $k - 1$ of the $k$ folds | a bootstrap sample, with repeats |
+| Held out from each model | one fold, $1/k$ of the data | the out of bag observations, about 37% |
+| Each observation is held out | exactly once | by about 37% of the models |
+| The models are then | used to estimate error, then set aside | averaged into the final prediction |
+| The held out data give us | the cross validation error | the out of bag error |
+
+The key difference: cross validation fits models **to measure** a method, and
+bagging fits models **to become** the method. The out of bag error is a cross
+validation estimate that bagging gives us for free.
+
+::: {style="color: lightgreen"}
+If the out of bag error comes for free, why do we still use cross validation?
+:::
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### One Problem Remains
+:::
+
+All 100 bagged trees split first on `OPN1`.
+
+-   In bagging, every tree can choose from every predictor at every split.
+-   A strong predictor like `OPN1` wins the first split in nearly every
+    bootstrap sample, so the trees end up looking alike.
+
+::: {style="color: lightgreen"}
+If every tree starts with the same question, how different can their
+predictions be?
+:::
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Why Are Similar Trees a Problem?
+:::
+
+When the trees look alike, they make similar predictions, and similar mistakes.
+How much averaging helps depends on two things:
 
 $$
 \text{Var}(\bar{f}) \approx \rho \sigma^2 + \frac{(1 - \rho)\sigma^2}{B}
 $$
 
-where:
+-   $\sigma^2$ is the variance of each tree,
+-   $\rho$ is the correlation between the trees' predictions, and
+-   $B$ is the number of trees.
 
-- $\sigma^2$ = variance of each model,
-- $\rho$ = correlation between model predictions,
-- $B$ = number of models.
+Adding trees shrinks only the second term. If $\rho$ is large, the first term
+dominates, and more trees barely help. Averaging 100 identical trees gives you
+the same tree.
+::::
 
-If $\rho$ (the correlation) is large, the first term dominates, and averaging provides little variance reduction
-
-Imagine having 100 decision trees, all nearly identical. Averaging 100 identical trees gives you the same model. The benefit of bagging comes only when each tree sees the data differently and makes different mistakes.
-
-::: {style="color: lightyellow"}
+:::: {.slide}
+::: {style="color: yellow"}
 ### How Can We Fix This?
 :::
 
-One method to reduce correlation among trees is to **inject randomness** into the tree-building process.
+Make the trees less alike by adding **randomness** to how each one is grown.
 
-Random Forests deliberately introduce randomness into the model-building process by: **randomly selecting a subset of predictors at each split.**
+Random forests do this by **choosing a random subset of predictors at each
+split**. Then:
 
-This de-correlates the trees:
+-   different trees see different predictors,
+-   they grow differently,
+-   their errors are less correlated, and
+-   averaging them reduces variance much more.
+::::
 
-- Different trees “see” different subsets of features,
-- They grow differently,
-- Their errors are less correlated,
-- And averaging them meaningfully reduces variance.
-
-Thus, random forests address of high correlation among trees that limits the effectiveness of bagging.
-
-
-::: {style="color: orange"}
-### What are Random Forests?
+:::: {.slide}
+::: {style="color: yellow"}
+### A Brief History
 :::
 
-So, what are random forests exactly?
+-   In 1995, Tin Kam Ho at Bell Labs grew trees on random subsets of the
+    predictors and combined them, calling the result "random decision forests."
+-   In 1997, Yali Amit and Donald Geman used randomly chosen splits to build
+    many trees for recognizing handwritten shapes.
+-   In 2001, Leo Breiman, who had introduced bagging in 1996, combined bagging
+    with random predictor subsets at each split in his paper "Random Forests."
+    He also showed how to use the out of bag observations to estimate error and
+    variable importance.
 
-A random forest is an ensemble of decision trees, trained on:
+Breiman's version is the one in nearly every software package today.
+::::
 
-- different bootstrap samples of the data (like bagging), and  
-- random subsets of predictors considered at each split.
-
-Just as with bagging, each tree makes a prediction, and the forest’s final prediction is:
-
-- The majority vote (for classification), or  
-- The average prediction (for regression).
-
-::: {style="color: lightyellow"}
-#### Random Subset of Predictors
+:::: {.slide}
+::: {style="color: yellow"}
+## What Is a Random Forest?
 :::
 
-Instead of searching all predictors for the best split as we did with decision trees and bagging approaches, random forests modify this step by selecting a random subset of predictors at each split. The next split is then determined only from this subset.
+A random forest is an ensemble of decision trees, each trained on:
 
-This reduces correlation among trees, increasing the effectiveness of averaging.
+-   a different bootstrap sample of the data, like bagging, and
+-   a random subset of the predictors at each split.
 
-Typical defaults where $p$ is the total number of predictors in model:
-- Classification: $m = \sqrt{p}$
-- Regression: $m = p/3$
+Each tree makes a prediction, and the forest combines them:
 
+-   by majority vote for classification, and
+-   by averaging for regression.
+::::
 
-::: {style="color: lightyellow"}
-#### Random Forest Algorithm
+:::: {.slide}
+::: {style="color: yellow"}
+### A Random Subset of Predictors
 :::
 
-Given training data with $n$ observations and $p$ predictors.  
+A single tree, and every bagged tree, searches **all** predictors for the best
+split. A random forest changes this one step:
 
-1. Choose the number of trees $B$ to grow.
+-   At each split, draw a random subset of $m$ predictors.
+-   Find the best split among those $m$ only.
 
-2. For some number of trees $b = 1, 2, \ldots, B$:
-   1. Draw a bootstrap sample from the training data.
-   2. Grow a decision tree to the bootstrap sample:
-      - At each node, randomly select $m$ predictors.
-      - Choose the best split among them.
-      - Grow the tree fully (no pruning).
-3. Aggregate predictions across all trees:
-   - Classification: majority vote.
-   - Regression: average.
+Typical defaults, where $p$ is the number of predictors:
 
+-   classification: $m = \sqrt{p}$
+-   regression: $m = p / 3$
 
+With $m = p$, a random forest is the same as bagging.
+::::
 
-::: {style="color: lightyellow"}
-#### Out-of-Bag (OOB) Error
+:::: {.slide}
+::: {style="color: yellow"}
+### Random Predictors at Each Split
 :::
 
-Just as with bagging, each tree is trained on a bootstrap sample (about 63% of the data).  
-The remaining 37%—called out-of-bag (OOB) observations—act as a built-in validation set.
-
-- For each observation, predict its outcome using only trees that did not include it in their bootstrap sample.
-- The OOB error provides an unbiased estimate of test error without needing a separate validation set.
-
-::: {style="color: lightyellow"}
-#### Variable Importance
-:::
-
-In the random forests framework we can also estimate variable importance, for example using the mean decrease in impurity (MDI) or how much a variable reduces Gini impurity or variance across the various splits it was included in.
-
-
-::: {style="color: lightyellow"}
-#### Limitations
-:::
-
-Just as in the case of standard bagging, random Forests are less interpretable than a single tree. 
-
-Other limitations include:
-
-- They can be computationally expensive for large datasets.  
-- Extrapolation beyond the range of training data is poor (like most tree-based methods).  
-
-::: {style="color: orange"} 
-### Random Forests in R
-:::
-
-There are a number of ways to implement random forests in R. The book uses the `ranger` and `h2o` packages and discusses a number of important parameters one might be interested in tuning. 
-
-We will continue with our use of `caret` and `tidymodels` for consistency. In doing so we will discuss the hyperprameters that can be tuned in this framework.
-
-
-::: {style="color: lightyellow"} 
-#### Hyperparameters
-:::
-
-
-**`mTry`**
-
-The mTry hyperparameter controls the number of predictors randomly selected at each split. The typical default for classification tasks is $\sqrt{p}$, and $m = p/3$   for regression tasks. Here $p$ is the total number of predictors.
-
-
-To recap:
-
-  - A random subset of size mtry is chosen from the full set of predictors.
-  - The best split is found only within those mtry predictors.
-
-The success of Random Forests depends on two competing goals:
-
-1. Each tree should be strong: capable of making accurate predictions.  
-2. Trees should be diverse: make different errors so that averaging them reduces variance.
-
-The mtry parameter controls the trade-off between these two.
-
-As mtry decreases we have more randomness, theoretically more diverse trees and lower correlation among the trees.
-
-**`splitrule`**
-
-splitrule is used to control how a node is split inside each tree. Different rules optimize different criteria and can change accuracy, speed, and calibration.
-
-For classification task the default is `"gini"` as we have discussed in previous sections. 
-
-For regression tasks the default is `"variance"`, meaning choose the split that maximizes reduction in response variance. 
- 
-**`min.node.size`**
-
-min.node.size sets the minimum number of observations required in a terminal node (leaf) of each decision tree in the forest.
-
-In other words, it determines how deep the trees are allowed to grow:
-
-- Smaller values indicate deeper trees with more splits  
-- Larger values indicate shallower trees with fewer splits
-
-By default, min.node.size is set to $5$ for regression tasks and $1$ for classification tasks but you can search over many values to find the best one for your problem.
-
-
-```{r,echo=F,show=F,results='hide',message=FALSE,warning=FALSE,cache=FALSE}
-data <- read.csv("data/data-final-shuffled.csv")
-dichotomous_vars <- colnames(data)[sapply(data, max) == 1]
-character_vars   <- colnames(data)[sapply(data, class) == "character"]
-cat_vars         <- c(character_vars,dichotomous_vars)
-data[cat_vars ]  <- lapply(data[cat_vars ], as.factor)
-
-target <- "OPN8"
-data <- data[!is.na(data[,target]),]
-```
-
-
-```{r,echo=F,show=F,results='hide',message=FALSE,warning=FALSE,cache=TRUE}
-library(caret)
-library(rpart)
-library(recipes)
-library(rsample)
-library(ipred)
-data <- read.csv("data/data-final-shuffled.csv")
-dichotomous_vars <- colnames(data)[sapply(data, max) == 1]
-character_vars   <- colnames(data)[sapply(data, class) == "character"]
-cat_vars         <- c(character_vars,dichotomous_vars)
-data[cat_vars ]  <- lapply(data[cat_vars ], as.factor)
-
-target <- "OPN8"
-data <- data[!is.na(data[,target]),]
-
-set.seed(123)
-split <- initial_split(data, prop = 0.7, strata = target)
-data_train  <- training(split)
-data_test   <- testing(split)
-
-formula_string <- as.formula(paste(target, "~ ."))
-
-blueprint <- recipe(formula_string, data = data_train) %>%
-  step_impute_bag(all_predictors()) %>%
-  step_dummy(all_factor_predictors(), one_hot = FALSE) 
-
-cv_model_1 <- train(
-  blueprint,
-  data = data_train,
-  method = "rpart",
-  trControl = trainControl(method = "cv", number = 10),
-  tuneLength = 10
-)
-
-# make bootstrapping reproducible
-set.seed(123)
-
-# train bagged model
-cv_bag1 <- bagging(
-  formula = OPN8 ~ .,
-  data = data_train,
-  nbagg = 100,  
-  coob = TRUE,
-  control = rpart.control(minsplit = 2, cp = 0)
-)
-```
-
-
-::: {style="color: lightyellow"} 
-#### Fitting the Model
-:::
-
-Now that we have a decent understanding of random forests and their hyperparameters, let's fit a random forest model to our data using the `caret` package. We can fit the model and evaluate its performance on the test set.
-
-```{r,message=FALSE,warning=FALSE,cache=TRUE}
-library(caret)
-library(rpart)
-library(recipes)
-library(rsample)
-library(ranger)
-library(vip)
-
-set.seed(123)
-target <- "OPN8"
-split <- initial_split(data, prop = 0.7, strata = target)
-data_train  <- training(split)
-data_test   <- testing(split)
-
-formula_string <- as.formula(paste(target, "~ ."))
-
-blueprint <- recipe(formula_string, data = data_train) %>%
-  step_impute_bag(all_predictors()) %>%
-  step_dummy(all_factor_predictors(), one_hot = FALSE) 
-
-
-tgrid <- expand.grid(
-  mtry = sqrt(ncol(data_train)-1),
-  splitrule = "gini",
-  min.node.size = c(1,5)
-)
-
-rf_model_1 <- train(
-  blueprint,
-  data = data_train,
-  importance = "impurity",
-  metric = "Kappa",
-  method = "ranger",
-  trControl = trainControl(method="cv", number = 10),
-  tuneGrid = tgrid,
-  num.trees = 500
-)
-```
-
-
-Now, that we have fit the model let's look at the variable importance plot and evaluate the model on the test set.
-
-```{r,message=FALSE,warning=FALSE}
-#| layout-ncol: 2
-#| fig-cap: 
-#|   - "Plot 1: VIP: Decision Tree"
-#|   - "Plot 2: VIP: Random Forest"
-#|   
-vip::vip(cv_model_1)
-vip::vip(rf_model_1)
-```
-
-
-Now, that we have fit the model let's look at the variable importance plot and evaluate the model on the test set.
+Six trees pick their first split from the same 9 predictors, listed from
+strongest to weakest. A random forest with $m = 3$ draws 3 of them per split.
 
 ```{r}
-# Make predictions on the test set      
-pred_class <- predict(rf_model_1, data_test)
+#| echo: false
+#| fig-width: 10
+#| fig-height: 3.4
+library(ggplot2)
 
-# create confusion matrix
-confusionMatrix(
-  data = relevel(pred_class, ref = "1"), 
-  reference = relevel(data_test[,"OPN8"], ref = "1")
+# an illustration with p = 9 predictors, listed from strongest to weakest
+preds <- c("OPN1", "OPN10", "OPN2", "OPN5", "EXT9", "AGR4", "CSN5", "EXT2",
+           "AGR7")
+
+# m = 3 predictors drawn for the first split of each random forest tree
+subsets <- list(c("OPN1", "EXT2", "AGR4"), c("OPN5", "EXT9", "AGR7"),
+                c("OPN10", "CSN5", "EXT2"), c("OPN2", "OPN1", "AGR7"),
+                c("EXT9", "AGR4", "CSN5"), c("OPN2", "OPN5", "EXT2"))
+
+# the strongest predictor that can be used wins the split
+splits <- do.call(rbind, lapply(1:6, function(b) {
+  in_subset <- preds %in% subsets[[b]]
+  rbind(
+    data.frame(method = "Bagging: all 9 predictors", tree = b, pred = preds,
+               available = TRUE, chosen = preds == "OPN1"),
+    data.frame(method = "Random forest: 3 random predictors", tree = b,
+               pred = preds, available = in_subset,
+               chosen = preds == preds[in_subset][1]))
+}))
+splits$status <- factor(ifelse(splits$chosen, "Wins the split",
+                        ifelse(splits$available, "Can be used", "Not drawn")),
+                        levels = c("Can be used", "Wins the split", "Not drawn"))
+
+ggplot(splits, aes(factor(pred, levels = preds), factor(tree, levels = 6:1),
+                   fill = status)) +
+  geom_tile(color = "white", linewidth = 1) +
+  facet_wrap(~ method) +
+  scale_fill_manual(values = c("Can be used" = "#9ecae1",
+                               "Wins the split" = "#2171b5",
+                               "Not drawn" = "#eeeeee")) +
+  labs(x = NULL, y = "Tree", fill = NULL) +
+  theme_minimal(base_size = 14) +
+  theme(panel.grid = element_blank(), legend.position = "bottom",
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text = element_text(face = "bold", size = 14))
+```
+
+-   Bagging: `OPN1` can always be used, so it wins the first split of every tree.
+-   Random forest: `OPN1` is drawn for about 1 in 3 splits. The rest of the
+    time, the best predictor in the subset wins.
+-   A new subset is drawn at every split, so a tree can still use `OPN1` further
+    down.
+-   The trees end up less alike, so their mistakes overlap less.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Random Forest Algorithm
+:::
+
+Given training data with $n$ observations and $p$ predictors:
+
+1.  Choose the number of trees, $B$.
+2.  For each tree $b = 1, 2, \ldots, B$:
+    1.  Draw a bootstrap sample from the training data.
+    2.  Grow a tree on that sample. At each node:
+        -   randomly select $m$ predictors,
+        -   choose the best split among them, and
+        -   keep splitting, with no pruning.
+3.  Combine the trees: majority vote for classification, average for
+    regression.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Out of Bag Error
+:::
+
+As in bagging, each tree is trained on a bootstrap sample, about 63% of the
+observations. The other 37% are **out of bag** for that tree.
+
+-   For each observation, predict its outcome using only the trees that did not
+    see it.
+-   The resulting **out of bag error** estimates error on new data, without
+    setting aside a separate validation set.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Variable Importance
+:::
+
+A forest has no single tree to read, but it can still tell us which predictors
+mattered.
+
+-   **Impurity importance:** add up how much each predictor reduced the Gini
+    impurity (or the variance, for regression) across every split that used it,
+    in every tree.
+-   **Permutation importance:** shuffle one predictor's values and measure how
+    much the out of bag error rises. A predictor the forest relies on makes the
+    error rise a lot.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Limitations
+:::
+
+-   Like bagging, a random forest is much harder to interpret than a single tree.
+-   It can be slow to train on large datasets with many trees.
+-   It extrapolates poorly beyond the range of the training data, like most tree
+    based methods.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Random Forests in R
+:::
+
+We fit random forests with the `ranger` package, through `caret::train()` with
+`method = "ranger"`. Three settings can be tuned:
+
+| Setting | What it controls |
+|---|---|
+| `mtry` | How many predictors are drawn at each split |
+| `splitrule` | How each split is chosen: `"gini"` for classification, `"variance"` for regression |
+| `min.node.size` | When a node stops splitting, which controls how deep each tree grows |
+
+The number of trees, `num.trees`, is not tuned. More trees never hurt a forest;
+they only take longer.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Tuning `mtry`
+:::
+
+A random forest needs two things that pull against each other:
+
+1.  **Strong trees**, each able to predict well.
+2.  **Diverse trees**, which make different mistakes so that averaging helps.
+
+`mtry` sets the balance:
+
+-   A **small** `mtry` adds more randomness: more diverse trees, but each one is
+    weaker.
+-   A **large** `mtry` gives stronger trees that look more alike. At the
+    maximum, it is bagging.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### Tuning `min.node.size`
+:::
+
+`min.node.size` sets when a node stops splitting. With `min.node.size = 5`:
+
+-   A node with 5 or fewer observations is not split. It becomes a leaf.
+-   A node with 6 or more can still split, so leaves can end up smaller than 5.
+    A node of 7 can split into 6 and 1.
+-   In classification, a leaf that stops early can hold both classes, say 3 to
+    2. Its vote is the majority class.
+
+**Smaller** values grow deeper trees, and **larger** values grow shallower ones.
+
+The defaults are 1 for classification and 5 for regression. With 1, a tree keeps
+splitting until nearly every leaf holds a single class. Forests usually do well
+with deep trees, since averaging removes much of their variance.
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Load the Required Packages
+:::
+
+```{r}
+library(caret)    # train(), confusionMatrix(), and varImp()
+library(ranger)   # random forests
+library(rsample)  # splitting data into training and test sets
+library(recipes)  # dummy coding
+library(ggplot2)  # plots
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Personality Data Again
+:::
+
+The same data, split, and target as the decision tree and bagging lectures:
+predicting `OPN8`, "I use difficult words," from the other 49 items.
+
+```{r}
+data <- read.csv("data/data-final-shuffled.csv")
+
+# items coded 0 and 1, and items stored as text, are categories
+dichotomous_vars <- colnames(data)[sapply(data, max) == 1]
+character_vars   <- colnames(data)[sapply(data, class) == "character"]
+cat_vars         <- c(character_vars, dichotomous_vars)
+data[cat_vars]   <- lapply(data[cat_vars], as.factor)
+
+target <- "OPN8"
+
+set.seed(123)
+split      <- initial_split(data, prop = 0.7, strata = target)
+data_train <- training(split)
+data_test  <- testing(split)
+```
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### The Recipe and the Grid
+:::
+
+These data have no missing values, so the recipe only dummy codes the factors.
+The grid tries five values of `mtry`, from very random to close to bagging.
+
+```{r}
+blueprint <- recipe(OPN8 ~ ., data = data_train) %>%
+  step_dummy(all_nominal_predictors())
+
+rf_grid <- expand.grid(
+  mtry          = c(2, 4, 7, 15, 30),
+  splitrule     = "gini",
+  min.node.size = c(1, 5)
 )
 ```
+::::
 
-Looks slightly better than our previous models. Let's look at the ROC curve. 
+:::: {.slide}
+::: {style="color: yellow"}
+### Fitting the Forest
+:::
 
-```{r,echo=F,show=F,results='hide',message=FALSE,warning=FALSE,cache=TRUE}
-pred_class1 <- predict(cv_model_1, data_test)
-pred_class2 <- predict(cv_bag1, data_test)
-pred_class3 <- predict(rf_model_1, data_test)
+Each of the 10 combinations is fit in each of the 10 folds, with 500 trees per
+forest.
 
-# create confusion matrix
-m_1 <- confusionMatrix(
-  data = relevel(pred_class1, ref = "1"), 
-  reference = relevel(data_test[,"OPN8"], ref = "1")
+```{r}
+#| cache: true
+set.seed(559)
+
+rf_model <- train(
+  blueprint,
+  data       = data_train,
+  method     = "ranger",
+  metric     = "Kappa",
+  trControl  = trainControl(method = "cv", number = 10),
+  tuneGrid   = rf_grid,
+  num.trees  = 500,
+  importance = "impurity"
 )
+```
+::::
 
-# create confusion matrix
-m_2 <- confusionMatrix(
-  data = relevel(pred_class2, ref = "1"), 
-  reference = relevel(data_test[,"OPN8"], ref = "1")
-)
+:::: {.slide}
+::: {style="color: yellow"}
+### Tuning Results
+:::
 
-# create confusion matrix
-m_3 <- confusionMatrix(
-  data = relevel(pred_class3, ref = "1"), 
-  reference = relevel(data_test[,"OPN8"], ref = "1")
-)
+```{r}
+#| fig-height: 3.4
+ggplot(rf_model) + theme_minimal(base_size = 13)
 ```
 
-**Original Decision Tree**
+Cross validated Kappa is highest with `mtry` = `r rf_model$bestTune$mtry` and
+`min.node.size` = `r rf_model$bestTune$min.node.size`.
+::::
 
-```{r,echo=F,show=F,results='show',message=FALSE,warning=FALSE,cache=TRUE}
-m_1$overall[1:4]
+:::: {.slide}
+::: {style="color: yellow"}
+### Test Set Performance
+:::
+
+```{r}
+pred_rf <- predict(rf_model, newdata = data_test)
+
+cm_rf <- confusionMatrix(pred_rf, data_test$OPN8, positive = "1")
+
+cm_rf$table
+
+round(c(cm_rf$overall[c("Accuracy", "Kappa")],
+        cm_rf$byClass[c("Sensitivity", "Specificity")]), 3)
 ```
+::::
 
-**Bagged Decision Trees**
-```{r,echo=F,show=F,results='show',message=FALSE,warning=FALSE,cache=TRUE}
-m_2$overall[1:4]
+:::: {.slide}
+::: {style="color: yellow"}
+### Comparing Our Models
+:::
+
+The same 301 test respondents, across three lectures:
+
+| Test set    | Single tree | Bagged trees | Random forest |
+|-------------|------------:|-------------:|--------------:|
+| Accuracy    | 0.741 | 0.774 | `r sprintf("%.3f", cm_rf$overall["Accuracy"])` |
+| Kappa       | 0.469 | 0.543 | `r sprintf("%.3f", cm_rf$overall["Kappa"])` |
+| Sensitivity | 0.654 | 0.752 | `r sprintf("%.3f", cm_rf$byClass["Sensitivity"])` |
+| Specificity | 0.810 | 0.792 | `r sprintf("%.3f", cm_rf$byClass["Specificity"])` |
+
+`r if (cm_rf$overall["Kappa"] > 0.543) paste0("Making the trees less alike gives a gain over bagging: Kappa rises from 0.543 to ", sprintf("%.3f", cm_rf$overall["Kappa"]), ".") else "Here the forest does not beat bagging. With these data, the bagged trees were already diverse enough."`
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+### What Mattered Most
+:::
+
+`varImp()` reports impurity importance, scaled so the most important predictor
+scores 100.
+
+:::: {.two-col}
+::: {}
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+ggplot(varImp(rf_model), top = 10) +
+  theme_minimal(base_size = 13)
 ```
+:::
 
-**Random Forest**
-```{r,echo=F,show=F,results='show',message=FALSE,warning=FALSE,cache=TRUE}
-m_3$overall[1:4]
-```
+::: {}
+::: {.compact}
+| Predictor  | Statement |
+|------------|-----------|
+| `OPN1`     | I have a rich vocabulary. |
+| `OPN2`     | I have difficulty understanding abstract ideas. |
+| `OPN10_X1` | I am full of ideas. |
+| `CSN5`     | I get chores done right away. |
+| `OPN7`     | I am quick to understand things. |
+:::
 
+-   `OPN10_X1` is the dummy column for `OPN10`, coded 0 and 1.
+-   Four of the top five are openness items.
+-   `OPN1` is closest in meaning to the target, "I use difficult words."
+:::
+::::
+::::
+
+:::: {.slide}
+::: {style="color: yellow"}
+## Wrapping Up
+:::
+
+-   Bagging averages many trees, but trees that look alike limit how much
+    averaging can help.
+-   Random forests make the trees less alike by drawing a random subset of
+    predictors at each split.
+-   `mtry` balances strong trees against diverse trees. With `mtry` equal to the
+    number of predictors, a random forest is bagging.
+-   The out of bag observations give a built in error estimate, and impurity or
+    permutation importance shows which predictors mattered.
+
+::: {style="color: lightgreen"}
+Bagging and random forests grow their trees independently. Coming next: what if
+each new tree learned from the mistakes of the trees before it?
+:::
+::::

@@ -44,6 +44,83 @@
     ]
   },
   {
+    "objectID": "week5_3.html",
+    "href": "week5_3.html",
+    "title": "Random Forests",
+    "section": "",
+    "text": "In today’s lecture we will cover:\n\nWhy bagging is not enough\nThe idea behind random forests\nThe random forest algorithm\nOut of bag error and variable importance\nTuning a random forest\nRandom forests in R",
+    "crumbs": [
+      "Tree Methods",
+      "Random Forests"
+    ]
+  },
+  {
+    "objectID": "week5_3.html#why-random-forests",
+    "href": "week5_3.html#why-random-forests",
+    "title": "Random Forests",
+    "section": "Why Random Forests?",
+    "text": "Why Random Forests?",
+    "crumbs": [
+      "Tree Methods",
+      "Random Forests"
+    ]
+  },
+  {
+    "objectID": "week5_3.html#where-we-left-off",
+    "href": "week5_3.html#where-we-left-off",
+    "title": "Random Forests",
+    "section": "Where We Left Off",
+    "text": "Where We Left Off",
+    "crumbs": [
+      "Tree Methods",
+      "Random Forests"
+    ]
+  },
+  {
+    "objectID": "week5_3.html#what-is-a-random-forest",
+    "href": "week5_3.html#what-is-a-random-forest",
+    "title": "Random Forests",
+    "section": "What Is a Random Forest?",
+    "text": "What Is a Random Forest?",
+    "crumbs": [
+      "Tree Methods",
+      "Random Forests"
+    ]
+  },
+  {
+    "objectID": "week5_3.html#random-forests-in-r",
+    "href": "week5_3.html#random-forests-in-r",
+    "title": "Random Forests",
+    "section": "Random Forests in R",
+    "text": "Random Forests in R",
+    "crumbs": [
+      "Tree Methods",
+      "Random Forests"
+    ]
+  },
+  {
+    "objectID": "week5_3.html#load-the-required-packages",
+    "href": "week5_3.html#load-the-required-packages",
+    "title": "Random Forests",
+    "section": "Load the Required Packages",
+    "text": "Load the Required Packages",
+    "crumbs": [
+      "Tree Methods",
+      "Random Forests"
+    ]
+  },
+  {
+    "objectID": "week5_3.html#wrapping-up",
+    "href": "week5_3.html#wrapping-up",
+    "title": "Random Forests",
+    "section": "Wrapping Up",
+    "text": "Wrapping Up",
+    "crumbs": [
+      "Tree Methods",
+      "Random Forests"
+    ]
+  },
+  {
     "objectID": "week5_1.html",
     "href": "week5_1.html",
     "title": "Decision Trees",
@@ -697,7 +774,7 @@
     "href": "week2_3.html",
     "title": "Data Splitting",
     "section": "",
-    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1]  5  8 10\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 4 6 1\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
+    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1] 5 6 7\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 7 1 3\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
     "crumbs": [
       "The Modeling Pipeline",
       "Data Splitting"
@@ -2054,6 +2131,17 @@
     ]
   },
   {
+    "objectID": "week5_2.html#one-sample-many-possible-samples",
+    "href": "week5_2.html#one-sample-many-possible-samples",
+    "title": "Bagging",
+    "section": "One Sample, Many Possible Samples",
+    "text": "One Sample, Many Possible Samples",
+    "crumbs": [
+      "Tree Methods",
+      "Bagging"
+    ]
+  },
+  {
     "objectID": "week5_2.html#what-is-bootstrapping",
     "href": "week5_2.html#what-is-bootstrapping",
     "title": "Bagging",
@@ -2087,17 +2175,6 @@
     ]
   },
   {
-    "objectID": "week5_2.html#in-class-activity-bagging-a-stump",
-    "href": "week5_2.html#in-class-activity-bagging-a-stump",
-    "title": "Bagging",
-    "section": "In-Class Activity: Bagging a Stump",
-    "text": "In-Class Activity: Bagging a Stump",
-    "crumbs": [
-      "Tree Methods",
-      "Bagging"
-    ]
-  },
-  {
     "objectID": "week5_2.html#wrapping-up",
     "href": "week5_2.html#wrapping-up",
     "title": "Bagging",
@@ -2106,6 +2183,105 @@
     "crumbs": [
       "Tree Methods",
       "Bagging"
+    ]
+  },
+  {
+    "objectID": "week5_4.html",
+    "href": "week5_4.html",
+    "title": "Gradient Boosting",
+    "section": "",
+    "text": "In today’s lecture we will cover:\n\nWhere we have been: trees, bagging, and random forests\nBoosting: learning from mistakes\nA brief history, from a theory question to XGBoost\nGradient boosting step by step\nBoosting in R with caret\nWhat makes XGBoost different, and XGBoost in R",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
+    "objectID": "week5_4.html#where-we-have-been",
+    "href": "week5_4.html#where-we-have-been",
+    "title": "Gradient Boosting",
+    "section": "Where We Have Been",
+    "text": "Where We Have Been",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
+    "objectID": "week5_4.html#a-different-idea-learn-from-mistakes",
+    "href": "week5_4.html#a-different-idea-learn-from-mistakes",
+    "title": "Gradient Boosting",
+    "section": "A Different Idea: Learn From Mistakes",
+    "text": "A Different Idea: Learn From Mistakes",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
+    "objectID": "week5_4.html#a-brief-history-of-boosting",
+    "href": "week5_4.html#a-brief-history-of-boosting",
+    "title": "Gradient Boosting",
+    "section": "A Brief History of Boosting",
+    "text": "A Brief History of Boosting",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
+    "objectID": "week5_4.html#gradient-boosting-step-by-step",
+    "href": "week5_4.html#gradient-boosting-step-by-step",
+    "title": "Gradient Boosting",
+    "section": "Gradient Boosting Step by Step",
+    "text": "Gradient Boosting Step by Step",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
+    "objectID": "week5_4.html#what-makes-xgboost-different",
+    "href": "week5_4.html#what-makes-xgboost-different",
+    "title": "Gradient Boosting",
+    "section": "What Makes XGBoost Different",
+    "text": "What Makes XGBoost Different",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
+    "objectID": "week5_4.html#xgboost-in-r",
+    "href": "week5_4.html#xgboost-in-r",
+    "title": "Gradient Boosting",
+    "section": "XGBoost in R",
+    "text": "XGBoost in R",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
+    "objectID": "week5_4.html#load-the-required-packages",
+    "href": "week5_4.html#load-the-required-packages",
+    "title": "Gradient Boosting",
+    "section": "Load the Required Packages",
+    "text": "Load the Required Packages",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
+    "objectID": "week5_4.html#wrapping-up",
+    "href": "week5_4.html#wrapping-up",
+    "title": "Gradient Boosting",
+    "section": "Wrapping Up",
+    "text": "Wrapping Up",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
     ]
   },
   {
@@ -2252,14 +2428,14 @@
     ]
   },
   {
-    "objectID": "week5_2.html#one-sample-many-possible-samples",
-    "href": "week5_2.html#one-sample-many-possible-samples",
-    "title": "Bagging",
-    "section": "One Sample, Many Possible Samples",
-    "text": "One Sample, Many Possible Samples",
+    "objectID": "week5_4.html#boosting-in-r-with-caret",
+    "href": "week5_4.html#boosting-in-r-with-caret",
+    "title": "Gradient Boosting",
+    "section": "Boosting in R With caret",
+    "text": "Boosting in R With caret",
     "crumbs": [
       "Tree Methods",
-      "Bagging"
+      "Gradient Boosting"
     ]
   }
 ]
