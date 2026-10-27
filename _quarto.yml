@@ -75,8 +75,7 @@ website:
     # (released 10/13 — Bagging: week5_2)
     # (released 10/20 — Random forests: week5_3)
     # (released 10/20 — Gradient boosting: week5_4)
-    # 10/22 — K-means clustering
-    - week6_3.qmd
+    # (released 10/27 — K-means clustering: week6_3)
     # 10/27 — Hierarchical clustering
     - week6_2.qmd
     # 11/5 — Principal components analysis
@@ -130,9 +129,9 @@ website:
           - week5_4.qmd
       - section: "Dimension Reduction"
         contents:
-          - week6_1.qmd
-          - week6_2.qmd
           - week6_3.qmd
+          - week6_2.qmd
+          - week6_1.qmd
       # Labs stay last among the course content.
       - section: "Labs"
         contents:

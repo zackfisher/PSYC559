@@ -44,6 +44,237 @@
     ]
   },
   {
+    "objectID": "week6_3.html",
+    "href": "week6_3.html",
+    "title": "K-Means Clustering",
+    "section": "",
+    "text": "In today’s lecture we will cover:\n\nA new kind of problem: learning without a target\nPerson-centered and variable-centered questions\nA brief history of K-means\nDistance, centroids, and within-cluster variation\nThe K-means algorithm, step by step and in R\nRandom starts and local optima\nChoosing K: the elbow and the silhouette\nK-means on the personality data\nDescribing, validating, and reporting clusters\nWhen K-means fails",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#where-we-have-been",
+    "href": "week6_3.html#where-we-have-been",
+    "title": "K-Means Clustering",
+    "section": "Where We Have Been",
+    "text": "Where We Have Been",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#unsupervised-learning",
+    "href": "week6_3.html#unsupervised-learning",
+    "title": "K-Means Clustering",
+    "section": "Unsupervised Learning",
+    "text": "Unsupervised Learning",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#two-kinds-of-questions",
+    "href": "week6_3.html#two-kinds-of-questions",
+    "title": "K-Means Clustering",
+    "section": "Two Kinds of Questions",
+    "text": "Two Kinds of Questions",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#why-psychologists-cluster",
+    "href": "week6_3.html#why-psychologists-cluster",
+    "title": "K-Means Clustering",
+    "section": "Why Psychologists Cluster",
+    "text": "Why Psychologists Cluster",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#a-brief-history-of-k-means",
+    "href": "week6_3.html#a-brief-history-of-k-means",
+    "title": "K-Means Clustering",
+    "section": "A Brief History of K-Means",
+    "text": "A Brief History of K-Means",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#measuring-similarity",
+    "href": "week6_3.html#measuring-similarity",
+    "title": "K-Means Clustering",
+    "section": "Measuring Similarity",
+    "text": "Measuring Similarity",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#defining-a-cluster",
+    "href": "week6_3.html#defining-a-cluster",
+    "title": "K-Means Clustering",
+    "section": "Defining a Cluster",
+    "text": "Defining a Cluster",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#the-k-means-algorithm",
+    "href": "week6_3.html#the-k-means-algorithm",
+    "title": "K-Means Clustering",
+    "section": "The K-Means Algorithm",
+    "text": "The K-Means Algorithm",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#k-means-finds-a-local-optimum",
+    "href": "week6_3.html#k-means-finds-a-local-optimum",
+    "title": "K-Means Clustering",
+    "section": "K-Means Finds a Local Optimum",
+    "text": "K-Means Finds a Local Optimum",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#kmeans-in-r",
+    "href": "week6_3.html#kmeans-in-r",
+    "title": "K-Means Clustering",
+    "section": "kmeans() in R",
+    "text": "kmeans() in R",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#the-personality-data-again",
+    "href": "week6_3.html#the-personality-data-again",
+    "title": "K-Means Clustering",
+    "section": "The Personality Data Again",
+    "text": "The Personality Data Again",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#step-2-how-many-clusters",
+    "href": "week6_3.html#step-2-how-many-clusters",
+    "title": "K-Means Clustering",
+    "section": "Step 2: How Many Clusters?",
+    "text": "Step 2: How Many Clusters?",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#step-3-fit-the-final-model",
+    "href": "week6_3.html#step-3-fit-the-final-model",
+    "title": "K-Means Clustering",
+    "section": "Step 3: Fit the Final Model",
+    "text": "Step 3: Fit the Final Model",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#step-4-describe-the-clusters",
+    "href": "week6_3.html#step-4-describe-the-clusters",
+    "title": "K-Means Clustering",
+    "section": "Step 4: Describe the Clusters",
+    "text": "Step 4: Describe the Clusters",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#step-5-does-the-solution-replicate",
+    "href": "week6_3.html#step-5-does-the-solution-replicate",
+    "title": "K-Means Clustering",
+    "section": "Step 5: Does the Solution Replicate?",
+    "text": "Step 5: Does the Solution Replicate?",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#using-the-cluster-variable",
+    "href": "week6_3.html#using-the-cluster-variable",
+    "title": "K-Means Clustering",
+    "section": "Using the Cluster Variable",
+    "text": "Using the Cluster Variable",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#small-group-activity-interpreting-the-clusters",
+    "href": "week6_3.html#small-group-activity-interpreting-the-clusters",
+    "title": "K-Means Clustering",
+    "section": "Small Group Activity: Interpreting the Clusters",
+    "text": "Small Group Activity: Interpreting the Clusters",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#when-k-means-fails",
+    "href": "week6_3.html#when-k-means-fails",
+    "title": "K-Means Clustering",
+    "section": "When K-Means Fails",
+    "text": "When K-Means Fails",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#reporting-a-cluster-analysis",
+    "href": "week6_3.html#reporting-a-cluster-analysis",
+    "title": "K-Means Clustering",
+    "section": "Reporting a Cluster Analysis",
+    "text": "Reporting a Cluster Analysis",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
+    "objectID": "week6_3.html#summary",
+    "href": "week6_3.html#summary",
+    "title": "K-Means Clustering",
+    "section": "Summary",
+    "text": "Summary",
+    "crumbs": [
+      "Dimension Reduction",
+      "K-Means Clustering"
+    ]
+  },
+  {
     "objectID": "week5_3.html",
     "href": "week5_3.html",
     "title": "Random Forests",
@@ -774,7 +1005,7 @@
     "href": "week2_3.html",
     "title": "Data Splitting",
     "section": "",
-    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1] 5 6 7\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 7 1 3\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
+    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1] 10  9  4\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 4 6 3\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
     "crumbs": [
       "The Modeling Pipeline",
       "Data Splitting"
@@ -2241,6 +2472,28 @@
     ]
   },
   {
+    "objectID": "week5_4.html#boosting-in-r-with-caret",
+    "href": "week5_4.html#boosting-in-r-with-caret",
+    "title": "Gradient Boosting",
+    "section": "Boosting in R With caret",
+    "text": "Boosting in R With caret",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
+    "objectID": "week5_4.html#load-the-required-packages",
+    "href": "week5_4.html#load-the-required-packages",
+    "title": "Gradient Boosting",
+    "section": "Load the Required Packages",
+    "text": "Load the Required Packages",
+    "crumbs": [
+      "Tree Methods",
+      "Gradient Boosting"
+    ]
+  },
+  {
     "objectID": "week5_4.html#what-makes-xgboost-different",
     "href": "week5_4.html#what-makes-xgboost-different",
     "title": "Gradient Boosting",
@@ -2257,17 +2510,6 @@
     "title": "Gradient Boosting",
     "section": "XGBoost in R",
     "text": "XGBoost in R",
-    "crumbs": [
-      "Tree Methods",
-      "Gradient Boosting"
-    ]
-  },
-  {
-    "objectID": "week5_4.html#load-the-required-packages",
-    "href": "week5_4.html#load-the-required-packages",
-    "title": "Gradient Boosting",
-    "section": "Load the Required Packages",
-    "text": "Load the Required Packages",
     "crumbs": [
       "Tree Methods",
       "Gradient Boosting"
@@ -2425,17 +2667,6 @@
     "crumbs": [
       "Labs",
       "Lab: R Markdown"
-    ]
-  },
-  {
-    "objectID": "week5_4.html#boosting-in-r-with-caret",
-    "href": "week5_4.html#boosting-in-r-with-caret",
-    "title": "Gradient Boosting",
-    "section": "Boosting in R With caret",
-    "text": "Boosting in R With caret",
-    "crumbs": [
-      "Tree Methods",
-      "Gradient Boosting"
     ]
   }
 ]

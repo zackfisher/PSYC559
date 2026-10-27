@@ -1,0 +1,685 @@
+---
+title: "K-Means Cluster Analysis"
+format: 
+  html: 
+    fontsize: 25px
+    code-folders: true
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r,echo=F,results='hide',message=FALSE,warning=FALSE}
+data <- readRDS("data/data.RDS")
+library(dplyr)
+library(tidymodels)
+library(caret)
+library(rpart)
+library(recipes)
+library(rsample)
+library(ipred)
+library(dplyr)
+library(psych)
+```
+
+
+::: {style="color: yellow"}
+# Introduction
+:::
+
+This section of the book cover K-Means Clustering and DBSCAN clustering methods.
+
+::: {style="color: orange"}
+## A Brief History of K-Means
+:::
+
+::: {style="color: lightyellow"}
+### Early Origins
+:::  
+
+The origins of **K-Means clustering** trace back to the mid-20th century, with multiple independent discoveries across disciplines. The basic idea—partitioning data into *k* groups to minimize within-group variance—was first mentioned by **Hugo Steinhaus (1956)**, who described a method for dividing points into clusters based on proximity.
+
+::: {style="color: lightyellow"}
+## Formalization by Lloyd (1957, 1982)
+:::
+
+The algorithm most people associate with K-Means was first introduced by Stuart Lloyd in a 1957 Bell Labs internal technical report titled “Least Squares Quantization in PCM”. Although unpublished for decades, his work was rediscovered and officially published in 1982.
+
+Lloyd’s version of K-Means introduced the iterative refinement procedure:
+
+1. Assign each point to the nearest cluster centroid.
+2. Recompute each centroid as the mean of its assigned points.
+3. Repeat until assignments no longer change.
+
+This became the foundation for modern K-Means implementations.
+
+::: {style="color: lightyellow"}
+### Parallel Development: MacQueen (1967)
+:::
+
+Around the same time, James MacQueen (1967) independently proposed a similar algorithm in his paper “Some Methods for Classification and Analysis of Multivariate Observations.” MacQueen formalized the term “K-Means” and emphasized its use in statistical pattern recognition and data analysis.
+
+::: {style="color: lightyellow"}
+### Modern Usage
+::: 
+
+Today, K-Means is one of the most widely used unsupervised learning algorithms in data science, statistics, and psychology. Its simplicity, speed, and interpretability have made it a standard for:
+
+- Market segmentation  
+- Image compression  
+- Behavioral clustering  
+- High-dimensional data exploration
+
+While its assumptions (spherical clusters, equal variance) limit its use in some contexts, K-Means remains foundational in both machine learning and psychological data analysis.
+
+
+::: {style="color: orange"}
+## A Brief History of DBSCAN
+:::
+
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise) groups together points that are closely packed based on density, while marking isolated points as outliers. Unlike K-Means, it does not require specifying the number of clusters in advance and can find clusters of arbitrary shape.
+
+::: {style="color: lightyellow"}
+### Early Origins
+:::  
+
+DBSCAN was introduced in 1996 by Ester, Kriegel, Sander, Xu in their paper “A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise.”
+
+::: {style="color: lightyellow"}
+## Origins and Motivation
+:::
+
+DBSCAN emerged from the field of spatial data mining, where traditional clustering algorithms like K-Means struggled with:
+
+- Clusters of arbitrary shape
+- Outliers (noise points)
+- Non-uniform cluster density
+
+The authors’ goal was to define clusters as areas of high point density, rather than assuming spherical shapes or specifying the number of clusters in advance.
+
+::: {style="color: lightyellow"}
+### Innovations
+:::
+
+DBSCAN introduced two important parameters:
+
+- **ε (epsilon):** The neighborhood radius  
+- **MinPts:** The minimum number of points required to form a dense region  
+
+The algorithm identifies **core points** (dense regions), **border points**, and **noise points**, expanding clusters outward from dense cores. This approach made DBSCAN robust to noise and capable of detecting clusters with irregular boundaries.
+
+::: {style="color: lightyellow"}
+### Modern Usage
+::: 
+
+Today, DBSCAN is widely used in:
+- Geospatial analysis
+- Anomaly detection
+- Pattern recognition
+- Psychological and behavioral clustering (where outliers and irregular group shapes are common)
+
+
+::: {style="color: yellow"}
+# K-Means Clustering
+:::
+
+Clustering requires a way to measure how similar or different observations are, typically by computing a distance or dissimilarity matrix. 
+
+As we discussed previously, the chosen distance measure is crucial because it determines how similarity is quantified and influences the resulting cluster shapes and sizes.
+
+Common distance measures include Euclidean and Manhattan distances, but alternatives like correlation-based, Gower, or cosine distances are often used depending on the data type and context. 
+
+
+::: {style="color: orange"}
+## Defining a Cluster
+:::
+
+The central goal of K-means clustering is to form clusters that minimize the total within-cluster variation. Clusters are groups of observations, for example, people.
+
+
+
+Several algorithms exist for this purpose, with the standard being the Hartigan-Wong algorithm (Hartigan and Wong, 1979). 
+
+A good clustering solution is one for which the within-cluster variation is as small as possible
+
+This method defines the total within-cluster variation as the sum of the squared Euclidean distances between each observation and its corresponding cluster centroid:
+
+$$
+W(C_k) = \sum_{x_i \in C_k} (x_i - \mu_k)^2
+$$
+
+where:
+
+- $x_i$ is an observation belonging to cluster $C_k$
+- $\mu_k$ is the mean (centroid) of all points assigned to cluster $C_k$
+
+
+Each observation ($x_i$) is assigned to a given cluster such that the sum of squared (SS) distances of each observation to their assigned cluster centers ($\mu_k$) is minimized.
+
+To make this concrete, let's define within cluster variation using the squared Euclidian distance (the most commonly used metric)
+
+$$
+W(C_{k}) = \frac{1}{|C_k|}\sum_{i,i'\in C_k}\sum_{j=1}^{p}(x_{ij}-x_{i'j})^2
+$$ 
+
+Furthermore, the total within-cluster variation, or sum of squares within clusters, is defined as:
+
+$$
+SS_{\text{within}} = \sum_{k=1}^{K} W(C_k) = \sum_{k=1}^{K} \sum_{x_i \in C_k} (x_i - \mu_k)^2
+$$
+
+This measure, $SS_{\text{within}}$, quantifies the compactness or "goodness" of the resulting clusters. A smaller value of $SS_{\text{within}}$ indicates tighter, more cohesive clusters.
+
+![](imgs/cluster_sep.png)
+
+
+
+::: {style="color: orange"}
+## K-means Algorithm
+:::
+
+The K-means algorithm will assign each observation to exactly one of the $K$ clusters.
+
+::: {style="color: lightyellow"}
+### K-Means Algorithm
+:::
+
+1.  Specify $K$, the number of clusters
+2.  Randomly select $K$ initial cluster means (centroids)
+3.  Assignment step: Assign each observation to the cluster whose centroid is closest (where closest is defined using squared Euclidean distance)
+4.  Adjustment step:Compute the new cluster means (centroids).
+5.  Iterate the Assignment and Update steps until the assignments no longer change.
+
+::: {style="color: lightyellow"}
+### Example of Algorithm
+:::
+
+![K-means Example](imgs/kmeans2.png)
+
+![K-means Example](imgs/kmeans4.png)
+
+![K-means Example](imgs/kmeans5.png)
+
+![K-means Example](imgs/kmeans6.png) Here, we establish a new centroid (X) based on the means of the current assignment Then do the assignment again by cacluting the closeness to the new centroid,
+
+![K-means Example](imgs/kmeans7.png)
+
+![K-means Example](imgs/kmeans8.png)
+
+![K-means Example](imgs/kmeans9.png)
+
+![K-means Example](imgs/kmeans10.png)
+
+::: {style="color: lightyellow"}
+### Sensitivity to Starting Values
+:::
+
+The K-means algorithm is sensitive to the initial random assignment of cluster centroids.
+
+![K-means Snapshot](imgs/kmeans11.png) Randomness of the initial choice for the starting point. We might end up with different solutions when we have different starting points.
+
+Now, let's take a look with various random starting points.
+
+![K-means Snapshot](imgs/kmeans12.png)
+
+We ended up with three clusters, but the random start value influenced, above the variance is printed, there are 4 identical solutions $235.8$ but different order (label switching).
+
+::: {style="color: lightyellow"}
+### Local Optimum
+:::
+
+The K-Means algorithm finds a local rather than a global optimum. This means results obtained will depend on the initial (random) cluster assignment of each observation
+
+It is important to run the algorithm multiple times from different random starting values and then select the best solution. Here, by best, we mean the minimum within cluster variance.
+
+::: {style="color: orange"}
+## Choosing K
+::: 
+
+![Choosing K?](imgs/kmeans13.png)
+
+::: {style="color: lightyellow"}
+### How to Choose K?
+:::
+
+You want to maximize data reduction while making sure that you have good accuracy in terms of cluster memberships.
+
+Some possibilities for choosing $K$:
+
+-   Elbow method (see also within and between sum of squares in the R script)
+-   Information criterion approach (AIC, BIC, DIC)
+-   Two-step approach – using the dendogram from hierarchical clustering
+-   Using the Silhouette coefficient (see next)
+
+![Elbow Method](imgs/kmeans14.png)
+
+**Silhouette Coefficient**
+
+![Silhouette Coefficient](imgs/kmeans15.jpg) The silhouette coefficient is one such measure. It works as follows:
+
+For each point $p$, first find the average distance between p and all other points in the same cluster (this is a measure of cohesion, call it $a$). 
+
+Then find the average distance between $p$ and all points in the nearest cluster (this is a measure of separation from the closest other cluster, call it $b$). 
+
+The silhouette coefficient for $p$ is defined as the difference between $b$ and $a$ divided by the greater of the two ($max(a,b)$).
+
+We evaluate the cluster coefficient of each point and from this we can obtain the 'overall' average cluster coefficient.
+
+Intuitively, we are trying to measure the space between clusters. If cluster cohesion is good ($a$ is small) and cluster separation is good ($b$ is large), the numerator will be large, etc.
+
+The silhouette plot shows the that the silhouette coefficient was highest when $k = 3$, suggesting that's the optimal number of clusters. In this example we are lucky to be able to visualize the data and we might agree that indeed, three clusters best captures the segmentation of this data set.
+
+If we were unable to visualize the data, perhaps because of higher dimensionality, a silhouette plot would still give us a suggestion.
+
+::: {style="color: yellow"}
+# DBSCAN
+:::
+
+Another method to consider is Density-based spatial clustering of applications with noise (DBSCAN).
+
+DBSCAN is a powerful, widely used method – great with identifying clusters of arbitrary shape clusters together points that are closely packed together (high density regions), and identifies outliers (not part of any clusters) as points whose neighbors are far away (low-density regions).
+
+![Algorithm Comparison](imgs/kmeans16.png)
+
+::: {style="color: orange"}
+## Example of DBSCAN
+:::
+
+![DBSCAN Example](imgs/kmeans17.png)
+
+**Eps**: You have to choose this value. Recommended to be smallish and based on domain knowledge. Eps defines the size and borders of each neighborhood. The Eps (must be bigger than 0) is a radius. The neighborhood of point $p$ called the Eps-neighborhood of $p$, is the ball with radius Eps around point $p$.
+
+![DBSCAN Example](imgs/kmeans18.png)
+
+**MinPts**: You have to choose this value. Recommended to be twice the number of dimensions in your dataset.
+
+MinPts is the density threshold. If a neighborhood includes at least MinPts points, it will be considered as a dense region. Alternatively, a point will be considered as dense if there are at least the value of MinPts points in its Eps-neighborhood. These dense points are called core points.
+
+Point $p$ is a core point because the size of its Eps-neighborhood is 12 and MinPts is 5. Point $q$, on the other hand, won't be a core point because its Eps-neighborhood is 4, smaller than MinPts.
+
+A border point has Eps-neighborhood that contains less than MinPts points (so it’s not a core point), but it belongs to the Eps-neighborhood of another core point.
+
+If a point isn’t a core point and isn’t a border point, it’s a noise point or an outlier.
+
+In the figure below we can see that point $x$ is a core point, because it has more than $11$ points in its Eps-neighborhood. Point $y$ isn’t a core point because it has less than $11$ points in its Eps-neighborhood, but because it belongs to the Eps-neighborhood of point $x$, and point $x$ is a core point, point $y$ is a border point. We can easily see that point $z$ isn’t a core point. It belongs to the Eps-neighborhood of point $y$, but point $y$ isn’t a core point, therefore point $z$ is a noise point.
+
+![<https://towardsdatascience.com/a-practical-guide-to-dbscan-method-d4ec5ab2bc99>](imgs/dbscan1.png)
+
+![DBSCAN Example](imgs/kmeans19.png) Note, the assumption here is that we sampled well, like there are really not a lot of people around the outlier.
+
+A wonderful illustrated description of the DBSCAN algorithm can be found at: <https://towardsdatascience.com/a-practical-guide-to-dbscan-method-d4ec5ab2bc99>
+
+::: {style="color: yellow"}
+# Issues in Clustering
+:::
+
+-   Determining the number of clusters to retain
+-   Cross-validation of clusters and cluster sizes
+-   All or none decision process (Either in or out of a cluster)
+-   What to do with observations that really don’t belong in any cluster
+-   Consequences of choices among linkage, dissimilarity measure, cutting dendrogram
+
+::: {style="color: yellow"}
+# Some Recommendations
+:::
+
+Perform clustering with different choices of parameters, and look at the full set of results in order to see what patterns consistently emerge
+
+Since clustering can be non-robust, recommend to cluster subsets of the data and evaluate robustness of the clusters obtained
+
+Most importantly, must be careful about how the results of a clustering analysis are reported.
+
+Results should not be taken as the absolute truth about a data set.
+
+Instead, results often constitute a starting point for the development of a scientific hypothesis and further study, preferably on an independent data set
+
+
+
+
+::: {style="color: yellow"}
+# Example: Clustering Digits
+:::
+
+Let’s illustrate an example by performing k-means clustering on the MNIST pixel features and see if we can identify unique clusters of digits without using the response variable. 
+
+Here, we declare k=10 only because we already know there are 10 unique digits represented in the data. We also use 10 random starts (`nstart = 10`). 
+
+The output of our model contains many of the metrics we’ve already discussed such as total within-cluster variation (`withinss`), total within-cluster sum of squares (`tot.withinss`), the size of each cluster (`size`), and the iteration out of our 10 random starts used (`iter`). It also includes the cluster each observation is assigned to and the centers of each cluster.
+
+
+```{r, warning=FALSE, message=FALSE}
+library(dslabs)
+
+mnist <- dslabs::read_mnist()
+
+url <- "https://koalaverse.github.io/homlr/data/my_basket.csv"
+my_basket <- readr::read_csv(url)
+
+features <- mnist$train$images
+str(features)
+```
+
+Now we can cluster the features using K-means and the `kmeans()` function in R.
+
+
+```{r, warning=FALSE, message=FALSE}
+# Use k-means model with 10 centers and 10 random starts
+mnist_clustering <- kmeans(features, centers = 10, nstart = 10)
+
+# Print contents of the model output
+str(mnist_clustering)
+```
+
+
+The centers output is a `10x784` matrix. This matrix contains the average value of each of the 784 features for the 10 clusters. 
+
+We can plot this as in Figure 20.5 which shows us what the typical digit is in each cluster. We clearly see recognizable digits even though k-means had no insight into the response variable.
+
+```{r}
+# Extract cluster centers
+mnist_centers <- mnist_clustering$centers
+
+# Plot typical cluster digits
+par(mfrow = c(2, 5), mar=c(0.5, 0.5, 0.5, 0.5))
+layout(matrix(seq_len(nrow(mnist_centers)), 2, 5, byrow = FALSE))
+for(i in seq_len(nrow(mnist_centers))) {
+  image(matrix(mnist_centers[i, ], 28, 28)[, 28:1], 
+        col = gray.colors(12, rev = TRUE), xaxt="n", yaxt="n")
+}
+```
+
+Since we also know the truth here we can take a look at the accuracy of our clustering by comparing the cluster assignments to the actual digit labels.
+
+```{r}
+# Create mode function
+mode_fun <- function(x){  
+  which.max(tabulate(x))
+}
+
+mnist_comparison <- data.frame(
+  cluster = mnist_clustering$cluster,
+  actual = mnist$train$labels
+) %>%
+  group_by(cluster) %>%
+  mutate(mode = mode_fun(actual)) %>%
+  ungroup() %>%
+  mutate_all(factor, levels = 0:9)
+
+# Create confusion matrix and plot results
+yardstick::conf_mat(
+  mnist_comparison, 
+  truth = actual, 
+  estimate = mode
+) %>%
+  autoplot(type = 'heatmap')
+```
+
+
+When clustering the MNIST data, the number of clusters we specified was based on prior knowledge of the data. However, often we do not have this kind of a priori information and the reason we are performing cluster analysis is to identify what clusters may exist. So how do we go about determining the right number of k? Let's examine this in more detail.
+
+::: {style="color: yellow"}
+## Example: ESM Data
+:::
+
+Again, let's use the experience sampling data sets, but treats these data as though they are cross-sectional. Getting the data and doing a bit of data management (new id variable)
+
+```{r}
+#set filepath for data file
+filepath <- "https://quantdev.ssri.psu.edu/sites/qdev/files/AMIBbrief_raw_daily1.csv"
+
+#read in the .csv file using the url() function
+daily <- read.csv(file=url(filepath),header=TRUE)
+
+#clean-up of variable names so that they are all lowercase
+var.names.daily <- tolower(colnames(daily))
+colnames(daily)<-var.names.daily
+
+#creating a new "id" variable
+#(we had repeated measures nested in people, now they all get different ids)
+daily$id <- daily$id*10+daily$day
+
+names(daily)
+#reducing down to variable set
+daily <- daily[ ,c("id","slphrs","weath","lteq","pss","se","swls","evalday", "posaff","negaff","temp","hum","wind","bar","prec")]
+
+#removing observations with NA
+dailysub <- daily[complete.cases(daily), ] 
+describe(dailysub)
+
+#scaling all the variables
+dailyscale <- data.frame(scale(dailysub, center=TRUE, scale=TRUE))
+#checking and fixing the id variable (which we did not want standardized)
+str(dailyscale$id)
+dailyscale$id <- dailysub$id
+str(dailyscale$id)
+describe(dailyscale)
+```
+
+::: {style="color: orange"}
+## K-Means
+:::
+
+Basic clustering in the social sciences often makes use of the *K-means* procedure.
+
+The k-means algorithm is a traditional and widely used clustering algorithm.
+
+In brief, the algorithm begins by specifying the number of clusters we are interested in. This is the *k*. Each of the *k* clusters is identified by the vector of the average (i.e., the mean) value of each of the variables for observations within a cluster. A random clustering is constructed (random set of mean vectors).
+
+The *k* means are calculated. Then, using the distance measure, we gravitate each observation to its nearest mean. The means are then recalculated and the points re-gravitate. And so on until there is no further change to the means.
+
+Let's see an example where we chose $K=4$.
+
+We use the R function `kmeans()`.
+
+```{r}
+#there are random starts involved so we set a seed
+set.seed(1234)
+#running a cluster analysis
+model <- kmeans(dailyscale[,c("lteq","posaff")], centers=4)
+model
+```
+
+That is a lot of output! - but pretty easy to walk through and understand. The algorithm even gives a within cluster sum of squares, which is a measure of the explained variance.
+
+Let's extract the mean vectors and plot for a more intuitive understanding of the results.
+
+```{r}
+#getting centers
+model$centers
+#plotting clustered data points with k means
+ggplot(dailyscale,aes(x=lteq,y=posaff)) +
+  geom_point(color=model$cluster, alpha=.6) +#plotting all the points
+  #plotting the centroids
+  geom_point(aes(x=model$centers[1,1],y=model$centers[1,2]),color=1,size=5,shape=18) +
+  geom_point(aes(x=model$centers[2,1],y=model$centers[2,2]),color=2,size=5,shape=18) +
+  geom_point(aes(x=model$centers[3,1],y=model$centers[3,2]),color=3,size=5,shape=18) +
+  geom_point(aes(x=model$centers[4,1],y=model$centers[4,2]),color=4,size=5,shape=18) 
+  
+```
+
+::: {style="color: lighyellow"}
+### Evaluation of Clustering Quality
+:::
+
+Numerous measures are available for evaluating a clustering. Many are stored within the model object returned by `kmeans()`.
+
+A basic concept for evaluating the quality of the clusters is the *sum of squares*. This is typically a sum of the square of the distances between observations.
+
+```{r}
+model$totss
+model$withinss
+model$tot.withinss
+model$betweenss
+```
+
+Evaluation of the sum of squares can help us both evaluate the quality of any given solution, as well as help us choose the number of clusters, *k*, needed to describe the data.
+
+**Evaluation: Within Sum of Squares**
+
+The within sum of squares is a measure of how *close* the observations are within the clusters. For a single cluster this is calculated as the average squared distance of each observation within the cluster from the cluster mean. Then the total within sum of squares is the sum of the within sum of squares over all clusters.
+
+The total within sum of squares generally decreases as the number of clusters increases. As we increase the number of clusters they individually tend to become smaller and the observations closer together within the clusters. As *k* increases, the changes in the total within sum of squares would be expected to reduce, and so it flattens out. A good value of *k* might be where the reduction in the total weighted sum of squares begins to flatten.
+
+General rule of thumb: Aim to minimize the total within sum of squares (achieve within-group similarity).
+
+**Evaluation: Between Sum of Squares**
+
+The between sum or squares is a measure of how *far* the clusters are from each other.
+
+General rule of thumb: Aim to maximize the between sum of squares (achieve between-group dissimilarity).
+
+A good clustering will have a small within sum of squares and a large between sum of squares.
+
+So, we need to have a range of solutions to see how the within and between sum of squares looks with different *k*.
+
+```{r}
+#making a empty dataframe
+criteria <- data.frame()
+#setting range of k                   
+nk <- 1:20
+#loop for range of clusters
+for (k in nk) {
+model <- kmeans(dailyscale[,c("lteq","posaff")], k)
+criteria <- rbind(criteria,c(k,model$tot.withinss,model$betweenss,model$totss))
+}
+#renaming columns
+names(criteria) <- c("k","tot.withinss","betweenss","totalss")
+
+#scree plot
+ggplot(criteria, aes(x=k)) +
+  geom_point(aes(y=tot.withinss),color="red") +
+  geom_line(aes(y=tot.withinss),color="red") +
+  geom_point(aes(y=betweenss),color="blue") +
+  geom_line(aes(y=betweenss),color="blue") +
+  xlab("k = number of clusters") + ylab("Sum of Squares (within = red, between = blue)")
+
+#looking at criteria
+round(criteria,2)
+```
+
+From the scree plot, we might look for 6 clusters (but it is really hard to see any "elbow").
+
+There are also additional quantitative criteria that can be used to inform selection.
+
+For example, the Calinski-Harabasz criterion, also known as the variance ratio criterion, is the ratio of the between sum of squares (divided by k - 1) to the within sum of squares (divided by n - k).
+
+The relative values can be used to compare clusterings of a single dataset, with higher values being better clusterings. The criterion is said to work best for spherical clusters with compact centers (as with normally distributed data) using k-means with Euclidean distance.
+
+And of course this is a well-trodden area of research so there are many criteria - and packages that calculate them for you - and make automated choices.
+
+Don't just pick an index that shows your solution but check out the next point that talks about the stability of the solution. There is not "standard reporting" of cluster analysis results in the psychological literature. Different authors report different things - but all are using some metrics to justify the choice of *k*, and to support why the chosen cluster solution is a good description of the data.
+
+::: {style="color: orange"}
+## Obtaining a Stable Solution
+::: 
+
+Recall that k-means begins the iterations with a random cluster assignment. Different starting points may lead to different solutions. So, it may be useful to start many times to locate a stable solution. This is automated within the `kmeans()` function.
+
+```{r}
+#kmeans with nstart = 1
+km.res <- kmeans(dailyscale[,c("lteq","posaff")], centers=4, nstart = 1)
+km.res$tot.withinss
+
+#kmeans with nstart = 25
+km.res <- kmeans(dailyscale[,c("lteq","posaff")], centers=4, nstart = 25)
+km.res$tot.withinss
+
+#kmeans with nstart = 50
+km.res <- kmeans(dailyscale[,c("lteq","posaff")], centers=4, nstart = 50)
+km.res$tot.withinss
+```
+
+The improvement can be seen over the single random start.
+
+Recommended to do 25+ or 50 for stable solutions.
+
+**Replication**
+
+It may also be informative to repeat the procedure on randomly selected portions of the sample. If the cluster solution replicates in (random) subsets of the data - that would be strong evidence that the typology is pervasive and meaningful.
+
+
+::: {style="color: yellow"}
+# Post-Clustering Analyses
+::: 
+
+After finding a suitable cluster solution, each individual is placed in a cluster. Formally, we obtain a vector of cluster assignments - a new categorical, grouping variable.
+
+What's next?
+
+Well, we can both describe the clusters and use this new cluster variable in some other analysis - ANOVAs to test group differences, Chi-square tests, Multinomial regressions ... the cluster variable can be used as a predictor, a correlate, an outcome (e.g., check whether those clusters are for example differ across personality variables etc.)
+
+::: {style="color: orange"}
+## Describing Clusters
+:::
+
+First we merge the vector of cluster assignments back into the data set.
+
+```{r}
+dailyscale.clus <- cbind(km.res$cluster,dailyscale)
+names(dailyscale.clus)[1] <- "cluster"
+head(dailyscale.clus[,c(1:4,6)],4)
+```
+
+We can describe the different clusters - and potentially name the clusters.
+
+```{r}
+library(tidyverse)
+
+# Gather the data to 'long' format so the clustering variables are all in one column
+#gather() has been replaced by pivot_longer()
+longdata <- dailyscale.clus %>%
+  pivot_longer(c(lteq, posaff), names_to = "variable", values_to = "value")
+
+# Create the summary statistics seperately for cluster and variable (i.e. lteq, posaff)
+summary <- longdata %>%
+             group_by(cluster, variable) %>%
+             summarise(mean = mean(value), se = sd(value) / length(value))
+
+# Plot
+ggplot(summary, aes(x = variable, y = mean, fill = variable)) + 
+  geom_bar(stat = 'identity', position = 'dodge') +
+  geom_errorbar(aes(ymin = mean - se, ymax = mean + se),                            
+                  width = 0.2,
+                  position = position_dodge(0.9)) +
+  facet_wrap(~cluster) 
+```
+
+From this plot we can see the multivariate "profile" of each cluster - and use that to name the clusters. There can be some label switching, depending on random starting values, in terms of the cluster membership identifiers.
+
+There are 4 profiles:
+
+-   Vigorous Exercisers
+
+-   Happy Sedentary
+
+-   Happy Exercisers
+
+-   Unhappy Sedentary
+
+::: {style="color: orange"}
+## Analyzing Clusters
+:::
+
+Now that we have clusters = groups, we can analyze them. For example, we can take our 4-cluster solution and see if the clusters differ on another variable.
+
+Let's see how the cluster groups differ on perceived stress (`pss`).
+
+```{r}
+fit1 <- aov(pss ~ factor(km.res$cluster), data=dailyscale.clus)
+summary(fit1)
+TukeyHSD(fit1) 
+```
+
+We see that clusters differ from each other on `pss`, except clusters 3 and 4 (or 3 and 2 if there was label switching).
+
+Differences on **non-clustering** variables provide evidence that, indeed, the cluster solution is providing a meaningful distinction. The typology has value.
+
+In sum, there are variety of ways to justify a cluster solution (e.g., selection of *k*)
+
+1.  Conceptual arguments
+2.  Internal statistical criteria
+3.  replication of clusters in random halves
+4.  cluster differentiation on external variables
+
+A practical benefit of subgroup-oriented interpretation emerges when considering potential interventions. Multivariate profiles may point toward tailoring diagnostic and intervention efforts to individual needs.
+
