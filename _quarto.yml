@@ -9,6 +9,7 @@ project:
     - data/data-final-shuffled.csv
     - data/data-final.RDS
     - data/student_wellbeing.csv
+    - data/speed_dating.csv
     - rmd/
   render:
     - index.qmd
