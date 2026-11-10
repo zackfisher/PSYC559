@@ -1,2 +1,1990 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"></html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Principal Components Analysis – PSYC559: Applied Machine Learning in Psychology</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-4b807711a074c809fb7a41e0e0412991.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked slides fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week6_3.html">Dimension Reduction</a></li><li class="breadcrumb-item"><a href="./week6_1.html">Principal Components Analysis</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">PSYC559: Applied Machine Learning in Psychology</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Table of Contents</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Course Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./f01_welcome.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome to PSYC559</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./f02_explanation_prediction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">From Explanation to Prediction</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r_intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction to R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction to Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Important Terms and Distinctions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Problem Classes in ML</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">The Modeling Pipeline</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Splitting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bias and Variance</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./p01_splitting_resampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Splitting and Resampling in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./p02_evaluating_performance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Evaluating Model Performance</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./p03_complete_pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A Complete Pipeline</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Feature Engineering</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Example Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Missing Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5d.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Feature Filtering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5e.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Numeric Feature Engineering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5f.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Categorical Feature Engineering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week2_5g.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Workflow</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Regression Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_1b_inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inference in Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week3_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week4_1b_regularization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Tree Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week5_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Decision Trees</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week5_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bagging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week5_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Random Forests</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week5_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gradient Boosting</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Dimension Reduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week6_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">K-Means Clustering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./week6_1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Principal Components Analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lab01_rmarkdown.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab: R Markdown</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true">
+ <span class="menu-text">Resources</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./open_datasets.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open Datasets</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./week6_3.html">Dimension Reduction</a></li><li class="breadcrumb-item"><a href="./week6_1.html">Principal Components Analysis</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Principal Components Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="slide">
+<section id="todays-lecture" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="todays-lecture">Today’s Lecture</h2>
+</section>
+<p>In today’s lecture we will cover:</p>
+<ul>
+<li>From clustering people to summarizing variables</li>
+<li>Why psychologists reduce dimensions</li>
+<li>A brief history: from questionnaires to components</li>
+<li>PCA and factor analysis</li>
+<li>What PCA does, on the fifty Big Five items</li>
+<li>The road to the Big Five</li>
+<li>PCA in R with <code>prcomp()</code></li>
+<li>Choosing the number of components</li>
+<li>Scores, loadings, and rotation</li>
+<li>Using, checking, and reporting a PCA</li>
+</ul>
+</div>
+<div class="slide">
+<section id="where-we-have-been" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="where-we-have-been">Where We Have Been</h2>
+</section>
+<p>The last two lectures were about clustering. K-means and hierarchical clustering both took <span class="math inline">\(n\)</span> people measured on <span class="math inline">\(p\)</span> variables and sorted the people into groups.</p>
+<p>That was <strong>person-centered</strong>. The output was one new column: a group label for each person.</p>
+<div style="color: lightgreen">
+<p>Today we work on the columns instead of the rows.</p>
+</div>
+<p>Principal components analysis (PCA) takes the same kind of data and builds a small number of new variables that carry most of the information in the original <span class="math inline">\(p\)</span>. The output is a few new columns, with a weight for every original variable.</p>
+</div>
+<div class="slide">
+<section id="two-kinds-of-unsupervised-learning" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="two-kinds-of-unsupervised-learning">Two Kinds of Unsupervised Learning</h2>
+</section>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Clustering</th>
+<th>Dimension reduction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Works on</strong></td>
+<td>Rows (people)</td>
+<td>Columns (variables)</td>
+</tr>
+<tr class="even">
+<td><strong>Asks</strong></td>
+<td>Are there groups of similar people?</td>
+<td>Can a few new variables stand in for many?</td>
+</tr>
+<tr class="odd">
+<td><strong>Output</strong></td>
+<td>A group label for each person</td>
+<td>A score for each person on each new variable, and a loading for each old variable</td>
+</tr>
+<tr class="even">
+<td><strong>Methods</strong></td>
+<td>K-means, hierarchical, mixture models</td>
+<td>PCA, factor analysis, autoencoders</td>
+</tr>
+</tbody>
+</table>
+<p>Both are unsupervised. There is still no <span class="math inline">\(y\)</span>, so there is still no test set error. We judge a PCA by how much variance it keeps, how stable it is, and whether the components are useful.</p>
+</div>
+<div class="slide">
+<section id="why-psychologists-reduce-dimensions" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="why-psychologists-reduce-dimensions">Why Psychologists Reduce Dimensions</h2>
+</section>
+<ul>
+<li><strong>Many correlated items.</strong> A questionnaire has 50 items, but nobody believes it measures 50 different things. A few summary scores are easier to use and easier to explain.</li>
+<li><strong>Too many predictors.</strong> Regression and clustering struggle when predictors are highly correlated or when there are many of them relative to the sample size.</li>
+<li><strong>Noise.</strong> The last few components mostly carry random error. Keeping only the first few can filter some of it out.</li>
+<li><strong>Pictures.</strong> Two components can be plotted. Fifty variables cannot.</li>
+<li><strong>Structure.</strong> Which items go together? That question built the Big Five.</li>
+</ul>
+<div style="color: lightgreen">
+<p>PCA returns components whether or not they mean anything. Deciding whether they do is the hard part, just as it was with clusters.</p>
+</div>
+</div>
+<div class="slide">
+<section id="questionnaires-made-the-problem" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="questionnaires-made-the-problem">Questionnaires Made the Problem</h2>
+</section>
+<p>On the first day we saw that psychology has had more data than it could handle since the 1890s, and that questionnaires were the reason.</p>
+<ul>
+<li>G. Stanley Hall circulated more than 200 questionnaires between 1894 and 1915, on topics from anger to dolls. By 1896 over one hundred thousand had come back, some of them forty or fifty pages long.</li>
+<li>Hall wanted “a composite photograph” of each construct. His problem was getting there: “When these returns come in, one at first feels helpless before them” (Hall, 1897, quoted in Young, 2018).</li>
+<li>The First World War brought mass testing of army recruits, tests with restricted answer sets, and new statistical techniques. Those fed Thurstone’s and Likert’s scaled questionnaires, including the Likert scale (Likert, 1932).</li>
+</ul>
+<div style="color: lightgreen">
+<p>Hall wanted a composite photograph of each construct. A principal component is one way to take it: a weighted combination of many items, chosen by a rule.</p>
+</div>
+</div>
+<div class="slide">
+<section id="from-answers-to-a-correlation-matrix" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="from-answers-to-a-correlation-matrix">From Answers to a Correlation Matrix</h3>
+</section>
+<p>Scaled answers changed what could be computed.</p>
+<ul>
+<li>Once every answer is a number on the same scale, every pair of items has a correlation. Fifty items give 1,225 of them.</li>
+<li>The correlation matrix is the raw material. Items that go together correlate, and items that do not stay near zero.</li>
+<li>The questions psychologists began asking of that matrix are the questions PCA answers. How many things does this questionnaire measure? Which items belong to which? How should a person’s answers be combined into a score?</li>
+</ul>
+<div style="color: lightgreen">
+<p>The other half of the first day’s story comes along too. Young (2018) calls it the move from thick to thin description: a person’s experience becomes a number on a scale. A component score goes one step further and turns fifty of those numbers into one.</p>
+</div>
+</div>
+<div class="slide">
+<section id="one-factor-or-several" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="one-factor-or-several">One Factor or Several</h3>
+</section>
+<div style="color: lightblue">
+<p><strong>1904: one general factor</strong></p>
+</div>
+<ul>
+<li>Charles Spearman noticed that scores on different mental tests were all positively correlated, and argued they shared one underlying factor, which he called <strong>g</strong>.</li>
+<li>Mathematically he was pulling one dominant dimension out of a correlation matrix, close to what the first principal component does.</li>
+</ul>
+<div style="color: lightblue">
+<p><strong>1930s: several factors and simple structure</strong></p>
+</div>
+<ul>
+<li>Louis Thurstone argued for several broad abilities instead of one: verbal, spatial, numerical, and so on.</li>
+<li>He showed that the axes through a correlation matrix can be turned without changing how much variance they explain, and chose the position where each test loads on one factor. He called that pattern <strong>simple structure</strong>.</li>
+<li>One factor or several was partly a question of where the axes sat. That choice comes back later today as rotation.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="thurstone-at-carolina" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="thurstone-at-carolina">Thurstone at Carolina</h3>
+</section>
+<p>Thurstone moved to UNC in 1952 and founded the Psychometric Laboratory here. It now carries his name and is still on the second floor of Davie Hall.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/thurstone_lab.jpg" class="img-fluid figure-img"></p>
+<figcaption>L. L. Thurstone Lab in Davie Hall</figcaption>
+</figure>
+</div>
+</div>
+<div class="slide">
+<section id="a-brief-history-pca-takes-shape" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="a-brief-history-pca-takes-shape">A Brief History: PCA Takes Shape</h2>
+</section>
+<div style="color: lightblue">
+<p><strong>1933: principal components formalized</strong></p>
+</div>
+<ul>
+<li>Harold Hotelling defined principal components in the modern sense: new uncorrelated variables, each a weighted combination of the originals, ordered so that each explains as much of the remaining variance as possible.</li>
+<li>Karl Pearson had described the geometry in 1901, as the line of closest fit to a cloud of points.</li>
+</ul>
+<div style="color: lightblue">
+<p><strong>Mid 20th century: personality and tests</strong></p>
+</div>
+<ul>
+<li>By the 1950s and 1960s PCA and factor analysis were being run on personality items, attitude scales, and symptom checklists.</li>
+<li>The question was always the same. Give people a long questionnaire. Do the items fall into a small number of broad traits?</li>
+<li>The Big Five came out of this work.</li>
+</ul>
+<div style="color: lightblue">
+<p><strong>Late 20th century: a routine tool</strong></p>
+</div>
+<ul>
+<li>Cognitive and clinical research: summarize many correlated measures into a few scores, such as internalizing and externalizing symptom dimensions.</li>
+<li>Machine learning: compress and decorrelate predictors before regression, classification, or clustering.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="a-question-before-we-go-on" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="a-question-before-we-go-on">A Question Before We Go On</h3>
+</section>
+<div style="color: lightgreen">
+<p>Turn to a neighbor and take three minutes.</p>
+</div>
+<ol type="1">
+<li>Hall wanted “a composite photograph” of each construct. What would a composite photograph of extraversion be made of, and who decides what goes into it?</li>
+<li>A component score turns a person’s fifty answers into one number. What does that number stand for? What was thrown away to get it?</li>
+<li>Spearman found one factor in ability tests. Thurstone found several in the same kind of tests. Can both be right? Are components found in the data, or chosen by the analyst?</li>
+</ol>
+<p>Hold onto your answer to the third question. The same choice comes back later today when we rotate the Big Five components.</p>
+</div>
+<div class="slide two-col">
+<div>
+<section id="pca" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="pca">PCA</h2>
+</section>
+<ul>
+<li>A <strong>data reduction</strong> technique.</li>
+<li>Builds new variables, the components, as weighted combinations of the original variables.</li>
+<li>Chooses the weights to capture as much <strong>total variance</strong> as possible.</li>
+<li>Uses all of each variable’s variance: what it shares with other variables, what is unique to it, and error.</li>
+<li>The components are directions in the data. They are not assumed to be real psychological traits. Interpretation is optional and comes after the fact.</li>
+</ul>
+</div>
+<div>
+<section id="factor-analysis" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="factor-analysis">Factor Analysis</h2>
+</section>
+<ul>
+<li>A <strong>latent variable model</strong>.</li>
+<li>Assumes unobserved constructs, the factors, cause the correlations among the observed variables, and tries to recover them.</li>
+<li>Models only the <strong>common variance</strong> that variables share. Unique variance and error are set aside.</li>
+<li>The factors are interpreted as constructs from the start: negative affect, working memory, and so on. Psychological meaning is the point.</li>
+<li>Next lecture.</li>
+</ul>
+</div>
+</div>
+<div class="slide">
+<section id="the-same-picture-two-models" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="the-same-picture-two-models">The Same Picture, Two Models</h3>
+</section>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/pca_fa.jpg" class="img-fluid figure-img"></p>
+<figcaption>PCA and factor analysis</figcaption>
+</figure>
+</div>
+<ul>
+<li>In PCA the arrows run from the items to the component. The component is built from the items.</li>
+<li>In factor analysis the arrows run from the factor to the items. The factor is assumed to produce the item responses, plus error.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="what-pca-does" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="what-pca-does">What PCA Does</h2>
+</section>
+<p>Start with <span class="math inline">\(p\)</span> variables measured on <span class="math inline">\(n\)</span> people. PCA builds <span class="math inline">\(p\)</span> new variables, the <strong>principal components</strong>.</p>
+<ul>
+<li>Each component is a weighted sum of the original variables.</li>
+<li>The first component, PC1, is the weighted sum with the largest possible variance.</li>
+<li>PC2 has the largest variance among weighted sums that are uncorrelated with PC1. PC3 is uncorrelated with both, and so on.</li>
+<li>Together the <span class="math inline">\(p\)</span> components hold all the variance in the data. The first few usually hold most of it, and those are the ones we keep.</li>
+</ul>
+<div style="color: lightgreen">
+<p>PCA is unsupervised. It never sees an outcome. It only looks at how the variables relate to each other.</p>
+</div>
+</div>
+<div class="slide">
+<section id="on-the-fifty-items" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="on-the-fifty-items">On the Fifty Items</h3>
+</section>
+<p>Each person in the Big Five data is a row of 50 answers. Applied to those items, the rule gives 50 components. The first one is</p>
+<p><span class="math display">\[\text{PC1} = 0.22 \cdot \text{EXT10} + 0.22 \cdot \text{EXT4} + \dots - 0.25 \cdot \text{EXT3}\]</span></p>
+<ul>
+<li>Every item appears in the formula with its own number, so the full version has 50 terms. The numbers are chosen so that this sum has more spread across people than any other weighted sum of the 50 items.</li>
+<li>A person’s <strong>score</strong> on PC1 is their 50 standardized answers, each multiplied by its number, added up. One value in place of 50.</li>
+<li>PC2 has its own 50 numbers and its own score for each person, and so on down to PC50.</li>
+</ul>
+<div style="color: lightgreen">
+<p>The components are mathematical objects. Sometimes they look like traits, but PCA is not a measurement model and does not promise that they will.</p>
+</div>
+</div>
+<div class="slide">
+<section id="fifty-in-fifty-out-five-kept" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="fifty-in-fifty-out-five-kept">Fifty In, Fifty Out, Five Kept</h3>
+</section>
+<p>PCA always returns as many components as there are items. Nothing has been reduced yet.</p>
+<ul>
+<li>The 50 components carry the same information as the 50 items, written on new axes. The variances of the components add up to the variances of the items: 50 either way, after standardizing.</li>
+<li>What changes is how the variance is spread out. The items share it evenly, one unit each. The components do not. The first few hold most of it, and the last ones hold almost none.</li>
+<li>The reduction is a decision, not part of the method. We keep the first few components and drop the rest. Each person is then described by a handful of scores instead of 50 answers, and most of the variation is still there.</li>
+</ul>
+<p>So the questions for the rest of the lecture are how many to keep, and what the kept ones mean.</p>
+</div>
+<div class="slide">
+<section id="the-vocabulary" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="the-vocabulary">The Vocabulary</h2>
+</section>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Term</th>
+<th>What it is</th>
+<th>In <code>prcomp()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Scores</strong></td>
+<td>Each person’s value on each component. These are the new variables.</td>
+<td><code>$x</code></td>
+</tr>
+<tr class="even">
+<td><strong>Proportion of variance</strong></td>
+<td>The share of the total variance that one component holds.</td>
+<td><code>summary()</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Loading</strong></td>
+<td>The correlation between an item and a component.</td>
+<td>computed by hand</td>
+</tr>
+</tbody>
+</table>
+<p>The word loading is used loosely. Some books and packages use it for the raw numbers in the component formula. On this page a loading is always a correlation, so it runs from <span class="math inline">\(-1\)</span> to <span class="math inline">\(1\)</span>.</p>
+</div>
+<div class="slide">
+<section id="standardize-first" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="standardize-first">Standardize First</h2>
+</section>
+<p>PCA chases variance. A variable with a large spread gets a large share of the first component just because of its units.</p>
+<ul>
+<li>Height in centimeters and weight in kilograms would give a first component that is mostly height.</li>
+<li>The 50 Big Five items share a 1 to 5 scale, but their spreads still differ, as we saw in the K-means lecture.</li>
+</ul>
+<p>So standardize every variable first. In <code>prcomp()</code> that is <code>scale. = TRUE</code>. The analysis then runs on the correlation matrix, and every item starts with a variance of 1.</p>
+<div style="color: lightgreen">
+<p>The only time not to standardize is when the variables share meaningful units and you want the ones with more spread to count more.</p>
+</div>
+</div>
+<div class="slide">
+<section id="the-road-to-the-big-five" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="the-road-to-the-big-five">The Road to the Big Five</h2>
+</section>
+<div style="color: lightblue">
+<p><strong>Start with language, not theory</strong></p>
+</div>
+<ul>
+<li>Allport and Odbert (1936) went through an English dictionary and pulled out thousands of adjectives that describe people: talkative, organized, anxious, creative, and so on.</li>
+<li>Later researchers had people rate themselves, or peers, on hundreds of these adjectives.</li>
+<li>Rows are people. Columns are adjectives. The problem is how to make sense of hundreds of traits at once.</li>
+</ul>
+<div style="color: lightblue">
+<p><strong>Which adjectives move together?</strong></p>
+</div>
+<ul>
+<li>People who call themselves talkative, energetic, and assertive also tend to say outgoing.</li>
+<li>People who call themselves organized, reliable, and careful also tend to say self-disciplined.</li>
+<li>PCA and factor analysis turn these bundles into a few summary dimensions. Instead of 200 adjective scores a person has a position on each dimension.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="the-big-five" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="the-big-five">The Big Five</h3>
+</section>
+<p>Across many studies, item sets, and samples, the same five broad dimensions kept showing up.</p>
+<ol type="1">
+<li><strong>Extraversion</strong>: talkative, outgoing, energetic.</li>
+<li><strong>Agreeableness</strong>: kind, warm, cooperative.</li>
+<li><strong>Conscientiousness</strong>: organized, reliable, disciplined.</li>
+<li><strong>Neuroticism</strong>, or its reverse, emotional stability: anxious, moody, easily upset.</li>
+<li><strong>Openness</strong>, or intellect: curious, imaginative, open to new ideas.</li>
+</ol>
+<p>The questionnaire in our data was written to measure these five, with ten items each. Later today we will see whether the five come back out of the data.</p>
+</div>
+<div class="slide">
+<section id="modern-takes-on-the-big-five" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="modern-takes-on-the-big-five">Modern Takes on the Big Five</h3>
+</section>
+<ul>
+<li><strong>Not always five.</strong> Different item sets, languages, and cultures do not always give five dimensions. The structure may reflect English adjectives and Western samples more than a universal map of personality.</li>
+<li><strong>Description, not explanation.</strong> A high neuroticism score says how a person differs from others. It does not say why: biology, development, stress, culture, roles. The traits are statistical summaries, not causal theories.</li>
+<li><strong>Too broad for some uses.</strong> Two people can both be high on neuroticism while one is mostly anxious and the other mostly angry. Traits also shift across situations. For clinical work and intervention, five broad dimensions can be too coarse.</li>
+</ul>
+<div style="color: lightgreen">
+<p>These are limits of what the dimensions mean, not of the method that found them. The same cautions will apply to any component we name today.</p>
+</div>
+</div>
+<div class="slide">
+<section id="pca-in-r" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="pca-in-r">PCA in R</h2>
+</section>
+<p>We will run PCA with <code>prcomp()</code>, which is built into R, so there is nothing to install.</p>
+<ul>
+<li>The book runs the same analysis with the <code>h2o</code> package. <code>h2o</code> needs Java and is built for very large data. On data of this size <code>prcomp()</code> finds the same components.</li>
+<li>The data are the same Big Five responses as the K-means lecture: 1,000 people, 50 IPIP items, each rated from 1 (disagree) to 5 (agree). The codebook is at the end of this page.</li>
+</ul>
+<p>Four steps, each one a decision you would report.</p>
+<ol type="1">
+<li>Prepare the data.</li>
+<li>Run the PCA.</li>
+<li>Choose the number of components.</li>
+<li>Interpret the components, with rotation if needed.</li>
+</ol>
+</div>
+<div class="slide">
+<section id="step-1-prepare-the-data" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="step-1-prepare-the-data">Step 1: Prepare the Data</h3>
+</section>
+<p>A 0 means the person skipped the item. As in the K-means lecture, we keep only the people who answered every item.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"data/data-final.RDS"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1000   50</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a 0 means the item was skipped, so keep only complete rows</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>complete <span class="ot">&lt;-</span> <span class="fu">apply</span>(data, <span class="dv">1</span>, <span class="cf">function</span>(r) <span class="fu">all</span>(r <span class="sc">%in%</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[complete, ]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 857  50</code></pre>
+</div>
+</div>
+<p>One difference from the K-means lecture: we do <strong>not</strong> reverse the negatively keyed items or average them into trait scores. PCA gets all 50 raw items and has to find the structure itself.</p>
+</div>
+<div class="slide">
+<section id="step-2-run-the-pca" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="step-2-run-the-pca">Step 2: Run the PCA</h3>
+</section>
+<p>Two arguments of <code>prcomp()</code> matter here.</p>
+<ul>
+<li><code>center = TRUE</code> subtracts each item’s mean. This is the default.</li>
+<li><code>scale. = TRUE</code> divides each item by its standard deviation. The default is <code>FALSE</code>, so set it yourself.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_pca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(data, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The result holds three pieces we will use.</p>
+<ul>
+<li><code>my_pca$sdev</code>, the standard deviation of each component. Squared, these are the eigenvalues.</li>
+<li><code>my_pca$rotation</code>, the weights that turn the 50 items into each component.</li>
+<li><code>my_pca$x</code>, each person’s score on each component.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="the-summary-table" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="the-summary-table">The Summary Table</h3>
+</section>
+<p>With 50 items there are 50 components. The summary shows how much variance each one explains. Here are the first ten.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">summary</span>(my_pca)<span class="sc">$</span>importance[, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                         PC1   PC2   PC3   PC4   PC5   PC6   PC7   PC8   PC9
+Standard deviation     2.776 2.242 1.961 1.849 1.692 1.254 1.182 1.064 1.033
+Proportion of Variance 0.154 0.100 0.077 0.068 0.057 0.031 0.028 0.023 0.021
+Cumulative Proportion  0.154 0.255 0.332 0.400 0.457 0.489 0.517 0.539 0.561
+                        PC10
+Standard deviation     1.014
+Proportion of Variance 0.021
+Cumulative Proportion  0.581</code></pre>
+</div>
+</div>
+<ul>
+<li><strong>Proportion of Variance</strong> is the share of the total variance that one component explains. PC1 explains 15 percent.</li>
+<li><strong>Cumulative Proportion</strong> adds those shares up from the first component onward.</li>
+<li>The shares fall off quickly at first and then level out. That shape is what the next step works with.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="step-3-how-many-components" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="step-3-how-many-components">Step 3: How Many Components?</h2>
+</section>
+<p>PCA always returns <span class="math inline">\(p\)</span> components. The point is to keep fewer than <span class="math inline">\(p\)</span>, so we need a rule. Three are common, and none is decisive, much like choosing <span class="math inline">\(K\)</span> in a cluster analysis.</p>
+<ul>
+<li><strong>The scree plot.</strong> Look for the point where the variance explained flattens out.</li>
+<li><strong>The eigenvalue rule.</strong> Keep every component with an eigenvalue of 1 or more.</li>
+<li><strong>Cumulative variance.</strong> Decide how much variance you need, and keep enough components to reach it.</li>
+</ul>
+<p>Theory counts too. The questionnaire was written to measure five traits.</p>
+</div>
+<div class="slide">
+<section id="the-scree-plot" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="the-scree-plot">The Scree Plot</h3>
+</section>
+<p>Plot the proportion of variance explained (PVE) by each component.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pve <span class="ot">&lt;-</span> my_pca<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(my_pca<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">PC =</span> <span class="fu">seq_along</span>(pve), <span class="at">PVE =</span> pve) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(PC, PVE)) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>The curve falls steeply through the first five components.</li>
+<li>There is a clear drop between the fifth and the sixth, and the curve is nearly flat after that.</li>
+<li>The scree plot points to five components.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="the-eigenvalue-rule" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="the-eigenvalue-rule">The Eigenvalue Rule</h3>
+</section>
+<p>A component’s <strong>eigenvalue</strong> is its variance. Each standardized item has a variance of 1, so a component with an eigenvalue above 1 explains more variance than a single item does. The rule keeps those and drops the rest.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>eigen <span class="ot">&lt;-</span> my_pca<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the eigenvalues add up to the number of items</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(eigen)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 50</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the components with an eigenvalue of 1 or more</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(eigen <span class="sc">&gt;=</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+</div>
+</div>
+<ul>
+<li>The rule keeps 10 components, twice as many as the theory behind the questionnaire.</li>
+<li>This is typical. With many items the eigenvalue rule tends to keep too many components.</li>
+<li>Components 6 to 10 only just clear the bar. Their eigenvalues run from 1.57 down to 1.03.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="cumulative-variance" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="cumulative-variance">Cumulative Variance</h3>
+</section>
+<p>Decide how much of the total variance you need to keep, and take enough components to reach it. The plot has two panes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">PC =</span> <span class="fu">seq_along</span>(pve), <span class="at">PVE =</span> pve, <span class="at">CVE =</span> <span class="fu">cumsum</span>(pve)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="sc">-</span>PC, <span class="at">names_to =</span> <span class="st">"metric"</span>, <span class="at">values_to =</span> <span class="st">"variance_explained"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">metric =</span> <span class="fu">factor</span>(metric, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"PVE"</span>, <span class="st">"CVE"</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"PVE: share held by each component"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"CVE: running total"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(PC, variance_explained)) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> metric, <span class="at">ncol =</span> <span class="dv">1</span>, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>Top pane.</strong> The scree plot again. Each point is the share of the variance that one component holds on its own, so the points fall as you move right.</li>
+<li><strong>Bottom pane.</strong> The running total. Each point is the share you keep if you stop at that component. It is the top pane added up from the left, so it always rises, quickly at first and then more slowly as the components get smaller. The 50th point is 1.</li>
+<li><strong>To use it</strong>, pick a target on the vertical axis of the bottom pane and read across to the curve. Half the variance takes 7 components. The first five give 46 percent, and reaching 80 percent would take 25 components.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="the-decision" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="the-decision">The Decision</h3>
+</section>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Rule</th>
+<th>Keeps</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Scree plot</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>Eigenvalue rule</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>80 percent of the variance</td>
+<td>25</td>
+</tr>
+<tr class="even">
+<td>Theory behind the questionnaire</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p>The three rules disagree, which is normal. We keep five, because the scree plot and the theory behind the questionnaire agree.</p>
+<div style="color: lightgreen">
+<p>Five components explain less than half the variance in the 50 items. That is not a failure. Single questionnaire items are noisy, and much of what is dropped is item specific.</p>
+</div>
+<p>Report the number you kept and the rules that disagreed, as with <span class="math inline">\(K\)</span>.</p>
+</div>
+<div class="slide">
+<section id="step-4-component-scores" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="step-4-component-scores">Step 4: Component Scores</h2>
+</section>
+<p>Every person gets a score on every component. These scores are the new variables you would hand to a regression or a cluster analysis in place of the 50 items.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">head</span>(my_pca<span class="sc">$</span>x[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]), <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    PC1   PC2   PC3  PC4   PC5
+1 -4.54  0.01  2.34 0.38  0.21
+2  0.73 -1.38 -3.13 0.10 -2.54
+3 -0.46 -1.48 -1.22 0.85 -1.91
+4  1.02 -0.11  1.66 0.42 -1.91
+5 -4.13 -1.77 -3.25 3.29 -0.50
+6 -1.87 -2.29  0.03 1.15 -0.82</code></pre>
+</div>
+</div>
+<p>Each score is a weighted sum of that person’s 50 standardized answers.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># person 1 on PC1, by hand and from prcomp</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sum</span>(<span class="fu">scale</span>(data)[<span class="dv">1</span>, ] <span class="sc">*</span> my_pca<span class="sc">$</span>rotation[, <span class="st">"PC1"</span>]), <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -4.54</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(my_pca<span class="sc">$</span>x[<span class="dv">1</span>, <span class="st">"PC1"</span>], <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -4.54</code></pre>
+</div>
+</div>
+<p>The scores are uncorrelated with each other, by construction.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(my_pca<span class="sc">$</span>x[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]), <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    PC1 PC2 PC3 PC4 PC5
+PC1   1   0   0   0   0
+PC2   0   1   0   0   0
+PC3   0   0   1   0   0
+PC4   0   0   0   1   0
+PC5   0   0   0   0   1</code></pre>
+</div>
+</div>
+</div>
+<div class="slide">
+<section id="interpreting-the-components" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="interpreting-the-components">Interpreting the Components</h2>
+</section>
+<p>Components are mathematical objects, but we can try to read them by looking at which items they lean on most. If the questionnaire works as designed, the first five components should line up with the five traits.</p>
+<ul>
+<li>A <strong>loading</strong> is the correlation between an item and a component.</li>
+<li>We get the loadings by multiplying each component’s weights by its standard deviation.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>loadings <span class="ot">&lt;-</span> my_pca<span class="sc">$</span>rotation[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="sc">%*%</span> <span class="fu">diag</span>(my_pca<span class="sc">$</span>sdev[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(loadings) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"PC"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">head</span>(loadings), <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       PC1   PC2   PC3   PC4   PC5
+EXT1 -0.54  0.25  0.30 -0.22  0.26
+EXT2  0.55 -0.27 -0.25  0.24 -0.22
+EXT3 -0.71  0.14  0.07 -0.29  0.04
+EXT4  0.61 -0.17 -0.26  0.30 -0.23
+EXT5 -0.70  0.25  0.10 -0.20  0.14
+EXT6  0.59 -0.21 -0.14 -0.02 -0.13</code></pre>
+</div>
+</div>
+<p>Fifty rows of five numbers is too many to read, and the item codes do not say what anyone was asked. The plots that follow show every loading with the item wording beside it. The full list is also at the end of this page.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>items <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/personality_items.csv"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>item_label <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="fu">paste</span>(items<span class="sc">$</span>item, items<span class="sc">$</span>statement), items<span class="sc">$</span>item)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(items)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  item                         statement
+1 EXT1       I am the life of the party.
+2 EXT2               I don't talk a lot.
+3 EXT3 I feel comfortable around people.
+4 EXT4         I keep in the background.
+5 EXT5            I start conversations.
+6 EXT6             I have little to say.</code></pre>
+</div>
+</div>
+</div>
+<div class="slide">
+<section id="the-loadings-heatmap" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="the-loadings-heatmap">The Loadings Heatmap</h3>
+</section>
+<p>We will draw the heatmap twice, so the code goes in a function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>plot_loadings <span class="ot">&lt;-</span> <span class="cf">function</span>(L) {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  labels <span class="ot">&lt;-</span> item_label[<span class="fu">rownames</span>(L)]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(L) <span class="sc">%&gt;%</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">factor</span>(labels, <span class="at">levels =</span> <span class="fu">rev</span>(labels))) <span class="sc">%&gt;%</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="sc">-</span>item, <span class="at">names_to =</span> <span class="st">"component"</span>, <span class="at">values_to =</span> <span class="st">"loading"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(component, item, <span class="at">fill =</span> loading)) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">"blue"</span>, <span class="at">mid =</span> <span class="st">"white"</span>, <span class="at">high =</span> <span class="st">"red"</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>))</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_loadings</span>(loadings)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="slide">
+<section id="reading-the-heatmap" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="reading-the-heatmap">Reading the Heatmap</h3>
+</section>
+<ul>
+<li>The items are in order by trait: ten EXT items at the top, then EST, AGR, CSN, and OPN.</li>
+<li>Red and blue both appear inside a trait because some items are worded in the opposite direction. “I am the life of the party” and “I don’t talk a lot” are both extraversion items, and they load with opposite signs.</li>
+<li>The sign of a whole component is arbitrary. Flipping every sign in a column gives an equally good component.</li>
+</ul>
+<p>To check the match with the five traits, find the component each item loads on most strongly, and count by trait.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>trait <span class="ot">&lt;-</span> <span class="fu">substr</span>(<span class="fu">rownames</span>(loadings), <span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(trait, <span class="at">strongest =</span> <span class="fu">colnames</span>(loadings)[<span class="fu">apply</span>(<span class="fu">abs</span>(loadings), <span class="dv">1</span>, which.max)])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     strongest
+trait PC1 PC2 PC3 PC4 PC5
+  AGR   3   4   1   0   2
+  CSN   0   1   8   1   0
+  EST   2   8   0   0   0
+  EXT  10   0   0   0   0
+  OPN   0   0   0  10   0</code></pre>
+</div>
+</div>
+<ul>
+<li>Some traits come through. All ten OPN items load most strongly on one component, and so do all ten EXT items.</li>
+<li>The match is not clean. The AGR items are scattered over four components.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="why-pc1-is-a-blend" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="why-pc1-is-a-blend">Why PC1 Is a Blend</h3>
+</section>
+<p>PC1 is not extraversion. All ten EXT items and all ten EST items have a loading of 0.3 or more on it, in absolute value, and so do half the AGR items.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(trait, <span class="at">loads_on_PC1 =</span> <span class="fu">abs</span>(loadings[, <span class="st">"PC1"</span>]) <span class="sc">&gt;=</span> <span class="fl">0.3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     loads_on_PC1
+trait FALSE TRUE
+  AGR     5    5
+  CSN     7    3
+  EST     0   10
+  EXT     0   10
+  OPN     8    2</code></pre>
+</div>
+</div>
+<p>The blend is what PCA is built to produce.</p>
+<ul>
+<li>The first component is chosen to explain as much variance as possible, so it picks up whatever the traits share.</li>
+<li>The second component does the same with what is left over, and so on.</li>
+<li>These components are a good summary for prediction. They are not designed to be easy to name.</li>
+</ul>
+<div style="color: lightgreen">
+<p>If the goal is a compact set of predictors, stop here. If the goal is to name the components, there is one more step.</p>
+</div>
+</div>
+<div class="slide">
+<section id="rotation" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="rotation">Rotation</h2>
+</section>
+<p>The Big Five are in these data. To see them we rotate the components.</p>
+<ul>
+<li>The first five components define a five dimensional space. We can turn the axes inside that space without changing how much variance the five explain together.</li>
+<li>A <strong>varimax</strong> rotation looks for the axes where each item loads strongly on one component and weakly on the others.</li>
+<li>Thurstone called this pattern <strong>simple structure</strong>. Varimax, introduced by Kaiser in 1958, is the most common way to find it.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rotated <span class="ot">&lt;-</span> <span class="fu">unclass</span>(<span class="fu">varimax</span>(loadings)<span class="sc">$</span>loadings)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(rotated) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"RC"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_loadings</span>(rotated)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="slide">
+<section id="after-rotation" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="after-rotation">After Rotation</h3>
+</section>
+<p>Each trait now has its own column. The same count as before:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>rotated_table <span class="ot">&lt;-</span> <span class="fu">table</span>(trait, <span class="at">strongest =</span> <span class="fu">colnames</span>(rotated)[<span class="fu">apply</span>(<span class="fu">abs</span>(rotated), <span class="dv">1</span>, which.max)])</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>rotated_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     strongest
+trait RC1 RC2 RC3 RC4 RC5
+  AGR   1   0   0   0   9
+  CSN   0   0  10   0   0
+  EST   0  10   0   0   0
+  EXT  10   0   0   0   0
+  OPN   0   0   0  10   0</code></pre>
+</div>
+</div>
+<ul>
+<li>After rotation, 49 of the 50 items load most strongly on the component for their own trait.</li>
+<li>The exception is AGR10, “I make people feel at ease.” It loads on the extraversion component and on the agreeableness component, which makes sense for an item about being good with people.</li>
+<li>The five rotated components explain 46 percent of the variance, the same as the five unrotated components.</li>
+</ul>
+<p>So the Big Five do emerge from these 50 items. The unrotated components hid them, because PCA maximizes variance and does not aim for components that are easy to name.</p>
+</div>
+<div class="slide">
+<section id="rotated-scores-and-the-trait-scores" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="rotated-scores-and-the-trait-scores">Rotated Scores and the Trait Scores</h3>
+</section>
+<p>Rotation turns the scores as well as the loadings. Standardize the five scores and apply the same rotation matrix.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>scores_rotated <span class="ot">&lt;-</span> <span class="fu">scale</span>(my_pca<span class="sc">$</span>x[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]) <span class="sc">%*%</span> <span class="fu">varimax</span>(loadings)<span class="sc">$</span>rotmat</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(scores_rotated) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"RC"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In the K-means lecture we built five trait scores by hand: reverse the negatively keyed items and average each trait’s ten items. How close are the rotated components to those?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>negatively_keyed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"EXT2"</span>, <span class="st">"EXT4"</span>, <span class="st">"EXT6"</span>, <span class="st">"EXT8"</span>, <span class="st">"EXT10"</span>, <span class="st">"EST2"</span>, <span class="st">"EST4"</span>,</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"AGR1"</span>, <span class="st">"AGR3"</span>, <span class="st">"AGR5"</span>, <span class="st">"AGR7"</span>, <span class="st">"CSN2"</span>, <span class="st">"CSN4"</span>, <span class="st">"CSN6"</span>, <span class="st">"CSN8"</span>,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"OPN2"</span>, <span class="st">"OPN4"</span>, <span class="st">"OPN6"</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>keyed <span class="ot">&lt;-</span> data</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>keyed[negatively_keyed] <span class="ot">&lt;-</span> <span class="dv">6</span> <span class="sc">-</span> keyed[negatively_keyed]</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>traits <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="st">"EXT"</span>, <span class="st">"EST"</span>, <span class="st">"AGR"</span>, <span class="st">"CSN"</span>, <span class="st">"OPN"</span>),</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">function</span>(t) <span class="fu">rowMeans</span>(keyed[<span class="fu">grep</span>(<span class="fu">paste0</span>(<span class="st">"^"</span>, t), <span class="fu">names</span>(keyed))]))</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(scores_rotated, traits), <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      EXT   EST   AGR   CSN   OPN
+RC1 -0.97  0.13 -0.21 -0.04 -0.11
+RC2 -0.12  0.97  0.00 -0.14 -0.06
+RC3 -0.03  0.10 -0.08 -0.97 -0.01
+RC4  0.09 -0.04  0.05  0.04  0.98
+RC5 -0.13 -0.02 -0.96 -0.06 -0.05</code></pre>
+</div>
+</div>
+<ul>
+<li>Each rotated component correlates above 0.95, in absolute value, with one trait score and weakly with the other four.</li>
+<li>Some signs are negative. The sign of a component is arbitrary, so read the size.</li>
+<li>PCA found, from the raw items, almost exactly the scoring key the questionnaire’s authors wrote by hand.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="a-closer-look-at-one-component" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="a-closer-look-at-one-component">A Closer Look at One Component</h3>
+</section>
+<p>Here are all 50 loadings on the first rotated component, sorted.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">item =</span> item_label[<span class="fu">rownames</span>(rotated)], <span class="at">loading =</span> rotated[, <span class="st">"RC1"</span>]) <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(loading, <span class="fu">reorder</span>(item, loading))) <span class="sc">+</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week6_1_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>The ten EXT items sit at the two ends, far from everything else.</li>
+<li>The five at one end are worded toward extraversion, and the five at the other end are worded away from it.</li>
+<li>Most of the other 40 items are near zero. The one closest to the EXT items is AGR10, the exception from the table above.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="using-the-components" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="using-the-components">Using the Components</h2>
+</section>
+<p>The scores are ordinary variables now. Three common uses:</p>
+<ul>
+<li><strong>As predictors.</strong> Regress an outcome on the first few components instead of on 50 correlated items. This is principal components regression, and it is one answer to multicollinearity.</li>
+<li><strong>As clustering inputs.</strong> The K-means lecture clustered on five hand built trait scores. The five rotated components would do the same job without a scoring key.</li>
+<li><strong>As a picture.</strong> Plot PC1 against PC2 to see the whole sample on one screen, colored by anything you like.</li>
+</ul>
+<div style="color: lightgreen">
+<p>One caution for prediction. The components are chosen to explain variance in the predictors, not to predict <span class="math inline">\(y\)</span>. A low variance component can still be the one that matters for the outcome.</p>
+</div>
+</div>
+<div class="slide">
+<section id="small-group-activity-reading-the-components" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="small-group-activity-reading-the-components">Small Group Activity: Reading the Components</h2>
+</section>
+<div style="color: lightgreen">
+<p>In groups of three or four, take ten minutes on the questions below. Pick one person to report back. Use the heatmaps, the trait tables, and the correlation with the trait scores as your evidence.</p>
+</div>
+<ol type="1">
+<li><strong>Name the components.</strong> Give each of the five rotated components a name. For each one, point to the loadings that support the name and to any item that does not fit.</li>
+<li><strong>Fix the sentence.</strong> A colleague writes, “PC1 is extraversion.” Using the unrotated table, say what is wrong with that sentence and rewrite it.</li>
+<li><strong>Rotate or not.</strong> Suppose the goal is to predict college GPA from the 50 items. Does it matter whether you rotate? Suppose instead the goal is to argue the questionnaire measures five traits. Does it matter now?</li>
+</ol>
+<div style="color: lightblue">
+<p>When we come back together, each group reports its five names from question 1 and its answer to question 3.</p>
+</div>
+</div>
+<div class="slide">
+<section id="when-pca-misleads" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="when-pca-misleads">When PCA Misleads</h2>
+</section>
+<p>PCA always runs, so the failures are quiet ones.</p>
+<ul>
+<li><strong>Scale.</strong> Without standardizing, the variables with the largest units own the first component.</li>
+<li><strong>Outliers.</strong> A few extreme people can pull a component toward themselves, because variance squares the distance.</li>
+<li><strong>Straight lines only.</strong> Components are linear combinations. Curved structure in the data is spread across several components.</li>
+<li><strong>Ordinal items.</strong> We treated 1 to 5 ratings as numbers. That is standard practice and usually fine, but it is an assumption.</li>
+<li><strong>Components are not constructs.</strong> A clean rotated solution is evidence about this sample and these items. It is not proof that a trait exists.</li>
+<li><strong>The number is a judgment.</strong> Two analysts can keep different numbers of components from the same data and both be defensible.</li>
+</ul>
+</div>
+<div class="slide">
+<section id="reporting-a-pca" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="reporting-a-pca">Reporting a PCA</h2>
+</section>
+<p>A reader should be able to reproduce the analysis and judge the decisions.</p>
+<ul>
+<li>The variables included, the sample size after handling missing data, and whether the variables were standardized.</li>
+<li>The number of components kept, the rules you used, and which rules disagreed.</li>
+<li>The variance explained by each kept component and by all of them together.</li>
+<li>Whether and how you rotated. Varimax is the common default, so say if you used something else.</li>
+<li>A loadings table or heatmap for the kept components. Names you give the components are interpretations, so report the loadings and let the names follow from them.</li>
+<li>What the scores were then used for.</li>
+</ul>
+<div style="color: lightgreen">
+<p>A PCA is a description of this sample. Whether the components hold up is a question for new data, or for factor analysis.</p>
+</div>
+</div>
+<div class="slide">
+<section id="summary" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+</section>
+<ul>
+<li>PCA builds new uncorrelated variables, each a weighted sum of the originals, ordered by how much variance they explain.</li>
+<li>Standardize first. <code>prcomp()</code> with <code>scale. = TRUE</code> does it.</li>
+<li>The scree plot, the eigenvalue rule, cumulative variance, and theory can disagree about how many components to keep. Report the disagreement.</li>
+<li>Unrotated components are built to explain variance, and they usually blend several traits.</li>
+<li>A varimax rotation keeps the same total variance and makes the components easier to name. On these 50 items it recovers the Big Five.</li>
+<li>Rotated components are still components. PCA is not a measurement model.</li>
+</ul>
+<div style="color: lightblue">
+<p><strong>Next time:</strong> factor analysis. A model with latent variables that cause the item responses, and the tool to use when the traits are the point.</p>
+</div>
+</div>
+<div class="slide">
+<section id="big-five-data-info" class="level2" style="color: yellow">
+<h2 class="anchored" data-anchor-id="big-five-data-info">Big Five Data Info</h2>
+</section>
+<ul>
+<li>The data were collected from 2016 to 2018 through an interactive online personality test.</li>
+<li>The test was built from the Big Five Factor Markers in the International Personality Item Pool (IPIP): <a href="https://ipip.ori.org/newBigFive5broadKey.htm" class="uri">https://ipip.ori.org/newBigFive5broadKey.htm</a>.</li>
+<li>Participants were told at the start that their responses would be recorded and used for research, and were asked to confirm their consent at the end.</li>
+<li>All 50 items were shown on one page, and each was rated on a five point scale with radio buttons. The order on the page was EXT1, AGR1, CSN1, EST1, OPN1, EXT2, and so on.</li>
+<li>The scale was labeled 1 = Disagree, 3 = Neutral, 5 = Agree. A 0 means the item was skipped.</li>
+<li>The file on this site holds 1,000 of the original responses.</li>
+</ul>
+</div>
+<div class="slide two-col">
+<div>
+<section id="extraversion-ext" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="extraversion-ext">Extraversion (EXT)</h3>
+</section>
+<ul>
+<li><strong>EXT1</strong> I am the life of the party.</li>
+<li><strong>EXT2</strong> I don’t talk a lot.</li>
+<li><strong>EXT3</strong> I feel comfortable around people.</li>
+<li><strong>EXT4</strong> I keep in the background.</li>
+<li><strong>EXT5</strong> I start conversations.</li>
+<li><strong>EXT6</strong> I have little to say.</li>
+<li><strong>EXT7</strong> I talk to a lot of different people at parties.</li>
+<li><strong>EXT8</strong> I don’t like to draw attention to myself.</li>
+<li><strong>EXT9</strong> I don’t mind being the center of attention.</li>
+<li><strong>EXT10</strong> I am quiet around strangers.</li>
+</ul>
+</div>
+<div>
+<section id="emotional-stability-est" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="emotional-stability-est">Emotional Stability (EST)</h3>
+</section>
+<ul>
+<li><strong>EST1</strong> I get stressed out easily.</li>
+<li><strong>EST2</strong> I am relaxed most of the time.</li>
+<li><strong>EST3</strong> I worry about things.</li>
+<li><strong>EST4</strong> I seldom feel blue.</li>
+<li><strong>EST5</strong> I am easily disturbed.</li>
+<li><strong>EST6</strong> I get upset easily.</li>
+<li><strong>EST7</strong> I change my mood a lot.</li>
+<li><strong>EST8</strong> I have frequent mood swings.</li>
+<li><strong>EST9</strong> I get irritated easily.</li>
+<li><strong>EST10</strong> I often feel blue.</li>
+</ul>
+</div>
+</div>
+<div class="slide two-col">
+<div>
+<section id="agreeableness-agr" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="agreeableness-agr">Agreeableness (AGR)</h3>
+</section>
+<ul>
+<li><strong>AGR1</strong> I feel little concern for others.</li>
+<li><strong>AGR2</strong> I am interested in people.</li>
+<li><strong>AGR3</strong> I insult people.</li>
+<li><strong>AGR4</strong> I sympathize with others’ feelings.</li>
+<li><strong>AGR5</strong> I am not interested in other people’s problems.</li>
+<li><strong>AGR6</strong> I have a soft heart.</li>
+<li><strong>AGR7</strong> I am not really interested in others.</li>
+<li><strong>AGR8</strong> I take time out for others.</li>
+<li><strong>AGR9</strong> I feel others’ emotions.</li>
+<li><strong>AGR10</strong> I make people feel at ease.</li>
+</ul>
+</div>
+<div>
+<section id="conscientiousness-csn" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="conscientiousness-csn">Conscientiousness (CSN)</h3>
+</section>
+<ul>
+<li><strong>CSN1</strong> I am always prepared.</li>
+<li><strong>CSN2</strong> I leave my belongings around.</li>
+<li><strong>CSN3</strong> I pay attention to details.</li>
+<li><strong>CSN4</strong> I make a mess of things.</li>
+<li><strong>CSN5</strong> I get chores done right away.</li>
+<li><strong>CSN6</strong> I often forget to put things back in their proper place.</li>
+<li><strong>CSN7</strong> I like order.</li>
+<li><strong>CSN8</strong> I shirk my duties.</li>
+<li><strong>CSN9</strong> I follow a schedule.</li>
+<li><strong>CSN10</strong> I am exacting in my work.</li>
+</ul>
+</div>
+</div>
+<div class="slide">
+<section id="openness-opn" class="level3" style="color: yellow">
+<h3 class="anchored" data-anchor-id="openness-opn">Openness (OPN)</h3>
+</section>
+<ul>
+<li><strong>OPN1</strong> I have a rich vocabulary.</li>
+<li><strong>OPN2</strong> I have difficulty understanding abstract ideas.</li>
+<li><strong>OPN3</strong> I have a vivid imagination.</li>
+<li><strong>OPN4</strong> I am not interested in abstract ideas.</li>
+<li><strong>OPN5</strong> I have excellent ideas.</li>
+<li><strong>OPN6</strong> I do not have a good imagination.</li>
+<li><strong>OPN7</strong> I am quick to understand things.</li>
+<li><strong>OPN8</strong> I use difficult words.</li>
+<li><strong>OPN9</strong> I spend time reflecting on things.</li>
+<li><strong>OPN10</strong> I am full of ideas.</li>
+</ul>
+<p>The negatively keyed items, the ones worded away from the trait, are EXT2, 4, 6, 8, 10; EST2, 4; AGR1, 3, 5, 7; CSN2, 4, 6, 8; and OPN2, 4, 6. The K-means lecture reversed these before scoring. This lecture did not.</p>
+</div>
+
+
+
+</main> <!-- /main -->
+<script>
+// Floating page controls: text size and sidebar visibility.
+// Choices persist across pages via localStorage.
+(function () {
+  var KEY_SCALE = "psyc559-scale";
+  var KEY_SIDEBAR = "psyc559-sidebar-hidden";
+
+  function applyScale(s) {
+    var m = document.querySelector("main.content");
+    if (m) m.style.fontSize = s + "em";
+    localStorage.setItem(KEY_SCALE, s);
+  }
+
+  function applySidebar(hidden) {
+    document.body.classList.toggle("sidebar-hidden", hidden);
+    localStorage.setItem(KEY_SIDEBAR, hidden ? "1" : "0");
+    var btn = document.getElementById("psyc-sidebar-btn");
+    if (btn) btn.textContent = hidden ? "Show menu" : "Hide menu";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var scale = parseFloat(localStorage.getItem(KEY_SCALE));
+    if (!scale || isNaN(scale)) scale = 1;
+    var hidden = localStorage.getItem(KEY_SIDEBAR) === "1";
+
+    var bar = document.createElement("div");
+    bar.id = "psyc-controls";
+    bar.innerHTML =
+      '<button id="psyc-smaller" title="Smaller text">A-</button>' +
+      '<button id="psyc-larger" title="Larger text">A+</button>' +
+      '<button id="psyc-sidebar-btn" title="Show or hide the sidebar">Hide menu</button>';
+    document.body.appendChild(bar);
+
+    document.getElementById("psyc-smaller").addEventListener("click", function () {
+      scale = Math.max(0.7, Math.round((scale - 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-larger").addEventListener("click", function () {
+      scale = Math.min(2.0, Math.round((scale + 0.1) * 10) / 10);
+      applyScale(scale);
+    });
+    document.getElementById("psyc-sidebar-btn").addEventListener("click", function () {
+      hidden = !hidden;
+      applySidebar(hidden);
+    });
+
+    applyScale(scale);
+    applySidebar(hidden);
+  });
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

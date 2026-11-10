@@ -275,6 +275,259 @@
     ]
   },
   {
+    "objectID": "week6_1.html",
+    "href": "week6_1.html",
+    "title": "Principal Components Analysis",
+    "section": "",
+    "text": "In today’s lecture we will cover:\n\nFrom clustering people to summarizing variables\nWhy psychologists reduce dimensions\nA brief history: from questionnaires to components\nPCA and factor analysis\nWhat PCA does, on the fifty Big Five items\nThe road to the Big Five\nPCA in R with prcomp()\nChoosing the number of components\nScores, loadings, and rotation\nUsing, checking, and reporting a PCA",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#where-we-have-been",
+    "href": "week6_1.html#where-we-have-been",
+    "title": "Principal Components Analysis",
+    "section": "Where We Have Been",
+    "text": "Where We Have Been",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#two-kinds-of-unsupervised-learning",
+    "href": "week6_1.html#two-kinds-of-unsupervised-learning",
+    "title": "Principal Components Analysis",
+    "section": "Two Kinds of Unsupervised Learning",
+    "text": "Two Kinds of Unsupervised Learning",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#why-psychologists-reduce-dimensions",
+    "href": "week6_1.html#why-psychologists-reduce-dimensions",
+    "title": "Principal Components Analysis",
+    "section": "Why Psychologists Reduce Dimensions",
+    "text": "Why Psychologists Reduce Dimensions",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#questionnaires-made-the-problem",
+    "href": "week6_1.html#questionnaires-made-the-problem",
+    "title": "Principal Components Analysis",
+    "section": "Questionnaires Made the Problem",
+    "text": "Questionnaires Made the Problem",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#a-brief-history-pca-takes-shape",
+    "href": "week6_1.html#a-brief-history-pca-takes-shape",
+    "title": "Principal Components Analysis",
+    "section": "A Brief History: PCA Takes Shape",
+    "text": "A Brief History: PCA Takes Shape",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#pca",
+    "href": "week6_1.html#pca",
+    "title": "Principal Components Analysis",
+    "section": "PCA",
+    "text": "PCA",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#factor-analysis",
+    "href": "week6_1.html#factor-analysis",
+    "title": "Principal Components Analysis",
+    "section": "Factor Analysis",
+    "text": "Factor Analysis",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#what-pca-does",
+    "href": "week6_1.html#what-pca-does",
+    "title": "Principal Components Analysis",
+    "section": "What PCA Does",
+    "text": "What PCA Does",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#the-vocabulary",
+    "href": "week6_1.html#the-vocabulary",
+    "title": "Principal Components Analysis",
+    "section": "The Vocabulary",
+    "text": "The Vocabulary",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#standardize-first",
+    "href": "week6_1.html#standardize-first",
+    "title": "Principal Components Analysis",
+    "section": "Standardize First",
+    "text": "Standardize First",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#the-road-to-the-big-five",
+    "href": "week6_1.html#the-road-to-the-big-five",
+    "title": "Principal Components Analysis",
+    "section": "The Road to the Big Five",
+    "text": "The Road to the Big Five",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#pca-in-r",
+    "href": "week6_1.html#pca-in-r",
+    "title": "Principal Components Analysis",
+    "section": "PCA in R",
+    "text": "PCA in R",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#step-3-how-many-components",
+    "href": "week6_1.html#step-3-how-many-components",
+    "title": "Principal Components Analysis",
+    "section": "Step 3: How Many Components?",
+    "text": "Step 3: How Many Components?",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#step-4-component-scores",
+    "href": "week6_1.html#step-4-component-scores",
+    "title": "Principal Components Analysis",
+    "section": "Step 4: Component Scores",
+    "text": "Step 4: Component Scores",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#interpreting-the-components",
+    "href": "week6_1.html#interpreting-the-components",
+    "title": "Principal Components Analysis",
+    "section": "Interpreting the Components",
+    "text": "Interpreting the Components",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#rotation",
+    "href": "week6_1.html#rotation",
+    "title": "Principal Components Analysis",
+    "section": "Rotation",
+    "text": "Rotation",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#using-the-components",
+    "href": "week6_1.html#using-the-components",
+    "title": "Principal Components Analysis",
+    "section": "Using the Components",
+    "text": "Using the Components",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#small-group-activity-reading-the-components",
+    "href": "week6_1.html#small-group-activity-reading-the-components",
+    "title": "Principal Components Analysis",
+    "section": "Small Group Activity: Reading the Components",
+    "text": "Small Group Activity: Reading the Components",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#when-pca-misleads",
+    "href": "week6_1.html#when-pca-misleads",
+    "title": "Principal Components Analysis",
+    "section": "When PCA Misleads",
+    "text": "When PCA Misleads",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#reporting-a-pca",
+    "href": "week6_1.html#reporting-a-pca",
+    "title": "Principal Components Analysis",
+    "section": "Reporting a PCA",
+    "text": "Reporting a PCA",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#summary",
+    "href": "week6_1.html#summary",
+    "title": "Principal Components Analysis",
+    "section": "Summary",
+    "text": "Summary",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
+    "objectID": "week6_1.html#big-five-data-info",
+    "href": "week6_1.html#big-five-data-info",
+    "title": "Principal Components Analysis",
+    "section": "Big Five Data Info",
+    "text": "Big Five Data Info",
+    "crumbs": [
+      "Dimension Reduction",
+      "Principal Components Analysis"
+    ]
+  },
+  {
     "objectID": "week5_3.html",
     "href": "week5_3.html",
     "title": "Random Forests",
@@ -1005,7 +1258,7 @@
     "href": "week2_3.html",
     "title": "Data Splitting",
     "section": "",
-    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1] 10  9  4\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 4 6 3\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
+    "text": "Data splitting (e.g., dividing data into training, validation, and test samples) is crucial because it protects us from fooling ourselves about how well a model actually performs.\nIn our discussion of the training and validation samples we introduce the idea of parameters and hyperparameters. The distinction between these terms can often can trip people up, so it’s worth explaining the difference.\nWhen we split data, each portion plays a distinct role:\nSo, what does all this data splitting mean for us in practice? Let’s take a look at one of the more popular data-splitting methods used in practice: K-Folds Cross-Validation\nWhen talking about data-splitting we discussed training, validation and test sets. For a moment, let’s take a closer look at the training and validation sets to get a clear idea of what is happening.\nLet’s split our available data into two parts:\nThis method is simple and useful. It gives us an early warning if our model is overfitting. However, relying on a single holdout split comes with a big drawback: the result can be very unstable.\nThis idea motivates a better solution: cross-validation, where we avoid putting all our faith in just one split of the data. Instead, we systematically rotate through multiple splits, averaging the results to get a more stable and reliable estimate of model performance.\nOne idea is to break up our data into a number of training and validation sets as the image below shows. We can then average the performance across the k folds to get a more stable estimate of the model performance.\nSometimes it is helpful to write out the steps of a procedure like this explicitly.\nNotice that every splitting procedure above starts by randomly shuffling or sampling the data. Randomness creates a practical problem: if you and I split the same dataset, we get different splits, and different results. Run it twice yourself and you’ll get two answers:\nsample(1:10, 3) # randomly draw 3 numbers\n\n[1] 2 9 3\n\nsample(1:10, 3) # run it again... different draw\n\n[1] 2 9 3\nR’s random numbers are actually pseudo-random: they come from a sequence determined by a starting point called the seed. If we set the seed ourselves, the “random” results become exactly reproducible:\nset.seed(559)\nsample(1:10, 3)\n\n[1]  8  4 10\n\nset.seed(559)\nsample(1:10, 3) # same seed, same draw\n\n[1]  8  4 10\nThis is why nearly every machine learning script you’ll see this semester begins with set.seed() before splitting data or fitting models that involve randomness. It doesn’t make the analysis less random in spirit; it makes your random choices repeatable, so your results can be checked by others (including the you of next week, and me when grading).",
     "crumbs": [
       "The Modeling Pipeline",
       "Data Splitting"

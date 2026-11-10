@@ -64,7 +64,11 @@ website:
   # syllabus — they are labels for you, nothing reads them.
   # -----------------------------------------------------------------
   draft-mode: gone
+  # To hide a page, list it here, one page per line. When nothing is
+  # hidden, write `drafts: []` instead.
   drafts:
+    # Hierarchical clustering: held back 11/10, not covered yet
+    - week6_2.qmd
     # (released 8/12 — Introduction to R section: 1_1, 1_1b, 1_2, week1_3, week1_4)
     # (released 8/28 — Fundamentals of ML: week2_1, week2_2)
     # (released 8/29 — General modeling pipelines: week2_3, week2_4)
@@ -77,10 +81,7 @@ website:
     # (released 10/20 — Random forests: week5_3)
     # (released 10/20 — Gradient boosting: week5_4)
     # (released 10/27 — K-means clustering: week6_3)
-    # 10/27 — Hierarchical clustering
-    - week6_2.qmd
-    # 11/5 — Principal components analysis
-    - week6_1.qmd
+    # (released 11/10 — Principal components analysis: week6_1)
 
   sidebar:
     style: "docked"
